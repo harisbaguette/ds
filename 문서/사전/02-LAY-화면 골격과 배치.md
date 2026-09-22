@@ -54,3 +54,14 @@
 | LAY-48 | 브랜드 없는 범용 헤더 틀 — Generic Header | 구성 | 기관 로고 없이 서비스명만 쓰는 범용 상단 헤더 틀 | 확인 [G] |
 | LAY-49 | 그리드 목록 — Grid List | 구성 | 카드형 항목을 격자로 배열하는 목록 틀 | 확인 [TOSSMINI] |
 | LAY-50 | 하단 보조 정보 바 — Bottom Info Bar | 부품 | 화면 하단에 배송비·재고 같은 보조 정보를 고정 표시 | 확인 [TOSSMINI] |
+| LAY-51 | 유동 중심 재배치 — Mostly Fluid | 구성 | 넓을 때는 여러 단으로 두고 좁아지면 단을 접어 한 줄로 쌓는 반응형 기본형 | 확인 [THISRESP] |
+| LAY-52 | 단 떨어뜨리기 — Column Drop | 구성 | 폭이 줄 때마다 오른쪽 단부터 아래로 떨어뜨려 세로로 쌓기 | 확인 [THISRESP] |
+| LAY-53 | 배치 재구성 — Layout Shifter | 구성 | 화면 크기 구간마다 요소의 자리를 크게 바꿔 다른 배치를 쓰기 | 확인 [THISRESP] |
+| LAY-54 | 최소 조정 — Tiny Tweaks | 구성 | 한 단짜리 화면에서 글자 크기와 여백만 조금 바꿔 대응 | 확인 [THISRESP] |
+| LAY-55 | 화면 밖 서랍 — Off Canvas | 구성 | 보조 영역을 화면 밖에 두고 필요할 때 밀어 넣기. 위·왼쪽·오른쪽·아래·전체 덮기 방향 선택 | 확인 [THISRESP] |
+| LAY-56 | 보이는 순서와 읽는 순서 분리 — Source-Order Shift | 기준 | 눈에 보이는 자리만 바꾸고 낭독기·키보드가 읽는 차례는 원래대로 두는 배치 판단 | 확인 [THISRESP] |
+| LAY-57 | 폭에 따라 자리 옮겨 끼우기 — AppendAround | 구성 | 같은 요소를 화면 폭에 맞춰 다른 위치의 자리로 옮겨 붙이기 | 확인 [THISRESP] |
+| LAY-58 | 같은 폭 단 나누기 — Equal Width Columns | 구성 | 2단부터 6단까지 같은 폭으로 나누고 좁아지면 단 수를 줄이기 | 확인 [THISRESP] |
+| LAY-59 | 두 칸을 차지하는 격자 블록 — Double-Wide Grid Block | 구성 | 격자 안에서 특정 칸만 두 칸 폭으로 키워 강약을 주기 | 확인 [THISRESP] |
+| LAY-60 | 행 높이를 맞춘 격자 — Equal Height Rows | 구성 | 내용 길이가 달라도 같은 줄의 칸 높이를 맞춰 줄이 어긋나지 않게 하기 | 확인 [THISRESP] |
+| LAY-61 | 섬네일 목록 — List with Thumbnails | 구성 | 작은 그림과 제목을 한 줄로 묶고 폭이 넓어지면 요약문을 함께 펴는 목록 틀 | 확인 [THISRESP] |

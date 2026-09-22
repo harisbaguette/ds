@@ -6,7 +6,7 @@
 |---|---|---|---|---|
 | NAV-01 | 헤더와 주 탐색 — Header / Navigation | 모듈 | 사이트 정체성과 주요 경로 제공 | 확인 [C] |
 | NAV-02 | 메가 메뉴 — Mega Menu | 모듈 | 많은 경로를 범주별로 탐색 | 확인 [K] |
-| NAV-03 | 접히는 탐색 메뉴 — Hamburger Menu | 구성 | 좁은 공간에서 탐색을 열기 | 확인 [K] |
+| NAV-03 | 접히는 탐색 메뉴 — Hamburger Menu | 구성 | 좁은 공간에서 탐색을 열기 | 확인 [K] · 대조 [THISRESP] |
 | NAV-04 | 사이드바 탐색 — Sidebar Navigation | 모듈 | 자주 오가는 작업 영역 표시 | 확인 [S] |
 | NAV-05 | 하단 탭 바 — Bottom Tab Bar | 모듈 | 모바일의 주요 목적지 전환 | 확인 [K] |
 | NAV-06 | 탭 — Tabs | 부품 | 관련 콘텐츠 패널 전환 | 확인 [S] |
@@ -21,7 +21,7 @@
 | NAV-15 | 맨 위로 이동 — Back to Top | 부품 | 긴 페이지의 시작으로 복귀 | 확인 [PF] |
 | NAV-16 | 워크스페이스·조직 전환 | 모듈 | 작업 대상 조직을 바꿔 이동 | 확인 [SHR] |
 | NAV-17 | 앱 전환 런처 — App Switcher | 모듈 | 연결된 여러 제품 사이 이동 | 확장 [ATL] |
-| NAV-18 | 넘치는 탐색의 보조 메뉴 | 구성 | 폭 밖의 항목을 다른 경로로 제공 | 확인 [PF] |
+| NAV-18 | 넘치는 탐색의 보조 메뉴 | 구성 | 폭 밖의 항목을 다른 경로로 제공 | 확인 [PF] · 대조 [THISRESP] |
 | NAV-19 | 다단계 드릴다운 탐색 | 구성 | 좁은 화면에서 분류를 한 단계씩 탐색 | 확장 [APG] |
 | NAV-20 | 문서 버전 전환 | 모듈 | 같은 문서의 버전을 구분해 이동 | 확장 · 기술 문서 요구 |
 | NAV-21 | 이전 맥락·스크롤 복원 | 구성 | 상세에서 돌아와 탐색 이어가기 | 확장 [GEL] |
@@ -45,5 +45,18 @@
 | NAV-39 | 스크롤 연동 페이지 내 목차 — Anchor(스크롤 스파이) | 부품 | 스크롤 위치에 맞춰 현재 섹션을 강조하는 페이지 내 목차 | 확인 [ANT] |
 | NAV-40 | 수평 메뉴 — Horizontal Menu | 부품 | 가로로 나열한 상단 메뉴 항목 묶음 | 확인 [DC] |
 | NAV-41 | 페이지 카운터 — Page Counter | 부품 | 여러 페이지 중 현재·전체 쪽수를 숫자로 표시 | 확인 [DC] |
-| NAV-42 | 사이드 드로어 — Side Drawer | 구성 | 화면 옆에서 밀려 나오는 전체 높이 메뉴 패널 | 확인 [LINEDS] |
+| NAV-42 | 사이드 드로어 — Side Drawer | 구성 | 화면 옆에서 밀려 나오는 전체 높이 메뉴 패널 | 확인 [LINEDS] · 대조 [THISRESP] |
 | NAV-43 | 여정 전체 단계 목차 — Step by Step Navigation | 모듈 | 여러 화면·서비스에 흩어진 절차 전체를 하나의 목차 지도로 묶어 지금 몇 단계인지 보여줌 | 확인 [G] |
+| NAV-44 | 선택 상자로 바꾼 탐색 — Select Menu Nav | 구성 | 좁은 화면에서 메뉴를 선택 상자 하나로 접어 기기 기본 선택기를 쓰게 하기 | 확인 [THISRESP] |
+| NAV-45 | 화면 전체를 덮는 탐색 — Fullscreen Overlay Nav | 구성 | 메뉴를 열면 화면 전체를 덮어 목록만 보이게 하기 | 확인 [THISRESP] |
+| NAV-46 | 가로로 넘치는 탐색 띠 — Horizontal Overflow Nav | 구성 | 메뉴를 한 줄로 두고 넘치는 항목은 옆으로 밀어 보게 하기 | 확인 [THISRESP] |
+| NAV-47 | 상위 메뉴를 건너뛰는 하위 탐색 — Skip the Subnav | 구성 | 상위 항목을 누르면 목록을 펴지 않고 바로 하위 화면으로 넘기기 | 확인 [THISRESP] |
+| NAV-48 | 여러 단 밀어 넣기 메뉴 — Multi-Level Push Menu | 구성 | 하위 단계를 누르면 목록 전체가 옆으로 밀려 다음 단계만 보이게 하기 | 확인 [THISRESP] |
+| NAV-49 | 상위 링크를 함께 두는 다단 토글 — Multi-Toggle with Active Parent | 구성 | 하위 목록을 펼치면서 상위 항목 자체로 가는 링크도 같이 남겨 두기 | 확인 [THISRESP] |
+| NAV-50 | 오른쪽에서 왼쪽으로 미는 하위 메뉴 — Right-to-Left Drill | 구성 | 하위 단계로 들어갈 때 화면을 왼쪽으로 밀어 깊이를 느끼게 하기 | 확인 [THISRESP] |
+| NAV-51 | 마지막 단계만 보이는 경로 — Last-One Only Breadcrumb | 구성 | 좁은 화면에서 현재 위치 경로 중 바로 위 한 단계만 남기기 | 확인 [THISRESP] |
+| NAV-52 | 경로를 접어 넣은 드롭다운 — Breadcrumb Dropdown | 구성 | 긴 경로를 버튼 하나로 접고 눌렀을 때 전체 단계를 펴 보이기 | 확인 [THISRESP] |
+| NAV-53 | 경로를 뒤로 버튼으로 바꾸기 — Breadcrumbs-to-back | 구성 | 좁은 화면에서 경로 전체 대신 바로 위로 가는 버튼 하나만 두기 | 확인 [THISRESP] |
+| NAV-54 | 번호 대신 이전·다음으로 바꾸기 — Number to Prev/Next | 구성 | 좁은 화면에서 페이지 번호를 접고 이전·다음 두 버튼만 남기기 | 확인 [THISRESP] |
+| NAV-55 | 필요할 때만 펴는 페이지 번호 — Conditional Expose | 구성 | 평소에는 번호를 접어 두고 누르면 전체 번호를 펴 보이기 | 확인 [THISRESP] |
+| NAV-56 | 푸터로 보내는 탐색 링크 — Footer Anchor | 구성 | 상단 메뉴 버튼을 눌러 화면 아래 탐색 영역으로 이동시키기 | 확인 [THISRESP] |

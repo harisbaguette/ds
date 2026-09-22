@@ -1,2 +1,6 @@
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
+
+# 영감보관함에 모아 둔 그림 파일 — 남이 만든 자료라 공개 저장소에 올리지 않는다(폴더 구조만 유지).
+/영감보관함/이미지/*
+!/영감보관함/이미지/.gitkeep

@@ -22,7 +22,7 @@
 | DAT-16 | 핵심 지표 — Stat Card | 모듈 | 수치·단위·기준 기간을 함께 표시 | 확인 [B] |
 | DAT-17 | 차트 — Chart | 모듈 | 추이·비교·분포를 목적별 변형으로 표시 | 확인 [CH] |
 | DAT-18 | 대시보드 — Dashboard | 모듈 | 지표·조건·상세 탐색을 한 흐름으로 연결 | 확인 [UD] |
-| DAT-19 | 중첩 행 표 — Treegrid | 모듈 | 부모·자식의 속성을 함께 비교 | 확인 [APG] |
+| DAT-19 | 중첩 행 표 — Treegrid | 모듈 | 부모·자식의 속성을 함께 비교 | 확인 [APG] · 대조 [APGIMPL] |
 | DAT-20 | 그룹별 표 — Grouped Table | 구성 | 공통 속성으로 행을 묶음 | 확인 [CF] |
 | DAT-21 | 셀 범위 편집 — Spreadsheet Grid | 모듈 | 셀 이동·범위 선택·붙여넣기 | 확인 [SHRC] |
 | DAT-22 | 피벗 표 — Pivot Table | 모듈 | 차원을 바꿔 집계 비교 | 확인 [SYNC] |

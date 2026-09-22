@@ -64,13 +64,13 @@
 | AIX-56 | 공유 캔버스 실시간 AI 작업 가시성 — Shared Vision | 기준 | 여러 사람이 보는 캔버스에서 AI가 작업하는 과정을 실시간으로 보여주는 기준 | 확인 [AISH] |
 | AIX-57 | 한계·위험 사전 고지 — Caveat | 부품 | AI 결과를 쓰기 전 한계·위험을 짧게 미리 알리는 문구 | 확인 [AISH] |
 | AIX-58 | MCP 서버·도구 연결 상태 표시 — MCP Connection Indicator | 부품 | AI가 지금 어떤 외부 도구·서버에 연결됐는지 보여주는 표시 | 확장 [MK] · 대조 [AIMISC-MCP] |
-| AIX-59 | 생성형 UI — Generative UI | 기준 | AI가 텍스트 대신 그때그때 맞는 화면 구성요소를 직접 만들어 보여주는 방식 | 확인 [AISDKUI] |
+| AIX-59 | 생성형 UI — Generative UI | 기준 | AI가 텍스트 대신 그때그때 맞는 화면 구성요소를 직접 만들어 보여주는 방식 | 확인 [AISDKUI] · 대조 [COPILOTGUI] |
 | AIX-60 | 인용 신뢰도·강도 지표 — Confidence & Citation Strength Indicator | 부품 | 인용한 근거가 얼마나 확실한지 강도로 표시 | 확인 [AISH] |
 | AIX-61 | 출처 없음 명시·인용 그레이브야드 — Citation Graveyard | 부품 | 확인하지 못한 주장은 출처 없음으로 따로 모아 표시 | 확인 [AISH] |
 | AIX-62 | 다중 응답 비교로 불일치 감지 — Multi-Response Consistency Check | 기준 | 같은 질문에 여러 번 답하게 해 답이 갈리는 곳을 찾아내는 방식 | 확장 [MK] |
 | AIX-63 | AI 환각 경고 배지 — Hallucination Warning | 부품 | AI가 지어낸 내용일 가능성이 있음을 경고하는 배지 | 확장 [MK] · 대조 [AIMISC-HALLU] |
 | AIX-64 | 에이전트 컴퓨터 조작 화면 시각화 — Computer Use/Agentic Browsing View | 구성 | AI가 화면을 직접 조작하는 과정을 실시간 화면으로 보여줌 | 확장 [MK] |
-| AIX-65 | 생성형 UI 세 갈래 — 고정·선언·열린 방식 | 기준 | 미리 만든 화면만 골라 쓰는 방식, 정해진 부품 목록 안에서 AI가 조합하는 방식, 화면 코드까지 AI가 새로 짜는 방식으로 나눠 위험도에 맞게 고름 | 확인 [AISDKUI] |
+| AIX-65 | 생성형 UI 세 갈래 — 고정·선언·열린 방식 | 기준 | 미리 만든 화면만 골라 쓰는 방식, 정해진 부품 목록 안에서 AI가 조합하는 방식, 화면 코드까지 AI가 새로 짜는 방식으로 나눠 위험도에 맞게 고름 | 확인 [AISDKUI] · 대조 [COPILOTGUI] |
 | AIX-66 | 점진적 위임 — Progressive Delegation | 흐름 | 처음에는 제안만 하게 두고, 잘 맞는 게 확인될수록 스스로 하게 두는 범위를 단계적으로 넓힘 | 확인 [AIAGENTUX] |
 | AIX-67 | 계획 승인 뒤 실행 — Plan and Execute | 흐름 | 먼저 할 일 목록을 보여주고 사람이 승인한 뒤에만 실제로 실행함 | 확인 [AIAGENTUX] |
 | AIX-68 | 작업 패널 분리 — Activity Panel | 구성 | 진행 중인 일을 대화창이 아닌 별도 패널에 모아, 대화가 길어져도 진행 상황이 묻히지 않게 함 | 확인 [AIAGENTUX] |

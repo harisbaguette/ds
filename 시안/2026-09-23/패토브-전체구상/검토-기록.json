@@ -1,0 +1,130 @@
+{
+  "date": "2026-09-23",
+  "type": "image_gen 구상 시안",
+  "count": 8,
+  "images": [
+    {
+      "id": "01",
+      "name": "01-패턴-탐색",
+      "title": "패턴 탐색",
+      "source": "/Users/haris/.codex/generated_images/01a0cb81-f66b-72c0-8000-5f8f1540f60e/exec-7f688580-a795-4577-8800-eec4386f4710.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "PNG",
+      "file": "01-패턴-탐색.png",
+      "bytes": 1139908,
+      "sha256": "598b0b39b05ce39f5f1f46b022c8c171d7937b32998fe705fdd591820b8c964a",
+      "review": "탐색 화면의 로고, 분류, 짧은 이름과 미리보기 배치를 확인했다."
+    },
+    {
+      "id": "02",
+      "name": "02-상황-검색과-선택",
+      "title": "상황 검색",
+      "source": "/Users/haris/.codex/generated_images/01a0cb81-f66b-72c0-8000-5f8f1540f60e/exec-46ae2ac0-7e00-434a-b886-816613a19ccf.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "PNG",
+      "file": "02-상황-검색과-선택.png",
+      "bytes": 1342750,
+      "sha256": "af2a4a093fae3f2abe6886cc504efc2ae864981b93a346d6c338b31b4f5b8217",
+      "review": "설명 문단과 분류 배지를 제거하고 비교 선택과 짧은 제목을 남겼다."
+    },
+    {
+      "id": "03",
+      "name": "03-패턴-상세",
+      "title": "패턴 상세",
+      "source": "/Users/haris/.codex/generated_images/01a0cb81-f66b-72c0-8000-5f8f1540f60e/exec-7f64bb84-10e2-4897-9f09-deaf7d49dd93.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "PNG",
+      "file": "03-패턴-상세.png",
+      "bytes": 1469589,
+      "sha256": "623f176310aaf1879fc0d03d4d8f996454623dd925d236719f103deb1261e50a",
+      "review": "상세 모달 배경을 패턴 목록으로 수정했다. 데모 저장과 패턴 저장을 구분했다."
+    },
+    {
+      "id": "04",
+      "name": "04-패턴-비교",
+      "title": "패턴 비교",
+      "source": "/Users/haris/.codex/generated_images/01a0cb81-f66b-72c0-8000-5f8f1540f60e/exec-0a1e94a3-7057-44e4-8573-f374cc06e82a.png",
+      "width": 1448,
+      "height": 1086,
+      "format": "PNG",
+      "file": "04-패턴-비교.png",
+      "bytes": 1069406,
+      "sha256": "338b519d06b132b6f21731e271a8db530d2243d801ac5802070c95dcc39bf923",
+      "review": "배경의 잘못된 항목 수와 분류를 실제 대표 패턴 목록에 맞췄다."
+    },
+    {
+      "id": "05",
+      "name": "05-스타일-전체",
+      "title": "스타일 전체",
+      "source": "/Users/haris/.codex/generated_images/01a0cb81-f66b-72c0-8000-5f8f1540f60e/exec-81fd14bd-3165-4433-b98b-4d795985b7ea.png",
+      "width": 1448,
+      "height": 1086,
+      "format": "PNG",
+      "file": "05-스타일-전체.png",
+      "bytes": 1058040,
+      "sha256": "282b04a09571db0396e5c47bbbb4161a3b73c98795c67a55dc77ef40524208d6",
+      "review": "동일한 집중 기능을 선화·컬러블록·풍경의 서로 다른 구도로 표현했다."
+    },
+    {
+      "id": "06",
+      "name": "06-스타일-입력과-피드백",
+      "title": "스타일의 입력과 피드백",
+      "source": "/Users/haris/.codex/generated_images/01a0cb81-f66b-72c0-8000-5f8f1540f60e/exec-071dd6aa-cc6a-4595-8e40-56caf734e3e9.png",
+      "width": 1536,
+      "height": 1024,
+      "format": "PNG",
+      "file": "06-스타일-입력과-피드백.png",
+      "bytes": 1204200,
+      "sha256": "d201a717f2fede75e86b9fd53c4890d3aa792402a91c7a950e38aa6f26b25022",
+      "review": "같은 입력 양식과 완료 피드백에 세 스타일이 이어지는지 확인했다."
+    },
+    {
+      "id": "07",
+      "name": "07-저장한-패턴",
+      "title": "저장한 패턴",
+      "source": "/Users/haris/.codex/generated_images/01a0cb81-f66b-72c0-8000-5f8f1540f60e/exec-3ad3dfb6-1225-4be7-b73a-cef95b75f121.png",
+      "width": 1448,
+      "height": 1086,
+      "format": "PNG",
+      "file": "07-저장한-패턴.png",
+      "bytes": 1138463,
+      "sha256": "61483ef8fb17fdc03e55fa9fe2a70b5e33b672afcf8a8d834f2a6a06921aa694",
+      "review": "진행률을 파일 업로드 68%로 수정하고 빈 상태의 예시 문구와 삭제 대상을 명확히 했다."
+    },
+    {
+      "id": "08",
+      "name": "08-모바일-전체흐름",
+      "title": "모바일 전체 흐름",
+      "source": "/Users/haris/.codex/generated_images/01a0cb81-f66b-72c0-8000-5f8f1540f60e/exec-693e050a-e425-408f-9c43-094fd401155c.png",
+      "width": 1476,
+      "height": 1066,
+      "format": "PNG",
+      "file": "08-모바일-전체흐름.png",
+      "bytes": 1253273,
+      "sha256": "91bd3689c4b4a0edfe7299a930c4b9516cd344fc89de6f9e323cba0f672f4097",
+      "review": "상세의 중복 완료 알림을 메모로 교체하고 스타일 제목의 중복을 줄였다."
+    }
+  ],
+  "scope": "대표 항목으로 전체 사용자 흐름을 설명한다. 실제 구현이나 브라우저 동작 검증의 증거로 사용하지 않는다.",
+  "implementation_notes": [
+    "로고 형태·치수와 정확한 컴포넌트 토큰은 기존 SVG와 실행 시안을 기준으로 한다.",
+    "생성 이미지 사이의 미세한 테두리·서체·배경 차이는 실제 구현 시 공통 토큰으로 통일한다.",
+    "검색 결과의 관련 후보 포함 범위와 순위는 실제 검색 설계에서 별도로 확정한다."
+  ],
+  "gallery_verification": {
+    "viewports": [
+      1440,
+      390
+    ],
+    "figures": 8,
+    "loaded_images_per_viewport": 9,
+    "references_checked_per_viewport": 38,
+    "horizontal_overflow": false,
+    "console_errors": 0,
+    "zip_integrity": "통과",
+    "source_copy_sha256": "8장 모두 일치"
+  }
+}

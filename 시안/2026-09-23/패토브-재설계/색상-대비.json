@@ -27,18 +27,42 @@
     "foreground": "#6D6D65",
     "background": "#FFFFFF",
     "ratio": 5.22,
-    "use": "모노 데모 보조 글자"
+    "use": "기본 데모 보조 글자"
   },
   {
-    "foreground": "#746E62",
-    "background": "#FCFAF3",
-    "ratio": 4.85,
-    "use": "에디토리얼 데모 보조 글자"
+    "foreground": "#63685F",
+    "background": "#FFFEFA",
+    "ratio": 5.66,
+    "use": "선화 데모 보조 글자"
   },
   {
-    "foreground": "#687862",
-    "background": "#F9FCF4",
-    "ratio": 4.55,
-    "use": "스튜디오 데모 보조 글자"
+    "foreground": "#56617A",
+    "background": "#F5F5ED",
+    "ratio": 5.66,
+    "use": "컬러블록 데모 보조 글자"
+  },
+  {
+    "foreground": "#FFFFFF",
+    "background": "#2452EE",
+    "ratio": 5.97,
+    "use": "컬러블록 주요 색면 글자"
+  },
+  {
+    "foreground": "#17284B",
+    "background": "#E4FA75",
+    "ratio": 12.65,
+    "use": "컬러블록 강조 버튼 글자"
+  },
+  {
+    "foreground": "#596771",
+    "background": "#F4EEE2",
+    "ratio": 5.04,
+    "use": "풍경 데모 보조 글자"
+  },
+  {
+    "foreground": "#283E4C",
+    "background": "#BDCBD2",
+    "ratio": 6.71,
+    "use": "풍경 배경 위 글자"
   }
 ]

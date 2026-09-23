@@ -2,10 +2,24 @@ const CATEGORIES = [
   ['all','전체','grid'],['navigate','이동','compass'],['input','입력','edit'],['browse','탐색','layers'],['feedback','피드백','bell'],['recover','복구','rotate']
 ];
 const STYLES = {
-  clear:{name:'모노',description:'정보가 많은 도구와 업무 화면에',detail:'고딕 · 중립색 · 얇은 경계 · 작은 그림자',ref:'Cosmos·Recent의 절제된 화면과 KAWAI의 미니어처 구조'},
-  ink:{name:'에디토리얼',description:'콘텐츠와 개성을 또렷하게 보여줄 때',detail:'명조 제목 · 종이색 · 직선 · 짙은 버튼',ref:'영감보관함의 Karita 선화와 MYTURN 격자'},
-  calm:{name:'스튜디오',description:'차분하게 읽고 선택하는 화면에',detail:'넉넉한 간격 · 녹색 면 · 부드러운 곡선',ref:'영감보관함의 바다 홈화면과 제한색 포스터'}
+ clear:{name:'기본',colors:['#ffffff','#242424','#e9e9e5']},
+ ink:{name:'선화',colors:['#fffefa','#202320','#d8e3d5'],refs:[
+  ['앱화면/2026-09-22-루틴-체크-격자-myturn-pinterest.png','MYTURN의 격자와 작은 그림'],
+  ['명함/2026-09-22-일러스트레이터-명함-흑백-karita-pinterest.jpg','Karita 명함의 절제된 선화'],
+  ['캐릭터/2026-09-22-간식-든-흑백-고양이-선화-pinterest.jpg','흑백 캐릭터의 선과 여백']
+ ]},
+ block:{name:'컬러블록',colors:['#2452ee','#e4fa75','#f5f5ed'],refs:[
+  ['인물/2026-09-22-파랑-단색-졸린-얼굴-sushi-pinterest.png','단색 바탕과 큰 타이포'],
+  ['그래픽포스터/2026-09-22-버튼-입체-단색-노랑-pinterest.jpg','노랑 면과 명확한 윤곽'],
+  ['앱화면/2026-09-22-초록-띠-잠금화면-lemon-pinterest.jpg','색면으로 나눈 기능 영역']
+ ]},
+ calm:{name:'풍경',colors:['#bdcbd2','#283e4c','#f4eee2'],refs:[
+  ['앱화면/2026-09-22-단순-풍경-홈화면-4대-바다-pinterest.png','수평 색면이 화면을 이루는 풍경'],
+  ['앱화면/2026-09-22-단순-풍경-홈화면-4대-집-pinterest.png','작은 사물과 넓은 여백'],
+  ['그래픽포스터/2026-09-22-밤하늘-비행기-그림자-구름-pinterest.jpg','제한된 색과 작은 주인공']
+ ]}
 };
+const STYLE_FAMILIES=['ink','block','calm'];
 const PATTERNS = [
  {id:'toast',source:'STA-03',name:'잠깐 알림',en:'Toast',cat:'feedback',status:['success'],type:'toast',task:'저장처럼 가벼운 작업의 완료를 알려요.',search:'저장 완료 끝났 끝났다고 성공 알려 알리기 알림 토스트 snackbar',why:'저장 성공처럼 흐름을 끊지 않아도 되는 결과에 맞아요.',when:'저장·복사처럼 결과가 짧고, 놓쳐도 다시 확인할 수 있을 때',avoid:'결제 실패나 동의처럼 반드시 읽거나 결정해야 할 때',confirm:'필요 없음',placement:'화면 가장자리, 잠깐',caution:'중요한 정보의 유일한 전달 수단으로 쓰지 않아요.',alternatives:['banner','dialog'],device:['web','mobile']},
  {id:'banner',source:'STA-02',name:'인라인 안내',en:'Inline alert',cat:'feedback',status:['success','error'],type:'banner',task:'중요한 안내를 내용 곁에 남겨 둬요.',search:'저장 완료 성공 알려 알리기 알림 중요 계속 배너 인라인 alert',why:'놓치지 않고 다시 읽어야 하는 안내라면 더 적합해요.',when:'이용 제한·저장 실패 등 읽고 대응할 내용을 남겨야 할 때',avoid:'매번 반복되는 가벼운 완료 알림으로 화면을 채울 때',confirm:'읽거나 해결할 때까지 유지',placement:'관련 내용 바로 위',caution:'무엇이 달라졌고 어떻게 해결할지 함께 적어요.',alternatives:['toast','dialog'],device:['web','mobile']},

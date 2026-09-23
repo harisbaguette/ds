@@ -27,7 +27,8 @@ function readSaved(){
    return Array.isArray(data)?data.filter(x=>PATTERNS.some(p=>p.id===x.id)&&Object.hasOwn(STYLES,x.style)).filter((x,i,a)=>a.findIndex(v=>v.id===x.id&&v.style===x.style)===i):[];
  } catch { return []; }
 }
-const state={page:'patterns',category:'all',device:'all',status:'all',style:'clear',query:'',compact:false,compareMode:false,compare:[],saved:readSaved(),detailId:null,detailStyle:'clear',lastOpener:null};
+function readStyle(){try{const key=localStorage.getItem('pattove-style');return Object.hasOwn(STYLES,key)?key:'clear';}catch{return 'clear';}}
+const state={page:'patterns',category:'all',device:'all',status:'all',style:readStyle(),query:'',compact:false,compareMode:false,compare:[],saved:readSaved(),detailId:null,detailStyle:'clear',lastOpener:null};
 let noticeTimer, searchTimer, demoTimer;
 function announce(text){$('#announcer').textContent=text;}
 function notify(text){clearTimeout(noticeTimer);$('#notice').textContent=text;$('#notice').hidden=false;noticeTimer=setTimeout(()=>$('#notice').hidden=true,3500);}
@@ -94,7 +95,9 @@ function renderPatterns(){
  announce(`${list.length}개의 패턴을 찾았습니다.`);
 }
 function setPage(page){
+ if(state.page==='styles'&&page!=='styles')pauseStyleClocks();
  state.page=page;
+ history.replaceState(null,'',`#${page}`);
  document.body.dataset.page=page;
  for(const [id,p] of [['pattern-page','patterns'],['style-page','styles'],['saved-page','saved']])$('#'+id).hidden=p!==page;
  $$('.top-nav button').forEach(b=>b.toggleAttribute('aria-current',false));
@@ -169,9 +172,11 @@ function openCompare(){
  dlg.innerHTML=`<div class="dialog-head"><h2 id="compare-title" tabindex="-1">비교</h2><button class="close-dialog" data-close="compare-dialog" aria-label="비교 닫기">${icon('close')}</button></div><div class="comparison"><div class="comparison-head">${ps.map(p=>`<div class="compare-pattern">${preview(p)}<h3>${p.name}</h3></div>`).join('')}</div>${[['용도','when'],['사용자 확인','confirm'],['위치','placement'],['피할 때','avoid']].map(([name,key])=>`<section class="compare-row"><h3>${name}</h3><div>${ps.map(p=>`<p>${p[key]}</p>`).join('')}</div></section>`).join('')}<div class="compare-actions">${ps.map(p=>`<button class="secondary" data-compare-detail="${p.id}">${p.name} ${icon('arrow')}</button>`).join('')}</div></div>`;
  dlg.showModal();$('#compare-title').focus();
 }
-function sampleScreen(){return `<div class="sample-app"><div class="sample-top"><b>Collection</b><span class="sample-avatar">J</span></div><div class="sample-body"><div class="sample-heading"><h3>내 컬렉션</h3><span class="mini-button">+ 만들기</span></div><div class="sample-nav"><span class="active">전체</span><span>최근</span><span>공유</span></div><div class="sample-projects"><div><img src="${ART.milk}" alt=""><b>색과 형태</b><span>12개</span></div><div><img src="${ART.melon}" alt=""><b>여름의 기록</b><span>8개</span></div></div><div class="sample-setting"><div><b>링크 공유</b><span>초대받은 멤버</span></div><i class="mini-toggle"></i></div><div class="sample-bottom"><span>멤버 3명</span><span class="mini-button">초대</span></div></div></div>`;}
-function renderStyles(){
- $('#style-page').innerHTML=`<div class="page-heading"><h1>스타일</h1><span>3</span></div><div class="style-grid">${Object.entries(STYLES).map(([key,v])=>`<article class="style-card ${state.style===key?'selected':''}"><div class="style-sample theme-${key}" aria-hidden="true">${sampleScreen()}</div><div class="style-meta"><h2>${v.name}</h2><button class="style-apply" data-apply-style="${key}" aria-label="${v.name} 적용" aria-pressed="${state.style===key}">${state.style===key?icon('check'):icon('arrow')}</button></div></article>`).join('')}</div>`;
+function applyStyle(style){
+ if(!Object.hasOwn(STYLES,style))return;
+ state.style=style;$('#preview-style').value=style;
+ try{localStorage.setItem('pattove-style',style);}catch{notify('스타일은 이 화면에서만 유지됩니다.');}
+ renderPatterns();
 }
 function renderSaved(){
  $('#saved-page').innerHTML=`<div class="saved-intro page-heading"><h1>저장</h1><span>${state.saved.length}</span></div>${!state.saved.length?'<div class="empty-results"><h2>저장한 패턴 없음</h2><button class="secondary" data-page="patterns">패턴 찾기</button></div>':`<div class="saved-list">${state.saved.map(({id,style})=>{const p=PATTERNS.find(x=>x.id===id);return `<article class="saved-item"><button class="saved-preview" data-saved-open="${id}" data-saved-style="${style}" aria-label="${p.name} 다시 보기">${preview(p,style)}</button><div class="saved-copy"><div><h3>${p.name}</h3><p>${styleName(style)}</p></div><button class="icon-button" data-unsave="${id}" data-unsave-style="${style}" aria-label="${p.name} ${styleName(style)} 저장 취소">${icon('close')}</button></div></article>`}).join('')}</div>`}`;
@@ -222,7 +227,7 @@ document.addEventListener('click',event=>{
  if(b.dataset.compareDetail){$('#compare-dialog').close();openDetail(b.dataset.compareDetail);}
  if(b.dataset.detailStyle)changeDetailStyle(b.dataset.detailStyle);
  if(b.dataset.save)savePattern(b.dataset.save,state.detailStyle);
- if(b.dataset.applyStyle){state.style=b.dataset.applyStyle;$('#preview-style').value=state.style;setPage('patterns');renderPatterns();notify(`${styleName(state.style)} 적용됨`);}
+ if(b.dataset.applyStyle){applyStyle(b.dataset.applyStyle);setPage('patterns');notify(`${styleName(state.style)} 적용됨`);$('#preview-style').focus();}
  if(b.dataset.savedOpen)openDetail(b.dataset.savedOpen,b.dataset.savedStyle);
  if(b.dataset.unsave){state.saved=state.saved.filter(x=>!(x.id===b.dataset.unsave&&x.style===b.dataset.unsaveStyle));persistSaved();updateSavedCount();renderSaved();announce('저장을 취소했습니다.');}
  if(b.dataset.demo)runDemo(b.dataset.demo,b);
@@ -232,7 +237,7 @@ document.addEventListener('change',event=>{
  if(el.dataset.compare)setCompare(el.dataset.compare,el.checked);
  if(el.id==='category-mobile'){state.category=el.value;renderSidebar();renderPatterns();}
  if(el.id==='device'||el.id==='status'){state[el.id]=el.value;renderPatterns();}
- if(el.id==='preview-style'){state.style=el.value;renderPatterns();}
+ if(el.id==='preview-style')applyStyle(el.value);
  if(el.id==='demo-filter')$('.demo-output',$('#detail-dialog')).innerHTML=`<p>${el.value==='done'?'소개 페이지 · 완료':'리뉴얼 · 진행 중<br>소개 페이지 · 완료'}</p>`;
 });
 $('#query').addEventListener('input',e=>{$('#search-suggestions').hidden=true;clearTimeout(searchTimer);const value=e.target.value;searchTimer=setTimeout(()=>setQuery(value),120);});
@@ -252,4 +257,6 @@ $('#query').addEventListener('focus',()=>{$('#search-suggestions').hidden=!!$('#
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('#search-form'))$('#search-suggestions').hidden=true;});
 document.addEventListener('focusin',e=>{if(!e.target.closest('#search-form'))$('#search-suggestions').hidden=true;});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('#search-suggestions').hidden=true;});
+$('#preview-style').innerHTML=Object.entries(STYLES).map(([key,s])=>`<option value="${key}">${s.name}</option>`).join('');
+$('#preview-style').value=state.style;
 document.body.dataset.page='patterns';$('#search-icon').innerHTML=icon('search');renderSidebar();renderPatterns();updateSavedCount();renderTray();

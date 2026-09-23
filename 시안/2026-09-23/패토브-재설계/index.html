@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <title>패토브</title>
-  <link rel="stylesheet" href="app.css"><link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="app.css"><link rel="stylesheet" href="style-lab.css"><link rel="icon" href="assets/mark.svg" type="image/svg+xml">
 </head>
 <body>
   <a class="skip" href="#main">본문으로</a>
@@ -29,7 +29,7 @@
             <select class="mobile-category" id="category-mobile" aria-label="목적"></select>
             <select id="device" aria-label="기기" hidden><option value="all">모든 기기</option><option value="web">웹</option><option value="mobile">모바일</option></select>
             <select id="status" aria-label="상태"><option value="all">모든 상태</option><option value="normal">기본</option><option value="success">완료</option><option value="loading">로딩</option><option value="empty">내용 없음</option><option value="error">오류</option></select>
-            <select id="preview-style" aria-label="스타일"><option value="clear">모노</option><option value="ink">에디토리얼</option><option value="calm">스튜디오</option></select>
+            <select id="preview-style" aria-label="스타일"></select>
             <button id="compare-mode" class="compare-mode-toggle" aria-pressed="false" aria-controls="pattern-grid">비교</button>
             <div class="density" aria-label="보기 방식"><button id="view-gallery" aria-label="갤러리 보기" aria-pressed="true"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3" y="3" width="5" height="5" rx="1"/><rect x="12" y="3" width="5" height="5" rx="1"/><rect x="3" y="12" width="5" height="5" rx="1"/><rect x="12" y="12" width="5" height="5" rx="1"/></svg></button><button id="view-compact" aria-label="목록 보기" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg></button></div>
           </div>
@@ -47,6 +47,6 @@
   <dialog id="compare-dialog" aria-labelledby="compare-title"></dialog>
   <div class="sr-only" id="announcer" role="status" aria-live="polite"></div>
   <div id="notice" class="notice" role="status" hidden></div>
-  <script src="data.js"></script><script src="app.js"></script>
+  <script src="data.js"></script><script src="app.js"></script><script src="style-lab.js"></script>
 </body>
 </html>

@@ -41,15 +41,64 @@ function check(label,condition){assert.ok(condition,label);checks.push(label);}
   await page.keyboard.press('Escape');
   check('상세를 닫고 원래 카드로 초점 복귀',await page.locator('[data-pattern="toast"] .card-main').evaluate(el=>el===document.activeElement));
   await page.locator('.top-nav [data-page="saved"]').click();
-  check('패턴과 스타일의 조합 저장',await page.locator('.saved-item').count()===1&&await page.locator('.saved-copy').textContent().then(t=>t.includes('에디토리얼')));
+  check('패턴과 스타일의 조합 저장',await page.locator('.saved-item').count()===1&&await page.locator('.saved-copy').textContent().then(t=>t.includes('선화')));
   await page.reload();await page.locator('.top-nav [data-page="saved"]').click();
   check('새로고침 후 저장 유지',await page.locator('.saved-item').count()===1);
   check('저장한 패턴 제목이 상단에 유지',await page.locator('.saved-intro').evaluate(e=>e.getBoundingClientRect().top<180));
   await page.screenshot({path:path.join(base,'08-저장한-패턴.png')});
   await page.locator('.top-nav [data-page="styles"]').click();
-  check('동일 콘텐츠의 세 스타일 비교',await page.locator('.sample-app').count()===3);
-  check('영감보관함 원본 이미지 로드',await page.locator('.sample-projects img').evaluateAll(es=>es.length===6&&es.every(e=>e.complete&&e.naturalWidth>0)));
+  check('동일 기능의 세 스타일 비교',await page.locator('.focus-app').count()===3);
+
   await page.screenshot({path:path.join(base,'06-화면-전체-스타일.png')});
+  for(const summary of await page.locator('.style-sources summary').all())await summary.click();
+  await page.waitForFunction(()=>[...document.querySelectorAll('.style-sources[open] img')].every(e=>e.complete&&e.naturalWidth>0));
+  check('세 스타일의 원본 참고 이미지 9장 열람',await page.locator('.style-sources[open] img').count()===9);
+  await page.screenshot({path:path.join(base,'14-스타일-참고-이미지.png'),fullPage:true});
+  for(const summary of await page.locator('.style-sources summary').all())await summary.click();
+  await page.locator('[data-lab-clock="ink"]').click();
+  await page.waitForFunction(()=>document.querySelector('.focus-ink .focus-clock').textContent!=='25:00');
+  check('집중 타이머 시작과 시간 감소',await page.locator('[data-lab-clock="ink"]').getAttribute('aria-pressed')==='true');
+  await page.locator('[data-lab-clock="ink"]').click();
+  const pausedTime=await page.locator('.focus-ink .focus-clock').textContent();await page.waitForTimeout(1100);
+  check('타이머 일시정지',await page.locator('.focus-ink .focus-clock').textContent()===pausedTime);
+  await page.locator('[data-lab-duration="ink"][data-minutes="50"]').click();
+  check('집중 시간 변경',await page.locator('.focus-ink .focus-clock').textContent()==='50:00');
+  await page.locator('[data-lab-task="ink"][data-task-index="0"]').check();
+  check('할 일 완료와 집계 연결',await page.locator('.focus-ink .task-count').textContent()==='2 / 2');
+  await page.locator('[data-lab-view="form"]').click();
+  for(const key of ['ink','block','calm']){
+    await page.locator(`[data-lab-form="${key}"] [type=submit]`).click();
+    check(`${key} 입력 오류와 초점`,await page.locator(`#collection-${key}`).getAttribute('aria-invalid')==='true'&&await page.locator(`#collection-${key}`).evaluate(e=>e===document.activeElement));
+    await page.locator(`#collection-${key}`).fill('여름의 색');
+    await page.locator(`[data-lab-form="${key}"] [type=submit]`).click();
+    check(`${key} 입력 완료 피드백`,await page.locator(`[data-lab-form="${key}"] .lab-form-result`).textContent().then(t=>t.includes('여름의 색')));
+  }
+  await page.screenshot({path:path.join(base,'10-스타일-입력.png')});
+  await page.locator('[data-lab-view="feedback"]').click();
+  check('뷰 전환 후 초점 유지',await page.locator('[data-lab-view="feedback"]').evaluate(e=>e===document.activeElement));
+  await page.locator('[data-lab-dismiss="block"]').click();
+  check('예시 알림 닫기와 초점 복귀',await page.locator('[data-lab-toast="block"]').isHidden()&&await page.locator('[data-lab-feedback="block"]').evaluate(e=>e===document.activeElement));
+  await page.locator('[data-lab-feedback="block"]').click();
+  check('피드백 예시 다시 실행',await page.locator('[data-lab-toast="block"]').isVisible());
+  await page.screenshot({path:path.join(base,'11-스타일-피드백.png')});
+  await page.locator('[data-lab-view="form"]').click();
+  check('예시 전환 후 입력 보존',await page.locator('#collection-ink').inputValue()==='여름의 색');
+  await page.locator('[data-apply-style="block"]').click();
+  check('컬러블록 16개 패턴에 적용',await page.locator('#pattern-grid .preview.theme-block').count()===16);
+  await page.reload();
+  check('새로고침 후 선택 스타일 유지',await page.locator('#preview-style').inputValue()==='block'&&await page.locator('#pattern-grid .preview.theme-block').count()===16);
+  await page.screenshot({path:path.join(base,'12-컬러블록-패턴.png')});
+  await page.locator('[data-pattern="tabs"] .card-main').click();await page.locator('#detail-save').click();await page.keyboard.press('Escape');
+  await page.locator('.top-nav [data-page="saved"]').click();
+  check('새 스타일 저장과 다시 열기',await page.locator('[data-saved-style="block"]').count()===1);
+  await page.locator('[data-saved-style="block"]').click();
+  check('저장한 컬러블록 스타일 복원',await page.locator('.demo-stage.theme-block').isVisible());await page.keyboard.press('Escape');
+  await page.locator('[data-unsave-style="block"]').click();
+  await page.locator('.top-nav [data-page="styles"]').click();
+  await page.locator('[data-apply-style="clear"]').click();
+  check('기본 스타일 복귀',await page.locator('#pattern-grid .preview.theme-clear').count()===16);
+  await page.locator('.top-nav [data-page="styles"]').click();
+
   await page.locator('[data-apply-style="calm"]').click();
   check('선택 스타일이 모든 목록 미리보기에 반영',await page.locator('#pattern-grid .preview.theme-calm').count()===16);
   await page.locator('#query').fill('존재하지않는말xyz987');await page.locator('#search-form').evaluate(f=>f.requestSubmit());
@@ -93,11 +142,22 @@ function check(label,condition){assert.ok(condition,label);checks.push(label);}
   check('모바일 상세 가로 넘침 없음',await mobile.locator('#detail-dialog').evaluate(e=>e.scrollWidth<=e.clientWidth));
   await mobile.locator('[data-demo="save"]').click();
   await mobile.screenshot({path:path.join(base,'09-모바일-상세.png')});
+  await mobile.keyboard.press('Escape');
+  await mobile.locator('.top-nav [data-page="styles"]').click();
+  await mobile.screenshot({path:path.join(base,'13-모바일-스타일.png'),fullPage:true});
+  for(const width of [320,390,768]){
+    await mobile.setViewportSize({width,height:844});
+    for(const view of ['focus','form','feedback']){
+      await mobile.locator(`[data-lab-view="${view}"]`).click();
+      check(`${width}px ${view} 스타일 가로 넘침 없음`,await mobile.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+      check(`${width}px ${view} 예시 내용 잘림 없음`,await mobile.locator('.sample-app').evaluateAll(es=>es.every(e=>e.scrollHeight<=e.clientHeight+2&&e.scrollWidth<=e.clientWidth+2)));
+    }
+  }
   await mobile.close();
   await page.emulateMedia({reducedMotion:'reduce'});
   check('움직임 완화에서 카드 전환 제거',await page.locator('.pattern-card').first().evaluate(e=>getComputedStyle(e).transitionDuration==='0s'));
   check('실행 중 JavaScript 오류 없음',errors.length===0);
-  const report={layoutMetrics:before,checkedAt:new Date().toISOString(),mobileFullyVisibleCards:visibleCards,browser:'Playwright Chromium, macOS',checks,passed:checks.length,errors,scope:'대표 패턴 16개, 로컬 검색·비교·체험·스타일·저장, 화면 320/390/768/1440px',limitations:'사용자 연구·실기기 터치·스크린리더·전체 WCAG 적합성·전체 사전 구현 검증은 포함하지 않음'};
+  const report={layoutMetrics:before,checkedAt:new Date().toISOString(),mobileFullyVisibleCards:visibleCards,browser:'Playwright Chromium, macOS',checks,passed:checks.length,errors,scope:'대표 패턴 16개, 세 스타일 계열과 기본, 집중·입력·피드백 예시, 선택 유지·저장, 화면 320/390/768/1440px',limitations:'사용자 연구·실기기 터치·스크린리더·전체 WCAG 적합성·전체 사전 구현 검증은 포함하지 않음'};
   fs.writeFileSync(path.join(base,'검증-결과.json'),JSON.stringify(report,null,2));
   console.log(JSON.stringify({passed:checks.length,errors,visibleCards}));
  }finally{await browser.close();}

@@ -1,0 +1,1218 @@
+The Component Gallery
+SEARCH
+⌘
+K
+COMPONENTS
+DESIGN SYSTEMS
+ABOUT
+Component
+Accordion
+
+Also known as: Arrow toggle, Collapse, Collapsible sections, Collapsible, Details, Disclosure, Expandable, Expander, ShowyHideyThing
+
+An accordion is a vertical stack of interactive headings used to toggle the display of further information; each item can be 'collapsed' with just a short label visible or 'expanded' to show the full content.
+
+ON THIS PAGE
+Examples
+Description
+Markup
+Approach 1: Heading with Button
+Approach 2: Summary and Details
+Interactivity
+Styling
+Usage guidelines
+Footnotes
+Resources
+Name distribution
+101 EXAMPLES
+
+Filter:
+
+Tech
+Features
+Sort by:
+Design system
+Component name
+Copy URLs
+Accordion
+
+A11Y Style Guide
+
+TECH
+jQuery
+FEATURES
+Code examples
+Usage guidelines
+Accessibility
+Unmaintained
+Open source
+Collapse
+
+Ant Design
+
+TECH
+React
+FEATURES
+Code examples
+Accessibility issues
+Open source
+Disclosure
+
+Ariakit
+
+TECH
+React
+FEATURES
+Code examples
+Open source
+Accessibility
+Accordion
+
+Auro
+
+TECH
+Web Components
+Sass
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Accordion
+
+Backpack
+
+TECH
+Mobile
+React
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Tone of voice
+Accordion
+
+Base Web
+
+TECH
+React
+CSS-in-JS
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Accordion
+
+BBC Global Experience Language
+
+FEATURES
+Accessibility
+Usage guidelines
+Unmaintained
+Collapse
+
+Blueprint
+
+TECH
+React
+Sass
+FEATURES
+Open source
+Accordion
+
+Bolt Design System
+
+TECH
+Sass
+Twig
+Web Components
+FEATURES
+Code examples
+Tone of voice
+Open source
+Collapse
+
+Bootstrap
+
+TECH
+Sass
+FEATURES
+Code examples
+Accessibility
+Open source
+Expandable helper
+
+Brighton & Hove City Council Website pattern library
+
+FEATURES
+Unmaintained
+Accordion
+
+Carbon Design System
+
+TECH
+React
+Vanilla JS
+Angular
+Vue
+Svelte
+Web Components
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Accordion
+
+Cauldron
+
+TECH
+React
+CSS
+FEATURES
+Code examples
+Usage guidelines
+Accessibility
+Open source
+ExpandCollapsePanel
+
+Cauldron
+
+TECH
+React
+CSS
+FEATURES
+Code examples
+Usage guidelines
+Accessibility
+Open source
+Accordion
+
+Cedar
+
+TECH
+Vue
+Sass
+CSS Modules
+FEATURES
+Usage guidelines
+Code examples
+Open source
+Accordion
+
+Chakra UI
+
+TECH
+React
+CSS-in-JS
+FEATURES
+Code examples
+Open source
+Collapsible
+
+Chakra UI
+
+TECH
+React
+CSS-in-JS
+FEATURES
+Code examples
+Open source
+Accordion
+
+Clarity Design System
+
+TECH
+CSS
+Angular
+Web Components
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Stack View
+
+Clarity Design System
+
+TECH
+CSS
+Angular
+Web Components
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Accordion
+
+Coral
+
+TECH
+React
+FEATURES
+Code examples
+Tone of voice
+Open source
+Accordion
+
+Crayons
+
+TECH
+Web Components
+FEATURES
+Code examples
+Open source
+Accordion
+
+Decathlon Design System
+
+TECH
+CSS
+React
+Svelte
+Vue
+Web Components
+FEATURES
+Usage guidelines
+Code examples
+Accessibility
+Open source
+Accordion
+
+Dell Design System
+
+TECH
+Vanilla JS
+FEATURES
+Code examples
+Usage guidelines
+View More/Less
+
+Dell Design System
+
+TECH
+Vanilla JS
+FEATURES
+Code examples
+Usage guidelines
+Accordion
+
+eBay MIND Patterns
+
+FEATURES
+Accessibility
+Usage guidelines
+Open source
+Details
+
+eBay MIND Patterns
+
+FEATURES
+Accessibility
+Usage guidelines
+Open source
+Expansion
+
+eBay Playbook
+
+TECH
+HTML
+React
+FEATURES
+Code examples
+Accordion
+
+Elastic UI framework
+
+TECH
+React
+CSS-in-JS
+FEATURES
+Code examples
+Open source
+Accordion
+
+Elisa Design System
+
+TECH
+React
+FEATURES
+Usage guidelines
+Code examples
+Accessibility
+Accordion
+
+Flowbite
+
+TECH
+Tailwind CSS
+FEATURES
+Open source
+Code examples
+Accordion
+
+Forma 36
+
+TECH
+React
+CSS-in-JS
+FEATURES
+Code examples
+Open source
+Collapse
+
+Geist Design System
+
+TECH
+React
+FEATURES
+Code examples
+Accordion
+
+generic-components
+
+TECH
+Web Components
+FEATURES
+Code examples
+Accessibility
+Open source
+Disclosure
+
+generic-components
+
+TECH
+Web Components
+FEATURES
+Code examples
+Accessibility
+Open source
+Accordion
+
+Gestalt
+
+TECH
+React
+CSS
+FEATURES
+Code examples
+Open source
+Usage guidelines
+Accordion
+
+giffgaff design system
+
+FEATURES
+Usage guidelines
+Code examples
+Accordion
+
+GOLD Design System
+
+TECH
+React
+Sass
+FEATURES
+Code examples
+Usage guidelines
+Accessibility
+Open source
+Unmaintained
+Accordion
+
+GOV.UK Design System
+
+TECH
+Nunjucks
+FEATURES
+Code examples
+Usage guidelines
+Research
+Open source
+Details
+
+GOV.UK Design System
+
+TECH
+Nunjucks
+FEATURES
+Code examples
+Usage guidelines
+Research
+Open source
+Accordion
+
+Grommet
+
+TECH
+React
+FEATURES
+Code examples
+Open source
+Disclosure
+
+Headless UI
+
+TECH
+React
+Vue
+FEATURES
+Code examples
+Accessibility
+Open source
+Accordion
+
+Helsinki Design System
+
+TECH
+React
+CSS
+FEATURES
+Code examples
+Usage guidelines
+Accessibility
+Open source
+Accordion
+
+HeroUI
+
+TECH
+React
+Tailwind CSS
+FEATURES
+Code examples
+Open source
+Collapsible sections
+
+Inclusive Components
+
+FEATURES
+Code examples
+Accessibility
+Unmaintained
+ToggleDetails
+
+Instructure-UI
+
+TECH
+React
+CSS-in-JS
+FEATURES
+Code examples
+Accessibility
+Open source
+ToggleGroup
+
+Instructure-UI
+
+TECH
+React
+CSS-in-JS
+FEATURES
+Code examples
+Accessibility
+Open source
+Accordion
+
+Jøkul Designsystem
+
+TECH
+React
+Sass
+FEATURES
+Code examples
+Usage guidelines
+Open source
+ExpandButton
+
+Jøkul Designsystem
+
+TECH
+React
+Sass
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Accordion
+
+Lightning Design System
+
+TECH
+React
+FEATURES
+Code examples
+Usage guidelines
+Tone of voice
+Open source
+Expandable Section
+
+Lightning Design System
+
+TECH
+React
+FEATURES
+Code examples
+Usage guidelines
+Tone of voice
+Open source
+Summary Detail
+
+Lightning Design System
+
+TECH
+React
+FEATURES
+Code examples
+Usage guidelines
+Tone of voice
+Open source
+Details
+
+Mozilla Protocol
+
+TECH
+Handlebars
+Sass
+FEATURES
+Usage guidelines
+Open source
+Details component
+
+Mozilla Protocol
+
+TECH
+Handlebars
+Sass
+FEATURES
+Usage guidelines
+Open source
+Expandable
+
+Nessie
+
+TECH
+Web Components
+Tailwind CSS
+FEATURES
+Usage guidelines
+Code examples
+Accordion
+
+NewsKit
+
+TECH
+React
+CSS-in-JS
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Expander
+
+NHS Digital service manual
+
+TECH
+Nunjucks
+FEATURES
+Code examples
+Usage guidelines
+Research
+Tone of voice
+Open source
+Details
+
+NHS Digital service manual
+
+TECH
+Nunjucks
+FEATURES
+Code examples
+Usage guidelines
+Research
+Tone of voice
+Open source
+Accordion
+
+Nucleus Design System
+
+TECH
+Web Components
+FEATURES
+Usage guidelines
+Expander
+
+Nucleus Design System
+
+TECH
+Web Components
+FEATURES
+Usage guidelines
+Accordion
+
+ONS Design System
+
+TECH
+HTML
+Nunjucks
+Sass
+FEATURES
+Code examples
+Usage guidelines
+Accessibility
+Open source
+Details
+
+ONS Design System
+
+TECH
+HTML
+Nunjucks
+Sass
+FEATURES
+Code examples
+Usage guidelines
+Accessibility
+Open source
+Accordion
+
+Ontario Design System
+
+TECH
+HTML
+Sass
+FEATURES
+Code examples
+Usage guidelines
+Accessibility
+Accordion
+
+Orbit
+
+TECH
+React
+CSS-in-JS
+FEATURES
+Usage guidelines
+Open source
+Code examples
+Tone of voice
+Collapse
+
+Orbit
+
+TECH
+React
+CSS-in-JS
+FEATURES
+Usage guidelines
+Open source
+Code examples
+Tone of voice
+Accordion
+
+Pajamas
+
+TECH
+Vue
+FEATURES
+Usage guidelines
+Code examples
+Open source
+Disclosure
+
+Paste
+
+TECH
+React
+CSS-in-JS
+FEATURES
+Usage guidelines
+Code examples
+Tone of voice
+Accessibility
+Open source
+Accordion
+
+PatternFly
+
+TECH
+React
+Sass
+FEATURES
+Tone of voice
+Open source
+Usage guidelines
+Expandable section
+
+PatternFly
+
+TECH
+React
+Sass
+FEATURES
+Tone of voice
+Open source
+Usage guidelines
+Accordion
+
+Porsche Design System
+
+TECH
+Web Components
+Angular
+React
+Vue
+FEATURES
+Code examples
+Open source
+Details
+
+Primer
+
+TECH
+React
+FEATURES
+Code examples
+Open source
+Expansion Item
+
+Quasar Framework
+
+TECH
+Vue
+FEATURES
+Accessibility issues
+Code examples
+Open source
+Accordion
+
+Radix Primitives
+
+TECH
+React
+FEATURES
+Code examples
+Open source
+Collapsible
+
+Radix Primitives
+
+TECH
+React
+FEATURES
+Code examples
+Open source
+Accordion
+
+Reach UI
+
+TECH
+React
+FEATURES
+Accessibility
+Code examples
+Open source
+Disclosure
+
+Reach UI
+
+TECH
+React
+FEATURES
+Accessibility
+Code examples
+Open source
+Accordion
+
+Red Hat design system
+
+TECH
+Web Components
+FEATURES
+Code examples
+Usage guidelines
+Disclosure
+
+Red Hat design system
+
+TECH
+Web Components
+FEATURES
+Code examples
+Usage guidelines
+Accordion
+
+Ruter Components
+
+TECH
+React
+FEATURES
+Code examples
+Unmaintained
+Accordion
+
+Sainsbury's Design System
+
+TECH
+React
+Sass
+FEATURES
+Usage guidelines
+Code examples
+Tone of voice
+Accordion
+
+SEB Design Library
+
+TECH
+Sass
+React
+Angular
+FEATURES
+Code examples
+Usage guidelines
+Section expander
+
+SEB Design Library
+
+TECH
+Sass
+React
+Angular
+FEATURES
+Code examples
+Usage guidelines
+Collapsible
+
+Seeds
+
+TECH
+React
+FEATURES
+Code examples
+Usage guidelines
+Tone of voice
+Accordion Item
+
+Seek style guide
+
+TECH
+React
+FEATURES
+Code examples
+Unmaintained
+Read More
+
+Seek style guide
+
+TECH
+React
+FEATURES
+Code examples
+Unmaintained
+Toggle Content
+
+Seek style guide
+
+TECH
+React
+FEATURES
+Code examples
+Unmaintained
+Accordion
+
+shadcn/ui
+
+TECH
+React
+Tailwind CSS
+FEATURES
+Code examples
+Open source
+Collapsible
+
+shadcn/ui
+
+TECH
+React
+Tailwind CSS
+FEATURES
+Code examples
+Open source
+Details
+
+Shoelace
+
+TECH
+Web Components
+FEATURES
+Code examples
+Open source
+Accordion
+
+Source
+
+TECH
+React
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Expandable
+
+Stacks
+
+TECH
+Stimulus
+FEATURES
+Code examples
+Usage guidelines
+Tone of voice
+Open source
+Accordion
+
+SubZero
+
+FEATURES
+Accessibility issues
+Accordion
+
+United States Web Design System
+
+TECH
+Nunjucks
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Accordion
+
+Visa Product Design System
+
+TECH
+Angular
+React
+CSS
+Mobile
+FEATURES
+Code examples
+Usage guidelines
+Accessibility
+Open source
+Collapsible containers
+
+W3C design system
+
+TECH
+Sass
+Vanilla JS
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Accessibility
+Disclosure
+
+Wanda
+
+TECH
+React
+CSS Modules
+FEATURES
+Code examples
+Open source
+Accordion
+
+Wanda
+
+TECH
+React
+CSS Modules
+FEATURES
+Code examples
+Open source
+Expander
+
+Wanda
+
+TECH
+React
+CSS Modules
+FEATURES
+Code examples
+Open source
+Details
+
+Web Awesome
+
+TECH
+Web Components
+FEATURES
+Open source
+Code examples
+Accordion
+
+West Midlands Network Design System
+
+TECH
+HTML
+Nunjucks
+Sass
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Details
+
+West Midlands Network Design System
+
+TECH
+HTML
+Nunjucks
+Sass
+FEATURES
+Code examples
+Usage guidelines
+Open source
+Expandable container
+
+Workday Canvas Design System
+
+TECH
+React
+FEATURES
+Usage guidelines
+Accessibility
+Tone of voice
+Open source
+DESCRIPTION
+
+The examples above use a variety of different names: many of these refer to the collapsible/expandable nature of the component, while others reference the HTML element used by their implementation: details. All of these examples have two primary elements in common: a heading and some content: interacting with the heading toggles the visibility of the content; this heading + content pattern can be repeated as many times as needed.
+
+MARKUP
+Approach 1: Heading with Button
+
+Here is example markup for a single accordion item:
+
+<h2>
+  <button
+    type="button"
+    aria-expanded="false"
+    aria-controls="accordion-item-1-content"
+  >
+    Accordion item 1
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 256 256"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <polygon points="0,64 128,192 256,64" />
+    </svg>
+  </button>
+</h2>
+<div id="accordion-item-1-content">
+  <p>Accordion item 1 content</p>
+</div>
+
+This example uses an h2 for the heading but this should be whichever heading level is appropriate for where you’re using it.
+
+Each accordion item can be in one of two states: expanded or collapsed. This is communicated to assistive technology via the aria-expanded attribute on the button.
+
+The aria-controls attribute ties the button to the content it controls using the id of the content container (accordion-item-1-content in the example).
+
+The button contains a downwards-pointing arrow to hint that it can be expanded. When the accordion item is in its expanded state, this is rotated 180 degrees to point upwards. It is also common to see plus (+) and minus (-) symbols used instead of arrows.
+
+The icon in this example uses an inline SVG to render the arrow. It is given the aria-hidden="true" attribute to hide it from assistive technologies (as well as focusable="false" to address an inconsistency in Internet Explorer and older versions of Edge). You could alternatively use a CSS background image or pseudo-element.
+
+Approach 2: Summary and Details
+
+The following example uses the summary and details elements to achieve a similar result to the previous example, without JavaScript:
+
+<details>
+  <summary>
+    <h2>Accordion item 1</h2>
+  </summary>
+  <p>Accordion item 1 content</p>
+</details>
+
+To set the initial state of the accordion item to be ‘expanded’, you can add the attribute open="true" to the details element (the default is false, so this can be omitted for collapsed items).
+
+Browser support warning: The details and summary elements are not supported by Internet Explorer or Opera Mini at the time of writing.1
+
+INTERACTIVITY
+
+The first example, requires a small amount of JavaScript to toggle the aria-expanded attribute on the button and the visibility of the content.
+
+In situations where JavaScript is not enabled or doesn’t work for some reason, it is desirable for the content to still be visible (because the button requires Javascript, the user has no way of making the content visible if JavaScript is disabled). Instead of making the content invisible by default or having buttons that do nothing, you can create your accordion component without the button element, and use JavaScript to progressively enhance the HTML with additional interactivity. There is an example on how to do this on Inclusive Components.
+
+The second example works without JavaScript in browsers that support the details element. In browsers that don’t support the details element, all of the content will be rendered, but it won’t be collapsible.
+
+STYLING
+
+If you go for the first approach, using a button element which triggers some JavaScript, you can use the aria-expanded attribute as a hook for styling the button. The following example will rotate the arrow 180 degrees when the accordion is expanded:
+
+button[aria-expanded='true'] > svg {
+  transform: rotate(180deg);
+}
+
+If you decide on the details and summary elements instead, there are a couple of default browser styles you may want to override:2
+
+The default cursor for the summary is the text selection type which doesn’t give great affordance that the element is clickable. The following CSS, will change the cursor to the pointer style (like that shown when hovering over links):
+
+details summary {
+  cursor: pointer;
+}
+
+If you nest a block-level element like a heading in a summary element (as in the example above), it appears below the arrow marker. To make it appear next the the arrow, set its display property to inline:
+
+details summary > * {
+  display: inline;
+}
+USAGE GUIDELINES
+
+Accordions work well on smaller screens, as they reduce the amount of vertical scrolling required to get an overview of the content. They also require very little horizontal space, unlike components such as tabs.
+
+Some implementations allow for only a single accordion item to be expanded at any one time — do this with caution, as some users may wish to view the content from two items at the same time.
+
+Be mindful that when you are using an accordion you are hiding content from users — they therefore should not be used for essential information.
+
+FOOTNOTES
+
+Details & Summary elements: Caniuse.com ↩
+
+Two Issues Styling the Details Element and How to Solve Them, Greg Gibson on CSS-Tricks ↩
+
+RESOURCES
+Accordion Icons: Which Signifiers Work Best?
+
+By Page Laubheimer and Raluca Budiu
+
+Nielsen Norman Group
+
+Stop Using ‘Drop-down’
+
+By Adrian Roselli
+
+Why <details> is Not an Accordion
+
+By Dave Rupert
+
+Accordion Guidelines
+
+By Tess Gadd
+
+Balsamiq
+
+UI cheat sheet: Accordions
+
+By Tess Gadd
+
+UX Collective
+
+NAME DISTRIBUTION
+The Component Gallery
+
+The Component Gallery is a project by Iain Bean, built with Astro, using data from Airtable, and hosted on Cloudflare Pages. Search functionality is powered by Pagefind. Screenshots were generated using this puppeteer script. The site’s CSS is generated with Tailwind. The fonts used are: Instrument Serif, Instrument Sans, and JetBrains Mono.
+
+About
+Contribute
+Changelog

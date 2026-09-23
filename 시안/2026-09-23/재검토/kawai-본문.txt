@@ -1,0 +1,1142 @@
+dashboard
+UI Design Dictionary
+menu_book
+Vibe Coding Glossary
+search
+/
+108 / 108 patterns
+JA
+EN
+X
+note
+MENTA
+CONTACT
+explore
+Navigation
+14
+grid_view
+Layout
+9
+edit_note
+Forms & Input
+17
+bar_chart
+Data Display
+13
+chat_bubble_outline
+Feedback
+8
+article
+Content
+9
+touch_app
+Actions
+8
+smartphone
+Mobile
+4
+forum
+Social & Communication
+5
+school
+Onboarding & Guidance
+3
+play_circle_outline
+Media
+3
+shopping_cart
+Commerce
+3
+settings
+Advanced Patterns
+6
+lock_outline
+Authentication
+2
+error_outline
+Error & System
+4
+explore
+Navigation
+14 patterns
+Logo
+Hamburger Menu
+ハンバーガーメニュー
+三本線アイコンでメニューの開閉を制御する。モバイルで頻出。
+Mobile
+Responsive
+home
+Home
+search
+Search
+notifications
+Alerts
+settings
+Settings
+Tab Bar
+タブバー
+画面下部に固定配置される主要セクションの切替UI。iOS/Androidの標準パターン。
+Mobile
+iOS
+Android
+Home
+/
+Category
+/
+Current Page
+Breadcrumb
+パンくずリスト
+現在位置までの階層パスを表示し、上位ページへの導線を提供する。
+Web
+Hierarchy
+Sidebar Navigation
+サイドバーナビ
+画面左側に常時表示されるナビゲーション。デスクトップ管理画面の定番。
+Desktop
+Admin
+Products
+Services
+About
+Category A
+Item 1
+Item 2
+Category B
+Item 3
+Item 4
+Category C
+Item 5
+Item 6
+Mega Menu
+メガメニュー
+ホバーで大きなパネルが展開され、多数のリンクをカテゴリごとに表示する。
+Web
+EC
+Large Site
+chevron_left
+1
+2
+3
+...
+24
+chevron_right
+Pagination
+ページネーション
+コンテンツを複数ページに分割し、番号付きリンクで移動する。
+Web
+List
+Loading...
+Infinite Scroll
+無限スクロール
+スクロール末尾到達時に自動的にコンテンツを追加読み込みする。
+Mobile
+SNS
+Feed
+Sticky Header
+Content scrolls beneath the fixed header which stays pinned at the top of viewport...
+Sticky Header
+固定ヘッダー
+スクロールしても画面上部に固定表示されるヘッダー。
+Web
+Mobile
+Menu
+Drawer
+ドロワー
+画面端からスライドインするパネル。ナビやフィルターに使用。
+Mobile
+Responsive
+Cmd+K
+description
+index.html
+description
+style.css
+Command Palette
+コマンドパレット
+キーボードショートカットで呼び出す検索+コマンド実行UI。パワーユーザー向け。
+Desktop
+Productivity
+Day
+Week
+Month
+Segmented Control
+セグメンテッドコントロール
+2〜5個の排他的選択肢を横並びボタンで切り替える。タブの軽量版。
+iOS
+Mobile
+Filter
+Overview
+Details
+Reviews
+Tab content area...
+Tabs
+タブ
+同一画面内でコンテンツ領域を切り替える水平タブ。
+Web
+Desktop
+Mobile
+check
+2
+3
+Stepper / Wizard
+ステッパー
+複数ステップのプロセスを順番に案内するナビゲーション。
+Form
+EC
+Onboarding
+Overview
+Features
+Pricing
+FAQ
+Anchor Navigation
+アンカーナビ
+ページ内の各セクションへスムーズスクロールで移動するリンク群。
+LP
+Web
+Long-form
+grid_view
+Layout
+9 patterns
+Grid Layout
+グリッドレイアウト
+コンテンツを均等なグリッドセルに配置する基本レイアウト。
+Web
+Basic
+Responsive
+Masonry Layout
+メイソンリー
+高さの異なるカードをレンガ積みのように隙間なく並べるレイアウト。
+Web
+Image
+Pinterest
+Card Layout
+カードレイアウト
+情報を独立したカード単位にまとめて並べるパターン。
+Web
+Mobile
+Basic
+Left Pane
+Right Pane
+Split Screen
+スプリットスクリーン
+画面を左右に2分割し、異なるコンテンツを並べるレイアウト。
+LP
+Web
+Desktop
+Headline
+Subtext goes here for the hero section
+Get Started
+Hero Section
+ヒーローセクション
+ページ冒頭の大きなビジュアル+見出し+CTA。第一印象を決定する。
+LP
+Web
+Marketing
+Bento Grid
+ベントグリッド
+様々なサイズのカードをタイル状に配置するモダンレイアウト。
+Web
+Modern
+Dashboard
+Holy Grail Layout
+ホーリーグレイル
+ヘッダー+フッター+3カラムの伝統的Webレイアウト。
+Web
+Classic
+Desktop
+FULL BLEED
+Full Bleed
+フルブリード
+コンテンツを画面幅いっぱいに広げるレイアウト。没入感を演出。
+Web
+LP
+Photo
+Long content area...
+Sticky
+Sticky Sidebar
+スティッキーサイドバー
+メインコンテンツのスクロールに追従するサイドバー。
+Web
+Blog
+EC
+edit_note
+Forms & Input
+17 patterns
+Email Address
+Text Field
+テキストフィールド
+1行のテキスト入力。ラベル・プレースホルダー・バリデーション状態を持つ。
+Form
+Basic
+Message
+Type here...
+Textarea
+テキストエリア
+複数行のテキスト入力。リサイズ可能。
+Form
+Basic
+Country
+Japan
+expand_more
+Select / Dropdown
+セレクト
+選択肢のリストから1つを選ぶ。クリックでリストが展開する。
+Form
+Basic
+check
+Option A
+Option B
+Option C
+Checkbox
+チェックボックス
+複数の選択肢から任意の数を選択できるUI。
+Form
+Basic
+Credit Card
+Bank Transfer
+Radio Button
+ラジオボタン
+複数の選択肢から1つだけを選択するUI。排他的選択。
+Form
+Basic
+Notifications
+Dark Mode
+Toggle Switch
+トグルスイッチ
+ON/OFFの2状態を切り替えるスイッチUI。即座に設定が反映される。
+Form
+Mobile
+Settings
+Price Range
+$30 - $80
+Slider / Range
+スライダー
+ドラッグで数値を連続的に選択するUI。
+Form
+Filter
+chevron_left
+March 2026
+chevron_right
+M
+T
+W
+T
+F
+S
+S
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+Date Picker
+デートピッカー
+カレンダーUIから日付を選択する。
+Form
+Booking
+cloud_upload
+Drag & Drop
+or click to browse
+File Upload
+ファイルアップロード
+ファイルを選択またはドラッグ&ドロップでアップロードするUI。
+Form
+Web
+search
+Search...
+Search Bar
+検索バー
+キーワードを入力してコンテンツを検索するUI。
+Basic
+Web
+Mobile
+React
+React Native
+React Router
+Autocomplete
+オートコンプリート
+入力に応じて候補を自動表示し、選択を補助するUI。
+Form
+Search
+React
+close
+TypeScript
+close
+Add...
+Tag Input
+タグ入力
+タグをチップとして追加・削除できるマルチ入力UI。
+Form
+Tag
+4
+7
+2
+_
+OTP Input
+OTP入力
+ワンタイムパスワードを1文字ずつ個別入力するUI。
+Form
+Auth
+Security
+Medium strength
+Password Strength Meter
+パスワード強度メーター
+パスワード入力時にリアルタイムで強度を表示するUI。
+Form
+Security
+#4F46E5
+Color Picker
+カラーピッカー
+色をビジュアルに選択するUI。
+Form
+Design Tool
+Project Name
+edit
+Editing text 
+Inline Edit
+インラインエディット
+表示テキストを直接クリックして編集モードに切り替えるUI。
+Form
+Advanced
+check
+2
+3
+Shipping Info
+Next arrow_forward
+Multi-step Form
+マルチステップフォーム
+長いフォームをステップに分割し段階的に入力させるUI。
+Form
+UX
+bar_chart
+Data Display
+13 patterns
+Name
+Status
+Date
+Tanaka
+● Done
+3/24
+Sato
+● In Progress
+3/23
+Table
+テーブル
+行と列で構造化されたデータを表示する。ソート・フィルター機能を持つことが多い。
+Data
+Admin
+A
+Alice
+Message preview...
+10:30
+B
+Bob
+Hello there...
+09:15
+List View
+リストビュー
+データを垂直リストで表示するシンプルなパターン。
+Data
+Basic
+Mobile
+expand_more
+folder
+src
+expand_more
+folder
+components
+description
+Button.tsx
+description
+Modal.tsx
+chevron_right
+folder
+utils
+Tree View
+ツリービュー
+階層的なデータを展開/折りたたみ可能なツリーで表示する。
+Data
+Hierarchy
+Deploy complete
+3 min ago
+PR merged
+1 hour ago
+Issue created
+Yesterday
+Timeline
+タイムライン
+時間軸に沿ってイベントを表示するUI。
+Data
+History
+TODO
+Task A
+Task B
+IN PROGRESS
+Task C
+DONE
+Task D
+Kanban Board
+カンバンボード
+カードをカラム間でドラッグ移動するタスク管理UI。
+Task
+Project
+Revenue
+$1.2M
+trending_up 12%
+Users
+8,421
+trending_up 5%
+Stat Card
+統計カード
+数値指標を大きく目立たせるカード。ダッシュボードの定番。
+Dashboard
+Data
+notifications
+3
+chat_bubble_outline
+Badge
+バッジ
+アイコンや要素の隅に付く小さな通知マーク。
+UI Part
+Notification
+Published
+React
+Review
+Important
+v2.0
+Tag / Chip
+タグ / チップ
+カテゴリやステータスを小さなラベルで表現する。
+UI Part
+Category
+K
+A
+T
+M
++3
+Avatar
+アバター
+ユーザーのプロフィール画像やイニシャルを円形で表示する。
+UI Part
+User
+Uploading
+67%
+Progress Bar
+プログレスバー
+タスクや処理の進捗率を横棒グラフで表示する。
+UI Part
+Progress
+Skeleton Screen
+スケルトンスクリーン
+コンテンツ読み込み中にレイアウトの骨格をプレースホルダーで表示する。
+Loading
+UX
+inbox
+No data yet
+Add your first item
+add Create New
+Empty State
+エンプティステート
+データがない時のプレースホルダー表示。行動を促すCTAを含む。
+UX
+State
+Chart / Graph
+チャート
+データを折れ線・棒・円などのグラフで視覚化する。
+Data
+Dashboard
+chat_bubble_outline
+Feedback
+8 patterns
+check_circle
+Saved successfully
+close
+Toast / Snackbar
+トースト
+一時的なメッセージを画面端に表示し自動で消えるUI。
+Notification
+Lightweight
+Delete item?
+This action cannot be undone.
+Cancel
+Delete
+Modal / Dialog
+モーダル
+背景を暗転させてコンテンツを前面に表示する。ユーザーの注目を強制する。
+Overlay
+Critical
+warning
+An error occurred
+check_circle
+Processed successfully
+Alert / Banner
+アラート
+画面上部などに固定表示される重要な通知メッセージ。
+Notification
+Important
+Save (Cmd+S)
+save
+Tooltip
+ツールチップ
+ホバーやフォーカス時に補助情報を小さなポップアップで表示する。
+Help
+Micro-interaction
+K
+Kawai
+AI Consultant
+View profile
+arrow_forward
+Popover
+ポップオーバー
+クリックでトリガーされるリッチなフローティングUI。
+Overlay
+Info
+Loading Spinner
+ローディングスピナー
+処理中であることを示す回転アニメーション。
+Loading
+Basic
+warning
+Confirm deletion?
+Type "delete" to confirm
+Delete permanently
+Confirmation Dialog
+確認ダイアログ
+破壊的操作の前にユーザーに確認を求めるダイアログ。
+Safety
+Confirm
+Notifications
+Mark all read
+New comment
+2 min ago
+PR was merged
+1 hour ago
+Notification Panel
+通知パネル
+通知一覧をドロップダウンパネルで表示する。
+Notification
+Overlay
+article
+Content
+9 patterns
+Question 1
+expand_more
+Answer content is displayed here with detailed explanation.
+Question 2
+chevron_right
+Accordion
+アコーディオン
+見出しクリックで内容の展開/折りたたみを切り替える。
+Content
+FAQ
+Slide 1
+Slide 2
+Carousel / Slider
+カルーセル
+複数のコンテンツを左右にスワイプ/クリックで切り替える。
+Content
+Image
+Mobile
+image
+close
+chevron_left
+chevron_right
+Lightbox
+ライトボックス
+画像をフルスクリーンオーバーレイで拡大表示する。
+Image
+Overlay
+Free
+$0
+5GB
+Select
+Recommended
+Pro
+$9
+100GB
+Select
+Team
+$24
+Unlimited
+Select
+Pricing Table
+料金テーブル
+複数プランを横並びで比較表示する。おすすめプランを強調。
+Marketing
+LP
+SaaS
+"This tool tripled our productivity within a week."
+T
+Taro Tanaka
+CTO, Example Inc.
+Testimonial
+テスティモニアル
+ユーザーの声・レビュー・推薦文を表示するUI。
+Marketing
+LP
+Trust
+Get Started Today
+14-day free trial. No credit card.
+Start Free arrow_forward
+CTA Section
+CTAセクション
+ユーザーの行動を促す大きなボタンとメッセージのセクション。
+Marketing
+LP
+Conversion
+FAQ
+How much does it cost?
+remove
+Basic plan starts at $9/mo
+Can I cancel?
+add
+FAQ Section
+FAQセクション
+よくある質問とその回答をまとめた専用セクション。
+Support
+LP
+bolt
+Fast
+10ms response
+lock
+Secure
+E2E encrypted
+language
+Global
+50+ regions
+extension
+Plugins
+100+ integrations
+Feature Section
+フィーチャーセクション
+製品の機能をアイコン+テキストでグリッド表示する。
+LP
+Marketing
+Free
+Pro
+Team
+Storage
+5GB
+100GB
+Unlimited
+API
+close
+check
+check
+Comparison Table
+比較テーブル
+複数のオプションを機能ごとに比較する表。
+Marketing
+Decision
+touch_app
+Actions
+8 patterns
+Primary
+Secondary
+Ghost
+Danger
+Pill
+Button
+ボタン
+クリックでアクションを実行するUI。Primary/Secondary/Ghostなど複数バリエーション。
+Basic
+Form
+add
+FAB
+フローティングアクションボタン
+画面上に浮遊する円形のメインアクションボタン。
+Mobile
+Material Design
+Copy
+Cmd+C
+Paste
+Cmd+V
+Rename
+Delete
+Context Menu
+コンテキストメニュー
+右クリックで表示されるアクションメニュー。
+Desktop
+Operation
+Take Photo
+Choose from Library
+Delete
+Cancel
+Action Sheet
+アクションシート
+画面下部からスライドアップするモバイル向けアクション選択UI。
+Mobile
+iOS
+Save
+expand_more
+Split Button
+スプリットボタン
+メインアクションとドロップダウンによる追加アクションを組み合わせたボタン。
+Desktop
+Advanced
+format_bold
+format_italic
+format_underlined
+format_strikethrough
+Button Group
+ボタングループ
+関連するアクションボタンを横並びで結合表示する。
+UI Part
+Basic
+check
+A
+Email Subject
+Swipe left / right
+delete
+Swipe Actions
+スワイプアクション
+リスト項目を左右にスワイプして操作するモバイルパターン。
+Mobile
+Gesture
+Refreshing...
+Pull to Refresh
+プルトゥリフレッシュ
+画面を下に引いてコンテンツを更新するモバイルジェスチャー。
+Mobile
+Gesture
+smartphone
+Mobile
+4 patterns
+Details
+Drag to adjust height
+Bottom Sheet
+ボトムシート
+画面下部からスライドアップする半モーダルパネル。
+Mobile
+Overlay
+user1
+user2
+user3
+Stories
+ストーリーズ
+画面上部の円形アイコン行。タップで全画面コンテンツを表示する。
+SNS
+Video
+arrow_back
+Back
+Title
+more_horiz
+App Bar
+アプリバー
+アプリ画面上部のタイトルバー。戻るボタン・タイトル・アクションを含む。
+Mobile
+Navigation
+add
+photo_camera
+attach_file
+edit
+Speed Dial
+スピードダイヤル
+FABをタップすると複数のサブアクションが扇状に展開するUI。
+Mobile
+Material Design
+forum
+Social & Communication
+5 patterns
+Hello!
+Good morning!
+When is today's meeting?
+Chat UI
+チャットUI
+メッセージを左右に振り分けるチャット形式のUI。
+Message
+Realtime
+A
+Alice 2h ago
+Great implementation!
+B
+Bob 1h ago
+Thank you!
+Comment Thread
+コメントスレッド
+ネストされたコメントと返信のスレッド表示。
+Community
+Comment
+Great release!
+thumb_up
+12
+favorite
+8
+celebration
+5
+add
+Emoji Reactions
+リアクション
+メッセージやコンテンツに絵文字で反応するUI。
+Social
+Micro-interaction
+K
+Kawai @kawai - 1h
+Launched a new AI feature today!
+chat_bubble_outline
+repeat
+favorite_border
+share
+Feed Card
+フィードカード
+SNSフィードの投稿カード。アバター・テキスト・画像・アクション行。
+SNS
+Feed
+@ka 
+K
+kawai
+K
+karen
+@Mention
+メンション
+テキスト入力中に@で始まるユーザー候補をサジェストするUI。
+Social
+Input Assist
+school
+Onboarding & Guidance
+3 patterns
+Button
+Click here!
+Walkthrough
+ウォークスルー
+UIの要素をハイライトし、ステップバイステップで使い方を案内するオーバーレイ。
+Onboarding
+Tutorial
+celebration
+Welcome!
+Let us show you around
+in 3 easy steps
+Next
+Welcome Screen
+ウェルカム画面
+アプリ初回起動時に表示されるスワイプ式のイントロダクション画面。
+Onboarding
+Mobile
+Setup 2/4 complete
+check_circle
+Set up profile
+check_circle
+Invite team
+radio_button_unchecked
+Create project
+radio_button_unchecked
+Connect integration
+Progress Checklist
+プログレスチェックリスト
+セットアップの完了度をチェックリストで表示し、次のアクションを促す。
+Onboarding
+Gamification
+play_circle_outline
+Media
+3 patterns
+play_circle
+1:23 / 3:45
+fullscreen
+Video Player
+ビデオプレーヤー
+動画再生UI。再生/一時停止・シーク・音量・全画面のコントロールを含む。
+Media
+Video
+play_arrow
+Episode 42
+12:30
+31:45
+Audio Player
+オーディオプレーヤー
+音声再生UI。再生ボタン・波形・プログレスバーを含む。
+Media
+Audio
+image
++12
+Image Gallery
+イメージギャラリー
+複数画像をグリッドやスライドで表示する。タップで拡大。
+Image
+Media
+shopping_cart
+Commerce
+3 patterns
+checkroom
+Premium Sneakers
+star
+star
+star
+star
+star
+(128)
+$128
+shopping_cart
+Product Card
+商品カード
+商品画像・名前・価格・レーティングを1枚にまとめたECカード。
+EC
+Product
+shopping_cart
+Cart (2)
+Item A
+x1
+$30
+Total
+$54
+Checkout
+Shopping Cart
+カート
+選択した商品と数量・小計を表示し、決済へ進むUI。
+EC
+Checkout
+4.2
+star
+star
+star
+star
+star
+1,284 reviews
+5
+756
+4
+321
+Rating / Review
+レーティング
+星やスコアで評価を表示・入力するUI。
+EC
+Feedback
+settings
+Advanced Patterns
+6 patterns
+dark_mode
+light_mode
+Dark Mode Toggle
+ダークモード切替
+ライト/ダークテーマをワンクリックで切り替えるUI。
+Accessibility
+Settings
+drag_indicator
+Item 1
+drag_indicator
+Item 2 (dragging)
+drag_indicator
+Item 3
+Drag & Drop
+ドラッグ&ドロップ
+要素をドラッグして並べ替えや移動を行うインタラクション。
+Interaction
+Advanced
+10,000 rows
+Virtual Scroll
+仮想スクロール
+大量データのうち画面に表示される分だけをDOMに描画する最適化パターン。
+Performance
+Data
+smartphone
+tablet
+laptop
+desktop_windows
+Responsive Breakpoints
+レスポンシブブレークポイント
+画面幅に応じてレイアウトを変化させるパターン。
+Responsive
+Basic
+CSS
+favorite
+check
+Micro-interactions
+マイクロインタラクション
+ホバー・クリック・遷移時の小さなアニメーションやフィードバック。
+Animation
+UX
+keyboard
+Shortcuts
+Save
+Cmd+S
+Search
+Cmd+K
+Undo
+Cmd+Z
+Keyboard Shortcuts
+キーボードショートカット一覧
+利用可能なキーボードショートカットをオーバーレイで一覧表示する。
+Accessibility
+Power User
+lock_outline
+Authentication
+2 patterns
+Log In
+Log In
+or continue with
+G
+apple
+Login Form
+ログインフォーム
+メール/パスワードでサインインするフォーム。ソーシャルログインボタンを含むことが多い。
+Auth
+Form
+Create Account
+Name
+Email
+Password
+Create
+Sign Up Form
+新規登録フォーム
+アカウント作成のためのフォーム。
+Auth
+Form
+error_outline
+Error & System
+4 patterns
+404
+Page Not Found
+Please check the URL
+Go Home
+404 Page
+404ページ
+ページが見つからない時のエラーページ。
+Error
+Web
+error_outline
+Something went wrong
+Could not connect to server
+Retry
+Error State
+エラー状態
+操作失敗時の状態表示。エラー内容と復旧アクションを提示。
+Error
+UX
+build
+Under Maintenance
+System update in progress
+ETA: 15:00 JST
+Maintenance Page
+メンテナンス画面
+システムメンテナンス中に表示されるページ。
+System
+Web
+cookie
+This site uses cookies for analytics.
+Decline
+Accept
+Cookie Banner
+クッキーバナー
+Cookie利用の同意を求めるGDPR対応バナー。
+Legal
+Web

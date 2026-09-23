@@ -1,0 +1,306 @@
+Design Patterns
+Screenshots
+Talks
+Newsletter
+Shop card defks
+Undo
+Design Pattern
+Design Patterns
+Getting input
+Forms
+Undo
+Chat	
+	Modal
+71%
+of 119 votes liked this
+
+Alternate titles: Multiple Undo, History, Global Undo.
+
+Problem summary
+
+The user wants to revert a mistaken input
+
+Example
+
+▲ After telling your preferences, a new home page is constructed for you at Pinterest. If you do not like the result, you can undo the action.
+
+Usage
+Use when you want to provide users with more confidence and willingness to play around
+The more costly it is to lose data, the more important it is to provide undo.
+Whenever there is an opportunity to lose work, the program should allow undo actions.
+Never use a warning when you mean undo.
+This card is part of the UI Patterns printed card deck
+
+A collection of 60 User Interface design patterns, presented in a manner easily referenced and used as a brainstorming tool.
+
+Get your deck!
+Solution
+
+Allow users to easily reverse their own actions
+
+Rationale
+
+Users aren’t perfect – they tend to make mistakes.
+
+Promote safe exploration and playfulness by providing confidence that mistakes aren’t permanent. Multi-level undo lets users incrementally construct and explore work paths quickly and easily. The more costly it is to lose data, the more important it is to provide the opportunity to undo.
+
+Discussion
+
+A great side effect of utilizing the Undo pattern, is that it provides users with more confidence and more willingness to try new and different things. By promoting trial and error, users are able to learn and master your application more quickly.
+
+Sources
+
+1 Undo Design Pattern at Quince
+
+2 Undo Design Pattern at Patternry.com
+
+3 Multi-level Undo Design Pattern by Jenifer Tidwell
+
+4 Goodbye Back Button by Michael Zuschlag
+
+5 The importance of Undo by Paul Boag
+
+6 Never Use a Warning When you Mean Undo by Aza Raskin
+
+ 51
+ 68
+User Interface Design Patterns
+Getting input
+Forms
+Drag and drop
+Structured Format
+Keyboard Shortcuts
+Rule Builder
+Captcha
+Inplace Editor
+Preview
+Autosave
+Password Strength Meter
+Fill in the Blanks
+WYSIWYG
+Input Feedback
+Calendar Picker
+Morphing Controls
+Expandable Input
+Settings
+Forgiving Format
+Undo
+Input Prompt
+Good Defaults
+Explaining the process
+Wizard
+Inline Help Box
+Steps Left
+Completeness meter
+Community driven
+Pay To Promote
+Rate Content
+Vote To Promote
+Wiki
+Flagging & Reporting
+Navigation
+Tabs
+Navigation Tabs
+Module Tabs
+Jumping in hierarchy
+Breadcrumbs
+Fat Footer
+Modal
+Notifications
+Shortcut Dropdown
+Home Link
+Menus
+Vertical Dropdown Menu
+Accordion Menu
+Horizontal Dropdown Menu
+Content
+Adaptable View
+Article List
+Tagging
+Pagination
+Categorization
+Cards
+Carousel
+Progressive Disclosure
+Continuous Scrolling
+Tag Cloud
+Event Calendar
+Archive
+Thumbnail
+Favorites
+Gestures
+Pull to refresh
+Dealing with data
+Tables
+Table Filter
+Alternating Row Colors
+Sort By Column
+Formatting data
+Frequently Asked Questions (FAQ)
+Dashboard
+Copy Box
+Images
+Gallery
+Slideshow
+Image Zoom
+Search
+Autocomplete
+Search Filters
+Social
+Reputation
+Testimonials
+Leaderboard
+Collectible Achievements
+Social interactions
+Activity Stream
+Auto-sharing Mini
+Friend list Mini
+Chat
+Invite friends
+Friend
+Follow
+Reaction
+Miscellaneous
+Shopping
+Coupon
+Pricing table
+Product page
+Shopping Cart
+Increasing frequency
+Tip A Friend
+Onboarding
+Guidance
+Coachmarks
+Playthrough
+Inline Hints
+Guided Tour
+Walkthrough
+Blank Slate
+Registration
+Lazy Registration
+Paywall
+Account Registration
+Persuasive Design Patterns
+Cognition
+Loss Aversion
+Status-Quo Bias
+Optimism Bias
+Framing
+IKEA effect
+Decoy Effect
+Loss Aversion
+Sunk Cost Effect
+Endowment Effect
+Negativity bias
+Other cognitive biases
+Illusion of control
+Set Completion
+Present Bias
+Delay Discounting
+Need for Closure
+Curiosity
+Priming Effect
+Value Attribution
+Peak-end rule
+Cashless Effect
+Temptation Bundling
+Inaction Inertia Effect
+Choice Closure
+Scarcity
+Limited Choice
+Scarcity
+Limited duration
+Game mechanics
+Gameplay design
+Appropriate Challenge
+Storytelling
+Intentional Gaps
+Investment Loops
+Periodic Events
+Hedonic Adaptation
+Levels
+Self-Monitoring
+Fundamentals of rewards
+Variable Rewards
+Fixed rewards
+Shaping
+Gameplay rewards
+Goal-Gradient Effect
+Privileges
+Unlock Features
+Delighters
+Achievements
+Praise
+Appointment Dynamic
+Prolonged Play
+Perception and memory
+Attention
+Tunnelling
+Reduction
+Isolation Effect
+Picture Superiority Effect
+Zeigarnik Effect
+Comprehension
+Chunking
+Anchoring
+Serial Positioning Effect
+Recognition over Recall
+Pattern Recognition
+Sequencing
+Conceptual Metaphor
+Feedback
+Timing
+Kairos
+Feedback Loops
+Tailoring
+Trigger
+Simulation
+Fresh Start Effect
+Social
+Social biases
+Authority Bias
+Liking
+Retaliation
+Role Playing
+Self-Expression
+Reciprocation
+Social Proof
+Cognitive Dissonance
+Positive Mimicry
+Commitment & Consistency
+Reputation
+Halo Effect
+Nostalgia Effect
+Competition
+Autonomy
+Status
+Noble Edge Effect
+Learn more
+Blog
+Join Newsletter
+Design Patterns
+Screenshots
+Talks
+Shop
+Send an email
+About UI-Patterns.com
+Shop
+Brainstorming tool web design
+Persuasive Patterns
+Validation Patterns
+UX card deck
+Posters about UI and webdesign
+Also by us
+UI Shop
+UI Talks
+Product & UX Mentoring
+Subscribe to our newsletter
+
+Sign up to receive tips and tricks on how to create online designs that make people take action.
+
+Email
+Subscribe
+
+© 2007-2026 Learning Loop ApS. All rights reserved. Privacy Policy.
+
+;

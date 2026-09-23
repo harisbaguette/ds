@@ -1,0 +1,168 @@
+Home
+Docs
+Components
+Blocks
+Charts
+Directory
+Typeset
+Create
+Search documentation...
+124k
+Toggle theme
+New
+New Questionnaire component
+The Foundation for your Design System
+
+Composable, accessible components with thoughtful defaults. Build your own component library with code you can customize, extend, and make your own.
+
+Get Started
+View Components
+Button
+Secondary
+Outline
+Badge
+Secondary
+Alert Dialog
+Button Group
+Overview
+Analytics
+Transactions
+Investments
+Accounts
+Spending
+Planning
+Documents
+Budget
+Reports
+Goals
+Calendar
+Support
+Help Center
+Docs
+Contact Us
+Status
+Community
+Account
+Profile
+Billing
+Notifications
+Security
+Appearance
+Savings Targets
+Active milestones for 2024 across your portfolio. Monitor how close you are to each savings goal.
+
+RETIREMENT
+
+$420,000
+x
+65% achieved
+$273,000
+
+REAL ESTATE
+
+$85,000
+x
+32% achieved
+$27,200
+You have not met your targets for this year.
+Contribution History
+Last 6 months of activity
+Dec
+Jan
+Feb
+Mar
+Apr
+
+UPCOMING
+
+May 2024
+Scheduled
+
+SAVINGS PLAN
+
+Accelerated
+Recurring
+View Full Report
+Claimable Balance
+$1,211.29
+Pending Setup
+Net Royalties
+$1,248.75
+Processing Fee
+-$37.46
+Total Ready to Claim
+$1,211.29 USD
+Once your bank is connected, balances over $10.00 are automatically eligible for monthly distribution on the 15th of each month.
+Q2 Dividend Income
+Quarterly dividend payouts across your portfolio holdings.
+Vanguard
+
+450 Shares
+
+S&P 500 VOO
+
+112 Shares
+
+Apple AAPL
+
+85 Shares
+
+Realty Income
+
+320 Shares
+
+Set a new milestone
+Define your financial target and we'll help you pace your savings.
+Goal Name
+Target Amount
+Target Date
+Create Goal
+Cancel
+Payout Threshold
+Set the minimum balance required before a payout is triggered.
+Preferred Currency
+USD — United States Dollar
+Minimum Payout Amount
+$2500.00
+x
+
+$50 (MIN)
+
+$10,000 (MAX)
+
+Notes
+Save Threshold
+Account Access
+Update your credentials or re-authenticate.
+Email Address
+Current Password
+FORGOT?
+Update Security
+Danger Zone
+
+Archive account and remove catalog
+
+Scan to connect your mobile device
+Open the Ledger mobile app and scan this code to link your device.
+New Chat
+How can I help you today?
+Morning, shadcn!
+What are we working on today? Press send to start a new conversation
+I'm building a chat for our app and the scroll behavior is driving me nuts. Every time the AI streams a reply, the whole thread jumps around.
+Send
+Home
+Account options
+Payments
+Change transfer limit
+
+Adjust how much you can send from your balance.
+
+Scheduled transfers
+
+Set up a transfer to send at a later date.
+
+Recurring card payments
+
+Manage your repeated card transactions.
+
+Built by shadcn at Vercel. The source code is available on GitHub.

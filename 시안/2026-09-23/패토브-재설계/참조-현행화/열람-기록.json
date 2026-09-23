@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-09-23T03:56:42.071Z",
+  "sites": [
+    {
+      "id": "recent",
+      "url": "https://recent.design/",
+      "title": "Recent — Design Inspiration"
+    },
+    {
+      "id": "cosmos",
+      "url": "https://www.cosmos.so/explore",
+      "title": "Featured / Explore / Cosmos"
+    },
+    {
+      "id": "layers",
+      "url": "https://layers.to/explore",
+      "title": "Explore | Layers"
+    },
+    {
+      "id": "curated",
+      "url": "https://curated.design/",
+      "title": "Web design inspiration from real, live websites — Curated"
+    },
+    {
+      "id": "uiland",
+      "url": "https://ui.land/",
+      "title": "ui.land"
+    },
+    {
+      "id": "minimal",
+      "url": "https://minimal.gallery/",
+      "title": "Minimal Gallery – Hand-picked web design inspiration, premium templates, tools and more"
+    },
+    {
+      "id": "kawai",
+      "url": "https://ui-design-dictionary.pages.dev/",
+      "title": "UI Design Dictionary"
+    }
+  ]
+}

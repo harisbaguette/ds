@@ -1,0 +1,13 @@
+{
+  "before": {
+    "textCharacters": 1173,
+    "firstPreviewTop": 453.0625,
+    "fullCards": 6
+  },
+  "after": {
+    "textCharacters": 432,
+    "firstPreviewTop": 166,
+    "fullCards": 9
+  },
+  "method": "1440×1080, 동일한 대표 패턴 16개 초기 목록. 문자 수는 body.innerText의 공백 제외이며 미리보기 내용과 아래쪽 목록을 포함."
+}

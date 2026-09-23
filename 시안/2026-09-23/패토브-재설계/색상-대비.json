@@ -1,44 +1,44 @@
 [
   {
-    "foreground": "#17203A",
-    "background": "#F7F8FC",
-    "ratio": 15.17,
+    "foreground": "#242424",
+    "background": "#FFFFFF",
+    "ratio": 15.52,
     "use": "본문"
   },
   {
-    "foreground": "#59647A",
+    "foreground": "#72726E",
     "background": "#FFFFFF",
-    "ratio": 5.95,
+    "ratio": 4.83,
     "use": "보조 글자"
   },
   {
     "foreground": "#FFFFFF",
-    "background": "#284CEB",
-    "ratio": 6.32,
+    "background": "#242424",
+    "ratio": 15.52,
     "use": "주요 버튼"
   },
   {
     "foreground": "#284CEB",
-    "background": "#EDF1FF",
-    "ratio": 5.6,
-    "use": "선택 상태"
-  },
-  {
-    "foreground": "#17203A",
-    "background": "#E9F29B",
-    "ratio": 13.53,
-    "use": "비교 실행"
-  },
-  {
-    "foreground": "#FFFFFF",
-    "background": "#282821",
-    "ratio": 14.83,
-    "use": "잉크 노트 버튼"
-  },
-  {
-    "foreground": "#FFFFFF",
-    "background": "#326A54",
+    "background": "#FFFFFF",
     "ratio": 6.32,
-    "use": "고요한 색면 버튼"
+    "use": "로고·초점"
+  },
+  {
+    "foreground": "#6D6D65",
+    "background": "#FFFFFF",
+    "ratio": 5.22,
+    "use": "모노 데모 보조 글자"
+  },
+  {
+    "foreground": "#746E62",
+    "background": "#FCFAF3",
+    "ratio": 4.85,
+    "use": "에디토리얼 데모 보조 글자"
+  },
+  {
+    "foreground": "#687862",
+    "background": "#F9FCF4",
+    "ratio": 4.55,
+    "use": "스튜디오 데모 보조 글자"
   }
 ]

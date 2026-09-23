@@ -10,12 +10,17 @@ function check(label,condition){assert.ok(condition,label);checks.push(label);}
  const browser=await chromium.launch({headless:true});
  try{
   const context=await browser.newContext({viewport:{width:1440,height:1080},deviceScaleFactor:1});
-  const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+  const page=await context.newPage();page.setDefaultTimeout(6000);const errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(pathToFileURL(path.join(base,'index.html')).href);
   check('첫 화면의 대표 패턴 16개',await page.locator('.pattern-card').count()===16);
+  const before=await page.evaluate(()=>({visibleText:document.body.innerText.replace(/\s/g,'').length,firstPreviewTop:document.querySelector('.preview').getBoundingClientRect().top,visibleCards:[...document.querySelectorAll('.pattern-card')].filter(e=>{const r=e.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight}).length}));
   await page.screenshot({path:path.join(base,'02-패턴-탐색.png')});
+  await page.locator('#query').focus();check('검색 예시는 검색창 초점에서 노출',await page.locator('#search-suggestions').isVisible());
+  await page.locator('[data-query="입력 오류"]').click();check('상황 예시 선택으로 입력 오류 발견',await page.locator('[data-pattern="form"]').count()===1);
+  await page.locator('#reset-filters').click();
   await page.locator('#query').fill('저장이 끝났다고 알려주고 싶어요');await page.locator('#search-form').evaluate(f=>f.requestSubmit());
   check('상황 검색에서 토스트와 인라인 안내 발견',await page.locator('[data-pattern="toast"]').count()===1&&await page.locator('[data-pattern="banner"]').count()===1);
+  await page.locator('#compare-mode').click();
   await page.locator('[data-compare="toast"]').check();await page.locator('[data-compare="banner"]').check();
   await page.screenshot({path:path.join(base,'03-상황-검색.png')});
   await page.locator('[data-open-compare]').click();
@@ -36,13 +41,14 @@ function check(label,condition){assert.ok(condition,label);checks.push(label);}
   await page.keyboard.press('Escape');
   check('상세를 닫고 원래 카드로 초점 복귀',await page.locator('[data-pattern="toast"] .card-main').evaluate(el=>el===document.activeElement));
   await page.locator('.top-nav [data-page="saved"]').click();
-  check('패턴과 스타일의 조합 저장',await page.locator('.saved-item').count()===1&&await page.locator('.saved-copy').textContent().then(t=>t.includes('잉크 노트')));
+  check('패턴과 스타일의 조합 저장',await page.locator('.saved-item').count()===1&&await page.locator('.saved-copy').textContent().then(t=>t.includes('에디토리얼')));
   await page.reload();await page.locator('.top-nav [data-page="saved"]').click();
   check('새로고침 후 저장 유지',await page.locator('.saved-item').count()===1);
   check('저장한 패턴 제목이 상단에 유지',await page.locator('.saved-intro').evaluate(e=>e.getBoundingClientRect().top<180));
   await page.screenshot({path:path.join(base,'08-저장한-패턴.png')});
   await page.locator('.top-nav [data-page="styles"]').click();
   check('동일 콘텐츠의 세 스타일 비교',await page.locator('.sample-app').count()===3);
+  check('영감보관함 원본 이미지 로드',await page.locator('.sample-projects img').evaluateAll(es=>es.length===6&&es.every(e=>e.complete&&e.naturalWidth>0)));
   await page.screenshot({path:path.join(base,'06-화면-전체-스타일.png')});
   await page.locator('[data-apply-style="calm"]').click();
   check('선택 스타일이 모든 목록 미리보기에 반영',await page.locator('#pattern-grid .preview.theme-calm').count()===16);
@@ -56,6 +62,8 @@ function check(label,condition){assert.ok(condition,label);checks.push(label);}
   await page.locator('.top-nav [data-page="patterns"]').click();
   const named=await page.locator('button').evaluateAll(es=>es.filter(e=>e.offsetWidth&&e.offsetHeight).every(e=>(e.getAttribute('aria-label')||e.textContent).trim()));
   check('표시된 버튼에 이름 존재',named);
+  await page.locator('#query').fill('저장');await page.locator('.top-nav [data-page="styles"]').click();await page.waitForTimeout(180);check('검색 직후 이동한 탭을 지연 검색이 바꾸지 않음',await page.locator('#style-page').isVisible());
+  await page.locator('.top-nav [data-page="patterns"]').click();await page.locator('#reset-filters').click();
   await page.locator('[data-pattern="toast"] .card-main').click();
   for(let i=0;i<25;i++){await page.keyboard.press('Tab');assert.ok(await page.evaluate(()=>document.activeElement.closest('#detail-dialog')!==null),'모달 초점 이탈');}
   check('Tab 25회 이동에서 모달 초점 유지',true);
@@ -80,7 +88,7 @@ function check(label,condition){assert.ok(condition,label);checks.push(label);}
   await mobile.goto(pathToFileURL(path.join(base,'index.html')).href);
   await mobile.screenshot({path:path.join(base,'07-모바일-탐색.png')});
   const visibleCards=await mobile.locator('.pattern-card').evaluateAll(es=>es.filter(e=>{const r=e.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight}).length);
-  check('390×844 첫 화면에 패턴 3개 전체 노출',visibleCards>=3);
+  check('390×844 첫 화면에 패턴 6개 전체 노출',visibleCards>=6);
   await mobile.locator('[data-pattern="toast"] .card-main').click();
   check('모바일 상세 가로 넘침 없음',await mobile.locator('#detail-dialog').evaluate(e=>e.scrollWidth<=e.clientWidth));
   await mobile.locator('[data-demo="save"]').click();
@@ -89,7 +97,7 @@ function check(label,condition){assert.ok(condition,label);checks.push(label);}
   await page.emulateMedia({reducedMotion:'reduce'});
   check('움직임 완화에서 카드 전환 제거',await page.locator('.pattern-card').first().evaluate(e=>getComputedStyle(e).transitionDuration==='0s'));
   check('실행 중 JavaScript 오류 없음',errors.length===0);
-  const report={checkedAt:new Date().toISOString(),mobileFullyVisibleCards:visibleCards,browser:'Playwright Chromium, macOS',checks,passed:checks.length,errors,scope:'대표 패턴 16개, 로컬 검색·비교·체험·스타일·저장, 화면 320/390/768/1440px',limitations:'사용자 연구·실기기 터치·스크린리더·전체 WCAG 적합성·전체 사전 구현 검증은 포함하지 않음'};
+  const report={layoutMetrics:before,checkedAt:new Date().toISOString(),mobileFullyVisibleCards:visibleCards,browser:'Playwright Chromium, macOS',checks,passed:checks.length,errors,scope:'대표 패턴 16개, 로컬 검색·비교·체험·스타일·저장, 화면 320/390/768/1440px',limitations:'사용자 연구·실기기 터치·스크린리더·전체 WCAG 적합성·전체 사전 구현 검증은 포함하지 않음'};
   fs.writeFileSync(path.join(base,'검증-결과.json'),JSON.stringify(report,null,2));
   console.log(JSON.stringify({passed:checks.length,errors,visibleCards}));
  }finally{await browser.close();}

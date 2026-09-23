@@ -9,7 +9,7 @@ Design Patterns
 Getting input
 Forms
 Undo
-Chat	
+Chat
 	Modal
 71%
 of 119 votes liked this

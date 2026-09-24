@@ -34,7 +34,7 @@
   }
   function patterns(state, results) {
     return `<section aria-labelledby="page-title">${filterStatus(state, results.length)}
-      ${results.length ? `<div class="pattern-grid">${results.map(p => card(p, state.style, state)).join('')}</div>` : `<div class="empty-state">${icon('search')}<h2>검색 결과가 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>`}
+      ${results.length ? `<div class="pattern-grid">${results.map(p => card(p, state.style, state)).join('')}</div>` : `<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>검색 결과가 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>`}
     </section>`;
   }
   function styleOverview() {
@@ -49,7 +49,7 @@
     return `<section aria-labelledby="page-title">${filterStatus(state, results.length)}${groups.length ? groups.map(group => `
       <section class="saved-group" aria-label="${group.name} 저장한 패턴"><a class="saved-group-title" href="#/patterns?style=${group.id}" data-apply-style="${group.id}">${palette(group.id)}<h2>${group.name}</h2>${icon('arrow')}</a>
         <div class="pattern-grid">${group.items.map(item => card(catalog.patterns.find(p => p.id === item.id), item.style, state, true)).join('')}</div></section>`).join('') : `
-      <div class="empty-state">${icon('bookmark')}<h2>${state.query ? '검색 결과가 없어요' : '아직 저장한 패턴이 없어요'}</h2>
+      <div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-bookmark" aria-hidden="true"></span><h2>${state.query ? '검색 결과가 없어요' : '아직 저장한 패턴이 없어요'}</h2>
         ${state.query ? '<button class="secondary" data-action="clear-query">검색 해제</button>' : '<a class="secondary" href="#/styles">스타일 둘러보기</a>'}</div>`}</section>`;
   }
   function detail(state, pattern) {
@@ -66,4 +66,3 @@
   }
   window.Pattove.views = { escape, styleName, header, sidebar, patterns, styles: styleOverview, saved, detail };
 })();
-

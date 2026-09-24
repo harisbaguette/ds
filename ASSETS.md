@@ -10,11 +10,14 @@
 | `assets/illustrations/seascape.svg` | 기존 `패토브-재설계/style-lab.js` | 프로젝트 기존 자산 | 해·배·수평선, 제목과 겹침 조정 |
 | `assets/illustrations/seascape-banner.svg` | 위 풍경의 가로 폼 변형 | 프로젝트 내 수정 | 같은 색과 도형 사용 |
 | `assets/illustrations/empty-box.svg` | 이전 뼈대 작업 | 프로젝트 내 제작 | 컬러블록·풍경의 빈 상태 |
+| `assets/illustrations/neumorphic-app-icons.png` | 이번 `imagegen` 생성 | 생성 자산. 외부 아이콘 팩으로 표시하지 않음 | 512×512 RGBA. 참조 이미지의 뉴모픽 타일·굵은 먹선·파스텔 색을 맞춘 레이어·저장·문서·검색 스프라이트 |
+| `assets/illustrations/nav-styles.svg` | 이번 UI 작업 | 프로젝트 내 제작 | 스타일 탭용 뉴모픽 SVG 아이콘 |
 | `assets/illustrations/cat-resting-alpha.png` | 이번 `imagegen` 생성·편집 | 생성 자산. 외부 작가 작품으로 표시하지 않음 | 1536×1024 RGBA, 827,910 bytes |
 | `assets/illustrations/cat-resting-v2.png` | 위 생성 과정 | 중간본, 실행 화면에서 사용하지 않음 | 최종 투명 배경 적용 전 기록 |
 | `assets/fonts/PretendardVariable.woff2` | 로컬 기존 자산 / [Pretendard](https://github.com/orioncactus/pretendard) | 동봉 `Pretendard-LICENSE.txt`, SIL OFL | 원본 글리프 유지 |
 | `assets/fonts/Outfit-Variable.woff2` | [Google Fonts Outfit](https://github.com/google/fonts/tree/main/ofl/outfit) | 동봉 `Outfit-OFL.txt`, SIL OFL | WOFF2 변환, 글리프 변경 없음 |
 
 고양이 생성·반려·편집 기록과 재생성 지시: [선화 자산 기록](assets/illustrations/generation.md).
+뉴모픽 앱 아이콘 생성 지시: “투명 배경, 둥근 밝은 회색 타일 4개, 레이어·북마크·문서·검색 아이콘, 굵은 charcoal 윤곽, mint/coral/yellow/blue 파스텔 채움, 텍스트·워터마크 없음.”
 선화 그림과 기하 풍경을 섞는 것은 각각 다른 스타일을 비교하는 제품 목적에 따른다.
 한 스타일의 화면 안에서는 그 스타일의 그림·팔레트·선 굵기를 유지한다.

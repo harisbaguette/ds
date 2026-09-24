@@ -9,9 +9,10 @@
   const pending=new Map();
   const match=(entry,query)=>query.trim().toLocaleLowerCase().split(/\s+/).every(term=>searches.get(entry.id).includes(term));
   const options=(items,current)=>items.map(e=>'<option value="'+e.id+'"'+(e.id===current?' selected':'')+'>'+escape(e.name)+'</option>').join('');
+  const navArt={styles:'nav-art-svg nav-art-styles',components:'nav-sprite nav-sprite-layers',dictionary:'nav-sprite nav-sprite-search',docs:'nav-sprite nav-sprite-document'};
   function navigation(state) {
     const active=state.page==='patterns'?'styles':state.page;
-    return [['styles','스타일'],['components','구성요소'],['dictionary','사전'],['docs','문서']].map(([id,name])=>'<a href="#/'+id+'" data-focus="page-'+id+'"'+(active===id?' aria-current="page"':'')+'>'+name+'</a>').join('');
+    return [['styles','스타일'],['components','구성요소'],['dictionary','사전'],['docs','문서']].map(([id,name])=>'<a href="#/'+id+'" data-focus="page-'+id+'" aria-label="'+name+'" title="'+name+'"'+(active===id?' aria-current="page"':'')+'><span class="nav-art '+navArt[id]+'" aria-hidden="true"></span><span>'+name+'</span></a>').join('');
   }
   function currentItems(state) {
     return state.page==='dictionary'?data.entries.filter(e=>(state.category==='all'||e.category===state.category)&&match(e,state.query))
@@ -41,7 +42,7 @@
     return '<label class="mobile-library-nav"><span class="sr-only">분류 선택</span><select data-library-category aria-label="분류 선택"><option value="all">'+(state.page==='dictionary'?'전체 분류':'전체 계층')+'</option>'+choices+'</select></label>';
   }
   function heading(state,count) {
-    return '<div class="library-heading"><h2>'+escape(state.query?'“'+state.query+'”':categoryTitle(state))+'</h2><span>'+count+'</span>'+(state.query?'<button class="icon-button" data-action="clear-query" aria-label="검색 해제">'+icon('close')+'</button>':'')+'</div>';
+    return '<div class="library-heading"><span class="heading-badge" aria-hidden="true"></span><h2>'+escape(state.query?'“'+state.query+'”':categoryTitle(state))+'</h2><span>'+count+'</span>'+(state.query?'<button class="icon-button" data-action="clear-query" aria-label="검색 해제">'+icon('close')+'</button>':'')+'</div>';
   }
   function indexCard(state,item) {
     const code=state.page==='dictionary'?item.id:item.english;
@@ -55,7 +56,7 @@
     const index=state.category==='all'&&!state.query;
     const items=index?(state.page==='dictionary'?data.categories:data.layers):currentItems(state);
     return '<section aria-labelledby="page-title">'+mobileNavigation(state)+heading(state,items.length)+
-      (items.length?'<div class="catalog-grid">'+(index?items.map(i=>indexCard(state,i)).join(''):items.slice(0,state.limit).map(e=>entryCard(state,e)).join(''))+'</div>':'<div class="empty-state">'+icon('search')+'<h2>검색 결과가 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>')+
+      (items.length?'<div class="catalog-grid">'+(index?items.map(i=>indexCard(state,i)).join(''):items.slice(0,state.limit).map(e=>entryCard(state,e)).join(''))+'</div>':'<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>검색 결과가 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>')+
       (!index&&items.length>state.limit?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+Math.min(state.limit,items.length)+' / '+items.length+'</span></button></div>':'')+'</section>';
   }
   function detail(state) {
@@ -94,4 +95,3 @@
     suggestionGroup:(page,e)=>page==='dictionary'?e.id:data.layers.find(l=>l.id===e.layer).name
   };
 })();
-

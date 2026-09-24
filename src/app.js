@@ -33,6 +33,11 @@
     $('#notice').hidden = false;
     noticeTimer = setTimeout(() => { $('#notice').hidden = true; }, 5000);
   }
+  function updateMobileChromeOffset() {
+    const header = $('.app-header');
+    if (!header) return;
+    document.documentElement.style.setProperty('--mobile-chrome-bottom', `${Math.ceil(header.getBoundingClientRect().bottom + 8)}px`);
+  }
   function hash(overrides = {}) {
     const next = { ...state, ...overrides };
     const params = new URLSearchParams();
@@ -162,6 +167,7 @@
         lastOpener = null;
       } else focusKey(focus);
     }
+    updateMobileChromeOffset();
   }
   function renderRoute() {
     hideSuggestions(); hideStyleMenu();
@@ -291,6 +297,18 @@
       options[next].focus();
     }
   });
+  dialog.addEventListener('keydown', event => {
+    if (event.key !== 'Tab' || !dialog.open || event.ctrlKey || event.metaKey || event.altKey) return;
+    const focusable = [...dialog.querySelectorAll('button, a[href], summary, input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+      .filter(el => !el.disabled && el.getClientRects().length && getComputedStyle(el).visibility !== 'hidden');
+    if (!focusable.length) return;
+    const first = focusable[0], last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault(); last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault(); first.focus();
+    }
+  });
   document.addEventListener('focusin', event => { if (!event.target.closest('.style-switcher')) hideStyleMenu(); });
   $('#clear-search').addEventListener('click', () => { navigate({ query: '' }, { replace: true }); $('#query').focus(); });
   dialog.addEventListener('cancel', event => { event.preventDefault(); closeDetail(); });
@@ -301,7 +319,8 @@
   });
   window.addEventListener('popstate', renderRoute);
   window.addEventListener('hashchange', () => { if (location.hash !== renderedHash && location.hash !== '#main') renderRoute(); });
+  window.addEventListener('resize', updateMobileChromeOffset);
+  window.visualViewport?.addEventListener('resize', updateMobileChromeOffset);
   if (!location.hash || location.hash === '#main') history.replaceState({}, '', '#/styles');
   renderRoute();
 })();
-

@@ -25,21 +25,55 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       for (const route of ['styles', 'patterns?style=ink', 'saved']) {
         await page.goto(url + '#/' + route);
         check(width + ' ' + route + ' 가로 넘침 없음', await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+        const navigation = await page.evaluate(() => {
+          const links = [...document.querySelectorAll('.primary-nav a')];
+          const controls = [...links, document.querySelector('#saved-link')];
+          return {
+            unnamed: links.filter(el => !el.innerText.trim()).map(el => el.getAttribute('aria-label')),
+            covered: controls.filter(el => {
+              const r = el.getBoundingClientRect();
+              return !el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
+            }).map(el => el.getAttribute('aria-label'))
+          };
+        });
+        check(width + ' ' + route + ' 메뉴 이름이 화면에 보임: ' + navigation.unnamed.join(', '), navigation.unnamed.length === 0);
+        check(width + ' ' + route + ' 메뉴 클릭 영역 가림 없음: ' + navigation.covered.join(', '), navigation.covered.length === 0);
         check(width + ' ' + route + ' 제목 16px 이하', await page.locator('#page-title').evaluate(e => parseFloat(getComputedStyle(e).fontSize) <= 16));
         check(width + ' ' + route + ' 불필요 조작 제거', await page.locator('[data-view], [data-compare], [data-action="compare-mode"], [data-filter="sort"], .compare-tray, .mobile-nav, .brand span').count() === 0);
         if (route === 'styles') {
           check(width + ' 스타일 입구에 검색과 분류 없음', !(await page.locator('.search-area').isVisible()) && !(await page.locator('#site-navigation').isVisible()));
           if ([375,1440].includes(width)) await shot(width + '-styles');
         } else if (route.startsWith('patterns')) {
+          const detachedSaves = await page.locator('.pattern-card').evaluateAll(cards => cards.filter(card => {
+            const save = card.querySelector('.card-save').getBoundingClientRect();
+            const caption = card.querySelector('.card-caption').getBoundingClientRect();
+            return save.left < caption.left - 1 || save.right > caption.right + 1 || save.top < caption.top - 1 || save.bottom > caption.bottom + 1;
+          }).map(card => card.dataset.pattern));
+          check(width + ' 저장 버튼이 해당 카드 제목 영역 안에 있음: ' + detachedSaves.join(', '), detachedSaves.length === 0);
           check(width + ' 첫 그리드 즉시 보임', (await page.locator('.pattern-grid').boundingBox()).y < (width <= 760 ? 190 : 110));
           if ([375,1440].includes(width)) await shot(width + '-ink');
+          await page.evaluate(() => scrollTo(0, 500));
+          const categoryObscured = await page.locator('.category').first().evaluate(el => {
+            const r = el.getBoundingClientRect();
+            const header = document.querySelector('.app-header').getBoundingClientRect();
+            return r.top < header.bottom - 1 || [r.top + 4, r.bottom - 4].some(y => !el.contains(document.elementFromPoint(r.x + r.width / 2, y)));
+          });
+          check(width + ' 스크롤 뒤 분류 버튼 위아래가 가려지지 않음', !categoryObscured);
           await page.locator('#style-switch').click();
           check(width + ' 스타일 메뉴 가로 넘침 없음', await page.locator('#style-menu').evaluate(e => { const r=e.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth; }));
+          check(width + ' 스타일 메뉴가 여는 버튼 아래에 붙음', await page.locator('#style-menu').evaluate(el => el.getBoundingClientRect().top >= document.querySelector('#style-switch').getBoundingClientRect().bottom - 1));
           if ([375,1440].includes(width)) await shot(width + '-style-menu');
           await page.keyboard.press('Escape');
           check(width + ' 스타일 메뉴 Escape 초점 복귀', await page.locator('#style-switch').evaluate(e => e === document.activeElement) && !(await page.locator('#style-menu').isVisible()));
+          await page.evaluate(() => scrollTo(0, 0));
           await page.locator('[data-open="toast"]').click();
           check(width + ' 상세 넘침 없음', await page.locator('#detail-dialog').evaluate(e => e.scrollWidth <= e.clientWidth));
+          await page.locator('#detail-dialog .dialog-footer button').last().focus();
+          await page.keyboard.press('Tab');
+          check(width + ' 상세 마지막 동작에서 Tab 초점 유지', await page.locator('#detail-dialog').evaluate(e => e.contains(document.activeElement)));
+          await page.locator('[data-action="close-dialog"]').focus();
+          await page.keyboard.press('Shift+Tab');
+          check(width + ' 상세 첫 동작에서 Shift+Tab 초점 유지', await page.locator('#detail-dialog').evaluate(e => e.contains(document.activeElement)));
           if ([375,1440].includes(width)) await shot(width + '-detail');
           await page.keyboard.press('Escape');
           await page.waitForFunction(() => !document.querySelector('dialog').open);
@@ -70,4 +104,3 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
     console.log(checks.length + ' lean-shell checks passed.');
   } finally { await browser.close(); }
 })().catch(e => { console.error(e); process.exitCode = 1; });
-

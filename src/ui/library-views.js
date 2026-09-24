@@ -42,7 +42,7 @@
     return '<label class="mobile-library-nav"><span class="sr-only">분류 선택</span><select data-library-category aria-label="분류 선택"><option value="all">'+(state.page==='dictionary'?'전체 분류':'전체 계층')+'</option>'+choices+'</select></label>';
   }
   function heading(state,count) {
-    return '<div class="library-heading"><span class="heading-badge" aria-hidden="true"></span><h2>'+escape(state.query?'“'+state.query+'”':categoryTitle(state))+'</h2><span>'+count+'</span>'+(state.query?'<button class="icon-button" data-action="clear-query" aria-label="검색 해제">'+icon('close')+'</button>':'')+'</div>';
+    return '<div class="library-heading"><h2>'+escape(state.query?'“'+state.query+'”':categoryTitle(state))+'</h2><span>'+count+'</span>'+(state.query?'<button class="icon-button" data-action="clear-query" aria-label="검색 해제">'+icon('close')+'</button>':'')+'</div>';
   }
   function indexCard(state,item) {
     const code=state.page==='dictionary'?item.id:item.english;

@@ -5,6 +5,7 @@ const root = path.resolve(__dirname, '..');
 const port = Number(process.env.PORT || 4173);
 const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.md': 'text/plain', '.pdf': 'application/pdf', '.zip': 'application/zip', '.woff2': 'font/woff2' };
 const publicRoots = ['assets', 'src', '문서', '시안', '영감보관함'].map(folder => path.join(root, folder));
+const evidenceRoot = path.join(root, 'test-results');
 const escape = value => value.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 http.createServer((req, res) => {
@@ -15,7 +16,8 @@ http.createServer((req, res) => {
   const relative = pathname.slice(1);
   let target = path.resolve(root, relative);
   const allowed = target === path.join(root, 'index.html')
-    || publicRoots.some(folder => target === folder || target.startsWith(folder + path.sep));
+    || publicRoots.some(folder => target === folder || target.startsWith(folder + path.sep))
+    || (target.startsWith(evidenceRoot + path.sep) && /\.(?:png|jpg|jpeg|webp|svg)$/i.test(target));
   if (!allowed) { res.writeHead(404); res.end(); return; }
   if (fs.existsSync(target) && fs.statSync(target).isDirectory()) {
     const index = path.join(target, 'index.html');

@@ -73,7 +73,7 @@ body:is([data-page='dictionary'],[data-page='components'],[data-page='docs']) ma
   .catalog-tile h3 { font-size: 13px; }
   .record-code { font-size: 10px; margin-bottom: 12px; }
   .record-detail { padding: 20px; }
-  .document-body { font-size: 15px; }
+  .document-body { font-size: 16px; }
   .document-body > h2:first-child { font-size: 18px; }
   .document-body h3, .document-body h4 { font-size: 16px; }
   .document-body ul, .document-body ol { padding-left: 18px; }

@@ -1,0 +1,28 @@
+﻿dialog { width: min(1080px, calc(100% - 64px)); max-height: calc(100dvh - 48px); border: 1px solid var(--line); padding: 0; border-radius: 10px; color: var(--ink); background: var(--canvas); box-shadow: var(--shadow); overscroll-behavior: contain; }
+dialog::backdrop { background: var(--backdrop); backdrop-filter: blur(3px); }
+.dialog-header { padding: 18px 24px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 12px; position: sticky; top: 0; background: var(--canvas); z-index: 2; }
+.dialog-category { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.dialog-header h2 { font-size: 20px; font-weight: 600; }
+.dialog-header > button { margin-left: auto; }
+.detail-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(270px, 1fr); }
+.detail-preview { padding: 24px; }
+.detail-content { padding: 28px; border-left: 1px solid var(--line); }
+.pending-label { font-size: 12px; color: var(--muted); margin-bottom: 28px; }
+.content-slot { border-bottom: 1px solid var(--line); margin-bottom: 24px; padding-bottom: 18px; }
+.content-slot h3, .content-slot summary { font-size: 14px; font-weight: 550; }
+.content-slot summary { min-height: 44px; cursor: pointer; }
+.pending-copy { margin-top: 16px; color: var(--muted); font-weight: 300; }
+.slot-label { font-size: 13px; color: var(--muted); }
+.dialog-footer { position: sticky; bottom: 0; display: flex; justify-content: flex-end; padding: 16px 24px; border-top: 1px solid var(--line); background: var(--canvas); z-index: 2; }
+.save-status { font-size: 13px; color: var(--muted); margin-right: auto; align-self: center; padding-right: 16px; }
+@media (max-width: 760px) {
+  dialog { width: calc(100% - 16px); max-height: calc(100dvh - 24px); border-radius: 8px; }
+  .dialog-header { padding: 14px 18px; }
+  .dialog-header h2 { font-size: 18px; }
+  .detail-layout { display: block; }
+  .detail-preview { padding: 16px; }
+  .detail-content { padding: 16px 20px; border-left: 0; }
+  .content-slot { margin-bottom: 18px; }
+  .dialog-footer { padding: 12px 18px; }
+}
+

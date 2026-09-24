@@ -1,0 +1,19 @@
+{
+  "name": "pattove-shell",
+  "version": "0.1.0",
+  "private": true,
+  "description": "패토브 화면 구조 검토용 뼈대",
+  "scripts": {
+    "build:library": "node scripts/build-library.mjs",
+    "dev": "node scripts/serve.cjs",
+    "test": "node tests/shell.cjs",
+    "test:visual": "node tests/visual.cjs",
+    "test:design": "node tests/design-audit.cjs",
+    "test:outer": "node tests/outer-shell.cjs",
+    "test:library": "node tests/library.cjs"
+  },
+  "devDependencies": {
+    "marked": "^18.0.14",
+    "playwright-core": "1.62.1"
+  }
+}

@@ -22,9 +22,9 @@ const integrity = root => {
     if(n.matches('input,select')&&!n.labels?.length&&!n.getAttribute('aria-label'))bad.push('unnamed-input');
   });return bad;
 };
-async function route(page,style,id='',category='all') {
-  await page.goto(origin+'#/system?style='+style+(id?'&detail='+id:'')+'&category='+category);
-  await page.locator(id?'.system-inspector':'.system-board').waitFor();
+async function route(page,style,id='') {
+  await page.goto(origin+'#/system?style='+style+(id?'&detail='+id:''));
+  await page.locator('.system-inspector').waitFor();
   await page.evaluate(()=>document.fonts.ready);
 }
 async function exportBlob(page,style,id) {
@@ -75,17 +75,6 @@ async function run() {
         return t.content.firstElementChild.outerHTML===document.querySelector('.part-demo > .ds').outerHTML;
       }));
     }
-    // Inspector overlays must preserve an already-used board.
-    await route(page,'main','','composition');
-    await page.locator('.system-board [name="query"]').fill('주말');await page.locator('.system-board button[type="submit"]').click();
-    await page.locator('[data-system-detail="card"]').click();await page.keyboard.press('Escape');
-    await page.waitForFunction(()=>!document.querySelector('dialog').open);
-    check('overlay keeps query and filtered results',await page.locator('.system-board [name="query"]').inputValue()==='주말'&&await page.locator('[data-result]:visible').count()===1);
-    await route(page,'main','','selection');
-    await page.locator('[data-indeterminate]').click();
-    await page.locator('[data-system-detail="checkbox"]').click();await page.keyboard.press('Escape');
-    await page.waitForFunction(()=>!document.querySelector('dialog').open);
-    check('overlay does not reinitialize mixed checkbox',!await page.locator('[data-indeterminate]').evaluate(n=>n.indeterminate));
     await route(page,'main','search-module');
     const demo=page.locator('.part-demo');
     await demo.locator('[data-result] button').first().click();await demo.locator('[data-part-action="save-record"]').click();await demo.locator('[data-part-action="close-record"]').click();await demo.locator('[data-result] button').first().click();
@@ -115,7 +104,7 @@ async function run() {
     await route(delayed,'main','field');
     const requested=delayed.waitForRequest('**/system-fonts.js');const downloadEvent=delayed.waitForEvent('download');
     await delayed.locator('[data-system-download]').click();await requested;await delayed.keyboard.press('Escape');
-    await delayed.getByRole('link',{name:'사전',exact:true}).first().click();release();
+    await delayed.locator('a[href="#/dictionary"]').first().click();release();
     const download=await downloadEvent;const filename=path.join(out,download.suggestedFilename());await download.saveAs(filename);
     check('async export filename is frozen',download.suggestedFilename()==='pattove-main-field.html');
     const content=fs.readFileSync(filename,'utf8');check('async export theme is frozen',content.includes('background: #e9edf2')&&content.includes('"style":"main"'));
@@ -142,7 +131,7 @@ async function run() {
       const page=await browser.newPage();page.setDefaultTimeout(10000);page.on('pageerror',e=>errors.push(name+': '+e.message));
       for(const width of [320,375,768,1440,1920]) for(const style of ['main']) {
         await page.setViewportSize({width,height:900});await route(page,style);
-        check(name+'/'+width+'/'+style+' board layout',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)&&await page.locator('.specimen').count()===18);
+        check(name+'/'+width+'/'+style+' single part layout',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)&&await page.locator('.component-page').count()===1&&await page.locator('.specimen').count()===0);
       }
       for(const id of ['field','checkbox','radio','switch','tabs','bottom-nav','card','search-module','page']) {
         await route(page,'main',id);
@@ -152,7 +141,7 @@ async function run() {
         if(id==='search-module'||id==='page') {await page.locator('.part-demo [name="query"]').fill('없는결과');await page.locator('.part-demo [type="submit"]').click();check(name+' '+id+' empty recovery',await page.locator('.part-demo .ds-empty').isVisible());await page.locator('.part-demo [data-part-action="reset-search"]').click();check(name+' '+id+' recovered',await page.locator('.part-demo [data-result]:visible').count()===3);}
         const downloadEvent=page.waitForEvent('download');await page.locator('[data-system-download]').click();const download=await downloadEvent;await download.saveAs(path.join(out,name+'-'+download.suggestedFilename()));check(name+'/'+id+' download',true);
       }
-      await page.goto(fileURL+'#/system?style=main&category=buttons');check(name+' file execution',await page.locator('.button-matrix tbody tr').count()===6);
+      await page.goto(fileURL+'#/system?style=main&detail=button');check(name+' file execution',await page.locator('.part-demo .ds-button').count()>=1);
       await page.screenshot({path:path.join(out,name+'-mobile.png')});console.log(name+': responsive controls and exports checked');
     } finally {await browser.close();}
   }

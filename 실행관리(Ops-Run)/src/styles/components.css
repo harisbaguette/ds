@@ -56,14 +56,12 @@
 .component-pagination { display:flex; justify-content:space-between; gap:20px; border-top:1px solid var(--p-line); margin-top:40px; padding-top:16px; }
 .component-pagination a { display:inline-flex; min-height:44px; gap:8px; align-items:center; font-size:13px; }
 .component-pagination a:first-child .ui-icon { transform:rotate(180deg); order:-1; }.component-pagination .ui-icon { width:14px; }
-.component-mobile-nav { display:none; }
 .component-sidebar-link { display:flex; align-items:center; min-height:44px; min-width:44px; padding:10px 14px; font-size:13px; color:var(--p-muted); border-radius:14px; }
 .component-sidebar-link[aria-current='page'] { background:var(--p-accent); color:var(--p-on-accent); font-weight:650; box-shadow:none; }
 .component-sidebar-link:hover { color:var(--p-ink); background:var(--p-surface); }
 @media(max-width:1250px) { .component-layout { grid-template-columns:minmax(0,1fr); }.component-toc { display:none; } }
 @media(max-width:760px) {
   .component-heading h2 { font-size:28px; }.component-heading { margin-bottom:16px; }
-  .component-mobile-nav { display:block; margin-bottom:20px; }.component-mobile-nav select { width:100%; min-height:44px; padding:8px 12px; border-radius:10px; border:1px solid var(--p-control-border); background:var(--p-surface); }
   .component-page .part-demo>.ds { min-height:220px; padding:24px 8px; }.component-page .part-demo>.ds>.ds-field { min-width:0; width:100%; }
   .component-examples { grid-template-columns:1fr; }.component-section { margin-top:32px; scroll-margin-top:160px; }
   .component-toolbar { gap:8px; }.component-tabs { gap:20px; }.component-code pre { font-size:12px; padding-inline:14px; }

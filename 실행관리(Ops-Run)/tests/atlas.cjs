@@ -9,9 +9,9 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
     try{
       const page=await browser.newPage({viewport:{width:1440,height:1080},acceptDownloads:true});page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
       await page.goto('http://127.0.0.1:4173/#/styles');await page.evaluate(()=>document.fonts.ready);
-      check(name+' 시작 화면에 부품·상태 시트',await page.locator('.specimen').count()===18&&await page.locator('.button-matrix tbody tr').count()===6);
+      check(name+' 시작 화면은 첫 부품 한 장',await page.locator('.component-page[data-component="tokens"]').count()===1&&await page.locator('.specimen').count()===0);
       check(name+' 옆 열에 부품별 바로가기',await page.locator('#sidebar a[href="#/system?style=main&detail=button"]').count()===1);
-      await page.locator('[data-system-detail="button"]').click();
+      await page.locator('#sidebar a[href="#/system?style=main&detail=button"]').click();
       await page.locator('[data-doc-environment]').selectOption('react');
       await page.waitForFunction(()=>document.querySelector('[data-install-source]')?.textContent.includes('export default'));
       check(name+' React 설치 명령과 실제 JSX', (await page.locator('[data-install-command]').textContent()).includes('pattove-main-button-react.json')&&(await page.locator('[data-install-source]').textContent()).includes('<Button'));

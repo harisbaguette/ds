@@ -27,28 +27,26 @@ const fingerprint = element => {
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(url + '#/styles');
     await page.evaluate(() => document.fonts.ready);
-    check('메인 스타일 시트로 바로 진입', await page.locator('.system-board .specimen').count() === 18 && await page.locator('[data-style-choice]').count() === 0);
+    check('스타일 진입은 첫 부품 한 장', page.url().endsWith('detail=tokens') && await page.locator('.component-page').count() === 1 && await page.locator('.specimen,.system-board').count() === 0 && await page.locator('[data-style-choice]').count() === 0);
     check('현재 스타일은 하나', await page.evaluate(()=>Pattove.catalog.styles.length===1 && Pattove.catalog.styles[0].id==='main'));
     await page.screenshot({ path: path.join(output, 'styles.png') });
-    check('18개 대표 구현과 8개 역할', await page.locator('.specimen').count() === 18 && await page.evaluate(() => new Set([...Pattove.systemRegistry.items, ...Pattove.systemRegistry.patterns].map(i=>i.layer)).size === 8));
+    check('18개 대표 구현과 8개 역할', await page.evaluate(() => Pattove.systemRegistry.items.length === 18 && new Set([...Pattove.systemRegistry.items, ...Pattove.systemRegistry.patterns].map(i=>i.layer)).size === 8));
     check('의존 관계는 존재하는 구현을 참조', await page.evaluate(() => Pattove.systemRegistry.items.every(item => item.deps.every(id=>Pattove.systemRegistry.index.has(id)))));
     const sourceBlocks = Object.fromEntries([...fs.readFileSync(path.join(root,'src/system/parts.css'),'utf8').matchAll(/\/\* @part ([\w-]+) \*\/([\s\S]*?)(?=\/\* @part |$)/g)].map(match=>[match[1],match[2].trim()]));
     check('내보내기 CSS 생성본이 공용 원본과 일치', await page.evaluate(expected=>JSON.stringify(Pattove.systemSource)===JSON.stringify(expected),sourceBlocks));
     check('사전 연결 무결성', await page.evaluate(() => Pattove.systemRegistry.items.every(item => !item.entry || Pattove.library.entries.some(e=>e.id===item.entry))));
-    check('크기와 상태는 버튼의 변형', await page.locator('.button-matrix tbody tr').count() === 6 && await page.locator('.button-options [data-size]').count() === 5);
-    await page.screenshot({ path: path.join(output, 'board.png') });
+    await inspect(page, 'main', 'button');
+    check('크기와 상태는 버튼의 변형', await page.locator('[data-part-option="size"]').count() === 1 && await page.locator('[data-part-option="state"]').count() === 1);
+    await page.screenshot({ path: path.join(output, 'button.png') });
     await page.locator('#query').fill('버튼');
     await page.locator('#query').press('Enter');
-    check('검색 조건 유지', await page.locator('#query').inputValue() === '버튼' && await page.locator('.specimen').count() === 1);
+    await page.waitForURL(/detail=button/);
     await page.reload();
-    check('주소에서 상태 복원', await page.locator('.system-board[data-style="main"]').count() === 1 && await page.locator('.specimen').count() === 1);
-    await page.locator('[data-system-detail="button"]').click();
+    check('검색하면 첫 맞는 부품으로, 새로고침해도 유지', await page.locator('.component-page[data-component="button"]').count() === 1);
+    await page.locator('#sidebar a[href="#/system?style=main&detail=button"]').click();
     await page.locator('[data-part-option="variant"]').selectOption('outline');
     await page.locator('[data-part-option="size"]').selectOption('lg');
     check('선택한 변형과 가져갈 마크업 일치', (await page.locator('#part-source').inputValue()).includes('data-size="lg"') && await page.locator('.part-demo .ds-button').getAttribute('data-variant') === 'outline');
-    await page.keyboard.press('Escape');
-    await page.waitForFunction(()=>!document.querySelector('dialog').open);
-    check('상세 닫기 후 원래 코드 버튼에 초점 복귀', await page.locator('[data-system-detail="button"]').evaluate(n=>n===document.activeElement));
     await inspect(page, 'main', 'search-module');
     const demo = page.locator('.part-demo');
     await demo.locator('[name="query"]').fill('없는이름');
@@ -64,7 +62,7 @@ const fingerprint = element => {
     check('상세의 주요 행동 피드백', await demo.locator('[data-part-action="save-record"]').getAttribute('aria-pressed') === 'true');
     await demo.locator('[data-part-action="close-record"]').click();
     check('목록으로 돌아오면 필터와 초점 유지', await demo.locator('[data-result]:visible').count() === 1 && await demo.locator('[data-result]:visible button').evaluate(n=>n===document.activeElement));
-    await page.locator('.part-dependencies [data-system-detail="field"]').click();
+    await page.locator('.part-dependencies a[href*="detail=field"]').click();
     check('모듈에서 하위 부품으로 탐색', await page.locator('#detail-title').textContent() === '입력 필드');
     await inspect(page,'main','tabs');
     await demo.locator('[role="tab"]').first().focus();
@@ -132,18 +130,18 @@ const fingerprint = element => {
     for(const width of [320,375,768,1440]) {
       await page.setViewportSize({width,height:1000});
       for(const style of ['main']) {
-        await page.goto(url+'#/system?style='+style);
-        check(width+' '+style+' 보드 가로 넘침 없음', await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+        await page.goto(url+'#/system?style='+style+'&detail=page');await page.locator('.system-inspector').waitFor();
+        check(width+' '+style+' 부품 화면 가로 넘침 없음', await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
         const duplicates=await page.evaluate(()=>{const ids=[...document.querySelectorAll('[id]')].map(n=>n.id);return ids.length!==new Set(ids).size;});
         check(width+' '+style+' 중복 ID 없음', !duplicates);
 
       }
     }
-    await page.goto(url+'#/system?style=main&category=buttons');await page.screenshot({path:path.join(output,'button-matrix.png')});
+    await page.goto(url+'#/system?style=main&detail=button');await page.screenshot({path:path.join(output,'button-page.png')});
     await page.setViewportSize({width:375,height:1000});
-    await page.goto(url+'#/system?style=main&category=page');await page.screenshot({path:path.join(output,'mobile-page.png'),fullPage:true});
-    await page.goto('http://127.0.0.1:4173/#/system?style=main&category=buttons');
-    check('HTTP 실행에서도 동일한 보드', await page.locator('.button-matrix tbody tr').count()===6);
+    await page.goto(url+'#/system?style=main&detail=page');await page.screenshot({path:path.join(output,'mobile-page.png'),fullPage:true});
+    await page.goto('http://127.0.0.1:4173/#/system?style=main&detail=button');
+    check('HTTP 실행에서도 같은 부품 화면', await page.locator('.part-demo .ds-button').count()>=1);
     check('브라우저 실행 오류 없음', errors.length===0);
     fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({checks,errors},null,2));
     console.log(checks.length+' atomic system checks passed.');

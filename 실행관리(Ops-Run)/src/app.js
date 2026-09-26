@@ -66,13 +66,14 @@
     const params = new URLSearchParams(query);
     const page = path.replace(/^\//, '');
     state.page = page === 'styles' || !page ? 'system' : ['patterns', 'system', 'saved', ...library.pages].includes(page) ? page : 'system';
-    state.category = (state.page === 'system' ? systemRegistry.sections.some(c => c.id === params.get('category')) : state.page === 'patterns' ? catalog.categories.some(c => c.id === params.get('category')) : isCollection() && library.validCategory(state.page, params.get('category'))) ? params.get('category') : 'all';
+    state.category = (state.page === 'patterns' ? catalog.categories.some(c => c.id === params.get('category')) : isCollection() && library.validCategory(state.page, params.get('category'))) ? params.get('category') : 'all';
     state.query = ['styles', 'docs'].includes(state.page) ? '' : (params.get('q') || '').slice(0, 100);
     state.doc = library.validDocument(params.get('doc')) ? params.get('doc') : 'definition';
     state.section = (params.get('section') || '').slice(0, 250);
     state.limit = Math.min(5000, Math.max(48, Number.parseInt(params.get('shown'), 10) || 48));
     if (validStyle(params.get('style'))) state.style = params.get('style');
     state.detail = (state.page === 'system' ? systemRegistry.index.has(params.get('detail')) : isCollection() ? library.validDetail(state.page, params.get('detail')) : ['patterns', 'saved'].includes(state.page) && validPattern(params.get('detail'))) ? params.get('detail') : null;
+    if (state.page === 'system' && !state.detail) { state.detail = (systemRegistry.matching(state.query)[0] || systemRegistry.items[0]).id; state.query = ''; }
     state.options = state.page === 'system' && state.detail ? systemRegistry.normalizeOptions(state.detail, Object.fromEntries([...params].filter(([key]) => key.startsWith('option-')).map(([key,value]) => [key.slice(7),value]))) : {};
     state.environment = params.get('env') === 'react' ? 'react' : 'html';
     state.previewTab = params.get('view') === 'code' ? 'code' : 'preview';
@@ -160,9 +161,9 @@
     else $('#saved-link').removeAttribute('aria-current');
     $('.saved-dot').hidden = !state.saved.length;
     const found = state.page === 'saved' ? savedResults() : results();
-    const nextMainKey = JSON.stringify([state.page, state.style, state.category, state.query, state.doc, state.page==='docs'?state.section:'', state.limit, state.saved, state.page==='system'?state.detail:null, state.environment, state.previewTab]);
+    const nextMainKey = JSON.stringify([state.page, state.style, state.category, state.query, state.doc, state.page==='docs'?state.section:'', state.limit, state.saved, state.page==='system'?[state.detail,state.options]:null, state.environment, state.previewTab]);
     if (mainRenderKey !== nextMainKey) {
-      $('#main').innerHTML = state.page === 'system' ? (state.detail ? system.detail(state) : system.main(state)) : state.page === 'docs' ? library.docPage(state) : isCollection() ? library.collection(state) : state.page === 'patterns' ? views.patterns(state, found) : views.saved(state, found);
+      $('#main').innerHTML = state.page === 'system' ? system.detail(state) : state.page === 'docs' ? library.docPage(state) : isCollection() ? library.collection(state) : state.page === 'patterns' ? views.patterns(state, found) : views.saved(state, found);
       mainRenderKey = nextMainKey;
     }
     if (state.detail && state.page !== 'system') {
@@ -207,7 +208,7 @@
       const section = document.getElementById('component-'+state.section);
       if (section) { section.tabIndex=-1; section.focus({preventScroll:true}); section.scrollIntoView({block:'start'}); }
     }
-    $('#announcer').textContent = state.page === 'styles' ? `스타일 ${catalog.styles.filter(s => s.id !== 'base').length}개` : state.page === 'system' ? `부품 ${system.currentItems(state).length}개` : state.page === 'docs' ? library.documentName(state.doc) : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : state.page === 'saved' ? savedResults().length : results().length}개`;
+    $('#announcer').textContent = state.page === 'styles' ? `스타일 ${catalog.styles.filter(s => s.id !== 'base').length}개` : state.page === 'system' ? systemRegistry.index.get(state.detail).name : state.page === 'docs' ? library.documentName(state.doc) : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : state.page === 'saved' ? savedResults().length : results().length}개`;
     const request = ++documentRequest;
     if (state.page === 'docs') library.loadDocument(state.doc).then(() => {
       if (request !== documentRequest || state.page !== 'docs') return;
@@ -238,10 +239,7 @@
     const data = target.dataset;
     if (target.matches('a') && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return;
     if (target.classList.contains('skip-link')) { event.preventDefault(); $('#main').focus(); return; }
-    if (data.systemDetail) {
-      lastOpener = target.dataset.focus || null;
-      navigate({ page:'system', detail: data.systemDetail, section:'', previewTab:'preview', options: data.systemIcon ? { icon: data.systemIcon } : {} });
-    } else if (data.docTab) {
+    if (data.docTab) {
       navigate({previewTab:data.docTab, section:''}, {replace:true});
     } else if (data.docSection) {
       event.preventDefault(); navigate({section:data.docSection}, {replace:true});
@@ -280,7 +278,6 @@
   });
   document.addEventListener('change', event => {
     if (event.target.matches('[data-doc-environment]')) navigate({environment:event.target.value, section:''},{replace:true});
-    if (event.target.matches('[data-component-select]')) navigate({detail:event.target.value,options:{},previewTab:'preview',section:''});
     if (event.target.matches('[data-part-option]')) {
       state.options = systemRegistry.normalizeOptions(state.detail, Object.fromEntries([...document.querySelectorAll('.system-inspector [data-part-option]')].map(el => [el.dataset.partOption,el.value])));
       history.replaceState(history.state, '', hash()); renderedHash = location.hash;

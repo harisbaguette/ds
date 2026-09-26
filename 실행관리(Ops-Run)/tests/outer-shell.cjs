@@ -42,7 +42,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
         check(width + ' ' + route + ' 제목 16px 이하', await page.locator('#page-title').evaluate(e => parseFloat(getComputedStyle(e).fontSize) <= 16));
         check(width + ' ' + route + ' 불필요 조작 제거', await page.locator('[data-view], [data-compare], [data-action="compare-mode"], [data-filter="sort"], .compare-tray, .mobile-nav, .brand span').count() === 0);
         if (route === 'styles') {
-          check(width + ' 첫 진입에서 부품 검색과 보드 표시', await page.locator('.search-area').isVisible() && await page.locator('.system-board').isVisible());
+          check(width + ' 스타일 진입에서 부품 검색과 부품 한 장 표시', await page.locator('.search-area').isVisible() && await page.locator('.component-page').isVisible() && await page.locator('.system-board').count() === 0);
           if ([375,1440].includes(width)) await shot(width + '-styles');
         } else if (route.startsWith('patterns')) {
           const detachedSaves = await page.locator('.pattern-card').evaluateAll(cards => cards.filter(card => {

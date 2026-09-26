@@ -6,13 +6,12 @@
   const validPattern = id => catalog.patterns.some(p => p.id === id);
   const validStyle = id => catalog.styles.some(s => s.id === id);
   const state = {
-    page: 'styles', category: 'all', query: '', style: 'main', detail: null, options: {}, environment: 'html', previewTab: 'preview', doc: 'definition', section: '', limit: 48
+    page: 'styles', category: 'all', query: '', style: 'main', detail: null, options: {}, environment: 'html', previewTab: 'preview', section: '', limit: 48
   };
   let lastOpener = null;
   let renderedHash = '';
   let suggestions = [];
   let suggestionIndex = -1;
-  let documentRequest = 0;
   let mainRenderKey = '';
   const dialog = $('#detail-dialog');
 
@@ -26,12 +25,8 @@
     const params = new URLSearchParams();
     if (['patterns', 'system'].includes(next.page)) params.set('style', next.style);
     if (['patterns', 'system', 'dictionary', 'components'].includes(next.page) && next.category !== 'all') params.set('category', next.category);
-    if (next.query && !['styles', 'docs'].includes(next.page)) params.set('q', next.query);
+    if (next.query && !['styles'].includes(next.page)) params.set('q', next.query);
     if (['dictionary', 'components'].includes(next.page) && next.limit > 48) params.set('shown', next.limit);
-    if (next.page === 'docs') {
-      params.set('doc', next.doc);
-      if (next.section) params.set('section', next.section);
-    }
     if (next.detail) params.set('detail', next.detail);
     if (next.page === 'system' && next.detail) {
       if (next.environment === 'react') params.set('env', 'react');
@@ -49,8 +44,7 @@
     const page = path.replace(/^\//, '');
     state.page = page === 'styles' || !page ? 'system' : ['patterns', 'system', ...library.pages].includes(page) ? page : 'system';
     state.category = (state.page === 'patterns' ? catalog.categories.some(c => c.id === params.get('category')) : isCollection() && library.validCategory(state.page, params.get('category'))) ? params.get('category') : 'all';
-    state.query = ['styles', 'docs'].includes(state.page) ? '' : (params.get('q') || '').slice(0, 100);
-    state.doc = library.validDocument(params.get('doc')) ? params.get('doc') : 'definition';
+    state.query = ['styles'].includes(state.page) ? '' : (params.get('q') || '').slice(0, 100);
     state.section = (params.get('section') || '').slice(0, 250);
     state.limit = Math.min(5000, Math.max(48, Number.parseInt(params.get('shown'), 10) || 48));
     if (validStyle(params.get('style'))) state.style = params.get('style');
@@ -97,7 +91,7 @@
   }
   function showSuggestions() {
     const query = $('#query').value.trim();
-    if (!query || ['styles', 'docs'].includes(state.page)) { hideSuggestions(); return; }
+    if (!query || ['styles'].includes(state.page)) { hideSuggestions(); return; }
     suggestions = state.page === 'system' ? systemRegistry.matching(query).slice(0, 6) : isCollection() ? library.suggestions(state, query) : catalog.patterns.filter(p => matches(p, query)).slice(0, 6);
     suggestionIndex = -1;
     $('#search-suggestions').innerHTML = suggestions.length ? suggestions.map((p, i) => `<button type="button" role="option" aria-selected="false" tabindex="-1" class="search-suggestion" id="suggestion-${i}" data-suggest-open="${p.id}"><span>${views.escape(p.name)}</span><small>${views.escape(state.page === 'system' ? p.layer : isCollection() ? library.suggestionGroup(state.page, p) : catalog.categories.find(c => c.id === p.category).name)}</small></button>`).join('') : '<p class="search-no-match">일치하는 항목이 없어요</p>';
@@ -118,9 +112,9 @@
   }
   function render(previousDetail = state.detail, focus = document.activeElement?.dataset.focus) {
     document.body.dataset.page = state.page;
-    const searchable = !['styles', 'docs'].includes(state.page);
+    const searchable = !['styles'].includes(state.page);
     document.body.dataset.search = String(searchable);
-    document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : ['patterns', 'system'].includes(state.page) ? views.styleName(state.style) : state.page === 'docs' ? library.documentName(state.doc) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
+    document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : ['patterns', 'system'].includes(state.page) ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
     $('#primary-nav').innerHTML = library.navigation(state);
     $('#header-context').innerHTML = views.header(state);
     const column = state.page === 'system' ? system.sidebar(state) : state.page === 'patterns' ? views.sidebar(state) : library.pages.includes(state.page) ? library.sidebar(state) : '';
@@ -131,9 +125,9 @@
     $('#query').setAttribute('aria-label', $('#query').placeholder);
     if (document.activeElement !== $('#query')) $('#query').value = state.query;
     $('#clear-search').hidden = !$('#query').value;
-    const nextMainKey = JSON.stringify([state.page, state.style, state.category, state.query, state.doc, state.page==='docs'?state.section:'', state.limit, state.page==='system'?[state.detail,state.options]:null, state.environment, state.previewTab]);
+    const nextMainKey = JSON.stringify([state.page, state.style, state.category, state.query, state.limit, state.page==='system'?[state.detail,state.options]:null, state.environment, state.previewTab]);
     if (mainRenderKey !== nextMainKey) {
-      $('#main').innerHTML = state.page === 'system' ? system.detail(state) : state.page === 'docs' ? library.docPage(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
+      $('#main').innerHTML = state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
       mainRenderKey = nextMainKey;
     }
     if (state.detail && state.page !== 'system') {
@@ -162,7 +156,6 @@
     const previousDetail = state.detail;
     const previousStyle = state.style;
     const previousCategory = state.category;
-    const previousDocument = state.doc;
     const focus = document.activeElement?.dataset.focus;
     readRoute();
     const canonical = hash();
@@ -170,7 +163,7 @@
     $('#query').value = state.query;
     render(previousDetail, focus);
     renderedHash = location.hash;
-    if (previousPage !== state.page || (state.page==='system' && previousDetail!==state.detail) || (!state.detail && (previousStyle !== state.style || previousCategory !== state.category || previousDocument !== state.doc))) {
+    if (previousPage !== state.page || (state.page==='system' && previousDetail!==state.detail) || (!state.detail && (previousStyle !== state.style || previousCategory !== state.category))) {
       window.scrollTo(0, 0);
       if (!state.detail) $('#main').focus({ preventScroll: true });
     }
@@ -178,18 +171,7 @@
       const section = document.getElementById('component-'+state.section);
       if (section) { section.tabIndex=-1; section.focus({preventScroll:true}); section.scrollIntoView({block:'start'}); }
     }
-    $('#announcer').textContent = state.page === 'styles' ? `스타일 ${catalog.styles.filter(s => s.id !== 'base').length}개` : state.page === 'system' ? systemRegistry.index.get(state.detail).name : state.page === 'docs' ? library.documentName(state.doc) : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개`;
-    const request = ++documentRequest;
-    if (state.page === 'docs') library.loadDocument(state.doc).then(() => {
-      if (request !== documentRequest || state.page !== 'docs') return;
-      $('#main').innerHTML = library.docPage(state);
-      if (state.section) {
-        const section = $('#main').querySelector(`#${CSS.escape(state.section)}`);
-        if (section) { section.tabIndex = -1; section.focus({ preventScroll: true }); section.scrollIntoView({ block: 'start' }); }
-      }
-    }).catch(() => {
-      if (request === documentRequest && state.page === 'docs') $('#main').innerHTML = '<div class="empty-state"><h2>문서를 열 수 없어요</h2><button class="secondary" data-action="retry-document">다시 열기</button></div>';
-    });
+    $('#announcer').textContent = state.page === 'styles' ? `스타일 ${catalog.styles.filter(s => s.id !== 'base').length}개` : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개`;
   }
   document.addEventListener('click', event => {
     if (!event.target.closest('.search-area')) hideSuggestions();
@@ -218,8 +200,7 @@
       const firstNew = library.currentItems(state).filter(e=>!e.implementation)[state.limit]?.id;
       navigate({ limit: state.limit + 48 }, { replace: true });
       if (firstNew) document.querySelector(`[data-focus="entry-${CSS.escape(firstNew)}"]`)?.focus();
-    } else if (data.action === 'retry-document') renderRoute();
-    else if (data.action === 'search-all') submitSearch();
+    } else if (data.action === 'search-all') submitSearch();
     else if (data.action === 'close-dialog') closeDetail();
   });
   document.addEventListener('change', event => {
@@ -254,7 +235,7 @@
       const next = event.key==='Home'?'preview':event.key==='End'?'code':event.target.dataset.docTab==='preview'?'code':'preview';
       navigate({previewTab:next, section:''},{replace:true}); document.querySelector('[data-doc-tab="'+next+'"]').focus();
     }
-    if (event.key === '/' && !['styles', 'docs'].includes(state.page) && !dialog.open && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest('input,textarea,select,[contenteditable="true"]')) {
+    if (event.key === '/' && !['styles'].includes(state.page) && !dialog.open && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest('input,textarea,select,[contenteditable="true"]')) {
       event.preventDefault(); $('#query').focus();
     }
   });

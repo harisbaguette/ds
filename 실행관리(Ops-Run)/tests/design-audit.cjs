@@ -6,7 +6,7 @@ const origin = 'http://127.0.0.1:4173';
 const routes = [
   '/patterns?style=main', '/patterns?q=zzzz', '/styles', '/patterns?detail=toast&style=main',
   '/components', '/components?category=module', '/dictionary', '/dictionary?category=ICO',
-  '/dictionary?category=TOK&detail=TOK-01', '/docs?doc=definition', '/docs?doc=guide',
+  '/dictionary?category=TOK&detail=TOK-01',
   '/system?style=main', '/system?style=main&detail=button', '/system?style=main&detail=page', '/system?style=main&detail=checkbox'
 ];
 
@@ -21,7 +21,6 @@ const routes = [
       for (const route of routes) {
         await page.goto(`${origin}#${route}`);
         await page.reload();
-        if (route.startsWith('/docs')) await page.locator('.document-body').waitFor();
         await page.evaluate(() => document.fonts.ready);
         const result = await page.evaluate(() => {
           const findings = [];
@@ -38,8 +37,6 @@ const routes = [
             const r = hitArea.getBoundingClientRect();
             const name = el.getAttribute('aria-label') || el.labels?.[0]?.textContent.trim() || el.textContent.trim();
             if (!name) findings.push({ kind: 'name', target: el.outerHTML.slice(0, 160) });
-            // Prose links are inline text, not standalone navigation controls.
-            if (el.matches('.document-body a')) continue;
             minTarget = Math.min(minTarget, r.width, r.height);
             if (r.width < 43.5 || r.height < 43.5) findings.push({ kind: 'target', name, width: r.width, height: r.height });
           }

@@ -13,7 +13,7 @@
     }).join('')}</div>` : ''}`;
   }
   function header(state) {
-    return `<h1 id="page-title" class="sr-only">${escape(state.page === 'docs' ? window.Pattove.libraryUI.documentName(state.doc) : ({styles:'메인 스타일',system:'메인 스타일',patterns:'패턴',dictionary:'사전',components:'구성요소'})[state.page])}</h1>`;
+    return `<h1 id="page-title" class="sr-only">${escape(({styles:'메인 스타일',system:'메인 스타일',patterns:'패턴',dictionary:'사전',components:'구성요소'})[state.page])}</h1>`;
   }
   function sidebar(state) {
     return catalog.categories.map(cat => `<button class="category" data-category="${cat.id}" data-focus="category-${cat.id}" aria-pressed="${state.category === cat.id}">${cat.name}</button>`).join('');

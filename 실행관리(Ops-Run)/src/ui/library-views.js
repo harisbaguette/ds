@@ -3,10 +3,8 @@
   const { escape } = views, { icon } = previews;
   const entries=new Map(data.entries.map(e=>[e.id,e]));
   const components=new Map(data.components.map(e=>[e.id,e]));
-  const documents=new Map(data.documents.map(e=>[e.id,e]));
-  const pages=['dictionary','components','docs'];
+  const pages=['dictionary','components'];
   const searches=new Map([...data.entries,...data.components].map(e=>[e.id,[e.id,e.name,e.usage,e.examples,e.kind].filter(Boolean).join(' ').toLocaleLowerCase()]));
-  const pending=new Map();
   const registry = window.Pattove.systemRegistry;
   const part = id => registry.index.get(id) || registry.items.find(item => item.entry === id);
   const implemented = e => ({ ...e, usage:e.purpose, category:e.section, kind:e.layer, implementation:true });
@@ -70,10 +68,6 @@
     return '<a class="library-nav-link" href="#/'+state.page+'?category='+item.id+'"'+(state.category===item.id?' aria-current="page"':'')+'>'+escape(item.name)+'</a>';
   }
   function sidebar(state) {
-    if(state.page==='docs') {
-      const links=ids=>ids.map(id=>{const d=documents.get(id);return '<a class="library-nav-link" href="#/docs?doc='+id+'"'+(state.doc===id?' aria-current="page"':'')+'>'+escape(d.name)+'</a>';}).join('');
-      return links(data.coreDocuments)+(data.noteDocuments.length?'<details class="nav-group"'+(data.noteDocuments.includes(state.doc)?' open':'')+'><summary>작업 기록'+icon('chevron-down')+'</summary>'+links(data.noteDocuments)+'</details>':'');
-    }
     const all=navLink(state,{id:'all',name:state.page==='dictionary'?'전체 분류':'전체 계층'});
     if(state.page==='components') return all+data.layers.map(l=>navLink(state,l)).join('');
     // Column = 중분류 of the open 대분류 only. The overview and whole-dictionary search need no column.
@@ -113,45 +107,24 @@
   function collection(state) {
     if (state.page === 'dictionary') return dictionary(state);
     const index=state.category==='all'&&!state.query;
-    const items=index?(state.page==='dictionary'?data.categories:data.layers):currentItems(state);
-    const intro=state.page==='dictionary'?'<div class="library-intro"><p>필요한 UI를 찾고, 언제 쓰는지 확인하세요.</p><details class="library-resources"><summary>사전 안내 '+icon('chevron-down')+'</summary><p>사전은 사용 목적별로 찾는 곳이에요. 부품의 구조와 자세한 원문은 아래에서 볼 수 있어요.</p><a href="#/components">부품 구조 <span>버튼부터 화면까지, 크기별로 보기</span>'+icon('arrow')+'</a><a href="#/docs?doc=guide">사전 사용법 '+icon('arrow')+'</a><a href="#/docs?doc=definition">원문·작업 기록 '+icon('arrow')+'</a></details></div>':'<div class="library-intro"><a class="library-back" href="#/dictionary">'+icon('arrow')+' 사전</a><p>버튼부터 화면까지, 부품을 크기별로 모았어요.</p></div>';
+    const items=index?data.layers:currentItems(state);
+    const intro='<div class="library-intro"><a class="library-back" href="#/dictionary">'+icon('arrow')+' 사전</a><p>버튼부터 화면까지, 부품을 크기별로 모았어요.</p></div>';
     return '<section aria-labelledby="page-title">'+intro+heading(state,items.length)+
       (items.length?'<div class="catalog-grid">'+(index?items.map(i=>indexCard(state,i)).join(''):items.slice(0,state.limit).map(e=>entryCard(state,e)).join(''))+'</div>':'<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>검색 결과가 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>')+
       (!index&&items.length>state.limit?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+Math.min(state.limit,items.length)+' / '+items.length+'</span></button></div>':'')+'</section>';
   }
   function detail(state) {
     const e=state.page==='dictionary'?entries.get(state.detail):components.get(state.detail);
-    const category=state.page==='dictionary'?data.categories.find(c=>c.id===e.category):data.layers.find(l=>l.id===e.layer);
-    const source=state.page==='dictionary'?e.category:'layers';
-    return '<header class="dialog-header"><div><span class="dialog-category">'+escape(state.page==='dictionary'?e.id:category.english)+'</span><h2 id="detail-title" tabindex="-1">'+escape(e.name)+'</h2></div><button class="icon-button" data-action="close-dialog" aria-label="상세 닫기">'+icon('close')+'</button></header>'+
-      '<div class="record-detail"><p class="record-kind">'+escape(category.name+(e.kind?' · '+e.kind:''))+'</p><section><h3>'+ (state.page==='dictionary'?'역할·사용할 때':'대표 항목')+'</h3><p>'+escape(e.usage||e.examples)+'</p></section>'+
-      (e.evidence?'<section><h3>근거</h3><p>'+escape(e.evidence)+'</p></section>':'')+'</div>'+
-      '<footer class="dialog-footer"><a class="secondary" href="#/docs?doc='+source+'">원문 보기 '+icon('arrow')+'</a></footer>';
-  }
-  function docPage(state) {
-    const doc=documents.get(state.doc), page=window.Pattove.documentPages?.[state.doc];
-    if(!page)return '<div class="document-loading" role="status">문서를 여는 중…</div>';
-    const toc=page.toc.length?'<details class="document-toc"><summary>목차 '+icon('chevron-down')+'</summary><nav aria-label="문서 목차">'+page.toc.map(t=>'<a class="toc-level-'+t.depth+'" href="#/docs?doc='+doc.id+'&section='+encodeURIComponent(t.id)+'">'+escape(t.title)+'</a>').join('')+'</nav></details>':'';
-    return '<a class="library-back" href="#/dictionary">'+icon('arrow')+' 사전</a>'+toc+'<article class="document-body" aria-label="'+escape(doc.name)+'">'+page.html+'</article>';
-  }
-  function loadDocument(id) {
-    if(window.Pattove.documentPages?.[id])return Promise.resolve();
-    if(pending.has(id))return pending.get(id);
-    const promise=new Promise((resolve,reject)=>{
-      const script=document.createElement('script');
-      script.src='src/data/documents/'+id+'.js';
-      script.onload=()=>{script.remove();pending.delete(id);resolve();};
-      script.onerror=()=>{script.remove();pending.delete(id);reject(new Error('문서를 열 수 없어요.'));};
-      document.head.append(script);
-    });
-    pending.set(id,promise);return promise;
+    const dict=state.page==='dictionary', category=dict?null:data.layers.find(l=>l.id===e.layer);
+    // The dictionary detail is only the enlarged picture; the tile already carries the name.
+    return '<header class="dialog-header"><div><span class="dialog-category">'+escape(dict?e.id:category.english)+'</span><h2 id="detail-title" tabindex="-1">'+escape(e.name)+'</h2></div><button class="icon-button" data-action="close-dialog" aria-label="상세 닫기">'+icon('close')+'</button></header>'+
+      (dict?'<div class="detail-art" data-kind="'+escape(e.kind||'')+'">'+kindSvg(e.kind)+'</div>'
+        :'<div class="record-detail"><p class="record-kind">'+escape(category.name)+'</p><section><h3>대표 항목</h3><p>'+escape(e.examples)+'</p></section></div>');
   }
   window.Pattove.libraryUI={
-    pages,navigation,sidebar,collection,detail,docPage,loadDocument,currentItems,suggestions,
+    pages,navigation,sidebar,collection,detail,currentItems,suggestions,
     validCategory:(page,id)=>(page==='dictionary'?[...data.categories,...data.groups,...registry.sections]:data.layers).some(c=>c.id===id),
     validDetail:(page,id)=>(page==='dictionary'?entries:components).has(id)||(page==='dictionary'&&registry.index.has(id)),
-    validDocument:id=>documents.has(id),
-    documentName:id=>documents.get(id)?.name,
     suggestionGroup:(page,e)=>page==='dictionary'?(e.implementation?'구현 · '+e.layer:e.id):data.layers.find(l=>l.id===e.layer).name,
     sample
   };

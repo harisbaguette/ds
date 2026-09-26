@@ -60,30 +60,17 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   await page.locator('#query').fill('색');await page.locator('#query').press('Enter');
   check('사전 전체 검색',await page.locator('.dict-entry').count()>0);
   await shot('05-search');
-  await goto('dictionary?category=NAV');
-  await page.locator('[data-library-entry="NAV-01"]').click();
-  await page.locator('.dialog-footer a[href="#/docs?doc=NAV"]').click();
-  await page.locator('.document-body').waitFor();
-  check('사전 상세에서 분류 원문 연결',(await page.locator('.document-body').textContent()).includes('NAV-01'));
-  await page.locator('.document-body a[href*="doc=guide"]').first().click();
-  await page.locator('.document-body').waitFor();
-  check('문서의 내부 링크가 사이트 안에서 연결',page.url().includes('doc=guide'));
-  await page.goBack();await page.locator('.document-body').waitFor();
-  check('문서 간 뒤로 가기',page.url().includes('doc=NAV'));
-  for(const id of data.coreDocuments){
-   await goto('docs?doc='+id);await page.locator('.document-body').waitFor();
-   check(id+' 문서 본문 로드',await page.locator('.document-body').innerText().then(t=>t.length>100));
-  }
-  await goto('docs?doc=definition');await page.locator('.document-body').waitFor();await shot('06-docs');
-  await page.locator('.document-toc summary').click();
-  await page.locator('.document-toc a').nth(1).click();
-  const section=new URL(page.url()).hash.split('section=')[1];
-  await page.waitForFunction(()=>document.activeElement.id.startsWith('doc-'));
-  check('문서 목차에서 제목으로 초점 이동',decodeURIComponent(section)===await page.evaluate(()=>document.activeElement.id));
+  await goto('dictionary?category=VIS');
+  await page.locator('button.dict-entry').first().click();
+  check('사전 상세는 그림 크게 보기만',await page.locator('dialog .detail-art svg').isVisible()&&await page.locator('dialog .dialog-footer, dialog .record-detail').count()===0);
+  await shot('06-entry-art');
+  await close();
+  await goto('docs?doc=definition');await page.waitForFunction(()=>!location.hash.startsWith('#/docs'));
+  check('없앤 문서 주소는 문서 화면을 열지 않음',!page.url().includes('docs')&&await page.locator('.document-body').count()===0);
   for(const width of [320,375,760,768,1440]){
    await page.setViewportSize({width,height:1000});
-   for(const route of ['components','components?category=module','dictionary','dictionary?category=CLI','docs?doc=definition']){
-    await goto(route);if(route.startsWith('docs'))await page.locator('.document-body').waitFor();
+   for(const route of ['components','components?category=module','dictionary','dictionary?category=CLI']){
+    await goto(route);
     check(width+' '+route+' 페이지 넘침 없음',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     if(width===375)await shot('mobile-'+route.split('?')[0]+(route.includes('category')?'-items':''));
    }
@@ -91,30 +78,9 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
     await goto('dictionary');
     await page.locator('[data-focus="rail-'+data.groups.find(g=>g.codes.includes('TOK')).id+'"]').click();
     await page.locator('[data-focus="leaf-TOK"]').click();
-    check(width+' 모바일 대분류→중분류 선택',(await page.locator('.dict-leaf[aria-current] b').textContent())==='TOK');
-    await goto('docs');await page.locator('.document-body').waitFor();
-    await page.locator('#sidebar a[href="#/docs?doc=guide"]').click();await page.locator('.document-body').waitFor();
-    check(width+' 모바일 문서 전환',page.url().includes('doc=guide'));
+    check(width+' 모바일 대분류→중분류 선택',(await page.locator('.dict-leaf[aria-current]').getAttribute('data-focus'))==='leaf-TOK');
    }
   }
-  const filePage=await context.newPage();
-  await filePage.goto(pathToFileURL(path.join(root,'index.html')).href+'#/docs?doc=definition');
-  await filePage.locator('.document-body').waitFor();
-  check('파일 실행에서도 문서 본문 열림',await filePage.locator('.document-body').isVisible());
-  await filePage.close();
-  // Load every generated document without navigating away to catch broken chunks.
-  await goto('docs?doc=definition');await page.locator('.document-body').waitFor();
-  const allLoaded=await page.evaluate(async()=>{for(const doc of window.Pattove.library.documents)await window.Pattove.libraryUI.loadDocument(doc.id);return Object.keys(window.Pattove.documentPages).length;});
-  check('모든 문서 청크 로드',allLoaded===data.documents.length);
-  const failed=await browser.newContext();
-  let abort=true;
-  await failed.route('**/src/data/documents/definition.js',r=>{if(abort){abort=false;return r.abort();}return r.continue();});
-  const failedPage=await failed.newPage();
-  await failedPage.goto(origin+'#/docs?doc=definition');
-  await failedPage.locator('[data-action="retry-document"]').waitFor();
-  await failedPage.locator('[data-action="retry-document"]').click();await failedPage.locator('.document-body').waitFor();
-  check('문서 로드 실패 후 재시도',await failedPage.locator('.document-body').isVisible());
-  await failed.close();
   check('브라우저 오류 없음',errors.length===0);
   fs.writeFileSync(path.join(out,'checks.json'),JSON.stringify({checks,errors},null,2));
   console.log(checks.length+' library checks passed.');

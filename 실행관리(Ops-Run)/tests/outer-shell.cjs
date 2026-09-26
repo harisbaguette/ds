@@ -22,7 +22,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
   try {
     for (const width of [320, 375, 768, 1101, 1440, 1920]) {
       await page.setViewportSize({ width, height: 1000 });
-      for (const route of ['styles', 'patterns?style=ink']) {
+      for (const route of ['styles', 'system', 'patterns?style=ink']) {
         await page.goto(url + '#/' + route);
         check(width + ' ' + route + ' 가로 넘침 없음', await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
         const navigation = await page.evaluate(() => {
@@ -42,8 +42,11 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
         check(width + ' ' + route + ' 제목 16px 이하', await page.locator('#page-title').evaluate(e => parseFloat(getComputedStyle(e).fontSize) <= 16));
         check(width + ' ' + route + ' 불필요 조작 제거', await page.locator('[data-view], [data-compare], [data-action="compare-mode"], [data-filter="sort"], .compare-tray, .mobile-nav, .brand span').count() === 0);
         if (route === 'styles') {
-          check(width + ' 스타일 진입에서 부품 검색과 부품 한 장 표시', await page.locator('.search-area').isVisible() && await page.locator('.component-page').isVisible() && await page.locator('.system-board').count() === 0);
+          check(width + ' 스타일 진입에서 스타일 카드 격자 표시', await page.locator('.style-card').first().isVisible() && await page.locator('.component-page').count() === 0);
           if ([375,1440].includes(width)) await shot(width + '-styles');
+        } else if (route === 'system') {
+          check(width + ' 부품 진입에서 부품 검색과 부품 한 장 표시', await page.locator('.search-area').isVisible() && await page.locator('.component-page').isVisible() && await page.locator('.system-board').count() === 0);
+          if ([375,1440].includes(width)) await shot(width + '-system');
         } else if (route.startsWith('patterns')) {
           check(width + ' 첫 그리드 즉시 보임', (await page.locator('.pattern-grid').boundingBox()).y < (width <= 760 ? 350 : 150));
           if ([375,1440].includes(width)) await shot(width + '-ink');

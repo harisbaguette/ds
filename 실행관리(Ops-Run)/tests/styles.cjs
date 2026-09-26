@@ -12,15 +12,15 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
   await page.goto(origin+'#/styles');await page.evaluate(()=>document.fonts.ready);
   check('메인 스타일 하나만 등록',await page.evaluate(()=>Pattove.catalog.styles.length===1&&Pattove.catalog.styles[0].id==='main'));
   check('이전 스타일 선택 UI 제거',await page.locator('.style-picker,#style-switch,#style-menu,.style-cover').count()===0);
-  check('시작 화면은 첫 부품 한 장, 전체 보드 없음',page.url().includes('detail=tokens')&&await page.locator('.component-page').count()===1&&await page.locator('.specimen,.system-board').count()===0);
+  check('스타일 화면은 스타일 카드 격자, 부품 문서 없음',await page.locator('.style-grid .style-card').count()===1&&await page.locator('.component-page,.specimen,.system-board').count()===0);
   const registry=JSON.parse(fs.readFileSync(path.join(root,'src/registry/registry.json'),'utf8'));
   check('배포 목록은 메인과 공용 아이콘·글꼴뿐',registry.items.every(i=>!i.meta.style||i.meta.style==='main'));
   for(const style of retired){
    check(style+' 생성 파일 제거',!fs.readdirSync(path.join(root,'src/registry/r')).some(f=>f.startsWith('pattove-'+style+'-')));
    check(style+' 이전 설치 URL 제거',(await fetch(origin+'/src/registry/r/pattove-'+style+'-button-html.json')).status===404);
    await page.goto(origin+'/#/system?style='+style+'&category=buttons');
-   await page.waitForURL('**/#/system?style=main&detail=tokens');
-   check(style+' 이전 주소는 메인으로 이동',page.url().includes('style=main')&&await page.locator('.component-page').count()===1);
+   await page.waitForURL('**/#/system?detail=tokens');
+   check(style+' 이전 주소는 첫 부품으로 이동',!page.url().includes('style=')&&await page.locator('.component-page').count()===1);
   }
   check('이전 스타일 표지 소스 제거',!fs.existsSync(path.join(root,'src/ui/style-covers.js'))&&!fs.existsSync(path.join(root,'src/styles/style-covers.css')));
   const css=fs.readFileSync(path.join(root,'src/system/parts.css'),'utf8')+fs.readFileSync(path.join(root,'src/styles/themes.css'),'utf8');

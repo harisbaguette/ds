@@ -25,9 +25,9 @@ const fingerprint = element => {
     const page = await context.newPage();
     page.setDefaultTimeout(7000);
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto(url + '#/styles');
+    await page.goto(url + '#/system');
     await page.evaluate(() => document.fonts.ready);
-    check('스타일 진입은 첫 부품 한 장', page.url().endsWith('detail=tokens') && await page.locator('.component-page').count() === 1 && await page.locator('.specimen,.system-board').count() === 0 && await page.locator('[data-style-choice]').count() === 0);
+    check('부품 진입은 첫 부품 한 장', page.url().endsWith('detail=tokens') && await page.locator('.component-page').count() === 1 && await page.locator('.specimen,.system-board').count() === 0 && await page.locator('[data-style-choice]').count() === 0);
     check('현재 스타일은 하나', await page.evaluate(()=>Pattove.catalog.styles.length===1 && Pattove.catalog.styles[0].id==='main'));
     await page.screenshot({ path: path.join(output, 'styles.png') });
     check('18개 대표 구현과 8개 역할', await page.evaluate(() => Pattove.systemRegistry.items.length === 18 && new Set([...Pattove.systemRegistry.items, ...Pattove.systemRegistry.patterns].map(i=>i.layer)).size === 8));
@@ -43,7 +43,7 @@ const fingerprint = element => {
     await page.waitForURL(/detail=button/);
     await page.reload();
     check('검색하면 첫 맞는 부품으로, 새로고침해도 유지', await page.locator('.component-page[data-component="button"]').count() === 1);
-    await page.locator('#sidebar a[href="#/system?style=main&detail=button"]').click();
+    await page.locator('#sidebar a[href="#/system?detail=button"]').click();
     await page.locator('[data-part-option="variant"]').selectOption('outline');
     await page.locator('[data-part-option="size"]').selectOption('lg');
     check('선택한 변형과 가져갈 마크업 일치', (await page.locator('#part-source').inputValue()).includes('data-size="lg"') && await page.locator('.part-demo .ds-button').getAttribute('data-variant') === 'outline');

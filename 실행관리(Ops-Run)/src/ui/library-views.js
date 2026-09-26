@@ -34,7 +34,7 @@
   }
   const match=(entry,query)=>query.trim().toLocaleLowerCase().split(/\s+/).every(term=>searches.get(entry.id).includes(term));
   const options=(items,current)=>items.map(e=>'<option value="'+e.id+'"'+(e.id===current?' selected':'')+'>'+escape(e.name)+'</option>').join('');
-  // Rail = 대분류. One short word under each icon; the full name stays in aria-label/title.
+  // Rail = 대분류 + 부품 (style-independent); only 스타일 sits below the divider. One short word under each icon; the full name stays in aria-label/title.
   const railName={expression:'표현',interaction:'조작',work:'작업',service:'서비스',game:'게임',domain:'화면',quality:'품질',vocabulary:'기초'};
   const openGroup=state=>state.page!=='dictionary'?null:groups.has(state.category)?state.category:groupOf(state.category)?.id||null;
   // A 대분류 address shows its first 중분류, so all three levels are always on screen together.
@@ -43,7 +43,8 @@
     const link=(href,focus,name,label,art,current)=>'<a href="'+href+'" data-focus="'+focus+'" aria-label="'+escape(name)+'" title="'+escape(name)+'"'+(current?' aria-current="page"':'')+'>'+art+'<span aria-hidden="true">'+label+'</span></a>';
     const open=openGroup(state);
     return [...groups.values()].map(g=>link('#/dictionary?category='+g.codes[0],'rail-'+g.id,g.name,railName[g.id]||short(g.name),icon('group-'+g.id),open===g.id)).join('')+
-      '<i class="rail-divider" aria-hidden="true"></i>'+link('#/styles','page-styles','스타일','스타일',icon('layers'),['patterns','system'].includes(state.page));
+      link('#/system','rail-parts','부품','부품',icon('box'),state.page==='system')+
+      '<i class="rail-divider" aria-hidden="true"></i>'+link('#/styles','page-styles','스타일','스타일',icon('layers'),['styles','patterns'].includes(state.page));
   }
   function currentItems(state) {
     if (state.page === 'dictionary') {
@@ -95,7 +96,7 @@
     const code=selected(state);
     let body;
     if (state.category==='all'&&!state.query) {
-      body='<div class="dict-grid dict-groups">'+[...groups.values()].map(g=>'<a class="dict-card dict-group" href="#/dictionary?category='+g.codes[0]+'" data-focus="group-'+g.id+'" aria-label="'+escape(g.name)+'"><span class="dict-glyph">'+icon('group-'+g.id)+'</span><strong aria-hidden="true">'+(railName[g.id]||escape(g.name))+'</strong><small aria-hidden="true">'+g.count+'</small></a>').join('')+'</div>';
+      body='<div class="dict-grid dict-groups">'+[...groups.values()].map(g=>'<a class="dict-card dict-group" href="#/dictionary?category='+g.codes[0]+'" data-focus="group-'+g.id+'" aria-label="'+escape(g.name)+'"><span class="dict-glyph">'+icon('group-'+g.id)+'</span><strong aria-hidden="true">'+(railName[g.id]||escape(g.name))+'</strong><small aria-hidden="true">'+g.count+'</small></a>').join('')+'<a class="dict-card dict-group" href="#/system" data-focus="group-parts" aria-label="부품"><span class="dict-glyph">'+icon('box')+'</span><strong aria-hidden="true">부품</strong><small aria-hidden="true">'+registry.items.length+'</small></a></div>';
     } else {
       const items=currentItems(state), built=items.filter(e=>e.implementation), rest=items.filter(e=>!e.implementation);
       body=(state.query?'<div class="dict-head"><h2>“'+escape(state.query)+'”</h2><span class="dict-count">'+items.length+'</span><button class="icon-button" data-action="clear-query" aria-label="검색 해제">'+icon('close')+'</button></div>':'')+

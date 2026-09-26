@@ -3,7 +3,7 @@
   const e = p.esc;
   const names = { button:'Button',input:'Input',field:'Field',checkbox:'Checkbox',radio:'Radio',switch:'Switch',badge:'Badge',divider:'Divider','status-dot':'StatusDot',card:'Card',tabs:'Tabs','bottom-nav':'BottomNav',feedback:'Feedback','search-module':'SearchModule',template:'Template',page:'CollectionPage' };
   const wide = id => ['search-module','template','page'].includes(id);
-  const url = (id, extras = {}) => '#/system?' + new URLSearchParams({ style:'main', detail:id, ...extras });
+  const url = (id, extras = {}) => '#/system?' + new URLSearchParams({ detail:id, ...extras });
   const jsxIcon = name => p.icon(name).replace(/class=/g,'className=').replace(/stroke-width=/g,'strokeWidth=').replace(/stroke-linecap=/g,'strokeLinecap=').replace(/stroke-linejoin=/g,'strokeLinejoin=');
   function jsx(id, provided) {
     const o = r.normalizeOptions(id, provided);

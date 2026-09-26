@@ -23,7 +23,7 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
  const shot=async name=>{await page.mouse.move(0,0);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(out,name+'.png')});};
  try{
   await goto('styles');
-  check('레일은 대분류 8개와 스타일',await page.locator('#primary-nav a').count()===data.groups.length+1);
+  check('레일은 대분류 8개와 부품·스타일',await page.locator('#primary-nav a').count()===data.groups.length+2);
   await shot('01-styles');
   await goto('components');
   check('구성요소 8개 계층 입구',await page.locator('.category-tile').count()===8);
@@ -36,7 +36,7 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    await close();
   }
   await page.locator('.brand').click();
-  check('사전 첫 화면은 대분류 그림 입구와 대분류 레일',await page.locator('.dict-group').count()===data.groups.length&&await page.locator('[data-focus^="rail-"]').count()===data.groups.length);
+  check('사전 첫 화면은 대분류 그림 입구와 부품 입구, 대분류 레일',await page.locator('.dict-group').count()===data.groups.length+1&&await page.locator('[data-focus^="rail-"]:not([data-focus="rail-parts"])').count()===data.groups.length);
   await shot('03-dictionary');
   for(const category of data.categories){
    await goto('dictionary?category='+category.id);

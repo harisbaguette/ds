@@ -13,7 +13,7 @@
     }).join('')}</div>` : ''}`;
   }
   function header(state) {
-    return `<h1 id="page-title" class="sr-only">${escape(({styles:'메인 스타일',system:'메인 스타일',patterns:'패턴',dictionary:'사전',components:'구성요소'})[state.page])}</h1>`;
+    return `<h1 id="page-title" class="sr-only">${escape(({styles:'스타일',system:'부품',patterns:'패턴',dictionary:'사전',components:'구성요소'})[state.page])}</h1>`;
   }
   function sidebar(state) {
     return catalog.categories.map(cat => `<button class="category" data-category="${cat.id}" data-focus="category-${cat.id}" aria-pressed="${state.category === cat.id}">${cat.name}</button>`).join('');
@@ -49,5 +49,24 @@
           ${entry ? `<a class="secondary pattern-dictionary-link" href="#/dictionary?category=${entry.category}&detail=${entry.id}">사전에서 자세히 보기 ${icon('arrow')}</a>` : ''}
         </div></div>`;
   }
-  window.Pattove.views = { escape, styleName, styleReferences, header, sidebar, patterns, detail };
+  // 스타일 화면: 디자인 스타일마다 견본 카드 한 장. 누르면 앱 전체가 그 스타일로 갈아입는다.
+  function styleGrid(state) {
+    const p = window.Pattove.parts;
+    return `<section class="style-gallery" aria-labelledby="page-title"><div class="style-grid">${styles.map(style => {
+      const active = style.id === state.style;
+      return `<article class="style-card${active ? ' is-active' : ''}">
+        <div class="style-sample ds theme-${style.id}" data-style="${style.id}" inert aria-hidden="true">
+          <div class="atlas-colors"><i></i><i></i><i></i><i></i></div>
+          <strong class="atlas-type">Aa 가나</strong>
+          <div class="style-sample-row">${p.button({label:'계속하기'})}${p.button({label:'취소',variant:'outline'})}</div>
+          ${p.input({id:'style-sample-'+style.id, placeholder:'검색어 입력'})}
+        </div>
+        <button type="button" class="style-choose" data-style-select="${style.id}" data-focus="style-${style.id}" aria-pressed="${active}">
+          <strong>${escape(style.name)}</strong>
+          ${active ? `<span class="style-badge">${icon('check')} 사용 중</span>` : ''}
+        </button>
+      </article>`;
+    }).join('')}</div></section>`;
+  }
+  window.Pattove.views = { escape, styleName, styleReferences, header, sidebar, patterns, detail, styleGrid };
 })();

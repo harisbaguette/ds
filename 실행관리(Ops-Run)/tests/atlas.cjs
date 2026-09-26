@@ -8,10 +8,10 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
     const browser=await engine.launch({headless:true});
     try{
       const page=await browser.newPage({viewport:{width:1440,height:1080},acceptDownloads:true});page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
-      await page.goto('http://127.0.0.1:4173/#/styles');await page.evaluate(()=>document.fonts.ready);
+      await page.goto('http://127.0.0.1:4173/#/system');await page.evaluate(()=>document.fonts.ready);
       check(name+' 시작 화면은 첫 부품 한 장',await page.locator('.component-page[data-component="tokens"]').count()===1&&await page.locator('.specimen').count()===0);
-      check(name+' 옆 열에 부품별 바로가기',await page.locator('#sidebar a[href="#/system?style=main&detail=button"]').count()===1);
-      await page.locator('#sidebar a[href="#/system?style=main&detail=button"]').click();
+      check(name+' 옆 열에 부품별 바로가기',await page.locator('#sidebar a[href="#/system?detail=button"]').count()===1);
+      await page.locator('#sidebar a[href="#/system?detail=button"]').click();
       await page.locator('[data-doc-environment]').selectOption('react');
       await page.waitForFunction(()=>document.querySelector('[data-install-source]')?.textContent.includes('export default'));
       check(name+' React 설치 명령과 실제 JSX', (await page.locator('[data-install-command]').textContent()).includes('pattove-main-button-react.json')&&(await page.locator('[data-install-source]').textContent()).includes('<Button'));
@@ -21,7 +21,7 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
       const source=fs.readFileSync(path.resolve(__dirname,'../src/system/react/button.jsx'),'utf8');check(name+' 내려받은 React 부품이 정본과 일치',strFromU8(files['design/react/button.jsx'])===source);
       await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
       await page.locator('.brand').click();
-      check(name+' 사전 첫 화면은 대분류 8개 그림 입구',await page.locator('.dict-group').count()===await page.evaluate(()=>Pattove.library.groups.length));
+      check(name+' 사전 첫 화면은 대분류 8개 그림 입구',await page.locator('.dict-group[href^="#/dictionary"]').count()===await page.evaluate(()=>Pattove.library.groups.length));
       const inputGroup=await page.evaluate(()=>Pattove.library.groups.find(g=>g.codes.includes('INP')).id);await page.locator('[data-focus="group-'+inputGroup+'"]').click();await page.locator('[data-focus="leaf-INP"]').click();check(name+' 대분류→중분류→소분류로 탐색',await page.locator('.dict-entry.is-built').count()>=1);
       await page.locator('[data-library-entry="field"]').click();check(name+' 사전에서 시각 예시와 소스로 연결',await page.locator('.component-page .part-demo input').count()>=1&&await page.locator('.install-panel').count()===1);
       await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
@@ -29,12 +29,12 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
       check(name+' 원문 ID로 같은 구현 조회',await page.locator('[data-library-entry="tokens"]').count()===1);
       for(const width of [320,375,768,1440]){
         await page.setViewportSize({width,height:1080});
-        for(const route of ['styles','dictionary','dictionary?detail=field','system?style=main&detail=page']){
+        for(const route of ['styles','system','dictionary','dictionary?detail=field','system?style=main&detail=page']){
           await page.goto('http://127.0.0.1:4173/#/'+route);
           check(`${name} ${width} ${route} 넘침 없음`,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1&&(!document.querySelector('dialog[open]')||document.querySelector('dialog').scrollWidth<=document.querySelector('dialog').clientWidth+1)));
         }
       }
-      await page.setViewportSize({width:1440,height:1080});await page.goto('http://127.0.0.1:4173/#/styles');await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(out,name+'-system.png')});
+      await page.setViewportSize({width:1440,height:1080});await page.goto('http://127.0.0.1:4173/#/system');await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(out,name+'-system.png')});
       await page.goto('http://127.0.0.1:4173/#/dictionary');await page.screenshot({path:path.join(out,name+'-dictionary.png')});
       await page.setViewportSize({width:375,height:900});await page.screenshot({path:path.join(out,name+'-mobile.png')});
     }finally{await browser.close();}

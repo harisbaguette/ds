@@ -5,8 +5,11 @@
   const $ = selector => document.querySelector(selector);
   const validPattern = id => catalog.patterns.some(p => p.id === id);
   const validStyle = id => catalog.styles.some(s => s.id === id);
+  // 스타일 화면에서 고른 디자인 스타일은 앱 전체에 입혀지고 다음 방문에도 유지된다.
+  const styleKey = 'pattove-style';
+  const storedStyle = (() => { try { return localStorage.getItem(styleKey); } catch { return null; } })();
   const state = {
-    page: 'styles', category: 'all', query: '', style: 'main', detail: null, options: {}, environment: 'html', previewTab: 'preview', section: '', limit: 48
+    page: 'styles', category: 'all', query: '', style: validStyle(storedStyle) ? storedStyle : 'main', detail: null, options: {}, environment: 'html', previewTab: 'preview', section: '', limit: 48
   };
   let lastOpener = null;
   let renderedHash = '';
@@ -23,7 +26,7 @@
   function hash(overrides = {}) {
     const next = { ...state, ...overrides };
     const params = new URLSearchParams();
-    if (['patterns', 'system'].includes(next.page)) params.set('style', next.style);
+    if (next.page === 'patterns') params.set('style', next.style);
     if (['patterns', 'system', 'dictionary', 'components'].includes(next.page) && next.category !== 'all') params.set('category', next.category);
     if (next.query && !['styles'].includes(next.page)) params.set('q', next.query);
     if (['dictionary', 'components'].includes(next.page) && next.limit > 48) params.set('shown', next.limit);
@@ -42,7 +45,7 @@
     const [path, query = ''] = location.hash.slice(1).split('?');
     const params = new URLSearchParams(query);
     const page = path.replace(/^\//, '');
-    state.page = page === 'styles' || !page ? 'system' : ['patterns', 'system', ...library.pages].includes(page) ? page : 'system';
+    state.page = ['styles', 'patterns', 'system', ...library.pages].includes(page) ? page : 'system';
     state.category = (state.page === 'patterns' ? catalog.categories.some(c => c.id === params.get('category')) : isCollection() && library.validCategory(state.page, params.get('category'))) ? params.get('category') : 'all';
     state.query = ['styles'].includes(state.page) ? '' : (params.get('q') || '').slice(0, 100);
     state.section = (params.get('section') || '').slice(0, 250);
@@ -112,9 +115,10 @@
   }
   function render(previousDetail = state.detail, focus = document.activeElement?.dataset.focus) {
     document.body.dataset.page = state.page;
+    document.body.className = 'theme-' + state.style;
     const searchable = !['styles'].includes(state.page);
     document.body.dataset.search = String(searchable);
-    document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : ['patterns', 'system'].includes(state.page) ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
+    document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : state.page === 'patterns' ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
     $('#primary-nav').innerHTML = library.navigation(state);
     $('#header-context').innerHTML = views.header(state);
     const column = state.page === 'system' ? system.sidebar(state) : state.page === 'patterns' ? views.sidebar(state) : library.pages.includes(state.page) ? library.sidebar(state) : '';
@@ -127,7 +131,7 @@
     $('#clear-search').hidden = !$('#query').value;
     const nextMainKey = JSON.stringify([state.page, state.style, state.category, state.query, state.limit, state.page==='system'?[state.detail,state.options]:null, state.environment, state.previewTab]);
     if (mainRenderKey !== nextMainKey) {
-      $('#main').innerHTML = state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
+      $('#main').innerHTML = state.page === 'styles' ? views.styleGrid(state) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
       mainRenderKey = nextMainKey;
     }
     if (state.detail && state.page !== 'system') {
@@ -171,7 +175,7 @@
       const section = document.getElementById('component-'+state.section);
       if (section) { section.tabIndex=-1; section.focus({preventScroll:true}); section.scrollIntoView({block:'start'}); }
     }
-    $('#announcer').textContent = state.page === 'styles' ? `스타일 ${catalog.styles.filter(s => s.id !== 'base').length}개` : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개`;
+    $('#announcer').textContent = state.page === 'styles' ? `스타일 ${catalog.styles.filter(s => s.id !== 'base').length}개, ${views.styleName(state.style)} 사용 중` : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개`;
   }
   document.addEventListener('click', event => {
     if (!event.target.closest('.search-area')) hideSuggestions();
@@ -186,6 +190,12 @@
       event.preventDefault(); navigate({section:data.docSection}, {replace:true});
     } else if ('systemDownload' in data) window.Pattove.systemExport.save(state);
     else if ('systemCopy' in data) window.Pattove.systemExport.copy();
+    else if (data.styleSelect && validStyle(data.styleSelect)) {
+      state.style = data.styleSelect;
+      try { localStorage.setItem(styleKey, state.style); } catch {}
+      render();
+      $('#announcer').textContent = `${views.styleName(state.style)} 적용함`;
+    }
     else if (target.matches('a[href^="#/"]')) {
       event.preventDefault();
       history.pushState({}, '', target.getAttribute('href'));

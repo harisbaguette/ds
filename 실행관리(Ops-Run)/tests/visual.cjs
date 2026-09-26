@@ -67,8 +67,8 @@ fs.mkdirSync(output, { recursive: true });
         await inspect(`${width} patterns ${style}`, '.pattern-card .preview');
         if (width === 1440 && style !== 'base') await shot(`${width}-patterns-${style}`);
       }
-      await page.goto(`${url}#/styles`);
-      await inspect(`${width} styles`, '.component-page .part-demo');
+      await page.goto(`${url}#/system`);
+      await inspect(`${width} system`, '.component-page .part-demo');
       if ([375, 1440].includes(width)) await shot(`${width}-styles`);
     }
     fs.writeFileSync(path.join(output, 'checks.json'), JSON.stringify({ checkedAt: new Date().toISOString(), checks, failures }, null, 2));

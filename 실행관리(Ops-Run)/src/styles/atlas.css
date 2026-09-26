@@ -1,4 +1,4 @@
-/* Application and specimens share the single main style's material tokens. */
+﻿/* Application and specimens share the single main style's material tokens. */
 body { background:var(--p-bg); background-image:radial-gradient(ellipse at 88% 0%,#e5e2f050,transparent 45%); color:var(--p-ink); }
 html { scroll-padding-top:120px; }
 :where(button,a,input,select,textarea,summary):focus-visible { outline:3px solid var(--p-highlight); outline-offset:3px; }
@@ -75,7 +75,6 @@ html { scroll-padding-top:120px; }
 .dict-code { font:600 12px/1 var(--display-font); letter-spacing:.06em; color:var(--p-ink); padding:7px 10px; border-radius:10px; background:var(--p-bg); }
 .dict-entry { padding:10px 10px 16px; gap:10px; }
 .dict-entry strong { font-size:13px; padding:0 8px; }
-.dict-entry small { font:500 11px var(--display-font); color:var(--p-muted); padding:0 8px; margin-top:auto; }
 .dict-thumb { width:100%; height:168px; display:grid; place-items:center; border-radius:16px; background:var(--p-bg); overflow:hidden; }
 .dict-thumb.atlas-preview { height:168px; }
 .dict-thumb .atlas-sample { padding:20px 16px; }
@@ -86,13 +85,30 @@ html { scroll-padding-top:120px; }
 .dict-leaf small { margin-left:auto; font:500 11px var(--display-font); opacity:.7; }
 .dict-built-dot { flex-shrink:0; width:6px; height:6px; border-radius:50%; background:var(--p-success); }
 .dict-leaf[aria-current] .dict-built-dot { background:currentColor; }
-.dict-leaf b { flex-shrink:0; width:30px; font:600 10px var(--display-font); letter-spacing:.04em; }
 .dict-entry.is-built { position:relative; }
 .dict-hit { flex:1; width:100%; display:flex; flex-direction:column; gap:10px; text-align:left; color:inherit; }
 .dict-hit::after { content:''; position:absolute; inset:0; border-radius:22px; }
 .dict-hit:focus-visible { outline:none; }.dict-hit:focus-visible::after { outline:3px solid var(--p-highlight); outline-offset:3px; }
 .dict-group .dict-glyph { width:100%; height:128px; border-radius:16px; }.dict-group .dict-glyph .ui-icon { width:40px; height:40px; }
 .dict-leaf { min-width:0; }.dict-leaf span { min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+/* 스타일 화면: 디자인 스타일 견본 카드 격자. 카드 전체가 하나의 선택 버튼이다. */
+.style-gallery { max-width:1320px; margin:auto; }
+.style-grid { display:grid; gap:20px; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); }
+.style-card { position:relative; min-width:0; display:flex; flex-direction:column; gap:12px; padding:12px 12px 18px; border:1px solid var(--p-line); border-radius:22px; background:var(--p-high); transition:border-color var(--p-duration),box-shadow var(--p-duration); }
+.style-card:hover { border-color:var(--p-control-border); box-shadow:var(--p-raised); }
+.style-card.is-active { border-color:var(--p-accent); box-shadow:0 0 0 1px var(--p-accent); }
+.style-sample { display:flex; flex-direction:column; gap:12px; padding:20px; border-radius:16px; background:var(--p-bg); overflow:hidden; pointer-events:none; }
+.style-sample .atlas-type { font:600 26px var(--ds-display-font); letter-spacing:-.05em; }
+.style-sample .atlas-colors i { width:32px; height:32px; border-radius:10px; }
+.style-sample-row { display:flex; gap:8px; flex-wrap:wrap; }
+.style-choose { display:flex; flex-direction:column; align-items:flex-start; gap:4px; padding:0 6px; text-align:left; color:var(--p-ink); background:none; border:0; }
+.style-choose strong { font-size:15px; font-weight:650; }
+.style-choose small { font-size:12px; color:var(--p-muted); }
+.style-choose::after { content:''; position:absolute; inset:0; border-radius:22px; }
+.style-choose:focus-visible { outline:none; }.style-choose:focus-visible::after { outline:3px solid var(--p-highlight); outline-offset:3px; }
+.style-badge { display:inline-flex; align-items:center; gap:4px; margin-top:6px; padding:4px 10px; border-radius:999px; background:var(--p-accent); color:var(--p-on-accent); font-size:12px; font-weight:600; }
+.style-badge .ui-icon { width:14px; height:14px; }
+@media(max-width:760px) { .style-grid { gap:12px; grid-template-columns:1fr; } }
 @media(max-width:1150px) { .dict-groups { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:760px) {
   .dict-head { margin-bottom:14px; }

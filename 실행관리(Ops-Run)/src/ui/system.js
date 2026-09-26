@@ -3,7 +3,7 @@
   const e = p.esc;
   function sidebar(state) {
     const groups = [['기초',['Token','Primitive']],['부품',['Atom','Molecule']],['조합',['Module','Template','Page']]];
-    return groups.map(([name,layers])=>'<p class="system-nav-group">'+name+'</p>'+r.items.filter(item=>layers.includes(item.layer)).map(item=>'<a class="component-sidebar-link" href="#/system?style=main&detail='+item.id+'"'+(state.detail===item.id?' aria-current="page"':'')+'>'+e(item.name)+'</a>').join('')).join('');
+    return groups.map(([name,layers])=>'<p class="system-nav-group">'+name+'</p>'+r.items.filter(item=>layers.includes(item.layer)).map(item=>'<a class="component-sidebar-link" href="#/system?detail='+item.id+'"'+(state.detail===item.id?' aria-current="page"':'')+'>'+e(item.name)+'</a>').join('')).join('');
   }
   function itemMarkup(state, options = {}) {
     const content = p.renderItem(state.detail, undefined, r.normalizeOptions(state.detail, { ...state.options, ...options }));

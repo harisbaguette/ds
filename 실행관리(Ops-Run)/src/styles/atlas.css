@@ -1,5 +1,5 @@
 ﻿/* Application and specimens share the single main style's material tokens. */
-body { background:var(--p-bg); background-image:radial-gradient(ellipse at 88% 0%,#e5e2f050,transparent 45%); color:var(--p-ink); }
+body { background:var(--p-bg); color:var(--p-ink); }
 html { scroll-padding-top:120px; }
 :where(button,a,input,select,textarea,summary):focus-visible { outline:3px solid var(--p-highlight); outline-offset:3px; }
 .search { border:1px solid var(--p-control-border); border-radius:16px; background:var(--p-bg); box-shadow:var(--p-inset); }

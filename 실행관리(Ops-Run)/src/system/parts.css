@@ -1,6 +1,6 @@
 /* @part shared */
 .ds {
-  --ds-bg:var(--p-bg,#e9edf2); --ds-surface:var(--p-surface,#f1f3f6); --ds-high:var(--p-high,#fafbfc);
+  --ds-bg:var(--p-bg,#ffffff); --ds-surface:var(--p-surface,#f1f3f6); --ds-high:var(--p-high,#fafbfc);
   --ds-text:var(--p-ink,#2c333d); --ds-muted:var(--p-muted,#59636f);
   --ds-border:var(--p-line,#c2cad5); --ds-control-border:var(--p-control-border,#7b8592);
   --ds-soft:var(--p-soft,#d3e8de); --ds-accent:var(--p-accent,#303b48); --ds-on-accent:var(--p-on-accent,#ffffff);

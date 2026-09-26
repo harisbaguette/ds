@@ -1,7 +1,7 @@
 /* One canonical style for the application, HTML and React sources. */
 :root,
 .theme-main {
-  --p-bg: #e9edf2;
+  --p-bg: #ffffff;
   --p-surface: #f1f3f6;
   --p-high: #fafbfc;
   --p-ink: #2c333d;

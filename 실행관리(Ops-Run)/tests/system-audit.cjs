@@ -107,7 +107,7 @@ async function run() {
     await delayed.locator('a[href="#/dictionary"]').first().click();release();
     const download=await downloadEvent;const filename=path.join(out,download.suggestedFilename());await download.saveAs(filename);
     check('async export filename is frozen',download.suggestedFilename()==='pattove-main-field.html');
-    const content=fs.readFileSync(filename,'utf8');check('async export theme is frozen',content.includes('background: #e9edf2')&&content.includes('"style":"main"'));
+    const content=fs.readFileSync(filename,'utf8');check('async export theme is frozen',content.includes('background: #ffffff')&&content.includes('"style":"main"'));
     await delayed.close();
     // Failed font fetch must offer a real retry and keep the dialog usable.
     const retry=await context.newPage();await retry.route('**/system-fonts.js',route=>route.abort());

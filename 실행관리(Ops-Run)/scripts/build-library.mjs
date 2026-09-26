@@ -24,7 +24,7 @@ const groups = [
   {id:'work', name:'콘텐츠와 작업', codes:'EDT CHR ANA RTE CAN COL FIL SCH GEO MED DOC'},
   {id:'service', name:'서비스와 흐름', codes:'WEB COM ACC SOC FLW AIX BIL HLP EDU PRV OPS TOO DOM MSG ADM DEV SEC GRO XR DVC VUI CLI'},
   {id:'game', name:'게임', codes:'GAM GHD GEC GLV GGN GIO GFX GTK GAC'},
-  {id:'domain', name:'영역별 화면', codes:'KOR CNT OBS PRO DSK IND AGE'},
+  {id:'domain', name:'영역별 화면', codes:'KOR CNT OBS PRO DSK IND AGE MAG BLG SLD PRT VID FIN LIF HLT'},
   {id:'quality', name:'품질과 검증', codes:'ACS DSO PRF ANT STR LAW'},
   {id:'vocabulary', name:'기초 사전', codes:'ICO ATM MOD TOK STT GES SND CPY FMT ARI AST'}
 ].map(g => ({...g,codes:g.codes.split(' ')}));

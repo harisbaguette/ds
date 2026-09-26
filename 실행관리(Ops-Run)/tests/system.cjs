@@ -25,7 +25,7 @@ const fingerprint = element => {
     const page = await context.newPage();
     page.setDefaultTimeout(7000);
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto(url);
+    await page.goto(url + '#/styles');
     await page.evaluate(() => document.fonts.ready);
     check('메인 스타일 시트로 바로 진입', await page.locator('.system-board .specimen').count() === 18 && await page.locator('[data-style-choice]').count() === 0);
     check('현재 스타일은 하나', await page.evaluate(()=>Pattove.catalog.styles.length===1 && Pattove.catalog.styles[0].id==='main'));
@@ -37,8 +37,6 @@ const fingerprint = element => {
     check('사전 연결 무결성', await page.evaluate(() => Pattove.systemRegistry.items.every(item => !item.entry || Pattove.library.entries.some(e=>e.id===item.entry))));
     check('크기와 상태는 버튼의 변형', await page.locator('.button-matrix tbody tr').count() === 6 && await page.locator('.button-options [data-size]').count() === 5);
     await page.screenshot({ path: path.join(output, 'board.png') });
-    await page.locator('[data-category="buttons"]').click();
-    check('부품 분류를 주소에 유지', page.url().includes('category=buttons') && await page.locator('.specimen').count() === 1);
     await page.locator('#query').fill('버튼');
     await page.locator('#query').press('Enter');
     check('검색 조건 유지', await page.locator('#query').inputValue() === '버튼' && await page.locator('.specimen').count() === 1);

@@ -36,13 +36,20 @@
   }
   const match=(entry,query)=>query.trim().toLocaleLowerCase().split(/\s+/).every(term=>searches.get(entry.id).includes(term));
   const options=(items,current)=>items.map(e=>'<option value="'+e.id+'"'+(e.id===current?' selected':'')+'>'+escape(e.name)+'</option>').join('');
-  const navArt={styles:'nav-art-svg nav-art-styles',components:'nav-sprite nav-sprite-layers',dictionary:'nav-sprite nav-sprite-search',docs:'nav-sprite nav-sprite-document'};
+  // Rail = 대분류. One short word under each icon; the full name stays in aria-label/title.
+  const railName={expression:'표현',interaction:'조작',work:'작업',service:'서비스',game:'게임',domain:'화면',quality:'품질',vocabulary:'기초'};
+  const openGroup=state=>state.page!=='dictionary'?null:groups.has(state.category)?state.category:groupOf(state.category)?.id||null;
+  // A 대분류 address shows its first 중분류, so all three levels are always on screen together.
+  const selected=state=>groups.has(state.category)?groups.get(state.category).codes[0]:categoryById.has(state.category)?state.category:null;
   function navigation(state) {
-    const active=['patterns','system'].includes(state.page)?'styles':pages.includes(state.page)?'dictionary':state.page;
-    return [['styles','스타일'],['dictionary','사전']].map(([id,name])=>'<a href="#/'+id+'" data-focus="page-'+id+'" aria-label="'+name+'" title="'+name+'"'+(active===id?' aria-current="page"':'')+'><span class="nav-art '+navArt[id]+'" aria-hidden="true"></span><span>'+name+'</span></a>').join('');
+    const link=(href,focus,name,label,art,current)=>'<a href="'+href+'" data-focus="'+focus+'" aria-label="'+escape(name)+'" title="'+escape(name)+'"'+(current?' aria-current="page"':'')+'>'+art+'<span aria-hidden="true">'+label+'</span></a>';
+    const open=openGroup(state);
+    return [...groups.values()].map(g=>link('#/dictionary?category='+g.codes[0],'rail-'+g.id,g.name,railName[g.id]||short(g.name),icon('group-'+g.id),open===g.id)).join('')+
+      '<i class="rail-divider" aria-hidden="true"></i>'+link('#/styles','page-styles','스타일','스타일',icon('layers'),['patterns','system'].includes(state.page));
   }
   function currentItems(state) {
     if (state.page === 'dictionary') {
+      if (groups.has(state.category)) state={...state,category:selected(state)};
       const matches = new Set(registry.matching(state.query).map(e=>e.id));
       const built = registry.items.filter(e=>matches.has(e.id)||(e.entry&&match(entries.get(e.entry),state.query))).filter(e => e.section === state.category || inScope(state, entries.get(e.entry)?.category)).map(implemented);
       if (!state.query && (state.category === 'all' || registry.sections.some(s => s.id === state.category))) return built;
@@ -69,16 +76,10 @@
     }
     const all=navLink(state,{id:'all',name:state.page==='dictionary'?'전체 분류':'전체 계층'});
     if(state.page==='components') return all+data.layers.map(l=>navLink(state,l)).join('');
-    const open=groups.has(state.category)?state.category:groupOf(state.category)?.id;
-    const current=id=>state.category===id?' aria-current="page"':'';
-    return '<div class="dict-tree"><a class="library-nav-link dict-root" href="#/dictionary"'+current('all')+'>전체<small>'+data.entries.length+'</small></a>'+[...groups.values()].map(g=>'<div class="dict-branch"><a class="library-nav-link dict-group-link" href="#/dictionary?category='+g.id+'"'+current(g.id)+(g.id===open?' data-open':'')+'>'+icon('group-'+g.id)+'<span>'+escape(g.name)+'</span><small>'+g.count+'</small></a>'+
-      (g.id===open?'<div class="dict-leaves">'+g.codes.map(code=>categoryById.get(code)).map(c=>'<a class="library-nav-link dict-leaf" href="#/dictionary?category='+c.id+'"'+current(c.id)+' title="'+escape(c.name)+'"><b>'+c.id+'</b><span>'+escape(short(c.name))+'</span></a>').join('')+'</div>':'')+'</div>').join('')+'</div>';
-  }
-  function mobileNavigation(state) {
-    if(state.page==='docs') return '<label class="mobile-library-nav"><span class="sr-only">문서 선택</span><select data-document-select aria-label="문서 선택">'+options([...data.coreDocuments,...data.noteDocuments].map(id=>documents.get(id)),state.doc)+(data.coreDocuments.includes(state.doc)||data.noteDocuments.includes(state.doc)?'':options([documents.get(state.doc)],state.doc))+'</select></label>';
-    const section=registry.sections.find(s=>s.id===state.category&&s.id!=='all');
-    const choices=state.page==='dictionary'?(section?options([section],state.category):'')+[...groups.values()].map(g=>'<optgroup label="'+escape(g.name)+'">'+options([{id:g.id,name:g.name+' 전체'}],state.category)+options(g.codes.map(code=>categoryById.get(code)),state.category)+'</optgroup>').join(''):options(data.layers,state.category);
-    return '<label class="mobile-library-nav"><span class="sr-only">분류 선택</span><select data-library-category aria-label="분류 선택"><option value="all">'+(state.page==='dictionary'?'전체':'전체 계층')+'</option>'+choices+'</select></label>';
+    // Column = 중분류 of the open 대분류 only. The overview and whole-dictionary search need no column.
+    const open=openGroup(state), shown=selected(state);
+    if(!open||state.query) return '';
+    return '<div class="dict-col">'+groups.get(open).codes.map(code=>categoryById.get(code)).map(c=>'<a class="library-nav-link dict-leaf" href="#/dictionary?category='+c.id+'" data-focus="leaf-'+c.id+'"'+(shown===c.id?' aria-current="page"':'')+' title="'+escape(c.name)+'"><b>'+c.id+'</b><span>'+escape(short(c.name))+'</span>'+(builtIn(c.id)?'<i class="dict-built-dot" role="img" aria-label="구현 있음"></i>':'')+'<small>'+c.count+'</small></a>').join('')+'</div>';
   }
   function heading(state,count) {
     return '<div class="library-heading"><h2>'+escape(state.query?'“'+state.query+'”':categoryTitle(state))+'</h2><span>'+count+'</span>'+(state.query?'<button class="icon-button" data-action="clear-query" aria-label="검색 해제">'+icon('close')+'</button>':'')+'</div>';
@@ -96,35 +97,25 @@
     return '<button class="dict-entry" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(e.kind||'')+'" title="'+escape(e.name)+'"><span class="dict-thumb">'+kindSvg(e.kind)+'</span><strong>'+escape(short(e.name))+'</strong><small>'+e.id+'</small></button>';
   }
   function dictionary(state) {
-    const group=groups.get(state.category), category=categoryById.get(state.category);
-    const parent=group||(category&&groups.get(groupOf(category.id)?.id));
-    const crumb=(href,name)=>'<li><a href="'+href+'">'+escape(name)+'</a></li>';
-    const path='<ol class="dict-path" aria-label="사전 위치">'+(state.category==='all'&&!state.query?'':crumb('#/dictionary','전체'))+(category&&parent?crumb('#/dictionary?category='+parent.id,parent.name):'')+'</ol>';
-    const title=state.query?'“'+state.query+'”':category?category.name:categoryTitle(state);
-    const head=(count,mark)=>'<div class="atlas-heading dict-head"><div>'+path+'<h2>'+(mark||'')+'<span>'+escape(title)+'</span></h2></div><span class="dict-total">'+count+'</span></div>';
-    const foot='<footer class="atlas-footer"><a href="#/system?style='+state.style+'">부품 시트</a><a href="#/components">부품 관계</a><a href="#/docs?doc=guide">사전 원문</a></footer>';
-    let body, count;
+    // Rail and column already say where you are; main carries only pictures. Search alone gets a one-line head.
+    const code=selected(state);
+    let body;
     if (state.category==='all'&&!state.query) {
-      count=data.entries.length;
-      body='<div class="dict-grid dict-groups">'+[...groups.values()].map(g=>'<a class="dict-card dict-group" href="#/dictionary?category='+g.id+'" data-focus="group-'+g.id+'"><span class="dict-glyph">'+icon('group-'+g.id)+'</span><strong>'+escape(g.name)+'</strong><span class="dict-meta"><span>'+g.codes.length+'</span><span>'+g.count+'</span></span></a>').join('')+'</div>';
-    } else if (group&&!state.query) {
-      count=group.count;
-      body='<div class="dict-grid dict-categories">'+group.codes.map(code=>categoryById.get(code)).map(c=>{const n=builtIn(c.id);return '<a class="dict-card dict-category" href="#/dictionary?category='+c.id+'" data-focus="category-'+c.id+'" title="'+escape(c.name)+'"><span class="dict-code">'+c.id+'</span><strong>'+escape(short(c.name))+'</strong><span class="dict-meta"><span>'+c.count+'</span>'+(n?'<i class="dict-built" aria-label="구현 '+n+'개">'+'<b></b>'.repeat(Math.min(n,6))+'</i>':'')+'</span></a>';}).join('')+'</div>';
+      body='<div class="dict-grid dict-groups">'+[...groups.values()].map(g=>'<a class="dict-card dict-group" href="#/dictionary?category='+g.codes[0]+'" data-focus="group-'+g.id+'" aria-label="'+escape(g.name)+'"><span class="dict-glyph">'+icon('group-'+g.id)+'</span><strong aria-hidden="true">'+(railName[g.id]||escape(g.name))+'</strong><small aria-hidden="true">'+g.count+'</small></a>').join('')+'</div>';
     } else {
       const items=currentItems(state), built=items.filter(e=>e.implementation), rest=items.filter(e=>!e.implementation);
-      count=items.length;
-      body=items.length?'<div class="dict-grid dict-entries">'+built.map(e=>dictEntry(state,e)).join('')+rest.slice(0,state.limit).map(e=>dictEntry(state,e)).join('')+'</div>'+(rest.length>state.limit?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+state.limit+' / '+rest.length+'</span></button></div>':'')
-        :'<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>';
+      body=(state.query?'<div class="dict-head"><h2>“'+escape(state.query)+'”</h2><span class="dict-count">'+items.length+'</span><button class="icon-button" data-action="clear-query" aria-label="검색 해제">'+icon('close')+'</button></div>':'')+
+        (items.length?'<div class="dict-grid dict-entries">'+built.map(e=>dictEntry(state,e)).join('')+rest.slice(0,state.limit).map(e=>dictEntry(state,e)).join('')+'</div>'+(rest.length>state.limit?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+state.limit+' / '+rest.length+'</span></button></div>':'')
+        :'<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>');
     }
-    const mark=group?'<span class="dict-glyph">'+icon('group-'+group.id)+'</span>':category?'<span class="dict-code">'+category.id+'</span>':'';
-    return '<section class="atlas dict" aria-labelledby="page-title" data-level="'+(state.query?'search':state.category==='all'?1:group?2:category?3:'section')+'">'+head(count,mark)+mobileNavigation(state)+body+foot+'</section>';
+    return '<section class="atlas dict" aria-labelledby="page-title" data-level="'+(state.query?'search':state.category==='all'?1:code?3:'section')+'">'+body+'</section>';
   }
   function collection(state) {
     if (state.page === 'dictionary') return dictionary(state);
     const index=state.category==='all'&&!state.query;
     const items=index?(state.page==='dictionary'?data.categories:data.layers):currentItems(state);
     const intro=state.page==='dictionary'?'<div class="library-intro"><p>필요한 UI를 찾고, 언제 쓰는지 확인하세요.</p><details class="library-resources"><summary>사전 안내 '+icon('chevron-down')+'</summary><p>사전은 사용 목적별로 찾는 곳이에요. 부품의 구조와 자세한 원문은 아래에서 볼 수 있어요.</p><a href="#/components">부품 구조 <span>버튼부터 화면까지, 크기별로 보기</span>'+icon('arrow')+'</a><a href="#/docs?doc=guide">사전 사용법 '+icon('arrow')+'</a><a href="#/docs?doc=definition">원문·작업 기록 '+icon('arrow')+'</a></details></div>':'<div class="library-intro"><a class="library-back" href="#/dictionary">'+icon('arrow')+' 사전</a><p>버튼부터 화면까지, 부품을 크기별로 모았어요.</p></div>';
-    return '<section aria-labelledby="page-title">'+intro+mobileNavigation(state)+heading(state,items.length)+
+    return '<section aria-labelledby="page-title">'+intro+heading(state,items.length)+
       (items.length?'<div class="catalog-grid">'+(index?items.map(i=>indexCard(state,i)).join(''):items.slice(0,state.limit).map(e=>entryCard(state,e)).join(''))+'</div>':'<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>검색 결과가 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>')+
       (!index&&items.length>state.limit?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+Math.min(state.limit,items.length)+' / '+items.length+'</span></button></div>':'')+'</section>';
   }
@@ -139,9 +130,9 @@
   }
   function docPage(state) {
     const doc=documents.get(state.doc), page=window.Pattove.documentPages?.[state.doc];
-    if(!page)return mobileNavigation(state)+'<div class="document-loading" role="status">문서를 여는 중…</div>';
+    if(!page)return '<div class="document-loading" role="status">문서를 여는 중…</div>';
     const toc=page.toc.length?'<details class="document-toc"><summary>목차 '+icon('chevron-down')+'</summary><nav aria-label="문서 목차">'+page.toc.map(t=>'<a class="toc-level-'+t.depth+'" href="#/docs?doc='+doc.id+'&section='+encodeURIComponent(t.id)+'">'+escape(t.title)+'</a>').join('')+'</nav></details>':'';
-    return '<a class="library-back" href="#/dictionary">'+icon('arrow')+' 사전</a>'+mobileNavigation(state)+toc+'<article class="document-body" aria-label="'+escape(doc.name)+'">'+page.html+'</article>';
+    return '<a class="library-back" href="#/dictionary">'+icon('arrow')+' 사전</a>'+toc+'<article class="document-body" aria-label="'+escape(doc.name)+'">'+page.html+'</article>';
   }
   function loadDocument(id) {
     if(window.Pattove.documentPages?.[id])return Promise.resolve();

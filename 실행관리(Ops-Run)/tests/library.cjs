@@ -23,10 +23,9 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
  const shot=async name=>{await page.mouse.move(0,0);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(out,name+'.png')});};
  try{
   await goto('styles');
-  check('상단 주 메뉴는 스타일·사전 두 개',await page.locator('#primary-nav a').count()===2);
+  check('레일은 대분류 8개와 스타일',await page.locator('#primary-nav a').count()===data.groups.length+1);
   await shot('01-styles');
-  await page.locator('#primary-nav a[href="#/dictionary"]').click();
-  await page.locator('.atlas-footer a[href="#/components"]').click();
+  await goto('components');
   check('구성요소 8개 계층 입구',await page.locator('.category-tile').count()===8);
   await shot('02-components');
   for(const layer of data.layers){
@@ -36,8 +35,8 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    check(layer.english+' 상세에 대표 항목 표시',await page.locator('.record-detail section p').count()===1);
    await close();
   }
-  await page.locator('#primary-nav a[href="#/dictionary"]').click();
-  check('사전 첫 화면은 대분류 그림 입구와 대분류 메뉴',await page.locator('.dict-group').count()===data.groups.length&&await page.locator('.dict-group-link').count()===data.groups.length);
+  await page.locator('.brand').click();
+  check('사전 첫 화면은 대분류 그림 입구와 대분류 레일',await page.locator('.dict-group').count()===data.groups.length&&await page.locator('[data-focus^="rail-"]').count()===data.groups.length);
   await shot('03-dictionary');
   for(const category of data.categories){
    await goto('dictionary?category='+category.id);
@@ -90,10 +89,11 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    }
    if(width<=760){
     await goto('dictionary');
-    await page.locator('[data-library-category]').selectOption('TOK');
-    check(width+' 모바일 전체 분류 선택',await page.locator('.dict-head h2>span:last-child').textContent()===data.categories.find(c=>c.id==='TOK').name.split(' — ')[0]);
+    await page.locator('[data-focus="rail-'+data.groups.find(g=>g.codes.includes('TOK')).id+'"]').click();
+    await page.locator('[data-focus="leaf-TOK"]').click();
+    check(width+' 모바일 대분류→중분류 선택',(await page.locator('.dict-leaf[aria-current] b').textContent())==='TOK');
     await goto('docs');await page.locator('.document-body').waitFor();
-    await page.locator('[data-document-select]').selectOption('guide');await page.locator('.document-body').waitFor();
+    await page.locator('#sidebar a[href="#/docs?doc=guide"]').click();await page.locator('.document-body').waitFor();
     check(width+' 모바일 문서 전환',page.url().includes('doc=guide'));
    }
   }

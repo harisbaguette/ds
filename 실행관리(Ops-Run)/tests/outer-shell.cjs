@@ -31,6 +31,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
           return {
             unnamed: links.filter(el => !el.innerText.trim()).map(el => el.getAttribute('aria-label')),
             covered: controls.filter(el => {
+              el.scrollIntoView({ block: 'nearest', inline: 'nearest' });
               const r = el.getBoundingClientRect();
               return !el.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
             }).map(el => el.getAttribute('aria-label'))
@@ -53,10 +54,10 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
           check(width + ' 첫 그리드 즉시 보임', (await page.locator('.pattern-grid').boundingBox()).y < (width <= 760 ? 350 : 150));
           if ([375,1440].includes(width)) await shot(width + '-ink');
           await page.evaluate(() => scrollTo(0, 500));
-          const categoryObscured = width <= 760 ? !(await page.locator('[data-legacy-category]').isVisible()) : await page.locator('.category').first().evaluate(el => {
+          const categoryObscured = await page.locator('.category').first().evaluate(el => {
             const r = el.getBoundingClientRect();
             const header = document.querySelector('.app-header').getBoundingClientRect();
-            return r.top < header.bottom - 1 || [r.top + 4, r.bottom - 4].some(y => !el.contains(document.elementFromPoint(r.x + r.width / 2, y)));
+            return (r.left < header.right && r.top < header.bottom - 1) || [r.top + 4, r.bottom - 4].some(y => !el.contains(document.elementFromPoint(r.x + r.width / 2, y)));
           });
           check(width + ' 스크롤 뒤 분류 버튼 위아래가 가려지지 않음', !categoryObscured);
           check(width + ' 불필요한 스타일 선택 UI 없음', await page.locator('#style-switch,#style-menu').count() === 0);

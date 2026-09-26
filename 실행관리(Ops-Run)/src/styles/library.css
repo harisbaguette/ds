@@ -1,7 +1,4 @@
 ﻿/* Navigation backed by the existing dictionary and source documents. */
-body:is([data-page='dictionary'],[data-page='components'],[data-page='docs']) .app-sidebar { width: 244px; padding: 24px 16px; overflow-y: auto; overscroll-behavior: contain; }
-body:is([data-page='dictionary'],[data-page='components'],[data-page='docs']) #sidebar { display: block; }
-body:is([data-page='dictionary'],[data-page='components'],[data-page='docs']) main { margin-left: 284px; max-width: none; padding: 44px 32px 82px; }
 .library-nav-link { display: flex; align-items: center; min-height: 44px; padding: 10px 14px; font-size: 13px; font-weight: 650; color: var(--shell-muted); border-radius: 18px; overflow-wrap: anywhere; }
 .library-nav-link:hover { color: var(--ink); background: var(--surface-high); box-shadow: var(--neo-raised-small); }
 .library-nav-link[aria-current='page'] { color: var(--ink); background: var(--surface); box-shadow: var(--neo-pressed); font-weight: 750; }
@@ -24,7 +21,6 @@ body:is([data-page='dictionary'],[data-page='components'],[data-page='docs']) ma
 .tile-foot .ui-icon { width: 16px; height: 16px; margin-left: auto; }
 .load-more { display: flex; justify-content: center; margin-top: 28px; }
 .load-more span { font-size: 12px; color: var(--shell-muted); }
-.mobile-library-nav { display: none; }
 .library-intro { margin-bottom: 24px; font-size: 14px; color: var(--shell-muted); }
 .library-resources { margin-top: 8px; max-width: 600px; }
 .library-resources summary { display: flex; align-items: center; gap: 8px; width: fit-content; min-height: 44px; cursor: pointer; list-style: none; font-size: 13px; }
@@ -73,10 +69,6 @@ body:is([data-page='dictionary'],[data-page='components'],[data-page='docs']) ma
   .catalog-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
 @media (max-width: 760px) {
-  body:is([data-page='dictionary'],[data-page='components'],[data-page='docs']) .app-sidebar { display: none; }
-  body:is([data-page='dictionary'],[data-page='components'],[data-page='docs']) main { margin: 0; padding: 24px 18px 54px; }
-  .mobile-library-nav { display: block; margin-bottom: 14px; }
-  .mobile-library-nav select { width: 100%; min-height: 46px; border: 0; border-radius: 18px; font: 700 13px var(--font); color: var(--ink); background: var(--surface); box-shadow: var(--neo-pressed); padding-inline: 14px; }
   .library-heading { margin-bottom: 12px; }
   .library-heading h2 { font-size: 14px; }
   .catalog-grid { gap: 14px; }

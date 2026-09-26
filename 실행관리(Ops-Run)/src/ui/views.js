@@ -36,14 +36,14 @@
   }
   function patterns(state, results) {
     const style = styles.find(s => s.id === state.style);
-    return `<section aria-labelledby="page-title"><label class="legacy-mobile-category"><span class="sr-only">패턴 분류</span><select data-legacy-category>${catalog.categories.map(c=>`<option value="${c.id}"${c.id===state.category?' selected':''}>${c.name}</option>`).join('')}</select></label>${filterStatus(state, results.length)}
+    return `<section aria-labelledby="page-title">${filterStatus(state, results.length)}
       ${results.length ? `<div class="pattern-grid">${results.map(p => card(p, state.style, state)).join('')}</div>` : `<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>검색 결과가 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>`}
       ${style ? `<details class="style-notes"><summary>${escape(style.name)}의 특징·참고 이미지 ${icon('chevron-down')}</summary>${styleReferences(style)}</details>` : ''}
     </section>`;
   }
   function saved(state, results) {
     const groups = catalog.styles.map(s => ({ ...s, items: results.filter(item => item.style === s.id) })).filter(s => s.items.length);
-    return `<section aria-labelledby="page-title"><label class="legacy-mobile-category"><span class="sr-only">패턴 분류</span><select data-legacy-category>${catalog.categories.map(c=>`<option value="${c.id}"${c.id===state.category?' selected':''}>${c.name}</option>`).join('')}</select></label>${filterStatus(state, results.length)}${groups.length ? groups.map(group => `
+    return `<section aria-labelledby="page-title">${filterStatus(state, results.length)}${groups.length ? groups.map(group => `
       <section class="saved-group" aria-label="${group.name} 저장한 패턴"><a class="saved-group-title" href="#/patterns?style=${group.id}">${palette(group.id)}<h2>${group.name}</h2>${icon('arrow')}</a>
         <div class="pattern-grid">${group.items.map(item => card(catalog.patterns.find(p => p.id === item.id), item.style, state, true)).join('')}</div></section>`).join('') : `
       <div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-bookmark" aria-hidden="true"></span><h2>${state.query ? '검색 결과가 없어요' : '아직 저장한 패턴이 없어요'}</h2>

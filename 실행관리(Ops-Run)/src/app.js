@@ -144,11 +144,12 @@
     document.body.dataset.page = state.page;
     const searchable = !['styles', 'docs'].includes(state.page);
     document.body.dataset.search = String(searchable);
-    document.title = `패토브 · ${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : ['patterns', 'system'].includes(state.page) ? views.styleName(state.style) : state.page === 'docs' ? library.documentName(state.doc) : ({ saved: '저장', styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
+    document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : ['patterns', 'system'].includes(state.page) ? views.styleName(state.style) : state.page === 'docs' ? library.documentName(state.doc) : ({ saved: '저장', styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
     $('#primary-nav').innerHTML = library.navigation(state);
     $('#header-context').innerHTML = views.header(state);
-    $('#site-navigation').hidden = !['patterns', 'system', ...library.pages].includes(state.page);
-    $('#sidebar').innerHTML = state.page === 'system' ? system.sidebar(state) : state.page === 'patterns' ? views.sidebar(state) : library.pages.includes(state.page) ? library.sidebar(state) : '';
+    const column = state.page === 'system' ? system.sidebar(state) : state.page === 'patterns' ? views.sidebar(state) : library.pages.includes(state.page) ? library.sidebar(state) : '';
+    $('#sidebar').innerHTML = column;
+    $('#site-navigation').hidden = !column;
     $('.search-area').hidden = !searchable;
     $('#query').placeholder = ({ system: '부품 검색', saved: '저장한 패턴 검색', dictionary: '사전 검색', components: '구성요소 검색' })[state.page] || '패턴 검색';
     $('#query').setAttribute('aria-label', $('#query').placeholder);
@@ -280,14 +281,11 @@
   document.addEventListener('change', event => {
     if (event.target.matches('[data-doc-environment]')) navigate({environment:event.target.value, section:''},{replace:true});
     if (event.target.matches('[data-component-select]')) navigate({detail:event.target.value,options:{},previewTab:'preview',section:''});
-    if (event.target.matches('[data-system-category],[data-legacy-category]')) navigate({ category: event.target.value }, { replace: true });
     if (event.target.matches('[data-part-option]')) {
       state.options = systemRegistry.normalizeOptions(state.detail, Object.fromEntries([...document.querySelectorAll('.system-inspector [data-part-option]')].map(el => [el.dataset.partOption,el.value])));
       history.replaceState(history.state, '', hash()); renderedHash = location.hash;
       system.updateInspector(state);
     }
-    if (event.target.matches('[data-library-category]')) navigate({ category: event.target.value, limit: 48 }, { replace: true });
-    if (event.target.matches('[data-document-select]')) navigate({ doc: event.target.value, section: '' });
   });
   $('#search-form').addEventListener('submit', event => { event.preventDefault(); submitSearch(); });
   $('#query').addEventListener('input', () => { $('#clear-search').hidden = !$('#query').value; showSuggestions(); });
@@ -340,6 +338,6 @@
   window.addEventListener('hashchange', () => { if (location.hash !== renderedHash && location.hash !== '#main') renderRoute(); });
   window.addEventListener('resize', updateMobileChromeOffset);
   window.visualViewport?.addEventListener('resize', updateMobileChromeOffset);
-  if (!location.hash || location.hash === '#main') history.replaceState({}, '', '#/styles');
+  if (!location.hash || location.hash === '#main') history.replaceState({}, '', '#/dictionary');
   renderRoute();
 })();

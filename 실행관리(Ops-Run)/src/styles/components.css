@@ -57,8 +57,8 @@
 .component-pagination a { display:inline-flex; min-height:44px; gap:8px; align-items:center; font-size:13px; }
 .component-pagination a:first-child .ui-icon { transform:rotate(180deg); order:-1; }.component-pagination .ui-icon { width:14px; }
 .component-mobile-nav { display:none; }
-.component-sidebar-link { display:flex; align-items:center; min-height:40px; padding:8px 12px; font-size:13px; color:var(--p-muted); border-radius:8px; }
-.component-sidebar-link[aria-current='page'] { background:var(--p-surface); color:var(--p-ink); font-weight:650; box-shadow:var(--p-inset); }
+.component-sidebar-link { display:flex; align-items:center; min-height:44px; min-width:44px; padding:10px 14px; font-size:13px; color:var(--p-muted); border-radius:14px; }
+.component-sidebar-link[aria-current='page'] { background:var(--p-accent); color:var(--p-on-accent); font-weight:650; box-shadow:none; }
 .component-sidebar-link:hover { color:var(--p-ink); background:var(--p-surface); }
 @media(max-width:1250px) { .component-layout { grid-template-columns:minmax(0,1fr); }.component-toc { display:none; } }
 @media(max-width:760px) {

@@ -9,7 +9,7 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
  try {
   const context=await browser.newContext({viewport:{width:1440,height:1080}});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(8000);
-  await page.goto(origin);await page.evaluate(()=>document.fonts.ready);
+  await page.goto(origin+'#/styles');await page.evaluate(()=>document.fonts.ready);
   check('메인 스타일 하나만 등록',await page.evaluate(()=>Pattove.catalog.styles.length===1&&Pattove.catalog.styles[0].id==='main'));
   check('이전 스타일 선택 UI 제거',await page.locator('.style-picker,#style-switch,#style-menu,.style-cover').count()===0);
   check('시작 화면에 부품 18종과 3가지 재질 표현',await page.locator('.specimen').count()===18&&await page.locator('.surface-study .ds-surface').count()===3);
@@ -40,7 +40,6 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
   check('외곽과 부품이 같은 바탕 토큰 사용',await page.evaluate(()=>getComputedStyle(document.body).getPropertyValue('--p-bg').trim()===getComputedStyle(document.querySelector('.system-board')).getPropertyValue('--ds-bg').trim()));
   check('비활성 버튼의 그림자 제거',await page.locator('.button-matrix [data-state="disabled"]').evaluateAll(ns=>ns.every(n=>getComputedStyle(n).boxShadow==='none'&&n.disabled)));
   check('누름과 키보드 초점은 다른 상태',await page.locator('.button-matrix [data-state="pressed"]').first().evaluate(n=>getComputedStyle(n).boxShadow.includes('inset'))&&await page.locator('.button-matrix [data-state="focus"]').first().evaluate(n=>getComputedStyle(n).outlineStyle==='solid'&&getComputedStyle(n).outlineWidth==='3px'));
-  await page.locator('[data-category="selection"]').click();
   const choice=page.locator('.specimen[data-specimen="checkbox"] input').first();await choice.check();
   check('선택은 실제 값과 체크 기호로 표시',await choice.isChecked()&&await choice.evaluate(n=>getComputedStyle(n,'::after').content==='""'));
   await page.emulateMedia({forcedColors:'active'});

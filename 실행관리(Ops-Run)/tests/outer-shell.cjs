@@ -22,12 +22,12 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
   try {
     for (const width of [320, 375, 768, 1101, 1440, 1920]) {
       await page.setViewportSize({ width, height: 1000 });
-      for (const route of ['styles', 'patterns?style=ink', 'saved']) {
+      for (const route of ['styles', 'patterns?style=ink']) {
         await page.goto(url + '#/' + route);
         check(width + ' ' + route + ' 가로 넘침 없음', await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
         const navigation = await page.evaluate(() => {
           const links = [...document.querySelectorAll('.primary-nav a')];
-          const controls = [...links, document.querySelector('#saved-link')];
+          const controls = links;
           return {
             unnamed: links.filter(el => !el.innerText.trim()).map(el => el.getAttribute('aria-label')),
             covered: controls.filter(el => {
@@ -45,12 +45,6 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
           check(width + ' 스타일 진입에서 부품 검색과 부품 한 장 표시', await page.locator('.search-area').isVisible() && await page.locator('.component-page').isVisible() && await page.locator('.system-board').count() === 0);
           if ([375,1440].includes(width)) await shot(width + '-styles');
         } else if (route.startsWith('patterns')) {
-          const detachedSaves = await page.locator('.pattern-card').evaluateAll(cards => cards.filter(card => {
-            const save = card.querySelector('.card-save').getBoundingClientRect();
-            const caption = card.querySelector('.card-caption').getBoundingClientRect();
-            return save.left < caption.left - 1 || save.right > caption.right + 1 || save.top < caption.top - 1 || save.bottom > caption.bottom + 1;
-          }).map(card => card.dataset.pattern));
-          check(width + ' 저장 버튼이 해당 카드 제목 영역 안에 있음: ' + detachedSaves.join(', '), detachedSaves.length === 0);
           check(width + ' 첫 그리드 즉시 보임', (await page.locator('.pattern-grid').boundingBox()).y < (width <= 760 ? 350 : 150));
           if ([375,1440].includes(width)) await shot(width + '-ink');
           await page.evaluate(() => scrollTo(0, 500));
@@ -64,7 +58,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
           await page.evaluate(() => scrollTo(0, 0));
           await page.locator('[data-open="toast"]').click();
           check(width + ' 상세 넘침 없음', await page.locator('#detail-dialog').evaluate(e => e.scrollWidth <= e.clientWidth));
-          await page.locator('#detail-dialog .dialog-footer button').last().focus();
+          await page.locator('#detail-dialog .pattern-dictionary-link').focus();
           await page.keyboard.press('Tab');
           check(width + ' 상세 마지막 동작에서 Tab 초점 유지', await page.locator('#detail-dialog').evaluate(e => e.contains(document.activeElement)));
           await page.locator('[data-action="close-dialog"]').focus();
@@ -79,12 +73,6 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto(url + '#/patterns?style=ink');
     check('메인 스타일의 패턴 유지', await page.locator('.pattern-card .theme-main').count() === 12);
-    await page.locator('[data-quick-save="toast"]').click();
-    await page.locator('[data-quick-save="tabs"]').click();
-    await page.locator('#saved-link').click();
-    await shot('1440-saved');
-    await page.locator('.saved-group-title').click();
-    check('저장한 스타일에서 전체 패턴으로 복귀', await page.locator('.pattern-card .theme-main').count() === 12);
     await page.locator('#query').fill('저장 완료');
     await shot('1440-search');
     await page.locator('#clear-search').click();

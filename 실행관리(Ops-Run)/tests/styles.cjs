@@ -57,11 +57,6 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
     check(width+' '+route+' 중복 ID 없음',await page.locator('[id]').evaluateAll(ns=>ns.length===new Set(ns.map(n=>n.id)).size));
    }
   }
-  const migration=await browser.newContext();
-  await migration.addInitScript(()=>localStorage.setItem('pattove-shell:v1',JSON.stringify({style:'night',saved:[{id:'toast',style:'ink'},{id:'tabs',style:'night'},{id:'toast',style:'soft'}]})));
-  const migrated=await migration.newPage();await migrated.goto(origin+'/#/saved');
-  check('이전 저장 항목을 지우지 않고 메인으로 통합',await migrated.locator('.pattern-card').count()===2&&await migrated.locator('.pattern-card .theme-main').count()===2);
-  await migration.close();
   await page.setViewportSize({width:1440,height:1080});await page.goto(origin+'/#/system?style=main');await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(out,'desktop.png')});
   await page.goto(origin+'/#/system?style=main&detail=page');await page.screenshot({path:path.join(out,'page.png'),fullPage:true});
   await page.goto(origin+'/#/dictionary');await page.screenshot({path:path.join(out,'dictionary.png')});

@@ -4,7 +4,7 @@ const path = require('node:path');
 const output = path.resolve(__dirname, '../test-results');
 const origin = 'http://127.0.0.1:4173';
 const routes = [
-  '/patterns?style=main', '/patterns?q=zzzz', '/saved', '/styles', '/patterns?detail=toast&style=main',
+  '/patterns?style=main', '/patterns?q=zzzz', '/styles', '/patterns?detail=toast&style=main',
   '/components', '/components?category=module', '/dictionary', '/dictionary?category=ICO',
   '/dictionary?category=TOK&detail=TOK-01', '/docs?doc=definition', '/docs?doc=guide',
   '/system?style=main', '/system?style=main&detail=button', '/system?style=main&detail=page', '/system?style=main&detail=checkbox'
@@ -82,8 +82,6 @@ const routes = [
         if (route.includes('q=zzzz')) await page.screenshot({ path: path.join(output, `${width}-audit-search-empty.png`), fullPage: true });
       }
       await page.screenshot({ path: path.join(output, `${width}-audit-detail.png`) });
-      await page.goto(`${origin}#/saved`);
-      await page.screenshot({ path: path.join(output, `${width}-audit-empty.png`), fullPage: true });
     }
     await page.goto(`${origin}#/styles`);
     fs.writeFileSync(path.join(output, 'reading-order.txt'), await page.locator('body').ariaSnapshot());
@@ -97,7 +95,6 @@ const routes = [
     await page.goto(`${origin}#/patterns`);
     await page.reload();
     await page.evaluate(async () => { await document.fonts.ready; await Promise.all([...document.images].filter(img => !img.closest('details:not([open])')).map(img => img.decode())); });
-    await page.locator('[data-quick-save="tabs"]').click();
     await page.locator('[data-open="toast"]').click();
     await page.keyboard.press('Escape');
     await page.waitForTimeout(300);

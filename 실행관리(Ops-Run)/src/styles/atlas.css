@@ -93,14 +93,24 @@ html { scroll-padding-top:120px; }
 .dict-leaf { min-width:0; }.dict-leaf span { min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 /* 스타일 화면: 디자인 스타일 견본 카드 격자. 카드 전체가 하나의 선택 버튼이다. */
 .style-gallery { max-width:1320px; margin:auto; }
-.style-grid { display:grid; gap:20px; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); }
+.style-grid { display:grid; gap:20px; grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),300px)); }
 .style-card { position:relative; min-width:0; display:flex; flex-direction:column; gap:12px; padding:12px 12px 18px; border:1px solid var(--p-line); border-radius:22px; background:var(--p-high); transition:border-color var(--p-duration),box-shadow var(--p-duration); }
 .style-card:hover { border-color:var(--p-control-border); box-shadow:var(--p-raised); }
 .style-card.is-active { border-color:var(--p-accent); box-shadow:0 0 0 1px var(--p-accent); }
-.style-sample { display:flex; flex-direction:column; gap:12px; padding:20px; border-radius:16px; background:var(--p-bg); overflow:hidden; pointer-events:none; }
-.style-sample .atlas-type { font:600 26px var(--ds-display-font); letter-spacing:-.05em; }
-.style-sample .atlas-colors i { width:32px; height:32px; border-radius:10px; }
-.style-sample-row { display:flex; gap:8px; flex-wrap:wrap; }
+/* 견본은 휴대폰 첫 화면 비율(9:18). 내용이 아래로 넘치면 떠 있는 탐색 막대 뒤로 잘린다. */
+.style-sample { position:relative; aspect-ratio:9/18; border:1px solid var(--p-line); border-radius:26px; background:var(--p-bg); overflow:hidden; pointer-events:none; }
+.style-phone-screen { display:flex; flex-direction:column; gap:12px; padding:26px 16px 0; }
+.style-sample .ds-page-header { margin:0 0 2px; }
+.style-sample .ds-page-header h2 { font-size:24px; margin-top:2px; }
+.style-sample .ds-eyebrow { font-size:12px; }
+.style-sample .ds-card { height:auto; flex-shrink:0; }
+.style-sample .ds-card-body { padding:16px 16px 12px; }
+.style-sample .ds-card h3 { font-size:16px; margin-top:10px; }
+.style-sample .ds-card p { font-size:12px; margin-top:4px; }
+.style-sample .ds-card-actions { padding:10px 16px; }
+.style-sample .ds-bottom-nav { position:absolute; left:12px; right:12px; bottom:12px; }
+.style-sample .ds-bottom-nav > button { min-height:52px; gap:3px; font-size:11px; }
+.style-sample .ds-bottom-nav .ui-icon { width:18px; height:18px; }
 .style-choose { display:flex; flex-direction:column; align-items:flex-start; gap:4px; padding:0 6px; text-align:left; color:var(--p-ink); background:none; border:0; }
 .style-choose strong { font-size:15px; font-weight:650; }
 .style-choose small { font-size:12px; color:var(--p-muted); }
@@ -108,7 +118,7 @@ html { scroll-padding-top:120px; }
 .style-choose:focus-visible { outline:none; }.style-choose:focus-visible::after { outline:3px solid var(--p-highlight); outline-offset:3px; }
 .style-badge { display:inline-flex; align-items:center; gap:4px; margin-top:6px; padding:4px 10px; border-radius:999px; background:var(--p-accent); color:var(--p-on-accent); font-size:12px; font-weight:600; }
 .style-badge .ui-icon { width:14px; height:14px; }
-@media(max-width:760px) { .style-grid { gap:12px; grid-template-columns:1fr; } }
+@media(max-width:760px) { .style-grid { gap:12px; justify-content:center; } }
 @media(max-width:1150px) { .dict-groups { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media(max-width:760px) {
   .dict-head { margin-bottom:14px; }

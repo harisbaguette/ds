@@ -49,17 +49,20 @@
           ${entry ? `<a class="secondary pattern-dictionary-link" href="#/dictionary?category=${entry.category}&detail=${entry.id}">사전에서 자세히 보기 ${icon('arrow')}</a>` : ''}
         </div></div>`;
   }
-  // 스타일 화면: 디자인 스타일마다 견본 카드 한 장. 누르면 앱 전체가 그 스타일로 갈아입는다.
+  // 스타일 화면: 디자인 스타일마다 휴대폰 첫 화면 견본 한 장. 누르면 앱 전체가 그 스타일로 갈아입는다.
   function styleGrid(state) {
     const p = window.Pattove.parts;
     return `<section class="style-gallery" aria-labelledby="page-title"><div class="style-grid">${styles.map(style => {
       const active = style.id === state.style;
       return `<article class="style-card${active ? ' is-active' : ''}">
         <div class="style-sample ds theme-${style.id}" data-style="${style.id}" inert aria-hidden="true">
-          <div class="atlas-colors"><i></i><i></i><i></i><i></i></div>
-          <strong class="atlas-type">Aa 가나</strong>
-          <div class="style-sample-row">${p.button({label:'계속하기'})}${p.button({label:'취소',variant:'outline'})}</div>
-          ${p.input({id:'style-sample-'+style.id, placeholder:'검색어 입력'})}
+          <div class="style-phone-screen">
+            <header class="ds-page-header"><div><span class="ds-eyebrow">나의 작업실</span><h2>컬렉션</h2></div>${p.badge('3개')}</header>
+            ${p.input({id:'style-sample-'+style.id, type:'search', placeholder:'이름으로 검색'})}
+            ${p.card({title:'봄의 색', description:'연한 초록과 따뜻한 노랑', action:'열기'})}
+            ${p.card({title:'주말의 기록', description:'산책하며 모은 장면들', tag:'완료', action:'열기'})}
+          </div>
+          ${p.navigation('dock')}
         </div>
         <button type="button" class="style-choose" data-style-select="${style.id}" data-focus="style-${style.id}" aria-pressed="${active}">
           <strong>${escape(style.name)}</strong>

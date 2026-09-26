@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-folder-html",
+  "type": "registry:item",
+  "title": "folder · SVG",
+  "description": "folder · SVG",
+  "files": [
+    {
+      "path": "design/icons/folder.svg",
+      "type": "registry:file",
+      "target": "~/design/icons/folder.svg",
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#242424\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M3 7V5a1 1 0 0 1 1-1h5l3 3h8a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Zm0 0h9\"/></svg>\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "folder",
+    "environment": "html",
+    "source": "assets/icons/folder.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

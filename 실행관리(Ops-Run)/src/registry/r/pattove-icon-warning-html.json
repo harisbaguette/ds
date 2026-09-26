@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-warning-html",
+  "type": "registry:item",
+  "title": "warning · SVG",
+  "description": "warning · SVG",
+  "files": [
+    {
+      "path": "design/icons/warning.svg",
+      "type": "registry:file",
+      "target": "~/design/icons/warning.svg",
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#242424\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m12 3 10 18H2zm0 6v5m0 3v1\"/></svg>\r\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "warning",
+    "environment": "html",
+    "source": "assets/icons/warning.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

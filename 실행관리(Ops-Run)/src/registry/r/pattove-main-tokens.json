@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-main-tokens",
+  "type": "registry:item",
+  "title": "메인 스타일 · 토큰",
+  "description": "메인 스타일 · 토큰",
+  "files": [
+    {
+      "path": "design/styles/main.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main.css",
+      "content": ".ds[data-style=\"main\"]{--p-bg:#e9edf2;--p-surface:#f1f3f6;--p-high:#fafbfc;--p-ink:#2c333d;--p-muted:#59636f;--p-line:#c2cad5;--p-control-border:#7b8592;--p-soft:#d3e8de;--p-accent:#303b48;--p-on-accent:#ffffff;--p-highlight:#6153b5;--p-error:#a3313e;--p-success:#26614f;--p-warning:#805719;--p-radius:24px;--p-control-radius:16px;--p-shadow:6px 7px 16px #bbc4d166, -5px -5px 14px #ffffffed;--p-raised:3px 4px 8px #b9c3d066, -3px -3px 8px #ffffffed;--p-inset:inset 3px 3px 6px #b7c1cf55, inset -3px -3px 6px #ffffffd9;--p-glass:#f6f8fbe8;--p-disabled:#dce1e8;--p-duration:140ms;--p-task-line:#c2cad5;}\n"
+    },
+    {
+      "path": "design/base.css",
+      "type": "registry:file",
+      "target": "~/design/base.css",
+      "content": ".ds {\r\n  --ds-bg:var(--p-bg,#e9edf2); --ds-surface:var(--p-surface,#f1f3f6); --ds-high:var(--p-high,#fafbfc);\r\n  --ds-text:var(--p-ink,#2c333d); --ds-muted:var(--p-muted,#59636f);\r\n  --ds-border:var(--p-line,#c2cad5); --ds-control-border:var(--p-control-border,#7b8592);\r\n  --ds-soft:var(--p-soft,#d3e8de); --ds-accent:var(--p-accent,#303b48); --ds-on-accent:var(--p-on-accent,#ffffff);\r\n  --ds-focus:var(--p-highlight,#6153b5); --ds-error:var(--p-error,#a3313e); --ds-success:var(--p-success,#26614f); --ds-warning:var(--p-warning,#805719);\r\n  --ds-radius:var(--p-radius,24px); --ds-control-radius:var(--p-control-radius,16px);\r\n  --ds-shadow:var(--p-shadow,6px 7px 16px #bbc4d166,-5px -5px 14px #ffffffed);\r\n  --ds-raised:var(--p-raised,3px 4px 8px #b9c3d066,-3px -3px 8px #ffffffed);\r\n  --ds-inset:var(--p-inset,inset 3px 3px 6px #b7c1cf55,inset -3px -3px 6px #ffffffd9);\r\n  --ds-glass:var(--p-glass,#f6f8fbe8); --ds-disabled:var(--p-disabled,#dce1e8); --ds-duration:var(--p-duration,140ms);\r\n  --ds-font:Pretendard,sans-serif; --ds-display-font:Outfit,Pretendard,sans-serif;\r\n  --ds-text-sm:13px; --ds-text-md:16px; --ds-text-lg:24px;\r\n  --ds-space-1:4px; --ds-space-2:8px; --ds-space-3:12px; --ds-space-4:16px; --ds-space-6:24px; --ds-space-8:32px;\r\n  color:var(--ds-text); background:var(--ds-bg); font:var(--ds-text-md)/1.5 var(--ds-font);\r\n  color-scheme:light; word-break:keep-all; overflow-wrap:anywhere; text-align:left;\r\n}\r\n.ds,.ds * { box-sizing:border-box; }\r\n.ds [hidden] { display:none!important; }\r\n.ds :is(h1,h2,h3,p,fieldset) { margin:0; }\r\n.ds :is(button,input,select,textarea) { font:inherit; color:inherit; letter-spacing:inherit; }\r\n.ds button { cursor:pointer; touch-action:manipulation; }\r\n.ds button:disabled { cursor:not-allowed; }\r\n.ds :is(button,input,select,textarea,a,[tabindex]):focus-visible { outline:3px solid var(--ds-focus); outline-offset:3px; }\r\n.ds .ui-icon { display:inline-block; width:20px; height:20px; flex-shrink:0; vertical-align:middle; }\r\n.ds .ds-demo-note { font-size:var(--ds-text-sm); margin-top:var(--ds-space-3); min-height:20px; color:var(--ds-muted); }\r\n.ds .ds-surface { border:1px solid var(--ds-border); border-radius:var(--ds-radius); background:var(--ds-surface); }\r\n.ds .ds-surface[data-material=\"raised\"] { box-shadow:var(--ds-shadow); border-color:#ffffff; }\r\n.ds .ds-surface[data-material=\"inset\"] { box-shadow:var(--ds-inset); background:var(--ds-bg); }\r\n.ds .ds-surface[data-material=\"glass\"] { background:var(--ds-high); box-shadow:0 8px 24px #38465e12; }\r\n@supports (backdrop-filter:blur(16px)) { .ds .ds-surface[data-material=\"glass\"] { background:var(--ds-glass); backdrop-filter:blur(16px); } }\r\n@media(prefers-reduced-transparency:reduce) { .ds .ds-surface[data-material=\"glass\"] { background:var(--ds-high); backdrop-filter:none; } }\r\n@media(prefers-reduced-motion:reduce) { .ds * { transition:none!important; animation:none!important; } }"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "tokens",
+    "style": "main",
+    "source": "src/styles/themes.css"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

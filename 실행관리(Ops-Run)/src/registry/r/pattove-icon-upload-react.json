@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-upload-react",
+  "type": "registry:item",
+  "title": "upload · React",
+  "description": "upload · React",
+  "files": [
+    {
+      "path": "design/icons/upload.jsx",
+      "type": "registry:file",
+      "target": "~/design/icons/upload.jsx",
+      "content": "import React from 'react';\nexport function Icon(props){return (<svg {...props} viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.65\" strokeLinecap=\"round\" strokeLinejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 16V3m-5 5 5-5 5 5M4 15v5h16v-5\"/></svg>);}\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "upload",
+    "environment": "react",
+    "source": "assets/icons/upload.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

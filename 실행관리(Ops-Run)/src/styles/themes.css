@@ -1,0 +1,32 @@
+/* One canonical style for the application, HTML and React sources. */
+:root,
+.theme-main {
+  --p-bg: #e9edf2;
+  --p-surface: #f1f3f6;
+  --p-high: #fafbfc;
+  --p-ink: #2c333d;
+  --p-muted: #59636f;
+  --p-line: #c2cad5;
+  --p-control-border: #7b8592;
+  --p-soft: #d3e8de;
+  --p-accent: #303b48;
+  --p-on-accent: #ffffff;
+  --p-highlight: #6153b5;
+  --p-error: #a3313e;
+  --p-success: #26614f;
+  --p-warning: #805719;
+  --p-radius: 24px;
+  --p-control-radius: 16px;
+  --p-shadow: 6px 7px 16px #bbc4d166, -5px -5px 14px #ffffffed;
+  --p-raised: 3px 4px 8px #b9c3d066, -3px -3px 8px #ffffffed;
+  --p-inset: inset 3px 3px 6px #b7c1cf55, inset -3px -3px 6px #ffffffd9;
+  --p-glass: #f6f8fbe8;
+  --p-disabled: #dce1e8;
+  --p-duration: 140ms;
+  --p-task-line: #c2cad5;
+}
+.theme-main :is(.sample-panel,.sample-toast,.sample-pagination,.sample-drawer) { border:1px solid var(--p-line); box-shadow:var(--p-raised); }
+.theme-main :is(.sample-field,.sample-progress) { box-shadow:var(--p-inset); }
+.theme-main .sample-tabs { padding:5px; border:0; border-radius:16px; background:var(--p-bg); box-shadow:var(--p-inset); }
+.theme-main .sample-tabs b { background:var(--p-accent); color:var(--p-on-accent); border:0; border-radius:12px; }
+.theme-main .sample-steps > b:first-child { color:#fff; }

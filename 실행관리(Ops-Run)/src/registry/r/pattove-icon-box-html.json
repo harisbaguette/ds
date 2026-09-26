@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-box-html",
+  "type": "registry:item",
+  "title": "box · SVG",
+  "description": "box · SVG",
+  "files": [
+    {
+      "path": "design/icons/box.svg",
+      "type": "registry:file",
+      "target": "~/design/icons/box.svg",
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#242424\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m3 8 4-5h10l4 5v13H3zm0 0h5l2 4h4l2-4h5\"/></svg>\r\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "box",
+    "environment": "html",
+    "source": "assets/icons/box.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-layers-html",
+  "type": "registry:item",
+  "title": "layers · SVG",
+  "description": "layers · SVG",
+  "files": [
+    {
+      "path": "design/icons/layers.svg",
+      "type": "registry:file",
+      "target": "~/design/icons/layers.svg",
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#242424\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m12 3 10 5-10 5L2 8zm-9 9 9 5 9-5m-18 5 9 5 9-5\"/></svg>\r\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "layers",
+    "environment": "html",
+    "source": "assets/icons/layers.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

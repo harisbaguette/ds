@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-box-react",
+  "type": "registry:item",
+  "title": "box · React",
+  "description": "box · React",
+  "files": [
+    {
+      "path": "design/icons/box.jsx",
+      "type": "registry:file",
+      "target": "~/design/icons/box.jsx",
+      "content": "import React from 'react';\nexport function Icon(props){return (<svg {...props} viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.65\" strokeLinecap=\"round\" strokeLinejoin=\"round\" aria-hidden=\"true\"><path d=\"m3 8 4-5h10l4 5v13H3zm0 0h5l2 4h4l2-4h5\"/></svg>);}\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "box",
+    "environment": "react",
+    "source": "assets/icons/box.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

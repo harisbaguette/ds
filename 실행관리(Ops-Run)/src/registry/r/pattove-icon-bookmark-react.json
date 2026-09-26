@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-bookmark-react",
+  "type": "registry:item",
+  "title": "bookmark · React",
+  "description": "bookmark · React",
+  "files": [
+    {
+      "path": "design/icons/bookmark.jsx",
+      "type": "registry:file",
+      "target": "~/design/icons/bookmark.jsx",
+      "content": "import React from 'react';\nexport function Icon(props){return (<svg {...props} viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.65\" strokeLinecap=\"round\" strokeLinejoin=\"round\" aria-hidden=\"true\"><path d=\"M6 3h12v18l-6-4-6 4z\"/></svg>);}\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "bookmark",
+    "environment": "react",
+    "source": "assets/icons/bookmark.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

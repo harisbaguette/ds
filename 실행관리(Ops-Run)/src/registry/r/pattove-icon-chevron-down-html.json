@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-chevron-down-html",
+  "type": "registry:item",
+  "title": "chevron-down · SVG",
+  "description": "chevron-down · SVG",
+  "files": [
+    {
+      "path": "design/icons/chevron-down.svg",
+      "type": "registry:file",
+      "target": "~/design/icons/chevron-down.svg",
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#242424\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m6 9 6 6 6-6\"/></svg>\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "chevron-down",
+    "environment": "html",
+    "source": "assets/icons/chevron-down.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-arrow-react",
+  "type": "registry:item",
+  "title": "arrow · React",
+  "description": "arrow · React",
+  "files": [
+    {
+      "path": "design/icons/arrow.jsx",
+      "type": "registry:file",
+      "target": "~/design/icons/arrow.jsx",
+      "content": "import React from 'react';\nexport function Icon(props){return (<svg {...props} viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.65\" strokeLinecap=\"round\" strokeLinejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 12h16m-6-6 6 6-6 6\"/></svg>);}\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "arrow",
+    "environment": "react",
+    "source": "assets/icons/arrow.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

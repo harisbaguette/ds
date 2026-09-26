@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-edit-react",
+  "type": "registry:item",
+  "title": "edit · React",
+  "description": "edit · React",
+  "files": [
+    {
+      "path": "design/icons/edit.jsx",
+      "type": "registry:file",
+      "target": "~/design/icons/edit.jsx",
+      "content": "import React from 'react';\nexport function Icon(props){return (<svg {...props} viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.65\" strokeLinecap=\"round\" strokeLinejoin=\"round\" aria-hidden=\"true\"><path d=\"M13 5H5v15h15v-8M10 14l1-5 7-7 4 4-7 7z\"/></svg>);}\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "edit",
+    "environment": "react",
+    "source": "assets/icons/edit.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

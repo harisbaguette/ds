@@ -1,4 +1,7 @@
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
-/node_modules/
-/test-results/
+/실행관리(Ops-Run)/graft/
+/실행관리(Ops-Run)/node_modules/
+/실행관리(Ops-Run)/test-results/
+/실행관리(Ops-Run)/logs/
+/패토브 실행.exe

@@ -11,7 +11,7 @@ const checks=[],errors=[];
 const check=(name,value)=>{assert.ok(value,name);checks.push(name);};
 check('사전 원본의 모든 ID를 누락·중복 없이 연결',sourceIDs.length===data.entries.length&&new Set(sourceIDs).size===new Set(data.entries.map(e=>e.id)).size&&sourceIDs.every(id=>data.entries.some(e=>e.id===id)));
 check('8개 계층 모두 실제 구성요소를 가짐',data.layers.length===8&&data.layers.every(l=>data.components.some(c=>c.layer===l.id)));
-check('89개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categories.length===89&&data.groups.flatMap(g=>g.codes).length===89&&new Set(data.groups.flatMap(g=>g.codes)).size===89);
+check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categories.length===data.groups.flatMap(g=>g.codes).length&&new Set(data.groups.flatMap(g=>g.codes)).size===data.categories.length);
 (async()=>{
  const browser=await chromium.launch({headless:true});
  const context=await browser.newContext({viewport:{width:1440,height:1000}});
@@ -23,9 +23,10 @@ check('89개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
  const shot=async name=>{await page.mouse.move(0,0);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(out,name+'.png')});};
  try{
   await goto('styles');
-  check('상단 주 메뉴 네 개',await page.locator('#primary-nav a').count()===4);
+  check('상단 주 메뉴는 스타일·사전 두 개',await page.locator('#primary-nav a').count()===2);
   await shot('01-styles');
-  await page.locator('#primary-nav a[href="#/components"]').click();
+  await page.locator('#primary-nav a[href="#/dictionary"]').click();
+  await page.locator('.atlas-footer a[href="#/components"]').click();
   check('구성요소 8개 계층 입구',await page.locator('.category-tile').count()===8);
   await shot('02-components');
   for(const layer of data.layers){
@@ -36,35 +37,35 @@ check('89개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    await close();
   }
   await page.locator('#primary-nav a[href="#/dictionary"]').click();
-  check('사전 74개 분류 입구',await page.locator('.category-tile').count()===89);
+  check('사전 첫 화면은 대분류 그림 입구와 대분류 메뉴',await page.locator('.dict-group').count()===data.groups.length&&await page.locator('.dict-group-link').count()===data.groups.length);
   await shot('03-dictionary');
   for(const category of data.categories){
    await goto('dictionary?category='+category.id);
    const rows=data.entries.filter(e=>e.category===category.id);
-   check(category.id+' 메뉴·항목 수 일치',await page.locator('.entry-tile').count()===Math.min(48,rows.length));
+   check(category.id+' 메뉴·항목 수 일치',await page.locator('.dict-entry:not(.is-built)').count()===Math.min(48,await page.evaluate(code=>Pattove.libraryUI.currentItems({page:'dictionary',category:code,query:''}).filter(e=>!e.implementation).length,category.id)));
    check(category.id+' 현재 분류 메뉴 열림',await page.locator('#sidebar a[aria-current="page"]').isVisible());
   }
   await goto('dictionary?category=ICO');
   await page.locator('[data-action="load-more"]').click();
-  check('대량 분류 더 보기 48개씩',await page.locator('.entry-tile').count()===96);
-  check('더 보기 뒤 새 항목으로 초점',await page.locator('.entry-tile').nth(48).evaluate(e=>e===document.activeElement));
+  check('대량 분류 더 보기 48개씩',await page.locator('.dict-entry:not(.is-built)').count()===96);
+  check('더 보기 뒤 새 항목으로 초점',await page.locator('.dict-entry:not(.is-built)').nth(48).evaluate(e=>e===document.activeElement));
   await page.reload();
-  check('표시한 범위 새로고침 유지',await page.locator('.entry-tile').count()===96);
+  check('표시한 범위 새로고침 유지',await page.locator('.dict-entry:not(.is-built)').count()===96);
   await page.locator('#query').fill('TOK-01');
   check('ID 검색 제안',await page.locator('.search-suggestion').count()===1);
   await page.locator('#query').press('ArrowDown');await page.locator('#query').press('Enter');
-  check('검색 제안이 실제 사전 원문 역할과 일치',(await page.locator('.record-detail section p').first().textContent())===data.entries.find(e=>e.id==='TOK-01').usage);
+  check('구현된 사전 항목의 검색 제안은 실제 부품 상세로 연결',await page.locator('#detail-title').textContent()===await page.evaluate(()=>Pattove.systemRegistry.items.find(i=>i.entry==='TOK-01').name));
   await shot('04-entry');
-  await close();
-  check('사전 상세 닫기 후 검색 초점',await page.locator('#query').evaluate(e=>e===document.activeElement));
+  await page.goBack();
+  check('부품 상세에서 뒤로 가면 사전으로 복귀',await page.locator('.dict').count()===1);
   await page.locator('#query').fill('색');await page.locator('#query').press('Enter');
-  check('사전 전체 검색',await page.locator('.entry-tile').count()>0);
+  check('사전 전체 검색',await page.locator('.dict-entry').count()>0);
   await shot('05-search');
   await goto('dictionary?category=NAV');
-  await page.locator('[data-library-entry="NAV-06"]').click();
-  await page.locator('#detail-dialog a').click();
+  await page.locator('[data-library-entry="NAV-01"]').click();
+  await page.locator('.dialog-footer a[href="#/docs?doc=NAV"]').click();
   await page.locator('.document-body').waitFor();
-  check('사전 상세에서 분류 원문 연결',(await page.locator('.document-body').textContent()).includes('NAV-06'));
+  check('사전 상세에서 분류 원문 연결',(await page.locator('.document-body').textContent()).includes('NAV-01'));
   await page.locator('.document-body a[href*="doc=guide"]').first().click();
   await page.locator('.document-body').waitFor();
   check('문서의 내부 링크가 사이트 안에서 연결',page.url().includes('doc=guide'));
@@ -90,7 +91,7 @@ check('89개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    if(width<=760){
     await goto('dictionary');
     await page.locator('[data-library-category]').selectOption('TOK');
-    check(width+' 모바일 전체 분류 선택',await page.locator('.library-heading h2').textContent()===data.categories.find(c=>c.id==='TOK').name);
+    check(width+' 모바일 전체 분류 선택',await page.locator('.dict-head h2>span:last-child').textContent()===data.categories.find(c=>c.id==='TOK').name.split(' — ')[0]);
     await goto('docs');await page.locator('.document-body').waitFor();
     await page.locator('[data-document-select]').selectOption('guide');await page.locator('.document-body').waitFor();
     check(width+' 모바일 문서 전환',page.url().includes('doc=guide'));

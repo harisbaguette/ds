@@ -118,6 +118,9 @@ for (const doc of documents.filter(d=>d.source.startsWith('문서/사전/'))) {
   }
 }
 categories.sort((a,b)=>Number(path.basename(a.source).slice(0,2))-Number(path.basename(b.source).slice(0,2)));
+// New source categories stay reachable even before an editorial grouping is assigned.
+const ungrouped=categories.filter(c=>!groups.some(g=>g.codes.includes(c.id)));
+if(ungrouped.length)groups.push({id:'additional',name:'추가 분류',codes:ungrouped.map(c=>c.id)});
 const covered=groups.flatMap(g=>g.codes);
 if(covered.length!==categories.length||new Set(covered).size!==covered.length||categories.some(c=>!covered.includes(c.id)))throw new Error('Category group coverage mismatch');
 const layerDoc=bySource.get('문서/구성요소 계층표.md');

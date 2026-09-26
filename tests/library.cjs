@@ -11,7 +11,7 @@ const checks=[],errors=[];
 const check=(name,value)=>{assert.ok(value,name);checks.push(name);};
 check('사전 원본의 모든 ID를 누락·중복 없이 연결',sourceIDs.length===data.entries.length&&new Set(sourceIDs).size===new Set(data.entries.map(e=>e.id)).size&&sourceIDs.every(id=>data.entries.some(e=>e.id===id)));
 check('8개 계층 모두 실제 구성요소를 가짐',data.layers.length===8&&data.layers.every(l=>data.components.some(c=>c.layer===l.id)));
-check('66개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categories.length===66&&data.groups.flatMap(g=>g.codes).length===66&&new Set(data.groups.flatMap(g=>g.codes)).size===66);
+check('74개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categories.length===74&&data.groups.flatMap(g=>g.codes).length===74&&new Set(data.groups.flatMap(g=>g.codes)).size===74);
 (async()=>{
  const browser=await chromium.launch({headless:true});
  const context=await browser.newContext({viewport:{width:1440,height:1000}});
@@ -36,7 +36,7 @@ check('66개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    await close();
   }
   await page.locator('#primary-nav a[href="#/dictionary"]').click();
-  check('사전 66개 분류 입구',await page.locator('.category-tile').count()===66);
+  check('사전 74개 분류 입구',await page.locator('.category-tile').count()===74);
   await shot('03-dictionary');
   for(const category of data.categories){
    await goto('dictionary?category='+category.id);

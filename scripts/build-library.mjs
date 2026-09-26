@@ -22,7 +22,8 @@ const groups = [
   {id:'expression', name:'시각 표현', codes:'VIS ART TYP IMG ANM FX'},
   {id:'interaction', name:'구성과 조작', codes:'LAY NAV ACT INP DAT STA SRH MOT MOB'},
   {id:'work', name:'콘텐츠와 작업', codes:'EDT CHR ANA RTE CAN COL FIL SCH GEO MED DOC'},
-  {id:'service', name:'서비스와 흐름', codes:'WEB COM ACC SOC FLW AIX BIL HLP EDU PRV OPS TOO DOM GAM MSG ADM DEV SEC GRO XR DVC VUI CLI'},
+  {id:'service', name:'서비스와 흐름', codes:'WEB COM ACC SOC FLW AIX BIL HLP EDU PRV OPS TOO DOM MSG ADM DEV SEC GRO XR DVC VUI CLI'},
+  {id:'game', name:'게임', codes:'GAM GHD GEC GLV GGN GIO GFX GTK GAC'},
   {id:'quality', name:'품질과 검증', codes:'ACS DSO PRF ANT STR LAW'},
   {id:'vocabulary', name:'기초 사전', codes:'ICO ATM MOD TOK STT GES SND CPY FMT ARI AST'}
 ].map(g => ({...g,codes:g.codes.split(' ')}));

@@ -2,15 +2,15 @@
 .inspector-options { display: flex; flex-wrap: wrap; gap: 16px; padding-bottom: 20px; }
 .inspector-options:empty { display: none; }
 .inspector-options label { display: grid; gap: 6px; font-size: 12px; }
-.inspector-options select { min-height: 44px; max-width: 100%; border: 1px solid var(--line-strong); border-radius: 8px; padding: 8px 12px; background: var(--surface-high); font-size: 13px; }
-.part-demo { border-radius: 12px; overflow: hidden; border: 1px solid var(--line-strong); }
+.inspector-options select { min-height: 44px; max-width: 100%; border: 1px solid var(--p-line); border-radius: 8px; padding: 8px 12px; background: var(--p-high); font-size: 13px; }
+.part-demo { border-radius: 12px; overflow: hidden; border: 1px solid var(--p-line); }
 .part-demo > .ds { padding: 32px; min-height: 160px; }
 .part-demo > .ds-demo-note { padding-inline: 20px; font-size: 12px; }
 .part-demo > .ds-demo-note:empty { display: none; }
 .part-dependencies .ui-icon { width: 13px; height: 13px; }
 .part-dependencies { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-bottom: 20px; font-size: 12px; }
-.part-dependencies > span { margin-right: 8px; color: var(--muted); }
-.part-dependencies button { display: inline-flex; gap: 8px; align-items: center; padding: 8px 12px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface-high); font-size: 12px; }
+.part-dependencies > span { margin-right: 8px; color: var(--p-muted); }
+.part-dependencies button { display: inline-flex; gap: 8px; align-items: center; padding: 8px 12px; border: 1px solid var(--p-line); border-radius: 8px; background: var(--p-high); font-size: 12px; }
 @media (max-width: 760px) {
   .system-inspector { padding-inline: 16px; }
   .part-demo > .ds { padding: 20px 16px; }

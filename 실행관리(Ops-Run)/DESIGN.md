@@ -17,13 +17,19 @@
 | 원본 | 책임 |
 |---|---|
 | `src/system/registry.js` | ID, 역할, 목적, 사전 연결, 의존성, 호환 조건, 버전과 Trial 상태 |
-| `src/styles/tokens.css`, `src/styles/themes.css` | 공통 의미와 메인 스타일 값 |
+| `src/tokens/primitive.css` | 원시 값. 색·간격·글꼴·모서리·그림자·움직임 종류별 이름. 값이 적힌 유일한 곳 |
+| `src/tokens/semantic.css` | 역할 이름 `--p-*`. 원시 값만 참조하며, 스타일을 바꿀 때는 이 파일의 참조만 교체 |
+| `src/tokens/component.css` | 부품 토큰 `--ds-*`. 역할 이름만 참조 |
+| `scripts/tokens.mjs` | 세 층을 읽어 층 규칙을 검사하고, 배포용 대체값을 원시 값에서 생성 |
+| `src/styles/themes.css` | 메인 스타일 표본 규칙. 토큰은 선언하지 않음 |
 | `src/system/parts.css` | 부품과 메인 스타일 표현. HTML·React가 공유 |
 | `src/system/parts.js` | 시트·HTML 예시·HTML 배포의 공통 렌더러 |
 | `src/system/react/` | 실제 React 컴포넌트, 입력 속성·상태·이벤트 |
 | `src/system/behaviors.js` | 일반 HTML의 검색·탭·알림·초점 등 동작 |
 | `assets/icons/` | 개별 아이콘 원본 |
 | `문서/사전/` | 목적·사용 조건·패턴 정의 원문 |
+
+토큰은 `원시 값 → 역할 → 부품` 순서로만 참조한다. 각 층은 바로 아래 층만 참조하며, 규칙을 어기면 빌드가 멈춘다. `parts.css`는 부품 토큰을 쓰기만 하고 선언하지 않는다. 단독 배포본의 `base.css`와 `window.Pattove.systemTokens`에는 `var(--p-*, 원시 값)` 형태의 대체값이 생성되어, 역할 층 없이 설치해도 같은 모습으로 표시된다.
 
 `build-system.mjs`는 공유 CSS와 자산을 내보내기용 데이터로 만든다. `build-registry.mjs`는 공식 shadcn Universal Items 형식의 레지스트리를 만든다. `~/design/...` 대상 경로가 명시되어 프레임워크 탐지나 `components.json` 없이 소스를 설치할 수 있다. `build-library.mjs`는 사전의 검색 정보와 문서를 만든다. 새 분류도 누락시키지 않고 기존 그룹 뒤에 추가한다.
 

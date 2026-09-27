@@ -1,13 +1,15 @@
 {
   "version": "0.3.0",
-  "revision": "3294899de0dbca406810d406ef447c34b6be355663f7cfc2fe26cb47eeae8b1f",
+  "revision": "bf73ed0d6196bc72c0cd31ed40b90f5b59d5b7f8a5f9159f37295bf24af9fb0c",
   "sources": [
     "src/system/parts.js",
     "src/system/parts.css",
     "src/system/behaviors.js",
     "src/system/registry.js",
     "src/data/catalog.js",
-    "src/styles/tokens.css",
+    "src/tokens/primitive.css",
+    "src/tokens/semantic.css",
+    "src/tokens/component.css",
     "src/styles/themes.css"
   ],
   "sections": [
@@ -232,10 +234,6 @@
             [
               "rotate",
               "rotate"
-            ],
-            [
-              "sliders",
-              "sliders"
             ],
             [
               "upload",

@@ -3,15 +3,18 @@ import path from 'node:path';
 import vm from 'node:vm';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
+import { loadTokens, tokenFiles } from './tokens.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const write = (file, content) => { fs.mkdirSync(path.dirname(path.join(root, file)), { recursive: true }); fs.writeFileSync(path.join(root, file), content); };
 const ctx = vm.createContext({ window: {} });
 for (const file of ['src/data/catalog.js','src/ui/icons.js','src/system/registry.js','src/system/parts.js','src/system/behaviors.js','src/data/system-source.js','src/data/system-fonts.js']) vm.runInContext(read(file), ctx);
-const { catalog, systemRegistry: registry, parts, systemSource: css, systemFonts: fonts, iconMarkup } = ctx.window.Pattove;
+const { catalog, systemRegistry: registry, parts, systemSource: css, systemTokens, systemFonts: fonts, iconMarkup } = ctx.window.Pattove;
+// Distributed base.css = component tokens (with resolved fallbacks) + shared part rules.
+const baseCSS = systemTokens + '\n' + css.shared;
 const base = (process.env.REGISTRY_URL || 'http://127.0.0.1:4173/src/registry/r').replace(/\/$/, '');
 const cliVersion = JSON.parse(read('node_modules/shadcn/package.json')).version;
-const sourceHash = crypto.createHash('sha256').update(['src/system/parts.css','src/system/parts.js','src/system/behaviors.js','src/styles/themes.css','src/styles/tokens.css',...fs.readdirSync(path.join(root,'src/system/react')).map(file=>'src/system/react/'+file)].map(read).join('\0')).digest('hex');
+const sourceHash = crypto.createHash('sha256').update(['src/system/parts.css','src/system/parts.js','src/system/behaviors.js','src/styles/themes.css',...Object.values(tokenFiles),...fs.readdirSync(path.join(root,'src/system/react')).map(file=>'src/system/react/'+file)].map(read).join('\0')).digest('hex');
 const file = (name, content) => ({ path: `design/${name}`, type: 'registry:file', target: `~/design/${name}`, content });
 const items = [];
 function emit(name, title, files, meta = {}, dependencies = []) {
@@ -21,14 +24,7 @@ function emit(name, title, files, meta = {}, dependencies = []) {
 let fontCSS = '';
 for (const [name, font] of Object.entries(fonts)) fontCSS += `/* ${font.license.replace(/\*\//g,'* /')} */\n@font-face{font-family:${name};font-style:normal;font-weight:100 900;font-display:swap;src:url(data:font/woff2;base64,${font.data}) format('woff2')}\n`;
 emit('pattove-fonts', 'Pretendard · Outfit 및 라이선스', [file('fonts.css', fontCSS)]);
-const tokensCSS = read('src/styles/tokens.css') + '\n' + read('src/styles/themes.css');
-const properties = text => Object.fromEntries([...text.matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)].map(m => [m[1], m[2].trim()]));
-const rootVars = properties(tokensCSS.match(/:root\s*\{([^}]+)\}/)[1]);
-function styleCSS(style) {
-  const vars = { ...rootVars, ...properties(tokensCSS.match(new RegExp('\\.theme-' + style + '\\s*\\{([^}]+)\\}'))[1]) };
-  const resolve = (value, depth = 0) => { if (depth > 10) throw Error('Token cycle'); return value.replace(/var\((--[\w-]+)\)/g, (_, key) => { if (!(key in vars)) throw Error('Unknown token ' + key); return resolve(vars[key], depth + 1); }); };
-  return `.ds[data-style="${style}"]{${Object.entries(vars).filter(([key]) => key.startsWith('--p-')).map(([key,value]) => `${key}:${resolve(value)};`).join('')}}\n`;
-}
+const { styleCSS } = loadTokens(root);
 const componentNames = { button:'Button', input:'Input', field:'Field', checkbox:'Checkbox', radio:'Radio', switch:'Switch', badge:'Badge', divider:'Divider', 'status-dot':'StatusDot', card:'Card', tabs:'Tabs', 'bottom-nav':'BottomNav', feedback:'Feedback', 'search-module':'SearchModule', template:'Template', page:'CollectionPage' };
 const jsxExamples = {
   button:'<Button onClick={() => alert("실행했어요.")}>계속하기</Button>', input:'<label>이름<Input name="name" placeholder="이름을 입력하세요" /></label>', field:'<Field label="컬렉션 이름" name="name" help="나중에 바꿀 수 있어요." />', checkbox:'<Checkbox name="share" defaultChecked>링크로 공유</Checkbox>', radio:'<fieldset><legend>공개 범위</legend><Radio name="visibility" value="private" defaultChecked>나만 보기</Radio><Radio name="visibility" value="shared">링크로 공유</Radio></fieldset>', switch:'<Switch name="notification" defaultChecked>알림 받기</Switch>', badge:'<Badge>진행 중</Badge>', divider:'<Divider />', 'status-dot':'<StatusDot />', tabs:'<Tabs />', 'bottom-nav':'<BottomNav current="#home" items={[{href:"#home",label:"홈"},{href:"#search",label:"탐색"},{href:"#saved",label:"저장"}]} />', feedback:'<Feedback />', card:'<Card><CardBody><CardTitle>브랜드 리뉴얼</CardTitle><CardDescription>색과 서체, 첫인상을 모아 둔 컬렉션</CardDescription></CardBody><CardActions><Button onClick={() => alert("선택했어요.")} variant="outline">선택하기</Button></CardActions></Card>', 'search-module':'<SearchModule />', template:'<Template title="나의 기록" count="1개"><p>본문이나 다른 모듈을 이 자리에 넣습니다.</p></Template>', page:'<CollectionPage />'
@@ -48,12 +44,12 @@ for (const [name, markup] of Object.entries(iconMarkup)) {
 }
 for (const style of catalog.styles.filter(s => s.id !== 'base')) {
   const theme = file(`styles/${style.id}.css`, styleCSS(style.id));
-  emit(`pattove-${style.id}-tokens`, `${style.name} · 토큰`, [theme, file('base.css', css.shared)], { item:'tokens', style:style.id, source:'src/styles/themes.css' });
+  emit(`pattove-${style.id}-tokens`, `${style.name} · 토큰`, [theme, file('base.css', baseCSS)], { item:'tokens', style:style.id, source:tokenFiles.semantic });
   for (const item of registry.items.filter(i => !['tokens','icon'].includes(i.id))) for (const environment of ['html','react']) {
     const closure = environment === 'html' ? [...registry.dependencies(item.id).map(i => i.id), item.id].filter(id => !['tokens','icon'].includes(id)) : [...reactClosure(item.id)];
     if (environment === 'react' && item.id === 'card') closure.push('button');
     const blocks = [...new Set(closure.flatMap(id => registry.index.get(id).css))];
-    const files = [file('base.css', css.shared), theme, ...(style.specification ? [file(`styles/${style.id}.md`, read(style.specification))] : []), ...blocks.map(block => file(`css/${block}.css`, css[block]))];
+    const files = [file('base.css', baseCSS), theme, ...(style.specification ? [file(`styles/${style.id}.md`, read(style.specification))] : []), ...blocks.map(block => file(`css/${block}.css`, css[block]))];
     const styleImports = ['../../fonts.css','../../base.css',`../../styles/${style.id}.css`,...blocks.map(block => `../../css/${block}.css`)];
     let example;
     if (environment === 'html') {

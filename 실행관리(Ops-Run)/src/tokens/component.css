@@ -1,0 +1,36 @@
+/* Layer 3 · component tokens for the shared parts (.ds). Values are var(--semantic) only, never raw values.
+   Distributed copies get their standalone fallbacks filled by scripts/build-system.mjs from semantic.css + primitive.css. */
+.ds {
+  --ds-bg: var(--p-bg);
+  --ds-surface: var(--p-surface);
+  --ds-high: var(--p-high);
+  --ds-text: var(--p-ink);
+  --ds-muted: var(--p-muted);
+  --ds-border: var(--p-line);
+  --ds-control-border: var(--p-control-border);
+  --ds-soft: var(--p-soft);
+  --ds-accent: var(--p-accent);
+  --ds-on-accent: var(--p-on-accent);
+  --ds-focus: var(--p-highlight);
+  --ds-error: var(--p-error);
+  --ds-success: var(--p-success);
+  --ds-warning: var(--p-warning);
+  --ds-radius: var(--p-radius);
+  --ds-control-radius: var(--p-control-radius);
+  --ds-shadow: var(--p-shadow);
+  --ds-raised: var(--p-raised);
+  --ds-inset: var(--p-inset);
+  --ds-glass: var(--p-glass);
+  --ds-disabled: var(--p-disabled);
+  --ds-duration: var(--p-duration);
+  --ds-font: var(--p-font);
+  --ds-display-font: var(--p-display-font);
+  --ds-text-sm: var(--p-text-sm);
+  --ds-text-md: var(--p-text-md);
+  --ds-text-lg: var(--p-text-lg);
+  --ds-space-2: var(--p-space-xs);
+  --ds-space-3: var(--p-space-sm);
+  --ds-space-4: var(--p-space-md);
+  --ds-space-6: var(--p-space-lg);
+  --ds-space-8: var(--p-space-xl);
+}

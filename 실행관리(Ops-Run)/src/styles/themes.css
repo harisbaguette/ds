@@ -1,4 +1,4 @@
-/* One canonical style for the application, HTML and React sources. */
+﻿/* One canonical style for the application, HTML and React sources. */
 :root,
 .theme-main {
   --p-bg: #ffffff;
@@ -19,6 +19,7 @@
   --p-control-radius: 16px;
   --p-shadow: 6px 7px 16px #bbc4d166, -5px -5px 14px #ffffffed;
   --p-raised: 3px 4px 8px #b9c3d066, -3px -3px 8px #ffffffed;
+  --p-float: 0 12px 32px #26394d26;
   --p-inset: inset 3px 3px 6px #b7c1cf55, inset -3px -3px 6px #ffffffd9;
   --p-glass: #f6f8fbe8;
   --p-disabled: #dce1e8;

@@ -48,15 +48,14 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
           check(width + ' 부품 진입에서 부품 검색과 부품 한 장 표시', await page.locator('.search-area').isVisible() && await page.locator('.component-page').isVisible() && await page.locator('.system-board').count() === 0);
           if ([375,1440].includes(width)) await shot(width + '-system');
         } else if (route.startsWith('patterns')) {
-          check(width + ' 첫 그리드 즉시 보임', (await page.locator('.pattern-grid').boundingBox()).y < (width <= 760 ? 350 : 150));
+          check(width + ' 첫 그리드가 필터 줄 바로 아래에 보임', await page.evaluate(() => { const y = document.querySelector('.pattern-grid').getBoundingClientRect().y; return y - document.querySelector('.app-header').getBoundingClientRect().bottom <= 24 && y < 350; }));
           if ([375,1440].includes(width)) await shot(width + '-ink');
           await page.evaluate(() => scrollTo(0, 500));
-          const categoryObscured = await page.locator('.category').first().evaluate(el => {
+          const chipObscured = await page.locator('#filter-bar .chip').first().evaluate(el => {
             const r = el.getBoundingClientRect();
-            const header = document.querySelector('.app-header').getBoundingClientRect();
-            return (r.left < header.right && r.top < header.bottom - 1) || [r.top + 4, r.bottom - 4].some(y => !el.contains(document.elementFromPoint(r.x + r.width / 2, y)));
+            return r.bottom > 0 && [r.top + 4, r.bottom - 4].some(y => !el.contains(document.elementFromPoint(r.x + r.width / 2, y)));
           });
-          check(width + ' 스크롤 뒤 분류 버튼 위아래가 가려지지 않음', !categoryObscured);
+          check(width + ' 스크롤 뒤 필터 칩 위아래가 가려지지 않음', !chipObscured);
           check(width + ' 불필요한 스타일 선택 UI 없음', await page.locator('#style-switch,#style-menu').count() === 0);
           await page.evaluate(() => scrollTo(0, 0));
           await page.locator('[data-open="toast"]').click();

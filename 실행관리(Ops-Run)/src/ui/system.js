@@ -1,9 +1,11 @@
-(() => {
+﻿(() => {
   const { parts: p, systemRegistry: r } = window.Pattove;
   const e = p.esc;
-  function sidebar(state) {
-    const groups = [['기초',['Token','Primitive']],['부품',['Atom','Molecule']],['조합',['Module','Template','Page']]];
-    return groups.map(([name,layers])=>'<p class="system-nav-group">'+name+'</p>'+r.items.filter(item=>layers.includes(item.layer)).map(item=>'<a class="component-sidebar-link" href="#/system?detail='+item.id+'"'+(state.detail===item.id?' aria-current="page"':'')+'>'+e(item.name)+'</a>').join('')).join('');
+  // Part links sit in the filter row under the header, smallest layer first; the open part is dark like a pressed chip.
+  function partLinks(state) {
+    const order = ['Token','Primitive','Atom','Molecule','Module','Template','Page'];
+    const items = [...r.items].sort((x, y) => order.indexOf(x.layer) - order.indexOf(y.layer));
+    return '<div class="filter-row"><nav class="filter-scroll" aria-label="부품 목록">'+items.map(item=>'<a class="chip" href="#/system?detail='+item.id+'" data-focus="part-'+item.id+'"'+(state.detail===item.id?' aria-current="page"':'')+'>'+e(item.name)+'</a>').join('')+'</nav></div>';
   }
   function itemMarkup(state, options = {}) {
     const content = p.renderItem(state.detail, undefined, r.normalizeOptions(state.detail, { ...state.options, ...options }));
@@ -26,5 +28,5 @@
     window.Pattove.componentDocs.refresh(state);
     hydrate(document);
   }
-  window.Pattove.systemUI = { sidebar, detail, hydrate, updateInspector, itemMarkup };
+  window.Pattove.systemUI = { partLinks, detail, hydrate, updateInspector, itemMarkup };
 })();

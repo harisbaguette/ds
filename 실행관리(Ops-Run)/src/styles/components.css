@@ -1,4 +1,4 @@
-.component-page { max-width:1200px; margin:auto; }
+﻿.component-page { max-width:1200px; margin:auto; }
 .component-heading { margin-bottom:24px; }
 .component-heading>a { display:inline-flex; align-items:center; min-height:44px; gap:8px; font-size:13px; color:var(--p-muted); }
 .component-heading>a .ui-icon { width:14px; transform:rotate(180deg); order:-1; }
@@ -26,7 +26,7 @@
 .component-code>button { position:absolute; right:8px; top:8px; min-width:44px; min-height:44px; padding:8px; background:var(--p-high); border-radius:7px; border:1px solid var(--p-line); font-size:12px; }
 .component-code pre { padding:56px 20px 20px; overflow:auto; max-height:480px; font:13px/1.8 Consolas,monospace; tab-size:2; white-space:pre; }
 .component-code .copy-status { padding:0 20px; font-size:12px; }.component-code .copy-status:empty { display:none; }
-.component-section { margin-top:40px; scroll-margin-top:125px; }
+.component-section { margin-top:40px; scroll-margin-top:var(--chrome-bottom, 16px); }
 .component-section>h3 { font-size:20px; font-weight:650; margin-bottom:18px; }
 .component-section>p,.component-section>ul { font-size:14px; line-height:1.8; max-width:72ch; color:var(--p-muted); }
 .component-section>ul { margin-top:12px; padding-left:20px; }
@@ -41,7 +41,7 @@
 .component-example>.ds { min-height:130px; padding:24px 8px; display:grid; align-items:center; justify-items:start; }
 .component-example>details>summary { font-size:12px; color:var(--p-muted); min-height:44px; display:flex; align-items:center; cursor:pointer; }
 .component-example .component-code pre { font-size:11px; }
-.component-toc { position:sticky; top:135px; padding-left:12px; border-left:1px solid var(--p-line); }
+.component-toc { position:sticky; top:var(--chrome-bottom, 16px); padding-left:12px; border-left:1px solid var(--p-line); }
 .component-toc a { display:flex; align-items:center; min-height:44px; font-size:12px; color:var(--p-muted); }
 .component-toc a:hover { color:var(--p-ink); }
 .component-table { overflow:auto; margin-top:20px; }
@@ -56,14 +56,11 @@
 .component-pagination { display:flex; justify-content:space-between; gap:20px; border-top:1px solid var(--p-line); margin-top:40px; padding-top:16px; }
 .component-pagination a { display:inline-flex; min-height:44px; gap:8px; align-items:center; font-size:13px; }
 .component-pagination a:first-child .ui-icon { transform:rotate(180deg); order:-1; }.component-pagination .ui-icon { width:14px; }
-.component-sidebar-link { display:flex; align-items:center; min-height:44px; min-width:44px; padding:10px 14px; font-size:13px; color:var(--p-muted); border-radius:14px; }
-.component-sidebar-link[aria-current='page'] { background:var(--p-accent); color:var(--p-on-accent); font-weight:650; box-shadow:none; }
-.component-sidebar-link:hover { color:var(--p-ink); background:var(--p-surface); }
 @media(max-width:1250px) { .component-layout { grid-template-columns:minmax(0,1fr); }.component-toc { display:none; } }
 @media(max-width:760px) {
   .component-heading h2 { font-size:28px; }.component-heading { margin-bottom:16px; }
   .component-page .part-demo>.ds { min-height:220px; padding:24px 8px; }.component-page .part-demo>.ds>.ds-field { min-width:0; width:100%; }
-  .component-examples { grid-template-columns:1fr; }.component-section { margin-top:32px; scroll-margin-top:160px; }
+  .component-examples { grid-template-columns:1fr; }.component-section { margin-top:32px; }
   .component-toolbar { gap:8px; }.component-tabs { gap:20px; }.component-code pre { font-size:12px; padding-inline:14px; }
   .component-page .inspector-options { gap:12px; }.component-page .inspector-options label { flex:1 1 120px; }
 }

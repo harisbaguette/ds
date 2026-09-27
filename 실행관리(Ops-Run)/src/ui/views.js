@@ -15,8 +15,36 @@
   function header(state) {
     return `<h1 id="page-title" class="sr-only">${escape(({styles:'스타일',system:'부품',patterns:'패턴',dictionary:'사전',components:'구성요소'})[state.page])}</h1>`;
   }
-  function sidebar(state) {
-    return catalog.categories.map(cat => `<button class="category" data-category="${cat.id}" data-focus="category-${cat.id}" aria-pressed="${state.category === cat.id}">${cat.name}</button>`).join('');
+  // Filter bar under the header: chips toggle on/off (several at once), long lists sit in a popover with its own search.
+  // No selection means everything; active selections repeat below as removable tags. groups: [{key, options}] or [{key, label, menu:true, options}].
+  const count = n => n.toLocaleString('ko-KR') + '개';
+  function chip(key, option) {
+    const on = !!option.pressed;
+    return `<button type="button" class="chip" data-filter="${key}:${escape(option.id)}" data-focus="chip-${key}-${escape(option.id)}" aria-pressed="${on}"${!on && option.count === 0 ? ' disabled' : ''}>${escape(option.name)}</button>`;
+  }
+  function checkItem(key, option, nested) {
+    const on = !!option.pressed;
+    return `<label class="facet-option${nested ? ' is-nested' : ''}" data-facet-name="${escape(option.name.toLocaleLowerCase())}"><input type="checkbox" data-filter-check="${key}" value="${escape(option.id)}" data-focus="opt-${key}-${escape(option.id)}"${on ? ' checked' : ''}${!on && option.count === 0 ? ' disabled' : ''}><span>${escape(option.name)}</span><small>${option.count}</small></label>`
+      + (option.children ? option.children.options.map(child => checkItem(option.children.key, child, true)).join('') : '');
+  }
+  function menu(group) {
+    const selected = group.options.reduce((n, o) => n + (o.pressed ? 1 : 0) + (o.children ? o.children.options.filter(c => c.pressed).length : 0), 0);
+    const id = 'facet-' + group.key;
+    return `<button type="button" class="chip chip-menu${selected ? ' is-on' : ''}" popovertarget="${id}" data-focus="menu-${group.key}">${escape(group.label)}${selected ? `<b class="chip-num">${selected}</b>` : ''}${icon('chevron-down')}</button>
+      <div class="facet-panel" id="${id}" popover aria-label="${escape(group.label)}">
+        ${group.options.length > 12 ? `<input type="search" class="facet-search" data-facet-search placeholder="${escape(group.label)} 찾기" aria-label="${escape(group.label)} 찾기" autocomplete="off">` : ''}
+        <div class="facet-list" role="group" aria-label="${escape(group.label)}">${group.options.map(o => checkItem(group.key, o)).join('')}</div>
+      </div>`;
+  }
+  function filterBar({ groups, tags, query, total }) {
+    const tagList = tags.map(t => `<button type="button" class="filter-tag" data-filter="${t.key}:${escape(t.id)}" data-focus="tag-${t.key}-${escape(t.id)}" aria-label="${escape(t.name)} 필터 끄기">${escape(t.name)}${icon('close')}</button>`).join('')
+      + (query ? `<button type="button" class="filter-tag" data-action="clear-query" data-focus="tag-query" aria-label="검색어 ${escape(query)} 지우기">“${escape(query)}”${icon('close')}</button>` : '');
+    return `<div class="filter-row"><div class="filter-scroll" role="group" aria-label="필터">${groups.map(g => g.menu ? menu(g) : g.options.map(o => chip(g.key, o)).join('')).join('')}</div><p class="filter-count">${count(total)}</p></div>`
+      + (tagList ? `<div class="filter-tags">${tagList}<button type="button" class="filter-clear" data-action="clear-filters" data-focus="filter-clear">모두 지우기</button></div>` : '');
+  }
+  function patternFilters(state, total) {
+    const options = catalog.categories.filter(c => c.id !== 'all').map(c => ({ id: c.id, name: c.name, pressed: state.filters.category.includes(c.id) }));
+    return filterBar({ groups: [{ key: 'category', options }], tags: options.filter(o => o.pressed).map(o => ({ key: 'category', ...o })), query: state.query, total });
   }
   function card(pattern, style) {
     const key = `${pattern.id}-${style}`;
@@ -26,14 +54,10 @@
       </button>
     </article>`;
   }
-  function filterStatus(state, count) {
-    if (!state.query) return '';
-    return `<div class="search-summary"><span>“${escape(state.query)}” <span class="result-count">${count}</span></span><button data-action="clear-query" aria-label="검색 해제">${icon('close')}</button></div>`;
-  }
   function patterns(state, results) {
     const style = styles.find(s => s.id === state.style);
-    return `<section aria-labelledby="page-title">${filterStatus(state, results.length)}
-      ${results.length ? `<div class="pattern-grid">${results.map(p => card(p, state.style)).join('')}</div>` : `<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>검색 결과가 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>`}
+    return `<section aria-labelledby="page-title">
+      ${results.length ? `<div class="pattern-grid">${results.map(p => card(p, state.style)).join('')}</div>` : `<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>검색 결과가 없어요</h2><button class="secondary" data-action="clear-filters">필터 지우기</button></div>`}
       ${style ? `<details class="style-notes"><summary>${escape(style.name)}의 특징·참고 이미지 ${icon('chevron-down')}</summary>${styleReferences(style)}</details>` : ''}
     </section>`;
   }
@@ -46,7 +70,7 @@
         <div class="detail-content">
           <div class="content-slot"><h3>언제 쓰나요?</h3><p class="pattern-usage">${escape(entry?.usage || pattern.name)}</p></div>
           ${style ? `<div class="content-slot"><h3>${escape(style.name)}의 표현</h3><p class="pattern-usage">${escape(style.rules)}</p></div>` : ''}
-          ${entry ? `<a class="secondary pattern-dictionary-link" href="#/dictionary?category=${entry.category}&detail=${entry.id}">사전에서 자세히 보기 ${icon('arrow')}</a>` : ''}
+          ${entry ? `<a class="secondary pattern-dictionary-link" href="#/dictionary?code=${entry.category}&detail=${entry.id}">사전에서 자세히 보기 ${icon('arrow')}</a>` : ''}
         </div></div>`;
   }
   // 스타일 화면: 디자인 스타일마다 휴대폰 첫 화면 견본 한 장. 누르면 앱 전체가 그 스타일로 갈아입는다.
@@ -71,5 +95,5 @@
       </article>`;
     }).join('')}</div></section>`;
   }
-  window.Pattove.views = { escape, styleName, styleReferences, header, sidebar, patterns, detail, styleGrid };
+  window.Pattove.views = { escape, styleName, styleReferences, header, filterBar, patternFilters, patterns, detail, styleGrid };
 })();

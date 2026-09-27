@@ -8,33 +8,22 @@
   const registry = window.Pattove.systemRegistry;
   const part = id => registry.index.get(id) || registry.items.find(item => item.entry === id);
   const implemented = e => ({ ...e, usage:e.purpose, category:e.section, kind:e.layer, implementation:true });
-  // Three shelves by kind (부품 → 블록 → 템플릿). Inside a shelf, common role categories come first and use categories are "쓰는 곳" tags.
-  // The category parameter reads shelf[.code[.icon group]] or shelf.place; a bare source code still opens that code across every kind.
+  // Three shelves by kind (부품 → 블록 → 템플릿) are the header tabs. Inside a tab the filter bar narrows by kind, role group or 분야
+  // (one "area" facet, since the two split the categories between them), source category and icon group: OR inside a facet, AND across facets.
   const categoryById=new Map(data.categories.map(c=>[c.id,c]));
   const shelves=new Map(data.shelves.map(s=>[s.id,s]));
   const places=new Map(data.places.map(p=>[p.id,p]));
   const iconGroups=new Map(data.iconGroups.map(g=>[g.id,g]));
+  const layers=new Map(data.layers.map(l=>[l.id,l]));
   const placeOf=new Map(data.places.flatMap(p=>p.codes.map(code=>[code,p.id])));
-  const commonGroups=data.roleOrder.map(id=>data.groups.find(g=>g.id===id)).filter(Boolean).map(g=>({...g,codes:g.codes.filter(code=>!placeOf.has(code))}));
+  const groupName={vocabulary:'기초',interaction:'조작',expression:'표현',work:'작업',quality:'품질',additional:'추가'};
+  const roles=data.roleOrder.map(id=>data.groups.find(g=>g.id===id)).filter(Boolean)
+    .map(g=>({id:g.id,name:groupName[g.id]||g.name,codes:g.codes.filter(code=>!placeOf.has(code))}));
+  const roleOf=new Map(roles.flatMap(r=>r.codes.map(code=>[code,r.id])));
   const shelfOf=kind=>data.shelves.find(s=>s.kinds.includes(kind))?.id;
   const itemShelf=item=>item.entry?shelfOf(entries.get(item.entry).kind):['Template','Page'].includes(item.layer)?'template':item.layer==='Module'?'block':'part';
-  function scope(category) {
-    if (category==='all') return {};
-    if (typeof category!=='string') return null;
-    if (categoryById.has(category)) return {code:category};
-    const [shelf,key,sub,extra]=category.split('.');
-    if (!shelves.has(shelf)||extra!==undefined) return null;
-    if (!key) return {shelf};
-    if (places.has(key)&&!sub) return {shelf,place:key};
-    if (categoryById.has(key)&&!placeOf.has(key)&&(!sub||(key==='ICO'&&iconGroups.has(sub)))) return sub?{shelf,code:key,sub}:{shelf,code:key};
-    return null;
-  }
-  const fits=(s,e)=>(!s.shelf||shelfOf(e.kind)===s.shelf)&&(!s.code||e.category===s.code)&&(!s.sub||e.sub===s.sub)&&(!s.place||placeOf.get(e.category)===s.place);
-  const builtFits=(s,item)=>item.entry?fits(s,entries.get(item.entry)):!s.code&&!s.place&&(!s.shelf||itemShelf(item)===s.shelf);
-  const tally=new Map(), bump=key=>tally.set(key,(tally.get(key)||0)+1);
-  for (const e of data.entries) { const shelf=shelfOf(e.kind); bump(shelf); bump(shelf+'.'+(placeOf.get(e.category)||e.category)); if (e.sub) bump(shelf+'.'+e.category+'.'+e.sub); }
-  for (const item of registry.items) if (!item.entry) bump(itemShelf(item));
-  const builtIn=(shelf,code)=>registry.items.some(i=>i.entry&&itemShelf(i)===shelf&&entries.get(i.entry).category===code);
+  const inShelf=new Map(), bump=key=>inShelf.set(key,(inShelf.get(key)||0)+1);
+  for (const e of data.entries) { const shelf=shelfOf(e.kind); bump(shelf+'|'+e.category); if (e.sub) bump(shelf+'|ICO.'+e.sub); }
   const short=name=>String(name).split(' — ')[0];
   const kindArt={
     부품:'<rect x="16" y="26" width="54" height="20" rx="10" class="k-fill"/><rect x="80" y="28" width="26" height="16" rx="8"/><circle cx="98" cy="36" r="4.5" class="k-ink"/>',
@@ -54,53 +43,92 @@
     return '<div class="atlas-sample ds theme-'+style+'" data-style="'+style+'" data-kind="'+item.id+'">'+body+'</div>';
   }
   const match=(entry,query)=>query.trim().toLocaleLowerCase().split(/\s+/).every(term=>searches.get(entry.id).includes(term));
-  const options=(items,current)=>items.map(e=>'<option value="'+e.id+'"'+(e.id===current?' selected':'')+'>'+escape(e.name)+'</option>').join('');
-  // Rail = the three shelves (style-independent); only 스타일 sits below the divider. Built parts open on the system page, which belongs to 부품.
-  const groupName={vocabulary:'기초',interaction:'조작',expression:'표현',work:'작업',quality:'품질',additional:'추가'};
+
+  // Filters live in the address: shelf=part&kind=부품&role=interaction&place=shop&code=ICO&icon=move (lists are comma-separated).
+  // An old ?category=shelf[.code[.icon]] or bare code address still opens; with no shelf, the tab holding most of that category opens.
+  const list=value=>[...new Set(String(value||'').split(',').filter(Boolean))];
+  const homeShelf=code=>data.shelves.map(s=>s.id).sort((x,y)=>(inShelf.get(y+'|'+code)||0)-(inShelf.get(x+'|'+code)||0))[0];
+  function readFilters(page, params) {
+    const legacy=String(params.get('category')||'').split('.');
+    if (page==='components') return {layer:list(params.get('layer')).concat(layers.has(legacy[0])?[legacy[0]]:[]).filter(id=>layers.has(id))};
+    const legacyShelf=shelves.has(legacy[0])?legacy.shift():null;
+    const [oldKey,oldSub]=legacy;
+    const detail=entries.get(params.get('detail'));
+    const code=[...new Set(list(params.get('code')).concat(categoryById.has(oldKey)?[oldKey]:[]))].filter(id=>categoryById.has(id));
+    const wanted=params.get('shelf');
+    const shelf=shelves.has(wanted)?wanted:legacyShelf||(detail?shelfOf(detail.kind):code.length?homeShelf(code[0]):'part');
+    return {
+      shelf,
+      kind:list(params.get('kind')).filter(k=>shelves.get(shelf).kinds.includes(k)),
+      role:list(params.get('role')).filter(id=>roles.some(r=>r.id===id)),
+      place:list(params.get('place')).concat(places.has(oldKey)?[oldKey]:[]).filter(id=>places.has(id)),
+      code,
+      icon:code.includes('ICO')?list(params.get('icon')).concat(oldKey==='ICO'&&oldSub?[oldSub]:[]).filter(id=>iconGroups.has(id)):[]
+    };
+  }
+  function writeFilters(state, params) {
+    const f=state.filters;
+    if (state.page==='dictionary') params.set('shelf',f.shelf);
+    for (const [key,value] of Object.entries(f)) if (Array.isArray(value)&&value.length) params.set(key,value.join(','));
+  }
+  const active=f=>['kind','role','place','code','icon'].some(k=>f[k].length);
+  // skip leaves one facet out, so each option counts what it would show if pressed.
+  const passes=(f,e,skip)=>(skip==='kind'||!f.kind.length||f.kind.includes(e.kind))
+    &&(skip==='area'||!(f.role.length||f.place.length)||f.role.includes(roleOf.get(e.category))||f.place.includes(placeOf.get(e.category)))
+    &&(skip==='code'||!f.code.length||f.code.includes(e.category))
+    &&(skip==='icon'||!f.icon.length||e.category!=='ICO'||f.icon.includes(e.sub));
+
+  // Header tabs = the three shelves, then 스타일. Built parts open on the system page, which belongs to 부품. A search stays across tabs.
   function navigation(state) {
-    const link=(href,focus,name,label,art,current)=>'<a href="'+href+'" data-focus="'+focus+'" aria-label="'+escape(name)+'" title="'+escape(name)+'"'+(current?' aria-current="page"':'')+'>'+art+'<span aria-hidden="true">'+label+'</span></a>';
-    const open=state.page==='system'?'part':state.page==='dictionary'?scope(state.category)?.shelf:null;
-    return data.shelves.map(s=>link('#/dictionary?category='+s.id,'rail-'+s.id,s.name,s.name,icon(s.icon),open===s.id)).join('')+
-      '<i class="rail-divider" aria-hidden="true"></i>'+link('#/styles','page-styles','스타일','스타일',icon('layers'),['styles','patterns'].includes(state.page));
+    const open=state.page==='system'?'part':state.page==='dictionary'?state.filters.shelf:null;
+    const q=state.query&&['dictionary','system'].includes(state.page)?'&q='+encodeURIComponent(state.query):'';
+    const tab=(href,focus,name,art,current)=>'<a href="'+href+'" data-focus="'+focus+'"'+(current?' aria-current="page"':'')+'>'+art+'<span>'+escape(name)+'</span></a>';
+    return data.shelves.map(s=>tab('#/dictionary?shelf='+s.id+q,'tab-'+s.id,s.name,icon(s.icon),open===s.id)).join('')+
+      tab('#/styles','page-styles','스타일',icon('layers'),['styles','patterns'].includes(state.page));
+  }
+  function shelfItems(state) {
+    const shelf=state.filters.shelf, found=new Set(registry.matching(state.query).map(e=>e.id));
+    return {
+      built:registry.items.filter(i=>itemShelf(i)===shelf&&(found.has(i.id)||(i.entry&&match(entries.get(i.entry),state.query)))),
+      plain:data.entries.filter(e=>!part(e.id)&&shelfOf(e.kind)===shelf&&match(e,state.query))
+    };
   }
   function currentItems(state) {
-    if (state.page === 'dictionary') {
-      const s = scope(state.category) || {};
-      const matches = new Set(registry.matching(state.query).map(e=>e.id));
-      const built = registry.items.filter(e=>(matches.has(e.id)||(e.entry&&match(entries.get(e.entry),state.query)))&&builtFits(s,e)).map(implemented);
-      return [...built, ...data.entries.filter(e => !part(e.id) && fits(s, e) && match(e,state.query))];
+    const f=state.filters;
+    if (state.page==='components') return data.components.filter(e=>(!f.layer.length||f.layer.includes(e.layer))&&match(e,state.query));
+    const {built,plain}=shelfItems(state);
+    // A built part with no dictionary entry has no facets, so it shows only while nothing is pressed.
+    return [...built.filter(i=>i.entry?passes(f,entries.get(i.entry)):!active(f)).map(implemented), ...plain.filter(e=>passes(f,e))];
+  }
+  function filters(state) {
+    const f=state.filters, total=currentItems(state).length;
+    if (state.page==='components') {
+      const options=data.layers.map(l=>({key:'layer',id:l.id,name:l.name,pressed:f.layer.includes(l.id),count:data.components.filter(e=>e.layer===l.id&&match(e,state.query)).length}));
+      return views.filterBar({groups:[{key:'layer',options}],tags:options.filter(o=>o.pressed),query:state.query,total});
     }
-    return state.page==='dictionary'?[]
-      :data.components.filter(e=>(state.category==='all'||e.layer===state.category)&&match(e,state.query));
+    const {built,plain}=shelfItems(state);
+    const pool=[...built.filter(i=>i.entry).map(i=>entries.get(i.entry)),...plain];
+    const tallyBy=(skip,key)=>{ const m=new Map(); for (const e of pool) if (passes(f,e,skip)) { const k=key(e); if (k) m.set(k,(m.get(k)||0)+1); } return m; };
+    const kinds=tallyBy('kind',e=>e.kind), area=tallyBy('area',e=>e.category), codes=tallyBy('code',e=>e.category), icons=tallyBy('icon',e=>e.category==='ICO'&&e.sub);
+    const sum=cs=>cs.reduce((n,c)=>n+(area.get(c)||0),0);
+    const here=code=>inShelf.has(f.shelf+'|'+code);
+    const option=(key,id,name,count)=>({key,id,name,count,pressed:f[key].includes(id)});
+    const shelf=shelves.get(f.shelf);
+    const kindOptions=shelf.kinds.length>1?shelf.kinds.map(k=>option('kind',k,k,kinds.get(k)||0)):[];
+    const roleOptions=roles.filter(r=>r.codes.some(here)).map(r=>option('role',r.id,r.name,sum(r.codes)));
+    const placeOptions=data.places.filter(p=>p.codes.some(here)).map(p=>option('place',p.id,p.name,sum(p.codes)));
+    const iconOptions=data.iconGroups.filter(g=>inShelf.has(f.shelf+'|ICO.'+g.id)).map(g=>option('icon',g.id,g.name,icons.get(g.id)||0));
+    const codeOptions=data.categories.filter(c=>here(c.id)).map(c=>({...option('code',c.id,short(c.name),codes.get(c.id)||0),
+      children:c.id==='ICO'&&f.code.includes('ICO')&&iconOptions.length?{key:'icon',options:iconOptions}:null}));
+    const groups=[{key:'kind',options:kindOptions},{key:'role',options:roleOptions},
+      {key:'place',label:'분야',menu:true,options:placeOptions},{key:'code',label:'분류',menu:true,options:codeOptions}].filter(g=>g.options.length);
+    const tags=[...kindOptions,...roleOptions,...placeOptions,...codeOptions,...iconOptions].filter(o=>o.pressed);
+    return views.filterBar({groups,tags,query:state.query,total});
   }
   function suggestions(state,query) {
-    return state.page==='dictionary' ? currentItems({...state,category:'all',query}).slice(0,6) : data.components.filter(e=>match(e,query)).slice(0,6);
-  }
-  function categoryTitle(state) {
-    return data.layers.find(c=>c.id===state.category)?.name || '전체 계층';
-  }
-  function navLink(state,item) {
-    return '<a class="library-nav-link" href="#/'+state.page+'?category='+item.id+'"'+(state.category===item.id?' aria-current="page"':'')+'>'+escape(item.name)+'</a>';
-  }
-  function sidebar(state) {
-    if(state.page==='components') return navLink(state,{id:'all',name:'전체 계층'})+data.layers.map(l=>navLink(state,l)).join('');
-    // Column = the open shelf only: 전체, common role categories under their group heads (icons open a second level), then 쓰는 곳. The overview and search need no column.
-    const s=scope(state.category)||{};
-    if(!s.shelf||state.query) return '';
-    const leaf=(id,focus,name,count,built,sub)=>'<a class="library-nav-link dict-leaf'+(sub?' dict-sub':'')+'" href="#/dictionary?category='+id+'" data-focus="'+focus+'"'+(state.category===id?' aria-current="page"':'')+' title="'+escape(name)+'"><span>'+escape(name)+'</span>'+(built?'<i class="dict-built-dot" role="img" aria-label="구현 있음"></i>':'')+'<small>'+count+'</small></a>';
-    const head=name=>'<p class="system-nav-group dict-col-head">'+escape(name)+'</p>';
-    const icons=code=>code==='ICO'&&s.code==='ICO'?data.iconGroups.filter(i=>tally.get(s.shelf+'.ICO.'+i.id)).map(i=>leaf(s.shelf+'.ICO.'+i.id,'leaf-ICO-'+i.id,i.name,tally.get(s.shelf+'.ICO.'+i.id),false,true)).join(''):'';
-    const common=commonGroups.map(g=>[g,g.codes.filter(code=>tally.get(s.shelf+'.'+code))]).filter(([,codes])=>codes.length)
-      .map(([g,codes])=>head(groupName[g.id]||short(g.name))+codes.map(code=>leaf(s.shelf+'.'+code,'leaf-'+code,short(categoryById.get(code).name),tally.get(s.shelf+'.'+code),builtIn(s.shelf,code))+icons(code)).join('')).join('');
-    const used=data.places.filter(p=>tally.get(s.shelf+'.'+p.id));
-    return '<div class="dict-col">'+leaf(s.shelf,'leaf-'+s.shelf,'전체',tally.get(s.shelf))+common+(used.length?head('쓰는 곳')+used.map(p=>leaf(s.shelf+'.'+p.id,'place-'+p.id,p.name,tally.get(s.shelf+'.'+p.id))).join(''):'')+'</div>';
-  }
-  function heading(state,count) {
-    return '<div class="library-heading"><h2>'+escape(state.query?'“'+state.query+'”':categoryTitle(state))+'</h2><span>'+count+'</span>'+(state.query?'<button class="icon-button" data-action="clear-query" aria-label="검색 해제">'+icon('close')+'</button>':'')+'</div>';
-  }
-  function indexCard(state,item) {
-    const code=item.english;
-    return '<a class="catalog-tile category-tile" href="#/'+state.page+'?category='+item.id+'"><span class="record-code">'+code+'</span><h3>'+escape(item.name)+'</h3><span class="tile-foot">'+item.count+'개'+icon('arrow')+'</span></a>';
+    // Suggestions jump anywhere in the current tab, so pressed chips do not narrow them.
+    const whole=readFilters(state.page,new URLSearchParams(state.page==='dictionary'?'shelf='+state.filters.shelf:''));
+    return currentItems({...state,filters:whole,query}).slice(0,6);
   }
   function entryCard(state,e) {
     const label=data.layers.find(l=>l.id===e.layer).english;
@@ -110,27 +138,15 @@
     if (e.implementation) return '<div class="dict-entry is-built"><span class="dict-thumb atlas-preview" inert aria-hidden="true">'+sample(e,state.style,'thumb-'+e.id)+'</span><button class="dict-hit" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><strong>'+escape(e.name)+'</strong></button></div>';
     return '<button class="dict-entry" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(e.kind||'')+'" title="'+escape(e.name)+'"><span class="dict-thumb">'+kindSvg(e.kind)+'</span><strong>'+escape(short(e.name))+'</strong></button>';
   }
-  function dictionary(state) {
-    // Rail and column already say where you are; main carries only pictures. Search alone gets a one-line head.
-    let body;
-    if (state.category==='all'&&!state.query) {
-      body='<div class="dict-grid dict-groups dict-shelves">'+data.shelves.map(s=>'<a class="dict-card dict-group" href="#/dictionary?category='+s.id+'" data-focus="shelf-'+s.id+'" aria-label="'+escape(s.name+' — '+s.note)+'"><span class="dict-glyph">'+icon(s.icon)+'</span><strong aria-hidden="true">'+escape(s.name)+'</strong><span class="dict-note" aria-hidden="true">'+escape(s.note)+'</span><small aria-hidden="true">'+escape(s.english)+' · '+tally.get(s.id)+'</small></a>').join('')+'</div>';
-    } else {
-      const items=currentItems(state), built=items.filter(e=>e.implementation), rest=items.filter(e=>!e.implementation);
-      body=(state.query?'<div class="dict-head"><h2>“'+escape(state.query)+'”</h2><span class="dict-count">'+items.length+'</span><button class="icon-button" data-action="clear-query" aria-label="검색 해제">'+icon('close')+'</button></div>':'')+
-        (items.length?'<div class="dict-grid dict-entries">'+built.map(e=>dictEntry(state,e)).join('')+rest.slice(0,state.limit).map(e=>dictEntry(state,e)).join('')+'</div>'+(rest.length>state.limit?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+state.limit+' / '+rest.length+'</span></button></div>':'')
-        :'<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>');
-    }
-    return '<section class="atlas dict" aria-labelledby="page-title">'+body+'</section>';
-  }
+  const empty='<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary" data-action="clear-filters" data-focus="empty-clear">필터 지우기</button></div>';
+  const more=(shown,total)=>total>shown?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+shown+' / '+total+'</span></button></div>':'';
+  // The tabs and the filter bar say where you are; main carries only pictures.
   function collection(state) {
-    if (state.page === 'dictionary') return dictionary(state);
-    const index=state.category==='all'&&!state.query;
-    const items=index?data.layers:currentItems(state);
-    const intro='<div class="library-intro"><a class="library-back" href="#/dictionary">'+icon('arrow')+' 사전</a><p>버튼부터 화면까지, 부품을 크기별로 모았어요.</p></div>';
-    return '<section aria-labelledby="page-title">'+intro+heading(state,items.length)+
-      (items.length?'<div class="catalog-grid">'+(index?items.map(i=>indexCard(state,i)).join(''):items.slice(0,state.limit).map(e=>entryCard(state,e)).join(''))+'</div>':'<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>검색 결과가 없어요</h2><button class="secondary" data-action="reset">전체 보기</button></div>')+
-      (!index&&items.length>state.limit?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+Math.min(state.limit,items.length)+' / '+items.length+'</span></button></div>':'')+'</section>';
+    const items=currentItems(state);
+    if (!items.length) return '<section aria-labelledby="page-title">'+empty+'</section>';
+    if (state.page==='components') return '<section aria-labelledby="page-title"><div class="catalog-grid">'+items.slice(0,state.limit).map(e=>entryCard(state,e)).join('')+'</div>'+more(Math.min(state.limit,items.length),items.length)+'</section>';
+    const built=items.filter(e=>e.implementation), rest=items.filter(e=>!e.implementation);
+    return '<section class="atlas dict" aria-labelledby="page-title"><div class="dict-grid dict-entries">'+built.map(e=>dictEntry(state,e)).join('')+rest.slice(0,state.limit).map(e=>dictEntry(state,e)).join('')+'</div>'+more(state.limit,rest.length)+'</section>';
   }
   function detail(state) {
     const e=state.page==='dictionary'?entries.get(state.detail):components.get(state.detail);
@@ -141,8 +157,7 @@
         :'<div class="record-detail"><p class="record-kind">'+escape(category.name)+'</p><section><h3>대표 항목</h3><p>'+escape(e.examples)+'</p></section></div>');
   }
   window.Pattove.libraryUI={
-    pages,navigation,sidebar,collection,detail,currentItems,suggestions,
-    validCategory:(page,id)=>page==='dictionary'?id!=='all'&&!!scope(id):data.layers.some(c=>c.id===id),
+    pages,navigation,filters,readFilters,writeFilters,collection,detail,currentItems,suggestions,
     validDetail:(page,id)=>(page==='dictionary'?entries:components).has(id)||(page==='dictionary'&&registry.index.has(id)),
     suggestionGroup:(page,e)=>page==='dictionary'?(e.implementation?'구현 · '+e.layer:shelves.get(shelfOf(e.kind))?.name+' · '+short(categoryById.get(e.category)?.name||'')):data.layers.find(l=>l.id===e.layer).name,
     sample

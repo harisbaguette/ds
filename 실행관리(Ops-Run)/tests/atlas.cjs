@@ -10,8 +10,8 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
       const page=await browser.newPage({viewport:{width:1440,height:1080},acceptDownloads:true});page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
       await page.goto('http://127.0.0.1:4173/#/system');await page.evaluate(()=>document.fonts.ready);
       check(name+' 시작 화면은 첫 부품 한 장',await page.locator('.component-page[data-component="tokens"]').count()===1&&await page.locator('.specimen').count()===0);
-      check(name+' 옆 열에 부품별 바로가기',await page.locator('#sidebar a[href="#/system?detail=button"]').count()===1);
-      await page.locator('#sidebar a[href="#/system?detail=button"]').click();
+      check(name+' 맨 위 필터 줄에 부품별 바로가기',await page.locator('#filter-bar a[href="#/system?detail=button"]').count()===1);
+      await page.locator('#filter-bar a[href="#/system?detail=button"]').click();
       await page.locator('[data-doc-environment]').selectOption('react');
       await page.waitForFunction(()=>document.querySelector('[data-install-source]')?.textContent.includes('export default'));
       check(name+' React 설치 명령과 실제 JSX', (await page.locator('[data-install-command]').textContent()).includes('pattove-main-button-react.json')&&(await page.locator('[data-install-source]').textContent()).includes('<Button'));
@@ -21,8 +21,8 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
       const source=fs.readFileSync(path.resolve(__dirname,'../src/system/react/button.jsx'),'utf8');check(name+' 내려받은 React 부품이 정본과 일치',strFromU8(files['design/react/button.jsx'])===source);
       await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
       await page.locator('.brand').click();
-      check(name+' 사전 첫 화면은 부품·블록·템플릿 세 갈래 입구',await page.locator('.dict-group[href^="#/dictionary"]').count()===await page.evaluate(()=>Pattove.library.shelves.length));
-      await page.locator('[data-focus="shelf-part"]').click();await page.locator('[data-focus="leaf-INP"]').click();check(name+' 갈래→분류→항목으로 탐색',await page.locator('.dict-entry.is-built').count()>=1);
+      check(name+' 사전 첫 화면은 부품 탭 격자, 탭은 부품·블록·템플릿',await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1&&await page.locator('[data-focus^="tab-"]').count()===await page.evaluate(()=>Pattove.library.shelves.length)&&await page.locator('.dict-entry').count()>0);
+      await page.locator('[data-focus="menu-code"]').click();await page.locator('#facet-code [data-filter-check="code"][value="INP"]').check();await page.keyboard.press('Escape');check(name+' 탭→분류 칩→항목으로 탐색',await page.locator('.dict-entry.is-built').count()>=1);
       await page.locator('[data-library-entry="field"]').click();check(name+' 사전에서 시각 예시와 소스로 연결',await page.locator('.component-page .part-demo input').count()>=1&&await page.locator('.install-panel').count()===1);
       await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
       await page.locator('.brand').click();await page.locator('#query').fill('TOK-01');await page.locator('#query').press('Enter');

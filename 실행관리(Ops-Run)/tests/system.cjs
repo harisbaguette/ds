@@ -43,7 +43,7 @@ const fingerprint = element => {
     await page.waitForURL(/detail=button/);
     await page.reload();
     check('검색하면 첫 맞는 부품으로, 새로고침해도 유지', await page.locator('.component-page[data-component="button"]').count() === 1);
-    await page.locator('#sidebar a[href="#/system?detail=button"]').click();
+    await page.locator('#filter-bar a[href="#/system?detail=button"]').click();
     await page.locator('[data-part-option="variant"]').selectOption('outline');
     await page.locator('[data-part-option="size"]').selectOption('lg');
     check('선택한 변형과 가져갈 마크업 일치', (await page.locator('#part-source').inputValue()).includes('data-size="lg"') && await page.locator('.part-demo .ds-button').getAttribute('data-variant') === 'outline');

@@ -38,11 +38,13 @@
     if (key === 'code' && !filters.code.includes('ICO')) filters.icon = [];
     navigate({ filters, limit: 48 }, { replace: true });
   }
-  const firstChip = () => $('#filter-bar .filter-scroll [data-focus]:not([disabled])')?.focus({ preventScroll: true });
-  // The popover sits in the top layer (never clipped by the sideways-scrolling row); it opens under its chip, kept inside the screen.
+  const firstFilter = () => $('#filter-bar .filter-scroll [data-focus]')?.focus({ preventScroll: true });
+  const phone = matchMedia('(max-width: 760px)');
+  // The popover sits in the top layer (never clipped by the sideways-scrolling row); it opens under its button, kept inside the screen.
+  // On phones CSS makes it a sheet rising from the bottom, so no position is written.
   function placePanel(panel) {
-    const opener = document.querySelector(`[popovertarget="${panel.id}"]`);
-    if (!opener) return;
+    const opener = document.querySelector(`.filter-menu[popovertarget="${panel.id}"]`);
+    if (!opener || phone.matches) return panel.style.removeProperty('top'), panel.style.removeProperty('left'), panel.style.removeProperty('max-height');
     const r = opener.getBoundingClientRect(), width = panel.offsetWidth;
     panel.style.top = `${Math.round(r.bottom + 8)}px`;
     panel.style.left = `${Math.round(Math.max(16, Math.min(r.left, innerWidth - width - 16)))}px`;
@@ -65,7 +67,7 @@
     const bar = $('#filter-bar');
     bar.hidden = !html;
     if (html === filterBarHTML) return;
-    // A re-render keeps the open checklist open, scrolled and searched where it was, and the chip row where it was scrolled.
+    // A re-render keeps the open checklist open, scrolled and searched where it was, and the button row where it was scrolled.
     const open = bar.querySelector('.facet-panel:popover-open');
     const listTop = open?.querySelector('.facet-list')?.scrollTop || 0;
     const rowLeft = bar.querySelector('.filter-scroll')?.scrollLeft || 0;
@@ -73,13 +75,6 @@
     filterBarHTML = html;
     const row = bar.querySelector('.filter-scroll');
     if (row) row.scrollLeft = rowLeft;
-    // The current part's chip is brought into the row's view when it starts off-screen (phone widths), again once fonts settle its width.
-    const current = row?.querySelector('[aria-current="page"]');
-    if (current) {
-      const reveal = () => current.isConnected && current.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-      reveal();
-      document.fonts.ready.then(reveal);
-    }
     const panel = open && document.getElementById(open.id);
     if (panel) {
       panel.showPopover();
@@ -232,7 +227,7 @@
     $('#query').value = state.query;
     render(previousDetail, focus);
     renderedHash = location.hash;
-    // A new page or tab moves focus to the content; a filter change only returns to the top and leaves focus on the chip.
+    // A new page or tab moves focus to the content; a filter change only returns to the top and leaves focus where it was.
     if (previousPage !== state.page || (state.page==='system' && previousDetail!==state.detail) || (!state.detail && (previousStyle !== state.style || previousShelf !== state.filters.shelf))) {
       window.scrollTo(0, 0);
       if (!state.detail) $('#main').focus({ preventScroll: true });
@@ -264,21 +259,21 @@
     }
     else if (target.matches('a[href^="#/"]')) {
       event.preventDefault();
+      target.closest('[popover]')?.hidePopover();
       history.pushState({}, '', target.getAttribute('href'));
       renderRoute();
     } else if (data.suggestOpen) openSuggestion(data.suggestOpen);
     else if (data.libraryEntry) navigate({ detail: data.libraryEntry }, { overlay: true });
     else if (data.open) navigate({ detail: data.open, style: data.style || state.style }, { overlay: true });
     else if (target.classList.contains('filter-tag')) {
-      // A removed tag hands focus to the next tag, then 모두 지우기, then the first chip.
+      // A removed tag hands focus to the next tag, then 모두 지우기, then the first filter button.
       const keys = [...target.parentElement.querySelectorAll('[data-focus]')].map(el => el.dataset.focus), at = keys.indexOf(data.focus);
       if (data.filter) toggleFilter(...data.filter.split(/:(.*)/s, 2));
       else navigate({ query: '', limit: 48 }, { replace: true });
-      if (![...keys.slice(at + 1), ...keys.slice(0, at).reverse()].some(focusKey)) firstChip();
-    } else if (data.filter) toggleFilter(...data.filter.split(/:(.*)/s, 2));
-    else if (data.action === 'clear-filters') {
+      if (![...keys.slice(at + 1), ...keys.slice(0, at).reverse()].some(focusKey)) firstFilter();
+    } else if (data.action === 'clear-filters') {
       navigate({ filters: cleared(state.filters), query: '', limit: 48 }, { replace: true });
-      firstChip();
+      firstFilter();
     } else if (data.action === 'clear-query') navigate({ query: '', limit: 48 }, { replace: true });
     else if (data.action === 'load-more') {
       const firstNew = library.currentItems(state).filter(e=>!e.implementation)[state.limit]?.id;
@@ -297,7 +292,18 @@
     }
   });
   document.addEventListener('input', event => { if (event.target.matches('[data-facet-search]')) searchPanel(event.target); });
-  document.addEventListener('toggle', event => { if (event.target.matches?.('.facet-panel') && event.newState === 'open') placePanel(event.target); }, true);
+  // An opening list is placed, and the open part (or first ticked row) is scrolled into its view.
+  // A closing list hands focus back to its button before it hides (synchronously, so the next key already lands there).
+  document.addEventListener('beforetoggle', event => {
+    if (event.target.matches?.('.facet-panel') && event.newState === 'closed' && event.target.contains(document.activeElement))
+      $(`.filter-menu[popovertarget="${event.target.id}"]`)?.focus({ preventScroll: true });
+  }, true);
+  document.addEventListener('toggle', event => {
+    if (!event.target.matches?.('.facet-panel') || event.newState !== 'open') return;
+    placePanel(event.target);
+    event.target.querySelector('[aria-current="page"], :checked')?.scrollIntoView({ block: 'nearest' });
+  }, true);
+  phone.addEventListener('change', placeOpenPanels);
   window.addEventListener('scroll', placeOpenPanels, { passive: true });
   $('#filter-bar').addEventListener('scroll', placeOpenPanels, { passive: true, capture: true });
   $('#search-form').addEventListener('submit', event => { event.preventDefault(); submitSearch(); });

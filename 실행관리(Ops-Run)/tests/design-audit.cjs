@@ -65,7 +65,9 @@ const routes = [
             if (!textRange.getBoundingClientRect().height) continue;
             const s = getComputedStyle(el);
             const chain = []; for (let p = el; p; p = p.parentElement) chain.unshift(p);
-            const bg = chain.reduce((c, p) => over(rgb(getComputedStyle(p).backgroundColor), c), [255, 255, 255]);
+            // A pill painted by an absolutely placed ::before that spans the element (44px hit box, 36px fill) is the text's real background.
+            const fill = p => { const b = getComputedStyle(p, '::before'); return b.content !== 'none' && b.position === 'absolute' && ['width', 'borderLeftWidth', 'borderRightWidth', 'paddingLeft', 'paddingRight'].reduce((w, k) => w + parseFloat(b[k]), 0) >= p.clientWidth - 1 ? rgb(b.backgroundColor) : [0, 0, 0, 0]; };
+            const bg = chain.reduce((c, p) => over(fill(p), over(rgb(getComputedStyle(p).backgroundColor), c)), [255, 255, 255]);
             const value = contrast(over(rgb(s.color), bg), bg);
             const large = parseFloat(s.fontSize) >= 24 || (parseFloat(s.fontSize) >= 18.66 && Number(s.fontWeight) >= 700);
             measuredText++;

@@ -32,17 +32,19 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   const shown=async()=>Number((await page.locator('.filter-count').textContent()).replace(/[^0-9]/g,''));
   const noSide=async()=>await page.locator('#sidebar, .app-sidebar, #site-navigation').count()===0&&await page.locator('main').evaluate(m=>m.getBoundingClientRect().left)===0;
   await goto('components');
-  check('구성요소는 왼쪽 열 없이 계층 칩',await noSide()&&await page.locator('.chip[data-filter^="layer:"]').count()===data.layers.length&&await shown()===data.components.length);
+  const picked=async key=>{const n=page.locator('[data-focus="menu-'+key+'"] .filter-menu-num');return await n.count()?Number((await n.textContent()).replace(/[^0-9]/g,'')):0;};
+  const checked=()=>page.locator('.filter-scroll [data-filter-check]:checked').count();
+  check('구성요소는 왼쪽 열 없이 계층 버튼 하나',await noSide()&&await page.locator('.filter-scroll > .filter-menu').count()===1&&await page.locator('#facet-layer [data-filter-check="layer"]').count()===data.layers.length&&await shown()===data.components.length);
   await shot('02-components');
   for(const layer of data.layers){
-   const chip=page.locator('.chip[data-filter="layer:'+layer.id+'"]');
-   await chip.click();
-   check(layer.english+' 칩을 누르면 그 계층만',await chip.getAttribute('aria-pressed')==='true'&&await page.locator('.entry-tile').count()===Math.min(48,layer.count)&&await shown()===layer.count);
+   const box=page.locator('#facet-layer [data-filter-check="layer"][value="'+layer.id+'"]');
+   await page.locator('[data-focus="menu-layer"]').click();await box.check();await page.keyboard.press('Escape');
+   check(layer.english+' 계층을 고르면 그 계층만',await picked('layer')===1&&await page.locator('.entry-tile').count()===Math.min(48,layer.count)&&await shown()===layer.count);
    await page.locator('.entry-tile').first().click();
    check(layer.english+' 상세에 대표 항목 표시',await page.locator('.record-detail section p').count()===1);
    await close();
-   await chip.click();
-   check(layer.english+' 칩을 다시 누르면 전부',await chip.getAttribute('aria-pressed')==='false'&&await shown()===data.components.length);
+   await page.locator('[data-focus="menu-layer"]').click();await box.uncheck();await page.keyboard.press('Escape');
+   check(layer.english+' 계층을 다시 끄면 전부',await picked('layer')===0&&await shown()===data.components.length);
   }
   await page.locator('.brand').click();
   check('사전 첫 화면은 부품 탭 전체 폭 격자',await noSide()&&await page.locator('[data-focus^="tab-"]').count()===data.shelves.length&&await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1&&await page.locator('.dict-entry').count()>0);
@@ -63,28 +65,41 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    }
   }
   check('세 탭을 합치면 사전 전체와 구현 부품이 빠짐없이 들어감',shelfTotal===data.entries.length+await page.evaluate(()=>Pattove.systemRegistry.items.filter(i=>!i.entry).length));
+  // 어지러움 기준: 기준마다 이름 붙은 버튼 하나, 탭과 같은 이름 없음, 줄 높이·눈에 보이는 버튼 높이 상한.
+  const menus=()=>page.locator('.filter-scroll > .filter-menu > span:first-child').allTextContents();
+  for(const route of [...data.shelves.map(s=>'dictionary?shelf='+s.id),'components','patterns','system?detail=button']){
+   await goto(route);
+   const tab=(await page.locator('#primary-nav [aria-current="page"]').allTextContents()).join('').trim();
+   check(route+' 필터 줄에 이름 없는 값 칩 0개',await page.locator('.filter-scroll > :not(.filter-menu, .facet-panel)').count()===0&&(await menus()).every(t=>t.trim().length>0&&t.trim()!==tab));
+   const box=await page.evaluate(()=>({row:document.querySelector('.filter-row').getBoundingClientRect().height,pill:Math.max(...[...document.querySelectorAll('.filter-scroll > .filter-menu')].map(b=>parseFloat(getComputedStyle(b,'::before').height)))}));
+   check(route+' 필터 줄 높이 52 이하, 눈에 보이는 버튼 40 이하',box.row<=52&&box.pill<=40);
+  }
   await goto('dictionary?shelf=part');
-  const whole=await shown(),role=page.locator('.chip[data-filter^="role:"]:not([disabled])');
-  const firstKey=await role.first().getAttribute('data-filter'),secondKey=await role.nth(1).getAttribute('data-filter');
-  const first=page.locator('.chip[data-filter="'+firstKey+'"]'),second=page.locator('.chip[data-filter="'+secondKey+'"]');
-  await first.click();const one=await shown();
-  check('칩을 누르면 개수가 줄고 이름표가 생김',one<whole&&await first.getAttribute('aria-pressed')==='true'&&await page.locator('.filter-tag[data-filter="'+firstKey+'"]').count()===1);
-  await second.click();const two=await shown();
-  check('칩 여러 개를 함께 켜면 합쳐서 보여줌',two>one&&two<=whole&&await page.locator('.chip[aria-pressed="true"]').count()===2);
+  const kindNames=await page.locator('#facet-kind .facet-option span').allTextContents();
+  check('부품 탭 필터 줄에 부품 버튼·값 없음, 종류 안에서 낱개 부품',JSON.stringify(await menus())==='["종류","영역","분야","분류"]'&&kindNames.includes('낱개 부품')&&!kindNames.includes('부품'));
+  const whole=await shown(),roleMenu=page.locator('[data-focus="menu-role"]'),role=page.locator('#facet-role [data-filter-check="role"]:not([disabled])');
+  const firstKey=await role.first().getAttribute('value'),secondKey=await role.nth(1).getAttribute('value');
+  const first=page.locator('#facet-role [value="'+firstKey+'"]'),second=page.locator('#facet-role [value="'+secondKey+'"]');
+  await roleMenu.click();await first.check();const one=await shown();
+  check('영역에서 하나 고르면 개수가 줄고 버튼이 영역 · 1, 이름표가 생김',one<whole&&await picked('role')===1&&(await roleMenu.locator('.filter-menu-num').textContent()).startsWith('· ')&&await roleMenu.evaluate(b=>b.classList.contains('is-on'))&&await page.locator('.filter-tag[data-filter="role:'+firstKey+'"]').count()===1);
+  await second.check();const two=await shown();
+  check('여러 개를 함께 켜면 합쳐서 보여주고 버튼은 · 2',two>one&&two<=whole&&await picked('role')===2);
   await page.reload();
-  check('켠 칩과 개수 새로고침 유지',await shown()===two&&await page.locator('.chip[aria-pressed="true"]').count()===2);
+  check('고른 값과 개수 새로고침 유지',await shown()===two&&await checked()===2);
   await page.locator('[data-action="clear-filters"]').first().click();
-  check('모두 지우기로 전부 복귀',await shown()===whole&&await page.locator('.chip[aria-pressed="true"]').count()===0&&await page.locator('.filter-tag').count()===0);
-  await first.focus();await page.keyboard.press('Space');
-  check('키보드 스페이스로 칩 켜기',await shown()===one&&await page.locator('.chip[aria-pressed="true"]').count()===1);
-  await page.keyboard.press('Enter');
-  check('키보드 엔터로 칩 끄기, 초점은 칩에 남음',await shown()===whole&&await page.evaluate(()=>document.activeElement.classList.contains('chip')));
+  check('모두 지우기로 전부 복귀, 이름표 줄도 사라짐',await shown()===whole&&await checked()===0&&await page.locator('.filter-tags').count()===0&&await picked('role')===0);
+  await roleMenu.focus();await page.keyboard.press('Enter');await first.focus();await page.keyboard.press('Space');
+  check('키보드로 목록을 열고 스페이스로 켜기',await shown()===one&&await checked()===1);
+  await page.keyboard.press('Space');
+  check('스페이스로 다시 끄기, 초점은 체크 칸에 남음',await shown()===whole&&await page.evaluate(()=>document.activeElement.matches('[data-filter-check]')));
+  await page.keyboard.press('Escape');
+  check('Esc로 영역 목록 닫기',await page.locator('.facet-panel:popover-open').count()===0);
   await page.locator('[data-focus="menu-code"]').focus();await page.keyboard.press('Enter');
   check('분류는 자기 검색이 있는 체크 목록으로 열림',await page.locator('#facet-code:popover-open .facet-search').count()===1);
   await page.locator('#facet-code .facet-search').fill('아이콘');
   check('분류 목록 안에서 찾기',await page.locator('#facet-code .facet-option:not([hidden])').count()>=1&&await page.locator('#facet-code .facet-option:not([hidden])').count()<await page.locator('#facet-code .facet-option').count());
   await page.locator('#facet-code [data-filter-check="code"][value="ICO"]').check();
-  check('아이콘을 고르면 안쪽 분류가 목록에 열리고 목록은 열린 채',await page.locator('#facet-code:popover-open').count()===1&&await page.locator('#facet-code .facet-option.is-nested').count()===data.iconGroups.length&&await page.locator('[data-focus="menu-code"] .chip-num').textContent()==='1');
+  check('아이콘을 고르면 안쪽 분류가 목록에 열리고 목록은 열린 채',await page.locator('#facet-code:popover-open').count()===1&&await page.locator('#facet-code .facet-option.is-nested').count()===data.iconGroups.length&&await page.locator('[data-focus="menu-code"] .filter-menu-num').count()===1&&await picked('code')===1);
   await page.locator('#facet-code [data-filter-check="icon"][value="move"]').check();
   const move=data.entries.filter(e=>e.sub==='move').length;
   check('아이콘 안쪽 분류로 좁히기',await page.locator('.dict-entry').count()===move&&(await itemsOf('shelf=part&code=ICO&icon=move')).length===move);
@@ -127,10 +142,13 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
     await page.locator('[data-focus="tab-part"]').click();
     await page.locator('[data-focus="menu-code"]').click();
     await page.locator('#facet-code [data-filter-check="code"][value="TOK"]').check();
-    check(width+' 모바일 분류 목록이 화면 안에 열리고 고른 분류가 이름표로',await page.locator('#facet-code').evaluate(p=>{const r=p.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth;})&&await page.locator('.filter-tag[data-filter="code:TOK"]').count()===1);
+    check(width+' 모바일 분류 목록이 아래 시트로 화면 안에 열리고 고른 분류가 이름표로',await page.locator('#facet-code').evaluate(p=>{const r=p.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight;})&&await page.locator('.filter-tag[data-filter="code:TOK"]').count()===1);
     await page.keyboard.press('Escape');
     await goto('system?detail=button');await page.evaluate(()=>document.fonts.ready);
-    check(width+' 부품 화면에서 지금 부품 칩이 필터 줄 안에 보임',await page.evaluate(()=>{const row=document.querySelector('#filter-bar .filter-scroll'),c=row.querySelector('[aria-current="page"]').getBoundingClientRect(),b=row.getBoundingClientRect();return c.left>=b.left&&c.right<=b.right;}));
+    check(width+' 부품 화면에서 부품 버튼이 지금 부품 이름을 보여주고 필터 줄 안에 보임',(await page.locator('[data-focus="menu-part"] .filter-menu-value').textContent())==='버튼'&&await page.evaluate(()=>{const row=document.querySelector('#filter-bar .filter-scroll'),c=row.querySelector('[data-focus="menu-part"]').getBoundingClientRect(),b=row.getBoundingClientRect();return c.left>=b.left&&c.right<=b.right;}));
+    await page.locator('[data-focus="menu-part"]').click();
+    check(width+' 부품 고르기 시트가 화면 안에 열리고 지금 부품이 보임',await page.locator('#facet-part').evaluate(p=>{const r=p.getBoundingClientRect(),c=p.querySelector('[aria-current="page"]').getBoundingClientRect();return r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight&&c.top>=r.top&&c.bottom<=r.bottom;}));
+    await page.keyboard.press('Escape');
    }
   }
   check('브라우저 오류 없음',errors.length===0);

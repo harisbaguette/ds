@@ -113,42 +113,56 @@ h3 { font-size: 15px; font-weight: 550; }
 /* Frame: one top bar (logo · 부품/블록/템플릿/스타일 tabs · search), the filter row under it, then the grid at full width. */
 html { scroll-padding-top: var(--chrome-bottom, 16px); }
 .app-header { position: sticky; top: 0; z-index: 12; border-bottom: 1px solid var(--p-line); background: var(--p-bg); }
-.app-bar { display: flex; align-items: center; gap: 16px; padding: 12px 40px; }
-.brand { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; border-radius: var(--p-control-radius); }
+.app-bar { display: flex; align-items: center; gap: 24px; padding: 10px 40px 6px; }
+.brand { display: grid; place-items: center; width: 44px; height: 44px; flex-shrink: 0; margin-right: -8px; border-radius: var(--p-control-radius); }
 .brand img { width: 32px; height: 32px; }
-.primary-nav { display: flex; gap: 4px; flex-shrink: 0; padding: 5px; border-radius: var(--p-control-radius); background: var(--p-bg); box-shadow: var(--p-inset); }
-.primary-nav a { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 12px; color: var(--p-muted); font-size: 14px; font-weight: 600; white-space: nowrap; }
-.primary-nav a .ui-icon { width: 18px; height: 18px; }
-.primary-nav a:hover { color: var(--p-ink); background: var(--p-surface); }
-.primary-nav a[aria-current='page'] { background: var(--p-accent); color: var(--p-on-accent); }
+/* Tabs and filter buttons keep a 44px hit area but draw a lighter 36px pill inside it; the focus ring hugs the pill. */
+.primary-nav { display: flex; gap: 2px; flex-shrink: 0; }
+:is(.primary-nav a, .filter-menu) { position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 600; white-space: nowrap; }
+:is(.primary-nav a, .filter-menu)::before { content: ''; position: absolute; inset: 4px 0; z-index: -1; border-radius: 999px; }
+:is(.primary-nav a, .filter-menu):focus-visible { outline: none; }
+:is(.primary-nav a, .filter-menu):focus-visible::before { outline: 3px solid var(--p-highlight); outline-offset: 2px; }
+.primary-nav a { color: var(--p-muted); }
+.primary-nav a .ui-icon { width: 16px; height: 16px; }
+.primary-nav a:hover { color: var(--p-ink); }
+.primary-nav a:hover::before { background: var(--p-surface); }
+.primary-nav a[aria-current='page'] { color: var(--p-on-accent); }
+.primary-nav a[aria-current='page']::before { background: var(--p-accent); }
 .header-context { height: 0; }
-.search-area { position: relative; flex: 1; min-width: 0; max-width: 560px; margin-left: auto; }
-/* Chips: no 전체 item — nothing pressed shows everything; pressed chips go dark like the selected tab. */
-.filter-bar { padding: 0 40px 12px; }
-.filter-row { display: flex; align-items: center; gap: 16px; }
-.filter-scroll { display: flex; flex: 1; min-width: 0; gap: 8px; margin: -6px; padding: 6px; overflow-x: auto; scroll-padding-inline: 16px; scrollbar-width: none; }
+.search-area { position: relative; flex: 1; min-width: 0; max-width: 480px; }
+/* Filter row: one named button per criterion, the result count right after it. Nothing ticked shows everything. */
+.filter-bar { padding: 0 40px 8px; }
+.filter-row { display: flex; align-items: center; gap: 12px; }
+.filter-scroll { display: flex; flex: 0 1 auto; min-width: 0; gap: 8px; margin: -6px; padding: 6px; overflow-x: auto; scrollbar-width: none; }
 .filter-scroll::-webkit-scrollbar { display: none; }
-.filter-count { flex-shrink: 0; margin-left: auto; color: var(--p-muted); font-size: 14px; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.chip { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 16px; border: 1px solid var(--p-line); border-radius: 14px; background: var(--p-high); color: var(--p-ink); font-size: 14px; font-weight: 550; white-space: nowrap; }
-.chip:hover { border-color: var(--p-control-border); }
-.chip[aria-pressed='true'], .chip.is-on, .chip[aria-current='page'] { border-color: var(--p-accent); background: var(--p-accent); color: var(--p-on-accent); }
-.chip:disabled { border-color: var(--p-disabled); background: var(--p-bg); color: var(--p-muted); cursor: default; }
-.chip .ui-icon { width: 16px; height: 16px; margin-right: -4px; transition: transform var(--p-duration); }
-.chip-menu:has(+ .facet-panel:popover-open) .ui-icon { transform: rotate(180deg); }
-.chip-num { min-width: 20px; padding: 0 6px; border-radius: 10px; background: var(--p-on-accent); color: var(--p-accent); font-size: 12px; line-height: 20px; text-align: center; }
-/* Long lists (분야, 분류) open as a checklist with its own search; JS places it under its chip. */
+.filter-count { flex-shrink: 0; color: var(--p-muted); font-size: 13px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.filter-menu { flex: 0 0 auto; padding: 0 12px 0 14px; color: var(--p-ink); font-weight: 550; }
+.filter-menu::before { border: 1px solid var(--p-line); background: var(--p-high); }
+.filter-menu:hover::before { border-color: var(--p-control-border); }
+.filter-menu.is-on { color: var(--p-on-accent); }
+.filter-menu.is-on::before { border-color: var(--p-accent); background: var(--p-accent); }
+.filter-menu-value { font-weight: 700; }
+.filter-menu .ui-icon { width: 16px; height: 16px; margin-left: -2px; transition: transform var(--p-duration); }
+.filter-menu:has(+ .facet-panel:popover-open) .ui-icon { transform: rotate(180deg); }
+/* Each button's checklist (with its own search past 12 rows); JS places it under its button. */
 .facet-panel { position: fixed; inset: auto; margin: 0; width: min(360px, calc(100vw - 32px)); max-height: 60vh; padding: 8px; border: 1px solid var(--p-line); border-radius: 18px; background: var(--p-high); color: var(--p-ink); box-shadow: var(--p-float); }
 .facet-panel:popover-open { display: flex; flex-direction: column; }
+.facet-head { display: none; }
 .facet-search { flex-shrink: 0; height: 44px; margin-bottom: 8px; padding: 0 14px; border: 1px solid var(--p-control-border); border-radius: 12px; background: var(--p-bg); font-size: 16px; }
 .facet-list { display: grid; gap: 2px; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
 .facet-option { display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border-radius: 12px; font-size: 14px; cursor: pointer; }
 .facet-option:hover { background: var(--p-surface); }
+.facet-option[aria-current='page'] { font-weight: 700; }
+.facet-option .ui-icon { width: 18px; height: 18px; margin-left: auto; }
 .facet-option input { width: 18px; height: 18px; flex-shrink: 0; margin: 0; accent-color: var(--p-accent); }
 .facet-option small { margin-left: auto; color: var(--p-muted); font-size: 12px; font-variant-numeric: tabular-nums; }
 .facet-option:has(input:disabled) { color: var(--p-muted); cursor: default; }
 .facet-option.is-nested { padding-left: 42px; }
-.filter-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
-.filter-tag { display: inline-flex; align-items: center; gap: 4px; padding: 0 10px 0 14px; border-radius: 12px; background: var(--p-surface); color: var(--p-ink); font-size: 13px; }
+.filter-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 0 6px; }
+.filter-tag { position: relative; isolation: isolate; display: inline-flex; align-items: center; gap: 4px; min-height: 44px; padding: 0 10px 0 14px; border-radius: 999px; color: var(--p-ink); font-size: 13px; }
+.filter-tag::before { content: ''; position: absolute; inset: 7px 0; z-index: -1; border-radius: 999px; background: var(--p-surface); }
+.filter-tag:focus-visible { outline: none; }
+.filter-tag:focus-visible::before { outline: 3px solid var(--p-highlight); outline-offset: 2px; }
 .filter-tag .ui-icon { width: 14px; height: 14px; color: var(--p-muted); }
 .filter-tag:hover .ui-icon { color: var(--p-ink); }
 .filter-clear { padding: 0 8px; color: var(--p-muted); font-size: 13px; text-decoration: underline; text-underline-offset: 3px; }
@@ -156,14 +170,22 @@ html { scroll-padding-top: var(--chrome-bottom, 16px); }
 main { min-width: 0; padding: 24px 40px 80px; }
 @media (max-width: 760px) {
   .app-header { position: static; }
-  .app-bar { flex-wrap: wrap; gap: 8px; padding: 8px 16px; }
+  .app-bar { flex-wrap: wrap; gap: 8px; padding: 8px 16px 4px; }
+  .brand { margin-right: 0; }
   .brand img { width: 28px; height: 28px; }
   .primary-nav { flex: 1; min-width: 0; }
   .primary-nav a { flex: 1; padding: 0 8px; }
   .primary-nav a .ui-icon { display: none; }
   .search-area { flex-basis: 100%; max-width: none; margin: 0; }
-  .filter-bar { padding: 0 16px 10px; }
-  .filter-row { gap: 12px; }
+  .filter-bar { padding: 0 16px 8px; }
+  /* The row fades at its right edge to show it slides sideways. */
+  .filter-scroll { gap: 6px; mask-image: linear-gradient(to right, #000 calc(100% - 20px), transparent); }
+  .filter-menu { padding: 0 10px 0 12px; }
+  /* On phones a list rises from the bottom as a sheet with its own title and close button. */
+  .facet-panel { inset: auto 0 0; width: 100%; max-height: 75vh; padding: 4px 16px calc(16px + env(safe-area-inset-bottom)); border-width: 1px 0 0; border-radius: 20px 20px 0 0; }
+  .facet-panel::backdrop { background: var(--backdrop); }
+  .facet-head { display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; min-height: 52px; font-size: 16px; }
+  .facet-close { display: grid; place-items: center; width: 44px; height: 44px; margin-right: -12px; color: var(--p-muted); }
   main { padding: 16px 16px 48px; }
 }
 

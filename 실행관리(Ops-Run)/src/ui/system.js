@@ -1,11 +1,14 @@
 ﻿(() => {
   const { parts: p, systemRegistry: r } = window.Pattove;
   const e = p.esc;
-  // Part links sit in the filter row under the header, smallest layer first; the open part is dark like a pressed chip.
+  // The built parts sit behind one '부품 ▾' button in the filter row that names the open part; its list runs smallest layer first.
   function partLinks(state) {
     const order = ['Token','Primitive','Atom','Molecule','Module','Template','Page'];
     const items = [...r.items].sort((x, y) => order.indexOf(x.layer) - order.indexOf(y.layer));
-    return '<div class="filter-row"><nav class="filter-scroll" aria-label="부품 목록">'+items.map(item=>'<a class="chip" href="#/system?detail='+item.id+'" data-focus="part-'+item.id+'"'+(state.detail===item.id?' aria-current="page"':'')+'>'+e(item.name)+'</a>').join('')+'</nav></div>';
+    const { facetPanel } = window.Pattove.views, { icon } = window.Pattove.previews, current = r.index.get(state.detail);
+    const rows = '<nav class="facet-list" aria-label="부품 목록">'+items.map(item=>'<a class="facet-option" href="#/system?detail='+item.id+'" data-focus="part-'+item.id+'" data-facet-name="'+e(item.name.toLocaleLowerCase())+'"'+(state.detail===item.id?' aria-current="page"':'')+'><span>'+e(item.name)+'</span>'+(state.detail===item.id?icon('check'):'')+'</a>').join('')+'</nav>';
+    return '<div class="filter-row"><div class="filter-scroll"><button type="button" class="filter-menu" popovertarget="facet-part" data-focus="menu-part"'+(current?' aria-label="부품 고르기: '+e(current.name)+'"><span class="filter-menu-value">'+e(current.name)+'</span>':'><span>부품 고르기</span>')+icon('chevron-down')+'</button>'
+      +facetPanel('facet-part', '부품 고르기', rows, items.length > 12)+'</div></div>';
   }
   function itemMarkup(state, options = {}) {
     const content = p.renderItem(state.detail, undefined, r.normalizeOptions(state.detail, { ...state.options, ...options }));

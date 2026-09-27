@@ -33,8 +33,13 @@
 @media(prefers-reduced-transparency:reduce) { .ds .ds-surface[data-material="glass"] { background:var(--ds-high); backdrop-filter:none; } }
 @media(prefers-reduced-motion:reduce) { .ds * { transition:none!important; animation:none!important; } }
 /* @part tokens */
-.ds .ds-token-example h2 { font-size:var(--ds-text-lg); margin-block:var(--ds-space-4); }
-.ds .ds-color-example { display:block; width:80px; height:80px; border-radius:var(--ds-radius); background:var(--ds-accent); box-shadow:var(--ds-shadow); }
+.ds .ds-token-example { display:grid; gap:16px; justify-items:start; }
+.ds .ds-token-swatches { display:flex; gap:8px; }
+.ds .ds-token-swatches i { width:44px; height:44px; border-radius:12px; border:1px solid var(--ds-border); background:var(--ds-accent); }
+.ds .ds-token-swatches [data-token="high"] { background:var(--ds-high); }
+.ds .ds-token-swatches [data-token="soft"] { background:var(--ds-soft); }
+.ds .ds-token-swatches [data-token="text"] { background:var(--ds-text); }
+.ds .ds-token-type { font:600 38px var(--ds-display-font); letter-spacing:-.05em; color:var(--ds-text); }
 /* @part divider */
 .ds .ds-divider { border:0; border-top:1px solid var(--ds-border); margin:0; width:100%; }
 /* @part status-dot */

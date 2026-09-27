@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const port = Number(process.env.PORT || 4173);
-const types = { '.html': 'text/html', '.json': 'application/json', '.jsx': 'text/plain', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.md': 'text/plain', '.pdf': 'application/pdf', '.zip': 'application/zip', '.woff2': 'font/woff2' };
+const types = { '.html': 'text/html', '.json': 'application/json', '.jsx': 'text/plain', '.css': 'text/css', '.js': 'text/javascript', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.md': 'text/plain', '.pdf': 'application/pdf', '.woff2': 'font/woff2' };
 const publicRoots = ['assets', 'src', '문서', '시안', '영감보관함'].map(folder => path.join(root, folder));
 const evidenceRoot = path.join(root, 'test-results');
 const escape = value => value.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

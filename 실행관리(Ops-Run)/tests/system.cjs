@@ -3,6 +3,7 @@ const { pathToFileURL } = require('node:url');
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
+const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const url = pathToFileURL(path.join(root, 'index.html')).href;
 const output = path.join(root, 'test-results/system');
@@ -21,7 +22,7 @@ const fingerprint = element => {
 (async () => {
   const browser = await chromium.launch({ headless: true });
   try {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, acceptDownloads: true });
+    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
     const page = await context.newPage();
     page.setDefaultTimeout(7000);
     page.on('pageerror', error => errors.push(error.message));
@@ -33,11 +34,14 @@ const fingerprint = element => {
     check('18개 대표 구현과 8개 역할', await page.evaluate(() => Pattove.systemRegistry.items.length === 18 && new Set([...Pattove.systemRegistry.items, ...Pattove.systemRegistry.patterns].map(i=>i.layer)).size === 8));
     check('의존 관계는 존재하는 구현을 참조', await page.evaluate(() => Pattove.systemRegistry.items.every(item => item.deps.every(id=>Pattove.systemRegistry.index.has(id)))));
     const sourceBlocks = Object.fromEntries([...fs.readFileSync(path.join(root,'src/system/parts.css'),'utf8').matchAll(/\/\* @part ([\w-]+) \*\/([\s\S]*?)(?=\/\* @part |$)/g)].map(match=>[match[1],match[2].trim()]));
-    check('내보내기 CSS 생성본이 공용 원본과 일치', await page.evaluate(expected=>JSON.stringify(Pattove.systemSource)===JSON.stringify(expected),sourceBlocks));
+    const generated = { window: { Pattove: {} } };
+    vm.runInNewContext(fs.readFileSync(path.join(root,'src/data/system-source.js'),'utf8'), generated);
+    check('공용 CSS 생성본이 원본과 일치', JSON.stringify(generated.window.Pattove.systemSource)===JSON.stringify(sourceBlocks));
     check('사전 연결 무결성', await page.evaluate(() => Pattove.systemRegistry.items.every(item => !item.entry || Pattove.library.entries.some(e=>e.id===item.entry))));
     await inspect(page, 'main', 'button');
     check('크기와 상태는 버튼의 변형', await page.locator('[data-part-option="size"]').count() === 1 && await page.locator('[data-part-option="state"]').count() === 1);
     await page.screenshot({ path: path.join(output, 'button.png') });
+    await page.locator('#search-open').click();
     await page.locator('#query').fill('버튼');
     await page.locator('#query').press('Enter');
     await page.waitForURL(/detail=button/);
@@ -47,7 +51,8 @@ const fingerprint = element => {
     await page.locator('#facet-part a[href="#/system?detail=button"]').click();
     await page.locator('[data-part-option="variant"]').selectOption('outline');
     await page.locator('[data-part-option="size"]').selectOption('lg');
-    check('선택한 변형과 가져갈 마크업 일치', (await page.locator('#part-source').inputValue()).includes('data-size="lg"') && await page.locator('.part-demo .ds-button').getAttribute('data-variant') === 'outline');
+    check('고른 변형이 미리보기에 바로 반영', await page.locator('.part-demo .ds-button').getAttribute('data-size') === 'lg' && await page.locator('.part-demo .ds-button').getAttribute('data-variant') === 'outline');
+    check('부품 화면에는 그림만: 설치·코드·내려받기 칸 없음', await page.locator('[data-system-download],.install-panel,[data-doc-tab],[data-doc-environment],#part-source,.component-code,#component-usage').count() === 0 && !(await page.locator('main').innerText()).toLowerCase().includes('shadcn'));
     await inspect(page, 'main', 'search-module');
     const demo = page.locator('.part-demo');
     await demo.locator('[name="query"]').fill('없는이름');
@@ -80,54 +85,6 @@ const fingerprint = element => {
     await inspect(page,'main','feedback');
     await demo.locator('[data-part-action="notify"]').click();
     check('알림 실제 표시', await demo.locator('[data-part-feedback]').isVisible());
-    const styles = await page.evaluate(()=>Pattove.catalog.styles.filter(s=>s.id!=='base').map(s=>s.id));
-    const standalone = await context.newPage();
-    standalone.on('pageerror', error => errors.push(error.message));
-    const externalRequests=[];
-    standalone.on('request', request=>{if(/^https?:/.test(request.url())) externalRequests.push(request.url());});
-    for (const style of styles) {
-      await inspect(page, style, 'button');
-      const original = await demo.locator('.ds-button').evaluate(fingerprint);
-      const downloadEvent = page.waitForEvent('download');
-      await page.locator('[data-system-download]').click();
-      const download = await downloadEvent;
-      const file = path.join(output,download.suggestedFilename());
-      await download.saveAs(file);
-      await standalone.goto(pathToFileURL(file).href);
-      await standalone.evaluate(()=>document.fonts.ready);
-      check(style+' 단독 HTML 표현 동일', JSON.stringify(await standalone.locator('.ds-button').evaluate(fingerprint)) === JSON.stringify(original));
-      check(style+' 외부 앱 없이 글꼴 포함', await standalone.evaluate(()=>document.fonts.check('16px Pretendard')));
-      const html=fs.readFileSync(file,'utf8');
-      check(style+' 관련 없는 모듈 소스 미포함', !html.includes('.ds-search-module {'));
-    }
-    for (const id of ['page','checkbox','radio','switch','input','tabs']) {
-      await inspect(page,'main',id);
-      const pending=page.waitForEvent('download'); await page.locator('[data-system-download]').click();
-      const download=await pending; const file=path.join(output,download.suggestedFilename());await download.saveAs(file);
-      await standalone.goto(pathToFileURL(file).href);
-      check(id+' 단독 HTML 마운트', await standalone.locator('.ds').count()===1);
-      if(id==='page') {
-        await standalone.locator('[name="query"]').fill('없는이름'); await standalone.locator('button[type="submit"]').click();
-        check('내보낸 화면에서도 검색·빈 결과 동작', await standalone.locator('.ds-empty').isVisible());
-        await standalone.locator('[data-part-action="reset-search"]').click();
-        check('내보낸 화면 복구', await standalone.locator('[data-result]:visible').count()===3);
-        await standalone.setViewportSize({width:320,height:800});
-        check('내보낸 화면 320px 넘침 없음', await standalone.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-      }
-    }
-    await inspect(page,'main','icon');
-    await page.locator('[data-part-option="icon"]').selectOption('bookmark');
-    const svgEvent=page.waitForEvent('download');await page.locator('[data-system-download]').click();
-    const svgDownload=await svgEvent;const svgFile=path.join(output,svgDownload.suggestedFilename());await svgDownload.saveAs(svgFile);
-    check('아이콘은 독립 SVG로 가져오기', svgFile.endsWith('bookmark.svg') && fs.readFileSync(svgFile,'utf8').includes('xmlns="http://www.w3.org/2000/svg"') && fs.statSync(svgFile).size<2000);
-    check('내보낸 파일의 네트워크 의존 없음', externalRequests.length===0);
-    const staticContext = await browser.newContext({ javaScriptEnabled: false });
-    const staticPage = await staticContext.newPage();
-    await staticPage.goto(pathToFileURL(path.join(output,'pattove-main-checkbox.html')).href);
-    check('JavaScript 없는 HTML에서도 기본 표현과 입력 유지', await staticPage.locator('input[type="checkbox"]').isChecked());
-    await staticPage.locator('input').uncheck();
-    check('JavaScript 없는 네이티브 체크 조작', !await staticPage.locator('input').isChecked());
-    await staticContext.close();
     for(const width of [320,375,768,1440]) {
       await page.setViewportSize({width,height:1000});
       for(const style of ['main']) {

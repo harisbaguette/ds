@@ -70,7 +70,7 @@
       checkbox: () => choice({ label: '링크로 공유', checked: options.state !== 'unchecked', disabled: options.state === 'disabled', indeterminate: options.state === 'indeterminate' }),
       radio: () => `<fieldset class="ds-radio-group"><legend>공개 범위</legend>${choice({kind:'radio',label:'나만 보기',checked:options.state !== 'unchecked',disabled:options.state === 'disabled',name:prefix+'-visibility'})}${choice({kind:'radio',label:'링크로 공유',disabled:options.state === 'disabled',name:prefix+'-visibility'})}</fieldset>`,
       switch: () => choice({ kind: 'switch', label: '알림 받기', checked: options.state !== 'unchecked', disabled: options.state === 'disabled' }),
-      tokens: () => '<div class="ds-token-example"><span class="ds-color-example"></span><p>배경 · 본문 · 강조</p><h2>같은 기준으로 만듭니다.</h2><p>토큰을 바꾸면 연결된 부품이 함께 바뀝니다.</p></div>',
+      tokens: () => '<div class="ds-token-example"><span class="ds-token-swatches">'+['accent','high','soft','text'].map(t=>'<i data-token="'+t+'"></i>').join('')+'</span><strong class="ds-token-type">Aa 가나</strong></div>',
       icon: () => icon(options.icon || 'search'), divider, 'status-dot': statusDot,
       button: () => button({ variant: options.variant, size: options.size, state: options.state, iconName: options.icon || (options.iconOnly === 'true' ? 'search' : ''), iconOnly: options.iconOnly === 'true' }),
       input: () => `<label class="ds-field" for="${prefix}-input">이름${input({ id: prefix + '-input', disabled: options.state === 'disabled', type: options.type || 'text' })}</label>`,

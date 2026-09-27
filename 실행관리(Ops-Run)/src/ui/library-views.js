@@ -35,8 +35,7 @@
   const kindSvg=kind=>'<svg viewBox="0 0 120 72" class="dict-kind-art" aria-hidden="true" data-src="self:diagram">'+(kindArt[kind]||kindArt.모듈)+'</svg>';
   function sample(item, style = 'main', prefix = 'atlas') {
     const p = window.Pattove.parts;
-    const body = item.id === 'tokens' ? '<div class="atlas-colors"><i></i><i></i><i></i><i></i></div><strong class="atlas-type">Aa 가나</strong>'
-      : item.id === 'button' ? p.button({label:'계속하기'}) + p.button({label:'취소',variant:'outline'}) + p.button({label:'검색',iconName:'search',iconOnly:true})
+    const body = item.id === 'button' ? p.button({label:'계속하기'}) + p.button({label:'취소',variant:'outline'}) + p.button({label:'검색',iconName:'search',iconOnly:true})
       : item.id === 'icon' ? ['search','arrow','bookmark','grid','close','check','folder','bell'].map(p.icon).join('')
       : item.id === 'input' ? '<label class="ds-field">이름'+p.input({id:prefix,placeholder:'이름을 입력하세요'})+'</label>'
       : p.renderItem(item.id, prefix);

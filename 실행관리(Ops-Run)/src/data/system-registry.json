@@ -1,11 +1,10 @@
 {
   "version": "0.3.0",
-  "revision": "a2ee5817b883ee73d6f0e0ed6042bd5a2ddc013e96e49f34a5a28dfdac986376",
+  "revision": "a7ebf8822cb95e0bdac93093370c83afa70652e87370048269fcd6f48ee30606",
   "sources": [
     "src/system/parts.js",
     "src/system/parts.css",
     "src/system/behaviors.js",
-    "src/system/export.js",
     "src/system/registry.js",
     "src/data/catalog.js",
     "src/styles/tokens.css",

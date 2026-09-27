@@ -9,7 +9,7 @@
   const styleKey = 'pattove-style';
   const storedStyle = (() => { try { return localStorage.getItem(styleKey); } catch { return null; } })();
   const state = {
-    page: 'styles', filters: {}, query: '', style: validStyle(storedStyle) ? storedStyle : 'main', detail: null, options: {}, environment: 'html', previewTab: 'preview', section: '', limit: 48
+    page: 'styles', filters: {}, query: '', style: validStyle(storedStyle) ? storedStyle : 'main', detail: null, options: {}, section: '', limit: 48
   };
   let lastOpener = null;
   let renderedHash = '';
@@ -93,8 +93,6 @@
     if (['dictionary', 'components'].includes(next.page) && next.limit > 48) params.set('shown', next.limit);
     if (next.detail) params.set('detail', next.detail);
     if (next.page === 'system' && next.detail) {
-      if (next.environment === 'react') params.set('env', 'react');
-      if (next.previewTab === 'code') params.set('view', 'code');
       if (next.section) params.set('section', next.section);
       const defaults = systemRegistry.normalizeOptions(next.detail);
       for (const [key, value] of Object.entries(systemRegistry.normalizeOptions(next.detail, next.options))) if (value !== defaults[key]) params.set('option-' + key, value);
@@ -115,8 +113,6 @@
     state.detail = (state.page === 'system' ? systemRegistry.index.has(params.get('detail')) : isCollection() ? library.validDetail(state.page, params.get('detail')) : state.page === 'patterns' && validPattern(params.get('detail'))) ? params.get('detail') : null;
     if (state.page === 'system' && !state.detail) { state.detail = (systemRegistry.matching(state.query)[0] || systemRegistry.items[0]).id; state.query = ''; }
     state.options = state.page === 'system' && state.detail ? systemRegistry.normalizeOptions(state.detail, Object.fromEntries([...params].filter(([key]) => key.startsWith('option-')).map(([key,value]) => [key.slice(7),value]))) : {};
-    state.environment = params.get('env') === 'react' ? 'react' : 'html';
-    state.previewTab = params.get('view') === 'code' ? 'code' : 'preview';
     if (state.page === 'dictionary' && state.detail) {
       const implementation = systemRegistry.index.get(state.detail) || systemRegistry.items.find(i=>i.entry===state.detail);
       if (implementation) { state.page='system'; state.detail=implementation.id; state.filters={}; state.options=systemRegistry.normalizeOptions(implementation.id); }
@@ -188,7 +184,7 @@
     $('#query').setAttribute('aria-label', $('#query').placeholder);
     if (document.activeElement !== $('#query')) $('#query').value = state.query;
     $('#clear-search').hidden = !$('#query').value;
-    const nextMainKey = JSON.stringify([state.page, state.style, state.filters, state.query, state.limit, state.page==='system'?[state.detail,state.options]:null, state.environment, state.previewTab]);
+    const nextMainKey = JSON.stringify([state.page, state.style, state.filters, state.query, state.limit, state.page==='system'?[state.detail,state.options]:null]);
     if (mainRenderKey !== nextMainKey) {
       $('#main').innerHTML = state.page === 'styles' ? views.styleGrid(state) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
       mainRenderKey = nextMainKey;
@@ -245,13 +241,9 @@
     const data = target.dataset;
     if (target.matches('a') && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return;
     if (target.classList.contains('skip-link')) { event.preventDefault(); $('#main').focus(); return; }
-    if (data.docTab) {
-      navigate({previewTab:data.docTab, section:''}, {replace:true});
-    } else if (data.docSection) {
+    if (data.docSection) {
       event.preventDefault(); navigate({section:data.docSection}, {replace:true});
-    } else if ('systemDownload' in data) window.Pattove.systemExport.save(state);
-    else if ('systemCopy' in data) window.Pattove.systemExport.copy();
-    else if (data.styleSelect && validStyle(data.styleSelect)) {
+    } else if (data.styleSelect && validStyle(data.styleSelect)) {
       state.style = data.styleSelect;
       try { localStorage.setItem(styleKey, state.style); } catch {}
       render();
@@ -284,7 +276,6 @@
   });
   document.addEventListener('change', event => {
     if (event.target.matches('[data-filter-check]')) toggleFilter(event.target.dataset.filterCheck, event.target.value);
-    if (event.target.matches('[data-doc-environment]')) navigate({environment:event.target.value, section:''},{replace:true});
     if (event.target.matches('[data-part-option]')) {
       state.options = systemRegistry.normalizeOptions(state.detail, Object.fromEntries([...document.querySelectorAll('.system-inspector [data-part-option]')].map(el => [el.dataset.partOption,el.value])));
       history.replaceState(history.state, '', hash()); renderedHash = location.hash;
@@ -325,11 +316,6 @@
     $('#query').setAttribute('aria-activedescendant', `suggestion-${suggestionIndex}`);
   });
   document.addEventListener('keydown', event => {
-    if (event.target.matches('[data-doc-tab]') && ['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) {
-      event.preventDefault();
-      const next = event.key==='Home'?'preview':event.key==='End'?'code':event.target.dataset.docTab==='preview'?'code':'preview';
-      navigate({previewTab:next, section:''},{replace:true}); document.querySelector('[data-doc-tab="'+next+'"]').focus();
-    }
     if (event.key === '/' && !['styles'].includes(state.page) && !dialog.open && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest('input,textarea,select,[contenteditable="true"]')) {
       event.preventDefault(); $('#query').focus();
     }

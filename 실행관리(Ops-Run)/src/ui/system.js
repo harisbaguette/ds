@@ -18,17 +18,11 @@
   function hydrate(root) {
     root.querySelectorAll('[data-token-value]').forEach(node => { node.textContent = getComputedStyle(node.closest('.ds')).getPropertyValue(node.dataset.tokenValue).trim(); });
     window.Pattove.mountParts(root);
-    window.Pattove.installUI.hydrate(root);
   }
   function updateInspector(state) {
     const root = document.querySelector('.system-inspector');
     const options = Object.fromEntries([...root.querySelectorAll('[data-part-option]')].map(el => [el.dataset.partOption, el.value]));
-    const markup = itemMarkup(state, options);
-    root.querySelector('.part-demo').innerHTML = markup + '<p class="ds-demo-note" role="status"></p>';
-    root.querySelector('#part-source').value = markup;
-    const install = root.querySelector('.install-panel');
-    if (install && options.icon) { install.dataset.installIcon=options.icon; window.Pattove.installUI.refresh(install); }
-    window.Pattove.componentDocs.refresh(state);
+    root.querySelector('.part-demo').innerHTML = itemMarkup(state, options) + '<p class="ds-demo-note" role="status"></p>';
     hydrate(document);
   }
   window.Pattove.systemUI = { partLinks, detail, hydrate, updateInspector, itemMarkup };

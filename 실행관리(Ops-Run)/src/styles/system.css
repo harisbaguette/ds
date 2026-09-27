@@ -7,21 +7,10 @@
 .part-demo > .ds { padding: 32px; min-height: 160px; }
 .part-demo > .ds-demo-note { padding-inline: 20px; font-size: 12px; }
 .part-demo > .ds-demo-note:empty { display: none; }
-.part-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding-block: 18px; color: var(--muted); font-size: 12px; }
-.part-meta a { display: inline-flex; min-height: 44px; gap: 6px; align-items: center; text-decoration: underline; text-underline-offset: 4px; }
-.part-meta .ui-icon, .part-dependencies .ui-icon { width: 13px; height: 13px; }
+.part-dependencies .ui-icon { width: 13px; height: 13px; }
 .part-dependencies { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-bottom: 20px; font-size: 12px; }
 .part-dependencies > span { margin-right: 8px; color: var(--muted); }
 .part-dependencies button { display: inline-flex; gap: 8px; align-items: center; padding: 8px 12px; border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface-high); font-size: 12px; }
-.source-label { display: block; font-size: 13px; font-weight: 650; margin-bottom: 8px; }
-.part-source { display: block; width: 100%; height: 168px; resize: vertical; border: 1px solid var(--line-strong); border-radius: 10px; background: #f8f9f6; padding: 16px; color: #242936; font: 12px/1.7 Consolas, monospace; tab-size: 2; }
-.export-description, .export-status { margin-top: 10px; font-size: 12px; color: var(--muted); }
-.export-status:empty { display: none; }
-.part-rules { margin-bottom: 20px; font-size: 13px; }
-.part-rules summary { cursor: pointer; min-height: 44px; padding-block: 12px; }
-.part-rules ul { margin-top: 8px; padding-left: 20px; line-height: 1.8; color: var(--muted); }
-.part-rules > p { margin-block: 10px; color: var(--muted); overflow-wrap: anywhere; }
-.source-contract-link { display: inline-flex; align-items: center; min-height: 44px; text-decoration: underline; }
 @media (max-width: 760px) {
   .system-inspector { padding-inline: 16px; }
   .part-demo > .ds { padding: 20px 16px; }

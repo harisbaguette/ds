@@ -106,14 +106,62 @@
 .ds .ds-tab[aria-selected="true"] { background:var(--ds-accent); color:var(--ds-on-accent); font-weight:650; box-shadow:0 2px 5px #24314526; }
 .ds .ds-tabpanel { padding:var(--ds-space-6) 4px; font-size:14px; }
 /* @part bottom-nav */
-.ds .ds-bottom-nav { display:flex; justify-content:space-around; gap:4px; padding:6px; background:var(--ds-surface); border-top:1px solid var(--ds-border); }
-.ds .ds-bottom-nav > :is(button,a) { display:flex; flex:1; min-width:44px; min-height:64px; flex-direction:column; justify-content:center; align-items:center; gap:5px; padding:6px; border:0; border-top:3px solid transparent; color:var(--ds-muted); background:transparent; font-size:12px; text-decoration:none; }
-.ds .ds-bottom-nav > :is([aria-pressed="true"],[aria-current="page"]) { border-top-color:var(--ds-accent); color:var(--ds-text); font-weight:750; }
-.ds .ds-bottom-nav[data-variant="dock"] { border:1px solid var(--ds-border); border-radius:24px; box-shadow:var(--ds-shadow); padding:8px; background:var(--ds-high); }
-.ds .ds-bottom-nav[data-variant="dock"] > :is(button,a) { border:0; border-radius:17px; }
+/* One markup, eleven shapes. Selection never rests on color alone: each shape adds a mark, a tile, a pill, a press or weight. */
+/* Floating shapes declare --ds-nav-inset so a screen frame can keep them off the edges. */
+.ds .ds-bottom-nav { position:relative; isolation:isolate; display:flex; justify-content:space-around; align-items:center; gap:4px; padding:6px; background:var(--ds-surface); border-top:1px solid var(--ds-border); }
+.ds .ds-bottom-nav > :not(.ds-bottom-nav-create) { position:relative; display:flex; flex:1; min-width:44px; min-height:64px; flex-direction:column; justify-content:center; align-items:center; gap:5px; padding:6px; border:0; color:var(--ds-muted); background:transparent; font-size:12px; text-decoration:none; }
+.ds .ds-bottom-nav > :is([aria-pressed="true"],[aria-current="page"]) { color:var(--ds-text); font-weight:750; }
+.ds .ds-bottom-nav > :not(.ds-bottom-nav-create)::before,.ds .ds-bottom-nav > :not(.ds-bottom-nav-create)::after { content:''; position:absolute; pointer-events:none; }
+.ds .ds-bottom-nav > .ds-bottom-nav-create { display:grid; place-items:center; flex:none; width:48px; height:48px; padding:0; border:0; border-radius:50%; color:var(--ds-on-accent); background:var(--ds-accent); box-shadow:var(--ds-raised); }
+.ds .ds-bottom-nav > .ds-bottom-nav-create .ui-icon { width:24px; height:24px; stroke-width:2.2; }
+/* 09 line: top bar (also the look without a variant) */
+.ds .ds-bottom-nav:is(:not([data-variant]),[data-variant="line"]) > :is([aria-pressed="true"],[aria-current="page"])::before { top:-6px; left:18%; right:18%; height:3px; border-radius:0 0 3px 3px; background:var(--ds-accent); }
+/* 01 minimal: flat, dot under the label */
+.ds .ds-bottom-nav[data-variant="minimal"] { background:var(--ds-bg); border-top-color:transparent; }
+.ds .ds-bottom-nav[data-variant="minimal"] > :is([aria-pressed="true"],[aria-current="page"])::after { bottom:2px; width:5px; height:5px; border-radius:50%; background:var(--ds-accent); }
+/* 02 glass: translucent edge bar over the screen, light tile on the chosen item */
+.ds .ds-bottom-nav[data-variant="glass"] { background:var(--ds-high); border-top-color:var(--ds-border); }
+@supports(backdrop-filter:blur(16px)) { .ds .ds-bottom-nav[data-variant="glass"] { background:color-mix(in oklab, var(--ds-glass) 62%, transparent); backdrop-filter:blur(16px) saturate(1.4); } }
+.ds .ds-bottom-nav[data-variant="glass"] > :not(.ds-bottom-nav-create) { border-radius:16px; }
+.ds .ds-bottom-nav[data-variant="glass"] > :is([aria-pressed="true"],[aria-current="page"]) { background:color-mix(in oklab, var(--ds-high) 80%, transparent); box-shadow:inset 0 0 0 1px var(--ds-border); }
+/* 03 float: floating capsule, create button inside, soft disc behind the chosen icon */
+.ds .ds-bottom-nav[data-variant="float"] { --ds-nav-inset:var(--ds-space-3); padding:6px 8px; border:1px solid var(--ds-border); border-radius:999px; background:var(--ds-high); box-shadow:var(--ds-shadow); }
+.ds .ds-bottom-nav[data-variant="float"] > :not(.ds-bottom-nav-create) { min-height:56px; }
+.ds .ds-bottom-nav[data-variant="float"] > :is([aria-pressed="true"],[aria-current="page"])::before { top:4px; left:50%; width:36px; height:30px; margin-left:-18px; border-radius:15px; background:var(--ds-soft); z-index:-1; }
+/* 04 neumorph: raised soft slab, chosen item pressed in */
+.ds .ds-bottom-nav[data-variant="neumorph"] { --ds-nav-inset:var(--ds-space-3); padding:8px; border:0; border-radius:var(--ds-radius); background:var(--ds-surface); box-shadow:var(--ds-shadow); }
+.ds .ds-bottom-nav[data-variant="neumorph"] > :not(.ds-bottom-nav-create) { border-radius:18px; }
+.ds .ds-bottom-nav[data-variant="neumorph"] > :is([aria-pressed="true"],[aria-current="page"]) { background:var(--ds-surface); box-shadow:var(--ds-inset); }
+/* 05 pill: only the chosen item shows its name, inside a soft pill */
+.ds .ds-bottom-nav[data-variant="pill"] { padding:10px 8px; background:var(--ds-bg); }
+.ds .ds-bottom-nav[data-variant="pill"] > :not(.ds-bottom-nav-create) { min-height:44px; flex-direction:row; gap:6px; border-radius:999px; }
+.ds .ds-bottom-nav[data-variant="pill"] > :not([aria-pressed="true"],[aria-current="page"]) > span { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.ds .ds-bottom-nav[data-variant="pill"] > :is([aria-pressed="true"],[aria-current="page"]) { flex:1.8; padding:6px 14px; background:var(--ds-soft); font-size:13px; }
+/* 06 fab: edge bar with a notch, large create button rising out of it */
+.ds .ds-bottom-nav[data-variant="fab"] { padding:6px 6px 6px; border-top:0; background:transparent; }
+.ds .ds-bottom-nav[data-variant="fab"]::before { content:''; position:absolute; inset:0; z-index:-1; background:var(--ds-surface); border-top:1px solid var(--ds-border); -webkit-mask:radial-gradient(circle 37px at 50% 0, transparent 36px, black 37px); mask:radial-gradient(circle 37px at 50% 0, transparent 36px, black 37px); }
+.ds .ds-bottom-nav[data-variant="fab"] > .ds-bottom-nav-create { width:60px; height:60px; margin-top:-56px; box-shadow:var(--ds-shadow); }
+.ds .ds-bottom-nav[data-variant="fab"] > :is([aria-pressed="true"],[aria-current="page"])::before { top:4px; width:16px; height:3px; border-radius:2px; background:var(--ds-accent); }
+/* 07 gradient: dark floating slab, light icons, soft chip on the chosen item */
+.ds .ds-bottom-nav[data-variant="gradient"] { --ds-nav-inset:var(--ds-space-3); padding:8px; border:0; border-radius:var(--ds-radius); background:linear-gradient(135deg, var(--ds-accent), color-mix(in oklab, var(--ds-accent) 60%, var(--ds-success))); box-shadow:var(--ds-shadow); }
+.ds .ds-bottom-nav:is([data-variant="gradient"],[data-variant="curve"]) > :not(.ds-bottom-nav-create) { color:color-mix(in oklab, var(--ds-on-accent) 74%, transparent); border-radius:16px; }
+.ds .ds-bottom-nav:is([data-variant="gradient"],[data-variant="curve"]) > :is([aria-pressed="true"],[aria-current="page"]) { color:var(--ds-on-accent); }
+.ds .ds-bottom-nav:is([data-variant="gradient"],[data-variant="curve"]) :focus-visible { outline-color:var(--ds-on-accent); }
+.ds .ds-bottom-nav[data-variant="gradient"] > :is([aria-pressed="true"],[aria-current="page"]) { background:color-mix(in oklab, var(--ds-on-accent) 16%, transparent); box-shadow:inset 0 0 0 1px color-mix(in oklab, var(--ds-on-accent) 22%, transparent); }
+/* 08 outline: thin line icons, short underline under the chosen label */
+.ds .ds-bottom-nav[data-variant="outline"] { background:var(--ds-bg); }
+.ds .ds-bottom-nav[data-variant="outline"] .ui-icon { stroke-width:1.25; }
+.ds .ds-bottom-nav[data-variant="outline"] > :is([aria-pressed="true"],[aria-current="page"]) .ui-icon { stroke-width:2; }
+.ds .ds-bottom-nav[data-variant="outline"] > :is([aria-pressed="true"],[aria-current="page"])::after { bottom:4px; width:18px; height:2px; border-radius:1px; background:var(--ds-text); }
+/* 10 curve: dark bar with an arched top, the chosen icon lifts into a light disc */
+.ds .ds-bottom-nav[data-variant="curve"] { padding:14px 6px 6px; border:0; border-radius:50% 50% 0 0 / 28px 28px 0 0; background:var(--ds-accent); }
+.ds .ds-bottom-nav[data-variant="curve"] > :is([aria-pressed="true"],[aria-current="page"]) .ui-icon { box-sizing:content-box; margin:-10px; padding:10px; transform:translateY(-20px); border-radius:50%; color:var(--ds-accent); background:var(--ds-soft); box-shadow:0 0 0 4px var(--ds-accent); }
+/* 11 dock: floating rounded dock, chosen item is a filled tile */
+.ds .ds-bottom-nav[data-variant="dock"] { --ds-nav-inset:var(--ds-space-3); border:1px solid var(--ds-border); border-radius:24px; box-shadow:var(--ds-shadow); padding:8px; background:var(--ds-high); }
+.ds .ds-bottom-nav[data-variant="dock"] > :not(.ds-bottom-nav-create) { border-radius:17px; }
 .ds .ds-bottom-nav[data-variant="dock"] > :is([aria-pressed="true"],[aria-current="page"]) { background:var(--ds-accent); color:var(--ds-on-accent); }
 @supports(backdrop-filter:blur(16px)) { .ds .ds-bottom-nav[data-variant="dock"] { background:var(--ds-glass); backdrop-filter:blur(16px); } }
-@media(prefers-reduced-transparency:reduce) { .ds .ds-bottom-nav[data-variant="dock"] { background:var(--ds-high); backdrop-filter:none; } }
+@media(prefers-reduced-transparency:reduce) { .ds .ds-bottom-nav:is([data-variant="dock"],[data-variant="glass"]) { background:var(--ds-high); backdrop-filter:none; } }
 /* @part feedback */
 .ds .ds-feedback-example { display:grid; gap:var(--ds-space-4); }
 .ds .ds-feedback-example > .ds-button { justify-self:start; }

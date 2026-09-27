@@ -73,8 +73,11 @@ window.Pattove.mountParts = function mountParts(root) {
     } else if (action === 'notify') {
       button.closest('.ds-feedback-example').querySelector('[data-part-feedback]').hidden = false;
     } else if (action === 'nav') {
-      button.closest('nav').querySelectorAll('button').forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-      button.dispatchEvent(new CustomEvent('pattove:navigate', { bubbles: true, detail: { index: [...button.parentElement.children].indexOf(button), label: button.textContent.trim() } }));
+      const items = [...button.closest('nav').querySelectorAll(':scope > [data-part-action="nav"]')];
+      items.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+      button.dispatchEvent(new CustomEvent('pattove:navigate', { bubbles: true, detail: { index: items.indexOf(button), label: button.textContent.trim() } }));
+    } else if (action === 'create') {
+      button.dispatchEvent(new CustomEvent('pattove:create', { bubbles: true }));
     } else if (action === 'select-card') {
       const card = button.closest('.ds-card');
       const selected = card.dataset.selected !== 'true';

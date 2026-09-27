@@ -41,8 +41,24 @@
     checkbox: [control('state','상태',[...choiceStates,['indeterminate','일부 선택']])],
     radio: [control('state','상태',choiceStates)], switch: [control('state','상태',choiceStates)],
     badge: [control('tone','상태',[['neutral','진행 중'],['success','완료'],['warning','확인 필요'],['error','실패']])],
-    'bottom-nav': [control('variant','형태',[['line','밑줄'],['dock','독']])]
   };
+  // Look-alike versions of one part. Same tokens, different shape. Adding a list here is all another part needs for the variant grid.
+  const look = (no, id, name, tags) => ({ no, id, name, tags });
+  const galleries = {
+    'bottom-nav': { key: 'variant', label: '모양', default: 'line', frame: 'phone-bottom', list: [
+      look('01','minimal','미니멀',['가벼움','정돈','기본']), look('02','glass','유리',['투명','겹침','가벼움']),
+      look('03','float','떠 있는 바',['떠 있음','중심 행동','둥긂']), look('04','neumorph','뉴모피즘',['부드러움','입체감','촉감']),
+      look('05','pill','알약 강조',['또렷함','집중','간결']), look('06','fab','가운데 큰 버튼',['만들기 강조','솟음','역동']),
+      look('07','gradient','그라데이션',['진함','고급','대비']), look('08','outline','윤곽 아이콘',['얇음','단정','여백']),
+      look('09','line','위쪽 표시줄',['익숙함','명확','평평함']), look('10','curve','곡선 진한 바',['곡선','몰입','개성']),
+      look('11','dock','독',['떠 있음','고급','입체감'])
+    ] }
+  };
+  for (const [id, g] of Object.entries(galleries)) {
+    let c = controls[id]?.find(c => c.key === g.key);
+    if (!c) (controls[id] ||= []).push(c = control(g.key, g.label, []));
+    Object.assign(c, { values: g.list.map(v => [v.id, v.name]), default: g.default ?? g.list[0].id });
+  }
   const contracts = {
     tokens: ['공통 디자인 값', 'CSS 변수로 색·간격·서체를 참조', [], []],
     icon: ['한 개의 그림 기호', '아이콘만 있는 행동에는 접근 가능한 이름을 제공', ['icon'], []],
@@ -56,7 +72,7 @@
     switch: ['설정을 켜고 끄기', '동작 이름을 label로 제공', ['label','checked','disabled'], ['change']],
     badge: ['짧은 상태 이름', '색만으로 상태를 구분하지 않음', ['label','tone'], []],
     tabs: ['같은 영역의 내용 전환', '탭과 패널의 id 연결을 유지', ['prefix'], ['pattove:tabchange']],
-    'bottom-nav': ['주요 목적지 선택', '목적지 이동은 pattove:navigate 이벤트에 연결. 표본은 선택 상태를 제공', ['variant'], ['pattove:navigate']],
+    'bottom-nav': ['주요 목적지 선택', '목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float·fab)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공', ['variant','onCreate (React)'], ['pattove:navigate','pattove:create (HTML)']],
     feedback: ['행동의 결과와 진행률', '표본 저장 알림과 68% 진행률. 실제 저장·업로드는 프로젝트에서 연결', [], []],
     card: ['제목·본문·상태·행동 조합', '단독 표본은 선택 토글, 검색 모듈에서는 상세 열기', ['title','description','tag','action','behavior'], ['pattove:select']],
     'search-module': ['이름·상태로 검색하고 상세 확인', 'records에 고유 id·title·description·tag 필요. HTML은 화면 안의 보관 상태를 바꾸고 이벤트로 알림. React는 onSave(record)의 성공·실패와 대기 상태를 처리. 영구 저장은 프로젝트에서 연결', ['prefix','records','onSave (React)'], ['pattove:save (HTML)','onSave(record) (React)']],
@@ -65,7 +81,7 @@
   };
   for (const item of items) {
     const [purpose, compatibility, inputs, events] = contracts[item.id];
-    Object.assign(item, { purpose, compatibility, inputs, events, controls: controls[item.id] || [],
+    Object.assign(item, { purpose, compatibility, inputs, events, controls: controls[item.id] || [], gallery: galleries[item.id] || null,
       css: ['checkbox','radio','switch'].includes(item.id) ? ['selection'] : ['page','icon'].includes(item.id) ? [] : [item.id],
       source: 'src/system/parts.js', reactSource: ['tokens','icon'].includes(item.id) ? null : 'src/system/react/'+item.id+'.jsx', styles: window.Pattove.catalog.styles.filter(s => s.id !== 'base').map(s => s.id),
       minInlineSize: ({ 'bottom-nav': 224, 'search-module': 240, template: 240, page: 240, card: 200, input: 160, field: 160, tabs: 240, feedback: 224 })[item.id] || 160,
@@ -77,7 +93,7 @@
   items.find(i => i.id === 'field').publicParts = [{ name: 'label', selector: '.ds-field > label', requires: 'input', relation: 'for → input.id' }, { name: 'help / error', selector: '.ds-help', requires: 'input', relation: 'input.aria-describedby → help.id' }];
   items.find(i => i.id === 'card').publicParts = [{ name: 'body', selector: '.ds-card-body', requires: 'card' }, { name: 'title', selector: '.ds-card h3', requires: 'card' }, { name: 'description', selector: '.ds-card-body > p', requires: 'card' }, { name: 'actions', selector: '.ds-card-actions', requires: 'card' }];
   items.find(i => i.id === 'button').publicParts = [{ name: 'focus', selector: '[data-state="focus"]', requires: 'button' }, { name: 'loading', selector: '.ds-spinner', requires: 'button' }];
-  const normalizeOptions = (id, provided = {}) => Object.fromEntries((indexOptions(id)).map(c => [c.key, c.values.some(([value]) => value === provided[c.key]) ? provided[c.key] : c.key === 'icon' && id === 'icon' ? 'search' : c.values[0][0]]));
+  const normalizeOptions = (id, provided = {}) => Object.fromEntries((indexOptions(id)).map(c => [c.key, c.values.some(([value]) => value === provided[c.key]) ? provided[c.key] : c.key === 'icon' && id === 'icon' ? 'search' : c.default ?? c.values[0][0]]));
   function indexOptions(id) { return items.find(item => item.id === id)?.controls || []; }
   const index = new Map(items.map(item => [item.id, item]));
   const matching = (query = '') => {

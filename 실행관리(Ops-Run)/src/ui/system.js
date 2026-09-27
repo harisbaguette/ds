@@ -10,8 +10,7 @@
   }
 
   function itemMarkup(state, options = {}) {
-    const content = p.renderItem(state.detail, undefined, r.normalizeOptions(state.detail, { ...state.options, ...options }));
-    return `<div class="ds theme-${state.style}" data-style="${state.style}">${content}</div>`;
+    return window.Pattove.componentDocs.live(state.detail, { ...state.options, ...options }, state.style, 'component-live');
   }
   function detail(state) { return window.Pattove.componentDocs.page(state); }
   function hydrate(root) {
@@ -19,9 +18,7 @@
     window.Pattove.mountParts(root);
   }
   function updateInspector(state) {
-    const root = document.querySelector('.system-inspector');
-    const options = Object.fromEntries([...root.querySelectorAll('[data-part-option]')].map(el => [el.dataset.partOption, el.value]));
-    root.querySelector('.part-demo').innerHTML = itemMarkup(state, options) + '<p class="ds-demo-note" role="status"></p>';
+    document.querySelector('.system-inspector .part-demo').innerHTML = itemMarkup(state) + '<p class="ds-demo-note" role="status"></p>';
     hydrate(document);
   }
   window.Pattove.systemUI = { partLinks, detail, hydrate, updateInspector, itemMarkup };

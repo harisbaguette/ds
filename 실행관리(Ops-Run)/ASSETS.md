@@ -6,7 +6,7 @@
 | 파일 | 출처 | 사용·권리 정보 | 비고 |
 |---|---|---|---|
 | `assets/mark.svg` | 기존 패토브 브랜드 정본 | 프로젝트 기존 자산 | 로고 형태 유지 |
-| `assets/icons/*.svg` | 기존 실행 시안의 SVG와 이번 UI 작업 | 프로젝트 내 제작·수정 자산. 외부 아이콘 팩으로 표시하지 않음 | 20개, 24px 기준·1.65px 선. 원본을 묶어 인라인 SVG로 사용 |
+| `assets/icons/*.svg` | 기존 실행 시안의 SVG와 이번 UI 작업 | 프로젝트 내 제작·수정 자산. 외부 아이콘 팩으로 표시하지 않음 | 29개, 24px 기준·1.65px 선. 원본을 묶어 인라인 SVG로 사용 |
 | `assets/illustrations/seascape.svg` | 기존 `패토브-재설계/style-lab.js` | 프로젝트 기존 자산 | 해·배·수평선, 제목과 겹침 조정 |
 | `assets/illustrations/seascape-banner.svg` | 위 풍경의 가로 폼 변형 | 프로젝트 내 수정 | 같은 색과 도형 사용 |
 | `assets/illustrations/empty-box.svg` | 이전 뼈대 작업 | 프로젝트 내 제작 | 컬러블록·풍경의 빈 상태 |

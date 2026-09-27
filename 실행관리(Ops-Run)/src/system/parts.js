@@ -38,8 +38,12 @@
   function tabs(prefix = uid('tabs')) {
     return `<div class="ds-tabs"><div class="ds-tablist" role="tablist" aria-label="컬렉션 분류">${['전체','진행 중','완료'].map((name, i) => `<button type="button" class="ds-tab" id="${prefix}-tab-${i}" role="tab" aria-selected="${i === 0}" aria-controls="${prefix}-panel-${i}" tabindex="${i === 0 ? 0 : -1}">${name}</button>`).join('')}</div>${['모든 컬렉션을 보고 있어요.','진행 중인 컬렉션을 보고 있어요.','완료한 컬렉션을 보고 있어요.'].map((text, i) => `<div class="ds-tabpanel" id="${prefix}-panel-${i}" role="tabpanel" aria-labelledby="${prefix}-tab-${i}" tabindex="0"${i ? ' hidden' : ''}>${text}</div>`).join('')}</div>`;
   }
-  function navigation(variant = 'line') {
-    return `<nav class="ds-bottom-nav" data-variant="${variant}" aria-label="${variant === 'dock' ? '독 형태' : '밑줄 형태'} 하단 탐색">${[['홈','grid'],['탐색','search'],['저장','bookmark'],['설정','layers']].map(([name, art], i) => `<button type="button" data-part-action="nav" aria-pressed="${i === 0}">${icon(art)}<span>${name}</span></button>`).join('')}</nav>`;
+  // Shapes with a raised center action put a create button between the second and third destination.
+  const navCenter = ['float', 'fab'];
+  function navigation(variant = 'line', label = '하단 탐색') {
+    const items = [['홈','grid'],['탐색','search'],['저장','bookmark'],['설정','layers']].map(([name, art], i) => `<button type="button" data-part-action="nav" aria-pressed="${i === 0}">${icon(art)}<span>${name}</span></button>`);
+    if (navCenter.includes(variant)) items.splice(2, 0, `<button type="button" class="ds-bottom-nav-create" data-part-action="create" aria-label="만들기">${icon('plus')}</button>`);
+    return `<nav class="ds-bottom-nav" data-variant="${esc(variant)}" aria-label="${esc(label)}">${items.join('')}</nav>`;
   }
   function feedback() {
     return `<div class="ds-feedback-example">${button({ label: '저장 알림 띄우기', iconName: 'check', action: 'notify' })}<div class="ds-alert" role="status" data-part-feedback hidden>${statusDot('변경사항을 저장했어요.')}</div><div class="ds-progress-label"><span>파일 업로드</span><span>68%</span></div><progress class="ds-progress" value="68" max="100" aria-label="파일 업로드">68%</progress></div>`;
@@ -82,5 +86,5 @@
     if (!renderers[id]) throw new RangeError('알 수 없는 부품: ' + id);
     return renderers[id]();
   }
-  window.Pattove.parts = { esc, icon, button, input, field, fieldLabel, fieldDescription, cardTitle, cardDescription, cardBody, cardActions, choice, badge, divider, statusDot, tabs, navigation, feedback, card, searchModule, template, page, renderItem };
+  window.Pattove.parts = { esc, icon, navCenter, button, input, field, fieldLabel, fieldDescription, cardTitle, cardDescription, cardBody, cardActions, choice, badge, divider, statusDot, tabs, navigation, feedback, card, searchModule, template, page, renderItem };
 })();

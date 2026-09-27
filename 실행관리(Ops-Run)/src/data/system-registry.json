@@ -1,6 +1,6 @@
 {
   "version": "0.3.0",
-  "revision": "bf73ed0d6196bc72c0cd31ed40b90f5b59d5b7f8a5f9159f37295bf24af9fb0c",
+  "revision": "610a02404305441fc6f6932de0a775278ac896ab4cec8cc7cbb718636cd26c67",
   "sources": [
     "src/system/parts.js",
     "src/system/parts.css",
@@ -85,6 +85,7 @@
       "inputs": [],
       "events": [],
       "controls": [],
+      "gallery": null,
       "css": [
         "tokens"
       ],
@@ -232,6 +233,10 @@
               "menu"
             ],
             [
+              "plus",
+              "plus"
+            ],
+            [
               "rotate",
               "rotate"
             ],
@@ -246,6 +251,7 @@
           ]
         }
       ],
+      "gallery": null,
       "css": [],
       "source": "src/system/parts.js",
       "reactSource": null,
@@ -285,6 +291,7 @@
       "inputs": [],
       "events": [],
       "controls": [],
+      "gallery": null,
       "css": [
         "divider"
       ],
@@ -328,6 +335,7 @@
       ],
       "events": [],
       "controls": [],
+      "gallery": null,
       "css": [
         "status-dot"
       ],
@@ -482,6 +490,7 @@
           ]
         }
       ],
+      "gallery": null,
       "css": [
         "button"
       ],
@@ -584,6 +593,7 @@
           ]
         }
       ],
+      "gallery": null,
       "css": [
         "input"
       ],
@@ -664,6 +674,7 @@
           ]
         }
       ],
+      "gallery": null,
       "css": [
         "field"
       ],
@@ -751,6 +762,7 @@
           ]
         }
       ],
+      "gallery": null,
       "css": [
         "selection"
       ],
@@ -819,6 +831,7 @@
           ]
         }
       ],
+      "gallery": null,
       "css": [
         "selection"
       ],
@@ -885,6 +898,7 @@
           ]
         }
       ],
+      "gallery": null,
       "css": [
         "selection"
       ],
@@ -952,6 +966,7 @@
           ]
         }
       ],
+      "gallery": null,
       "css": [
         "badge"
       ],
@@ -998,6 +1013,7 @@
         "pattove:tabchange"
       ],
       "controls": [],
+      "gallery": null,
       "css": [
         "tabs"
       ],
@@ -1037,29 +1053,186 @@
       ],
       "behavior": true,
       "purpose": "주요 목적지 선택",
-      "compatibility": "목적지 이동은 pattove:navigate 이벤트에 연결. 표본은 선택 상태를 제공",
+      "compatibility": "목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float·fab)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공",
       "inputs": [
-        "variant"
+        "variant",
+        "onCreate (React)"
       ],
       "events": [
-        "pattove:navigate"
+        "pattove:navigate",
+        "pattove:create (HTML)"
       ],
       "controls": [
         {
           "key": "variant",
-          "label": "형태",
+          "label": "모양",
           "values": [
             [
+              "minimal",
+              "미니멀"
+            ],
+            [
+              "glass",
+              "유리"
+            ],
+            [
+              "float",
+              "떠 있는 바"
+            ],
+            [
+              "neumorph",
+              "뉴모피즘"
+            ],
+            [
+              "pill",
+              "알약 강조"
+            ],
+            [
+              "fab",
+              "가운데 큰 버튼"
+            ],
+            [
+              "gradient",
+              "그라데이션"
+            ],
+            [
+              "outline",
+              "윤곽 아이콘"
+            ],
+            [
               "line",
-              "밑줄"
+              "위쪽 표시줄"
+            ],
+            [
+              "curve",
+              "곡선 진한 바"
             ],
             [
               "dock",
               "독"
             ]
-          ]
+          ],
+          "default": "line"
         }
       ],
+      "gallery": {
+        "key": "variant",
+        "label": "모양",
+        "default": "line",
+        "frame": "phone-bottom",
+        "list": [
+          {
+            "no": "01",
+            "id": "minimal",
+            "name": "미니멀",
+            "tags": [
+              "가벼움",
+              "정돈",
+              "기본"
+            ]
+          },
+          {
+            "no": "02",
+            "id": "glass",
+            "name": "유리",
+            "tags": [
+              "투명",
+              "겹침",
+              "가벼움"
+            ]
+          },
+          {
+            "no": "03",
+            "id": "float",
+            "name": "떠 있는 바",
+            "tags": [
+              "떠 있음",
+              "중심 행동",
+              "둥긂"
+            ]
+          },
+          {
+            "no": "04",
+            "id": "neumorph",
+            "name": "뉴모피즘",
+            "tags": [
+              "부드러움",
+              "입체감",
+              "촉감"
+            ]
+          },
+          {
+            "no": "05",
+            "id": "pill",
+            "name": "알약 강조",
+            "tags": [
+              "또렷함",
+              "집중",
+              "간결"
+            ]
+          },
+          {
+            "no": "06",
+            "id": "fab",
+            "name": "가운데 큰 버튼",
+            "tags": [
+              "만들기 강조",
+              "솟음",
+              "역동"
+            ]
+          },
+          {
+            "no": "07",
+            "id": "gradient",
+            "name": "그라데이션",
+            "tags": [
+              "진함",
+              "고급",
+              "대비"
+            ]
+          },
+          {
+            "no": "08",
+            "id": "outline",
+            "name": "윤곽 아이콘",
+            "tags": [
+              "얇음",
+              "단정",
+              "여백"
+            ]
+          },
+          {
+            "no": "09",
+            "id": "line",
+            "name": "위쪽 표시줄",
+            "tags": [
+              "익숙함",
+              "명확",
+              "평평함"
+            ]
+          },
+          {
+            "no": "10",
+            "id": "curve",
+            "name": "곡선 진한 바",
+            "tags": [
+              "곡선",
+              "몰입",
+              "개성"
+            ]
+          },
+          {
+            "no": "11",
+            "id": "dock",
+            "name": "독",
+            "tags": [
+              "떠 있음",
+              "고급",
+              "입체감"
+            ]
+          }
+        ]
+      },
       "css": [
         "bottom-nav"
       ],
@@ -1103,6 +1276,7 @@
       "inputs": [],
       "events": [],
       "controls": [],
+      "gallery": null,
       "css": [
         "feedback"
       ],
@@ -1154,6 +1328,7 @@
         "pattove:select"
       ],
       "controls": [],
+      "gallery": null,
       "css": [
         "card"
       ],
@@ -1227,6 +1402,7 @@
         "onSave(record) (React)"
       ],
       "controls": [],
+      "gallery": null,
       "css": [
         "search-module"
       ],
@@ -1274,6 +1450,7 @@
       ],
       "events": [],
       "controls": [],
+      "gallery": null,
       "css": [
         "template"
       ],
@@ -1318,6 +1495,7 @@
       ],
       "events": [],
       "controls": [],
+      "gallery": null,
       "css": [],
       "source": "src/system/parts.js",
       "reactSource": "src/system/react/page.jsx",

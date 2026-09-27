@@ -1,6 +1,6 @@
 ﻿(() => {
   'use strict';
-  const { catalog, views, libraryUI: library, systemUI: system, systemRegistry } = window.Pattove;
+  const { catalog, views, libraryUI: library, systemUI: system, systemRegistry, componentDocs } = window.Pattove;
   const isCollection = () => ['dictionary', 'components'].includes(state.page);
   const $ = selector => document.querySelector(selector);
   const validPattern = id => catalog.patterns.some(p => p.id === id);
@@ -79,7 +79,7 @@
     if (next.detail) params.set('detail', next.detail);
     if (next.page === 'system' && next.detail) {
       if (next.section) params.set('section', next.section);
-      const defaults = systemRegistry.normalizeOptions(next.detail);
+      const defaults = systemRegistry.normalizeOptions(next.detail, componentDocs.defaults(next.detail));
       for (const [key, value] of Object.entries(systemRegistry.normalizeOptions(next.detail, next.options))) if (value !== defaults[key]) params.set('option-' + key, value);
     }
     const query = params.toString();
@@ -97,10 +97,10 @@
     if (validStyle(params.get('style'))) state.style = params.get('style');
     state.detail = (state.page === 'system' ? systemRegistry.index.has(params.get('detail')) : isCollection() ? library.validDetail(state.page, params.get('detail')) : state.page === 'patterns' && validPattern(params.get('detail'))) ? params.get('detail') : null;
     if (state.page === 'system' && !state.detail) { state.detail = (systemRegistry.matching(state.query)[0] || systemRegistry.items[0]).id; state.query = ''; }
-    state.options = state.page === 'system' && state.detail ? systemRegistry.normalizeOptions(state.detail, Object.fromEntries([...params].filter(([key]) => key.startsWith('option-')).map(([key,value]) => [key.slice(7),value]))) : {};
+    state.options = state.page === 'system' && state.detail ? systemRegistry.normalizeOptions(state.detail, { ...componentDocs.defaults(state.detail), ...Object.fromEntries([...params].filter(([key]) => key.startsWith('option-')).map(([key,value]) => [key.slice(7),value])) }) : {};
     if (state.page === 'dictionary' && state.detail) {
       const implementation = systemRegistry.index.get(state.detail) || systemRegistry.items.find(i=>i.entry===state.detail);
-      if (implementation) { state.page='system'; state.detail=implementation.id; state.filters={}; state.options=systemRegistry.normalizeOptions(implementation.id); }
+      if (implementation) { state.page='system'; state.detail=implementation.id; state.filters={}; state.options=systemRegistry.normalizeOptions(implementation.id, componentDocs.defaults(implementation.id)); }
     }
   }
   function navigate(overrides, { replace = false, overlay = false } = {}) {
@@ -269,10 +269,22 @@
       if (firstNew) document.querySelector(`[data-focus="entry-${CSS.escape(firstNew)}"]`)?.focus();
     } else if (data.action === 'search-all') submitSearch();
     else if (data.action === 'close-dialog') closeDetail();
+    else if (data.variantPick || data.variantUse) pickVariant(data.variantPick || data.variantUse, Boolean(data.variantUse));
   });
+  // A version card swaps the big preview; "이걸로 쓰기" also keeps it as this part's opening version.
+  function pickVariant(value, keep) {
+    const g = systemRegistry.index.get(state.detail)?.gallery, look = g?.list.find(v => v.id === value);
+    if (!look) return;
+    if (keep) componentDocs.choose(state.detail, value);
+    state.options = systemRegistry.normalizeOptions(state.detail, { ...state.options, [g.key]: value });
+    history.replaceState(history.state, '', hash()); renderedHash = location.hash;
+    componentDocs.refresh(state);
+    if (keep) document.querySelector(`[data-variant-use="${CSS.escape(value)}"]`)?.focus();
+    $('#announcer').textContent = `${look.name} ${keep ? '사용 중' : '미리보기'}`;
+  }
   document.addEventListener('change', event => {
     if (event.target.matches('[data-part-option]')) {
-      state.options = systemRegistry.normalizeOptions(state.detail, Object.fromEntries([...document.querySelectorAll('.system-inspector [data-part-option]')].map(el => [el.dataset.partOption,el.value])));
+      state.options = systemRegistry.normalizeOptions(state.detail, { ...state.options, ...Object.fromEntries([...document.querySelectorAll('.system-inspector [data-part-option]')].map(el => [el.dataset.partOption,el.value])) });
       history.replaceState(history.state, '', hash()); renderedHash = location.hash;
       system.updateInspector(state);
     }

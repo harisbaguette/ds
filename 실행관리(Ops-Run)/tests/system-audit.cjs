@@ -42,11 +42,12 @@ async function run() {
     // Every declared variant must be selectable, serializable and deep-linkable.
     for(const item of metadata.items) for(const control of item.controls) for(const [value] of control.values) {
       await route(page,'main',item.id);
-      await page.locator('[data-part-option="'+control.key+'"]').selectOption(value);
+      const card=item.gallery?.key===control.key, picked=()=>card?page.locator('[data-variant-pick="'+value+'"]').getAttribute('aria-pressed').then(v=>v==='true'?value:null):page.locator('[data-part-option="'+control.key+'"]').inputValue();
+      if(card) await page.locator('[data-variant-pick="'+value+'"]').click(); else await page.locator('[data-part-option="'+control.key+'"]').selectOption(value);
       const stateBefore=await page.locator('.part-demo > .ds').evaluate(integrity);
       check(item.id+'/'+control.key+'/'+value+' accessible variant',stateBefore.length===0,stateBefore);
       const href=page.url();await page.reload();
-      check(item.id+'/'+control.key+'/'+value+' reload restores variant', await page.locator('[data-part-option="'+control.key+'"]').inputValue()===value && page.url()===href);
+      check(item.id+'/'+control.key+'/'+value+' reload restores variant', await picked()===value && page.url()===href);
     }
     await route(page,'main','search-module');
     const demo=page.locator('.part-demo');

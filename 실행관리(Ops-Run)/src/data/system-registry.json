@@ -1,6 +1,6 @@
 {
   "version": "0.3.0",
-  "revision": "a7ebf8822cb95e0bdac93093370c83afa70652e87370048269fcd6f48ee30606",
+  "revision": "3294899de0dbca406810d406ef447c34b6be355663f7cfc2fe26cb47eeae8b1f",
   "sources": [
     "src/system/parts.js",
     "src/system/parts.css",
@@ -232,6 +232,10 @@
             [
               "rotate",
               "rotate"
+            ],
+            [
+              "sliders",
+              "sliders"
             ],
             [
               "upload",

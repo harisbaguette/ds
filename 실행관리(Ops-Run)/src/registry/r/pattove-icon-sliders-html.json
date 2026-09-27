@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-sliders-html",
+  "type": "registry:item",
+  "title": "sliders · SVG",
+  "description": "sliders · SVG",
+  "files": [
+    {
+      "path": "design/icons/sliders.svg",
+      "type": "registry:file",
+      "target": "~/design/icons/sliders.svg",
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#242424\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 7h9m4 0h3M4 17h3m4 0h9\"/><circle cx=\"15\" cy=\"7\" r=\"2\"/><circle cx=\"9\" cy=\"17\" r=\"2\"/></svg>\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "sliders",
+    "environment": "html",
+    "source": "assets/icons/sliders.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

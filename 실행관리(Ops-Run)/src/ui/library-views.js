@@ -100,10 +100,10 @@
     return [...built.filter(i=>i.entry?passes(f,entries.get(i.entry)):!active(f)).map(implemented), ...plain.filter(e=>passes(f,e))];
   }
   function filters(state) {
-    const f=state.filters, total=currentItems(state).length;
+    const f=state.filters;
     if (state.page==='components') {
       const options=data.layers.map(l=>({key:'layer',id:l.id,name:l.name,pressed:f.layer.includes(l.id),count:data.components.filter(e=>e.layer===l.id&&match(e,state.query)).length}));
-      return views.filterBar({groups:[{key:'layer',label:'계층',options}],tags:options.filter(o=>o.pressed),query:state.query,total});
+      return views.filterBar([{key:'layer',label:'계층',options}]);
     }
     const {built,plain}=shelfItems(state);
     const pool=[...built.filter(i=>i.entry).map(i=>entries.get(i.entry)),...plain];
@@ -113,17 +113,17 @@
     const here=code=>inShelf.has(f.shelf+'|'+code);
     const option=(key,id,name,count)=>({key,id,name,count,pressed:f[key].includes(id)});
     const shelf=shelves.get(f.shelf);
-    // A kind named like its tab (부품 inside 부품) reads as 낱개 부품, so the button never repeats the tab.
+    // A kind named like its tab (부품 inside 부품) reads as 낱개 부품, so the panel never repeats the tab.
     const kindOptions=shelf.kinds.length>1?shelf.kinds.map(k=>option('kind',k,k===shelf.name?'낱개 '+k:k,kinds.get(k)||0)):[];
     const roleOptions=roles.filter(r=>r.codes.some(here)).map(r=>option('role',r.id,r.name,sum(r.codes)));
     const placeOptions=data.places.filter(p=>p.codes.some(here)).map(p=>option('place',p.id,p.name,sum(p.codes)));
     const iconOptions=data.iconGroups.filter(g=>inShelf.has(f.shelf+'|ICO.'+g.id)).map(g=>option('icon',g.id,g.name,icons.get(g.id)||0));
-    const codeOptions=data.categories.filter(c=>here(c.id)).map(c=>({...option('code',c.id,short(c.name),codes.get(c.id)||0),
-      children:c.id==='ICO'&&f.code.includes('ICO')&&iconOptions.length?{key:'icon',options:iconOptions}:null}));
-    const groups=[{key:'kind',label:'종류',options:kindOptions},{key:'role',label:'영역',options:roleOptions},
-      {key:'place',label:'분야',options:placeOptions},{key:'code',label:'분류',options:codeOptions}].filter(g=>g.options.length);
-    const tags=[...kindOptions,...roleOptions,...placeOptions,...codeOptions,...iconOptions].filter(o=>o.pressed);
-    return views.filterBar({groups,tags,query:state.query,total});
+    const codeOptions=data.categories.filter(c=>here(c.id)).map(c=>option('code',c.id,short(c.name),codes.get(c.id)||0));
+    // Sections read top to bottom from broad to fine; the icon shapes open as their own section once 아이콘 is picked.
+    const groups=[{key:'kind',label:'종류',options:kindOptions},{key:'role',label:'쓰임',options:roleOptions},
+      {key:'place',label:'분야',options:placeOptions},{key:'code',label:'세부 분류',options:codeOptions},
+      {key:'icon',label:'아이콘 모양',options:f.code.includes('ICO')?iconOptions:[]}].filter(g=>g.options.length);
+    return views.filterBar(groups);
   }
   function suggestions(state,query) {
     // Suggestions jump anywhere in the current tab, so picked filters do not narrow them.

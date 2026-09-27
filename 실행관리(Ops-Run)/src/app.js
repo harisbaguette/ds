@@ -17,15 +17,17 @@
   let suggestionIndex = -1;
   let mainRenderKey = '';
   let filterBarHTML = '';
-  const facetSearch = {};
+  // The filter area remembers, per tab, which sections are folded and what each section search holds.
+  let filterScope = '';
+  let sectionOpen = {};
+  let facetSearch = {};
   const dialog = $('#detail-dialog');
 
-  // In-page anchors land below the header while it sticks (desktop); on phones the header scrolls away.
+  // In-page anchors land below the thin top bar on phones; on wider screens the menu sits at the side and nothing covers the top.
   function updateChromeOffset() {
-    const header = $('.app-header');
-    if (!header) return;
-    const sticky = getComputedStyle(header).position === 'sticky';
-    document.documentElement.style.setProperty('--chrome-bottom', `${sticky ? Math.ceil(header.getBoundingClientRect().height + 16) : 16}px`);
+    const bar = $('.app-top');
+    const shown = bar.getClientRects().length && getComputedStyle(bar).position === 'sticky';
+    document.documentElement.style.setProperty('--chrome-bottom', `${shown ? Math.ceil(bar.getBoundingClientRect().height + 16) : 16}px`);
   }
   const list = value => [...new Set(String(value || '').split(',').filter(Boolean))];
   function readFilters(page, params) {
@@ -38,50 +40,33 @@
     if (key === 'code' && !filters.code.includes('ICO')) filters.icon = [];
     navigate({ filters, limit: 48 }, { replace: true });
   }
-  const firstFilter = () => $('#filter-bar .filter-scroll [data-focus]')?.focus({ preventScroll: true });
+  const firstFilter = () => $('#filter-bar summary, #filter-bar [data-focus]')?.focus({ preventScroll: true });
   const phone = matchMedia('(max-width: 760px)');
-  // The popover sits in the top layer (never clipped by the sideways-scrolling row); it opens under its button, kept inside the screen.
-  // On phones CSS makes it a sheet rising from the bottom, so no position is written.
-  function placePanel(panel) {
-    const opener = document.querySelector(`.filter-menu[popovertarget="${panel.id}"]`);
-    if (!opener || phone.matches) return panel.style.removeProperty('top'), panel.style.removeProperty('left'), panel.style.removeProperty('max-height');
-    const r = opener.getBoundingClientRect(), width = panel.offsetWidth;
-    panel.style.top = `${Math.round(r.bottom + 8)}px`;
-    panel.style.left = `${Math.round(Math.max(16, Math.min(r.left, innerWidth - width - 16)))}px`;
-    panel.style.maxHeight = `${Math.max(200, Math.floor(innerHeight - r.bottom - 24))}px`;
-  }
-  const placeOpenPanels = () => document.querySelectorAll('.facet-panel:popover-open').forEach(placePanel);
+  const searchKey = input => input.closest('[data-section]')?.dataset.section || 'part';
   function searchPanel(input) {
     const term = input.value.trim().toLocaleLowerCase();
-    facetSearch[input.closest('.facet-panel').id] = input.value;
-    // Nested rows follow the row they sit under, so opening a found parent shows its children too.
-    let parentShown = true;
-    input.closest('.facet-panel').querySelectorAll('.facet-option').forEach(option => {
-      const match = !term || option.dataset.facetName.includes(term);
-      if (option.classList.contains('is-nested')) option.hidden = !match && !parentShown;
-      else { option.hidden = !match; parentShown = match; }
-    });
+    facetSearch[searchKey(input)] = input.value;
+    input.parentElement.querySelectorAll('[data-facet-name]').forEach(option => { option.hidden = !!term && !option.dataset.facetName.includes(term); });
   }
   function renderFilterBar() {
-    const html = state.page === 'system' ? system.partLinks(state) : state.page === 'patterns' ? views.patternFilters(state, results().length) : isCollection() ? library.filters(state) : '';
-    const bar = $('#filter-bar');
+    const html = state.page === 'system' ? system.partLinks(state) : state.page === 'patterns' ? views.patternFilters(state) : isCollection() ? library.filters(state) : '';
+    const bar = $('#filter-bar'), body = $('.menu-body');
     bar.hidden = !html;
     if (html === filterBarHTML) return;
-    // A re-render keeps the open checklist open, scrolled and searched where it was, and the button row where it was scrolled.
-    const open = bar.querySelector('.facet-panel:popover-open');
-    const listTop = open?.querySelector('.facet-list')?.scrollTop || 0;
-    const rowLeft = bar.querySelector('.filter-scroll')?.scrollLeft || 0;
-    bar.innerHTML = html;
     filterBarHTML = html;
-    const row = bar.querySelector('.filter-scroll');
-    if (row) row.scrollLeft = rowLeft;
-    const panel = open && document.getElementById(open.id);
-    if (panel) {
-      panel.showPopover();
-      const search = panel.querySelector('[data-facet-search]');
-      if (search && facetSearch[panel.id]) { search.value = facetSearch[panel.id]; searchPanel(search); }
-      panel.querySelector('.facet-list').scrollTop = listTop;
-    }
+    // Inside one tab a re-render keeps folds, section searches and the menu scroll; a section that newly appears opens.
+    // A new tab starts over from the folds written in the markup and shows the open part.
+    const scope = state.page + '|' + (state.filters.shelf || ''), sameTab = scope === filterScope, top = body.scrollTop;
+    if (!sameTab) { filterScope = scope; sectionOpen = {}; facetSearch = {}; }
+    bar.innerHTML = html;
+    bar.querySelectorAll('details[data-section]').forEach(d => {
+      const key = d.dataset.section;
+      if (sameTab) d.open = key in sectionOpen ? sectionOpen[key] : true;
+      sectionOpen[key] = d.open;
+    });
+    bar.querySelectorAll('[data-facet-search]').forEach(input => { if (facetSearch[searchKey(input)]) { input.value = facetSearch[searchKey(input)]; searchPanel(input); } });
+    if (sameTab) body.scrollTop = top;
+    else { body.scrollTop = 0; bar.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest' }); }
   }
   function hash(overrides = {}) {
     const next = { ...state, ...overrides };
@@ -132,8 +117,8 @@
   function focusKey(key) {
     if (!key) return false;
     const element = document.querySelector(`[data-focus="${CSS.escape(key)}"]`);
-    if (element?.getClientRects().length) { element.focus({ preventScroll: true }); return true; }
-    return false;
+    element?.focus({ preventScroll: true });
+    return !!element && document.activeElement === element;
   }
   function matches(pattern, query) {
     const terms = query.toLocaleLowerCase().trim().split(/\s+/).filter(Boolean);
@@ -159,13 +144,28 @@
     $('#query').setAttribute('aria-expanded', 'true');
     $('#query').removeAttribute('aria-activedescendant');
   }
+  // Searching from 스타일 looks through 부품. On phones the menu folds away so the results show.
   function submitSearch() {
     const query = $('#query').value.trim();
     hideSuggestions();
-    navigate({ query, detail: null, section: '', limit: 48 }, { replace: true });
+    setMenu(false, false);
+    if (state.page === 'styles') { history.pushState({}, '', '#/dictionary?shelf=part' + (query ? '&q=' + encodeURIComponent(query) : '')); renderRoute(); }
+    else navigate({ query, detail: null, section: '', limit: 48 }, { replace: true });
     $('#main').focus({ preventScroll: true });
   }
+  // Phones keep the side menu as a drawer: the menu button slides it in over a dimmed page; Esc, a tap outside or a link inside closes it,
+  // and a close by hand gives focus back to the menu button. Picking a filter leaves it open.
+  function setMenu(open, returnFocus = true) {
+    if (open === document.documentElement.classList.contains('menu-open')) return;
+    document.documentElement.classList.toggle('menu-open', open);
+    $('#menu-toggle').setAttribute('aria-expanded', String(open));
+    $('#main').inert = open;
+    $('.app-top').inert = open;
+    if (open) ($('#primary-nav [aria-current="page"]') || $('#primary-nav a')).focus();
+    else if (returnFocus) $('#menu-toggle').focus();
+  }
   function openSuggestion(id) {
+    setMenu(false, false);
     if (isCollection()) { navigate({ detail: id }, { overlay: true }); lastOpener = 'search-query'; return; }
     navigate({ detail: id }, { overlay: true });
     lastOpener = 'search-query';
@@ -173,17 +173,15 @@
   function render(previousDetail = state.detail, focus = document.activeElement?.dataset.focus) {
     document.body.dataset.page = state.page;
     document.body.className = 'theme-' + state.style;
-    const searchable = !['styles'].includes(state.page);
-    document.body.dataset.search = String(searchable);
     document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : state.page === 'patterns' ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
     $('#primary-nav').innerHTML = library.navigation(state);
     $('#header-context').innerHTML = views.header(state);
+    $('#top-title').textContent = $('#primary-nav [aria-current="page"]')?.textContent || ({ components: '구성요소' })[state.page] || '';
     renderFilterBar();
-    $('.search-area').hidden = !searchable;
-    $('#query').placeholder = ({ system: '부품 검색', dictionary: '사전 검색', components: '구성요소 검색' })[state.page] || '패턴 검색';
+    $('#query').placeholder = ({ system: '부품 검색', styles: '부품 검색', dictionary: '사전 검색', components: '구성요소 검색' })[state.page] || '패턴 검색';
     $('#query').setAttribute('aria-label', $('#query').placeholder);
     if (document.activeElement !== $('#query')) $('#query').value = state.query;
-    $('#clear-search').hidden = !$('#query').value;
+    $('#search-clear').hidden = !$('#query').value;
     const nextMainKey = JSON.stringify([state.page, state.style, state.filters, state.query, state.limit, state.page==='system'?[state.detail,state.options]:null]);
     if (mainRenderKey !== nextMainKey) {
       $('#main').innerHTML = state.page === 'styles' ? views.styleGrid(state) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
@@ -251,21 +249,19 @@
     }
     else if (target.matches('a[href^="#/"]')) {
       event.preventDefault();
-      target.closest('[popover]')?.hidePopover();
+      if (target.closest('#app-menu')) setMenu(false, false);
       history.pushState({}, '', target.getAttribute('href'));
       renderRoute();
     } else if (data.suggestOpen) openSuggestion(data.suggestOpen);
+    else if (data.filter) toggleFilter(...data.filter.split(/:(.*)/s, 2));
     else if (data.libraryEntry) navigate({ detail: data.libraryEntry }, { overlay: true });
     else if (data.open) navigate({ detail: data.open, style: data.style || state.style }, { overlay: true });
-    else if (target.classList.contains('filter-tag')) {
-      // A removed tag hands focus to the next tag, then 모두 지우기, then the first filter button.
-      const keys = [...target.parentElement.querySelectorAll('[data-focus]')].map(el => el.dataset.focus), at = keys.indexOf(data.focus);
-      if (data.filter) toggleFilter(...data.filter.split(/:(.*)/s, 2));
-      else navigate({ query: '', limit: 48 }, { replace: true });
-      if (![...keys.slice(at + 1), ...keys.slice(0, at).reverse()].some(focusKey)) firstFilter();
-    } else if (data.action === 'clear-filters') {
+    else if (data.action === 'clear-filters') {
+      // From the menu focus moves to the first section (the link itself goes away); from an empty result, to the content.
+      const inMenu = target.closest('#filter-bar');
       navigate({ filters: cleared(state.filters), query: '', limit: 48 }, { replace: true });
-      firstFilter();
+      if (inMenu) firstFilter();
+      else $('#main').focus({ preventScroll: true });
     } else if (data.action === 'clear-query') navigate({ query: '', limit: 48 }, { replace: true });
     else if (data.action === 'load-more') {
       const firstNew = library.currentItems(state).filter(e=>!e.implementation)[state.limit]?.id;
@@ -275,7 +271,6 @@
     else if (data.action === 'close-dialog') closeDetail();
   });
   document.addEventListener('change', event => {
-    if (event.target.matches('[data-filter-check]')) toggleFilter(event.target.dataset.filterCheck, event.target.value);
     if (event.target.matches('[data-part-option]')) {
       state.options = systemRegistry.normalizeOptions(state.detail, Object.fromEntries([...document.querySelectorAll('.system-inspector [data-part-option]')].map(el => [el.dataset.partOption,el.value])));
       history.replaceState(history.state, '', hash()); renderedHash = location.hash;
@@ -283,26 +278,25 @@
     }
   });
   document.addEventListener('input', event => { if (event.target.matches('[data-facet-search]')) searchPanel(event.target); });
-  // An opening list is placed, and the open part (or first ticked row) is scrolled into its view.
-  // A closing list hands focus back to its button before it hides (synchronously, so the next key already lands there).
-  document.addEventListener('beforetoggle', event => {
-    if (event.target.matches?.('.facet-panel') && event.newState === 'closed' && event.target.contains(document.activeElement))
-      $(`.filter-menu[popovertarget="${event.target.id}"]`)?.focus({ preventScroll: true });
-  }, true);
   document.addEventListener('toggle', event => {
-    if (!event.target.matches?.('.facet-panel') || event.newState !== 'open') return;
-    placePanel(event.target);
-    event.target.querySelector('[aria-current="page"], :checked')?.scrollIntoView({ block: 'nearest' });
+    if (event.target.matches?.('#filter-bar details[data-section]')) sectionOpen[event.target.dataset.section] = event.target.open;
   }, true);
-  phone.addEventListener('change', placeOpenPanels);
-  window.addEventListener('scroll', placeOpenPanels, { passive: true });
-  $('#filter-bar').addEventListener('scroll', placeOpenPanels, { passive: true, capture: true });
+  $('#menu-toggle').addEventListener('click', () => setMenu(true));
+  $('#menu-backdrop').addEventListener('click', () => setMenu(false));
+  phone.addEventListener('change', () => setMenu(false, false));
+  $('#search-clear').addEventListener('click', () => {
+    $('#query').value = '';
+    $('#search-clear').hidden = true;
+    $('#query').focus();
+    if (state.query) navigate({ query: '', limit: 48 }, { replace: true });
+  });
   $('#search-form').addEventListener('submit', event => { event.preventDefault(); submitSearch(); });
-  $('#query').addEventListener('input', () => { $('#clear-search').hidden = !$('#query').value; showSuggestions(); });
+  $('#query').addEventListener('input', () => { $('#search-clear').hidden = !$('#query').value; showSuggestions(); });
   $('#query').addEventListener('focus', showSuggestions);
   $('.search-area').addEventListener('focusout', () => setTimeout(() => { if (!$('.search-area').contains(document.activeElement)) hideSuggestions(); }, 0));
   $('#query').addEventListener('keydown', event => {
-    if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); hideSuggestions(); return; }
+    // Esc first folds the suggestions; with none showing it falls through and closes the phone menu.
+    if (event.key === 'Escape') { if (!$('#search-popover').hidden) { event.preventDefault(); event.stopPropagation(); hideSuggestions(); } return; }
     if (event.key === 'Enter' && suggestionIndex >= 0 && !$('#search-popover').hidden) {
       event.preventDefault(); openSuggestion(suggestions[suggestionIndex].id); return;
     }
@@ -316,9 +310,11 @@
     $('#query').setAttribute('aria-activedescendant', `suggestion-${suggestionIndex}`);
   });
   document.addEventListener('keydown', event => {
-    if (event.key === '/' && !['styles'].includes(state.page) && !dialog.open && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest('input,textarea,select,[contenteditable="true"]')) {
-      event.preventDefault(); $('#query').focus();
-    }
+    if (event.key === '/' && !dialog.open && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest('input,textarea,select,[contenteditable="true"]')) {
+      event.preventDefault();
+      if (phone.matches) setMenu(true, false);
+      $('#query').focus();
+    } else if (event.key === 'Escape' && document.documentElement.classList.contains('menu-open')) { event.preventDefault(); setMenu(false); }
   });
   dialog.addEventListener('keydown', event => {
     if (event.key !== 'Tab' || !dialog.open || event.ctrlKey || event.metaKey || event.altKey) return;
@@ -332,7 +328,6 @@
       event.preventDefault(); first.focus();
     }
   });
-  $('#clear-search').addEventListener('click', () => { navigate({ query: '' }, { replace: true }); $('#query').focus(); });
   dialog.addEventListener('cancel', event => { event.preventDefault(); closeDetail(); });
   dialog.addEventListener('click', event => {
     if (event.target !== dialog) return;
@@ -341,7 +336,7 @@
   });
   window.addEventListener('popstate', renderRoute);
   window.addEventListener('hashchange', () => { if (location.hash !== renderedHash && location.hash !== '#main') renderRoute(); });
-  window.addEventListener('resize', () => { updateChromeOffset(); placeOpenPanels(); });
+  window.addEventListener('resize', updateChromeOffset);
   window.visualViewport?.addEventListener('resize', updateChromeOffset);
   if (!location.hash || location.hash === '#main') history.replaceState({}, '', '#/dictionary');
   renderRoute();

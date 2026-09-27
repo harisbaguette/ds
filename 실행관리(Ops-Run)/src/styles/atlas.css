@@ -91,6 +91,12 @@ html { scroll-padding-top:120px; }
 .dict-hit:focus-visible { outline:none; }.dict-hit:focus-visible::after { outline:3px solid var(--p-highlight); outline-offset:3px; }
 .dict-group .dict-glyph { width:100%; height:128px; border-radius:16px; }.dict-group .dict-glyph .ui-icon { width:40px; height:40px; }
 .dict-leaf { min-width:0; }.dict-leaf span { min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.dict-groups.dict-shelves { grid-template-columns:repeat(3,minmax(0,1fr)); max-width:960px; }
+.dict-shelves .dict-glyph { height:168px; }.dict-shelves .dict-glyph .ui-icon { width:48px; height:48px; }
+.dict-shelves strong { font-size:18px; }
+.dict-note { padding:0 6px; font-size:13px; line-height:1.5; color:var(--p-muted); }
+.dict-col-head { padding:16px 12px 4px; }.dict-col > .dict-col-head:first-of-type { padding-top:12px; }
+.dict-sub { padding-left:28px; font-size:12px; }
 /* 스타일 화면: 디자인 스타일 견본 카드 격자. 카드 전체가 하나의 선택 버튼이다. */
 .style-gallery { max-width:1320px; margin:auto; }
 .style-grid { display:grid; gap:20px; grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),300px)); }
@@ -113,7 +119,6 @@ html { scroll-padding-top:120px; }
 .style-sample .ds-bottom-nav .ui-icon { width:18px; height:18px; }
 .style-choose { display:flex; flex-direction:column; align-items:flex-start; gap:4px; padding:0 6px; text-align:left; color:var(--p-ink); background:none; border:0; }
 .style-choose strong { font-size:15px; font-weight:650; }
-.style-choose small { font-size:12px; color:var(--p-muted); }
 .style-choose::after { content:''; position:absolute; inset:0; border-radius:22px; }
 .style-choose:focus-visible { outline:none; }.style-choose:focus-visible::after { outline:3px solid var(--p-highlight); outline-offset:3px; }
 .style-badge { display:inline-flex; align-items:center; gap:4px; margin-top:6px; padding:4px 10px; border-radius:999px; background:var(--p-accent); color:var(--p-on-accent); font-size:12px; font-weight:600; }
@@ -129,6 +134,8 @@ html { scroll-padding-top:120px; }
   .dict-card { padding:16px; border-radius:20px; }
   .dict-group .dict-glyph { height:84px; }.dict-group .dict-glyph .ui-icon { width:32px; height:32px; }
   .dict-group strong { font-size:15px; }
+  .dict-groups.dict-shelves { grid-template-columns:1fr; }.dict-shelves .dict-glyph { height:96px; }
+  .dict-sub { padding-left:12px; }
   .dict-thumb,.dict-thumb.atlas-preview { height:120px; }.dict-kind-art { width:96px; height:58px; }
   .dict-entry.is-built { grid-column:span 2; }.dict-entry.is-built .dict-thumb { height:168px; }
 }

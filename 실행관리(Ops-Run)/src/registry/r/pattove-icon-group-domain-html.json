@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-group-domain-html",
+  "type": "registry:item",
+  "title": "group-domain · SVG",
+  "description": "group-domain · SVG",
+  "files": [
+    {
+      "path": "design/icons/group-domain.svg",
+      "type": "registry:file",
+      "target": "~/design/icons/group-domain.svg",
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#242424\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><rect x=\"2.5\" y=\"4\" width=\"13\" height=\"10\" rx=\"1.5\"/><path d=\"M6.5 18h5M9 14v4\"/><rect x=\"17.5\" y=\"8\" width=\"4.5\" height=\"12\" rx=\"1.2\"/></svg>\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "group-domain",
+    "environment": "html",
+    "source": "assets/icons/group-domain.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

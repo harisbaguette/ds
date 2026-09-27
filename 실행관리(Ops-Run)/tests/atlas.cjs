@@ -21,8 +21,8 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
       const source=fs.readFileSync(path.resolve(__dirname,'../src/system/react/button.jsx'),'utf8');check(name+' 내려받은 React 부품이 정본과 일치',strFromU8(files['design/react/button.jsx'])===source);
       await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
       await page.locator('.brand').click();
-      check(name+' 사전 첫 화면은 대분류 8개 그림 입구',await page.locator('.dict-group[href^="#/dictionary"]').count()===await page.evaluate(()=>Pattove.library.groups.length));
-      const inputGroup=await page.evaluate(()=>Pattove.library.groups.find(g=>g.codes.includes('INP')).id);await page.locator('[data-focus="group-'+inputGroup+'"]').click();await page.locator('[data-focus="leaf-INP"]').click();check(name+' 대분류→중분류→소분류로 탐색',await page.locator('.dict-entry.is-built').count()>=1);
+      check(name+' 사전 첫 화면은 부품·블록·템플릿 세 갈래 입구',await page.locator('.dict-group[href^="#/dictionary"]').count()===await page.evaluate(()=>Pattove.library.shelves.length));
+      await page.locator('[data-focus="shelf-part"]').click();await page.locator('[data-focus="leaf-INP"]').click();check(name+' 갈래→분류→항목으로 탐색',await page.locator('.dict-entry.is-built').count()>=1);
       await page.locator('[data-library-entry="field"]').click();check(name+' 사전에서 시각 예시와 소스로 연결',await page.locator('.component-page .part-demo input').count()>=1&&await page.locator('.install-panel').count()===1);
       await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
       await page.locator('.brand').click();await page.locator('#query').fill('TOK-01');await page.locator('#query').press('Enter');

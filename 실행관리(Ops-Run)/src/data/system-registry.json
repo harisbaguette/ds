@@ -1,6 +1,6 @@
 {
   "version": "0.3.0",
-  "revision": "59ff4e72224c19820ee46bdcd9959057381ce459dcc96c50123a3e348028527d",
+  "revision": "a2ee5817b883ee73d6f0e0ed6042bd5a2ddc013e96e49f34a5a28dfdac986376",
   "sources": [
     "src/system/parts.js",
     "src/system/parts.css",
@@ -185,6 +185,38 @@
             [
               "grid",
               "grid"
+            ],
+            [
+              "group-domain",
+              "group-domain"
+            ],
+            [
+              "group-expression",
+              "group-expression"
+            ],
+            [
+              "group-game",
+              "group-game"
+            ],
+            [
+              "group-interaction",
+              "group-interaction"
+            ],
+            [
+              "group-quality",
+              "group-quality"
+            ],
+            [
+              "group-service",
+              "group-service"
+            ],
+            [
+              "group-vocabulary",
+              "group-vocabulary"
+            ],
+            [
+              "group-work",
+              "group-work"
             ],
             [
               "info",

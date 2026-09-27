@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-group-expression-html",
+  "type": "registry:item",
+  "title": "group-expression · SVG",
+  "description": "group-expression · SVG",
+  "files": [
+    {
+      "path": "design/icons/group-expression.svg",
+      "type": "registry:file",
+      "target": "~/design/icons/group-expression.svg",
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#242424\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"7\" cy=\"7\" r=\"3.5\"/><path d=\"M17 3.5l4 7h-8z\"/><rect x=\"3.5\" y=\"13.5\" width=\"7\" height=\"7\" rx=\"1.5\"/><path d=\"M13.5 17c1.2-1.8 2.3-1.8 3.5 0s2.3 1.8 3.5 0\"/></svg>\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "group-expression",
+    "environment": "html",
+    "source": "assets/icons/group-expression.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

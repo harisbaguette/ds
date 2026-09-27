@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-group-domain-react",
+  "type": "registry:item",
+  "title": "group-domain · React",
+  "description": "group-domain · React",
+  "files": [
+    {
+      "path": "design/icons/group-domain.jsx",
+      "type": "registry:file",
+      "target": "~/design/icons/group-domain.jsx",
+      "content": "import React from 'react';\nexport function Icon(props){return (<svg {...props} viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.65\" strokeLinecap=\"round\" strokeLinejoin=\"round\" aria-hidden=\"true\"><rect x=\"2.5\" y=\"4\" width=\"13\" height=\"10\" rx=\"1.5\"/><path d=\"M6.5 18h5M9 14v4\"/><rect x=\"17.5\" y=\"8\" width=\"4.5\" height=\"12\" rx=\"1.2\"/></svg>);}\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "group-domain",
+    "environment": "react",
+    "source": "assets/icons/group-domain.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

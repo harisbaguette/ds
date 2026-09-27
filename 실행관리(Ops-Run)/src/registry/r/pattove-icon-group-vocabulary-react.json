@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-icon-group-vocabulary-react",
+  "type": "registry:item",
+  "title": "group-vocabulary · React",
+  "description": "group-vocabulary · React",
+  "files": [
+    {
+      "path": "design/icons/group-vocabulary.jsx",
+      "type": "registry:file",
+      "target": "~/design/icons/group-vocabulary.jsx",
+      "content": "import React from 'react';\nexport function Icon(props){return (<svg {...props} viewBox=\"0 0 24 24\" width=\"20\" height=\"20\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"1.65\" strokeLinecap=\"round\" strokeLinejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 4.5A1.5 1.5 0 0 1 6.5 3H19v14H6.5A1.5 1.5 0 0 0 5 18.5zM5 18.5A1.5 1.5 0 0 0 6.5 20H19\"/><path d=\"M9 7h6M9 10.5h4\"/></svg>);}\n"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "icon",
+    "icon": "group-vocabulary",
+    "environment": "react",
+    "source": "assets/icons/group-vocabulary.svg"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

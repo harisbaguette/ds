@@ -1,0 +1,46 @@
+{
+  "shelves": [
+    {"id": "part", "name": "부품", "english": "Atomic", "icon": "box", "kinds": ["부품", "기준"], "note": "아이콘·버튼처럼 어디에나 들어가는 낱개 재료와 그 규칙"},
+    {"id": "block", "name": "블록", "english": "Module", "icon": "grid", "kinds": ["모듈"], "note": "재료를 묶은 덩어리 — 목록, 표, 결제 상자"},
+    {"id": "template", "name": "템플릿", "english": "Template", "icon": "file", "kinds": ["구성", "흐름"], "note": "블록을 조립한 화면 배치와 이어지는 흐름"}
+  ],
+  "roleOrder": ["vocabulary", "interaction", "expression", "work", "quality", "additional"],
+  "places": [
+    {"id": "game", "name": "게임", "codes": ["GAM", "GHD", "GEC", "GLV", "GGN", "GIO", "GFX", "GTK", "GAC"]},
+    {"id": "magazine", "name": "매거진·뉴스", "codes": ["MAG"]},
+    {"id": "blog", "name": "블로그·웹사이트", "codes": ["BLG", "WEB"]},
+    {"id": "slides", "name": "발표·인쇄", "codes": ["SLD", "PRT"]},
+    {"id": "video", "name": "영상·콘텐츠", "codes": ["VID", "CNT"]},
+    {"id": "shop", "name": "쇼핑·결제", "codes": ["COM", "BIL", "KOR"]},
+    {"id": "finance", "name": "금융", "codes": ["FIN"]},
+    {"id": "life", "name": "생활·건강", "codes": ["LIF", "HLT", "AGE"]},
+    {"id": "work", "name": "업무·운영", "codes": ["ADM", "OBS", "OPS", "PRO", "IND", "DSK", "TOO", "DOM"]},
+    {"id": "developer", "name": "개발자", "codes": ["DEV", "CLI"]},
+    {"id": "ai", "name": "AI·대화", "codes": ["AIX", "VUI"]},
+    {"id": "account", "name": "계정·보안", "codes": ["ACC", "SEC", "PRV"]},
+    {"id": "community", "name": "소통·알림", "codes": ["SOC", "MSG", "GRO"]},
+    {"id": "learn", "name": "학습·지원", "codes": ["EDU", "HLP"]},
+    {"id": "flow", "name": "사용자 흐름", "codes": ["FLW"]},
+    {"id": "device", "name": "특수 기기", "codes": ["XR", "DVC"]}
+  ],
+  "iconGroups": [
+    {"id": "move", "name": "이동", "ranges": ["1-24"]},
+    {"id": "action", "name": "편집·행동", "ranges": ["25-93"]},
+    {"id": "status", "name": "상태·알림", "ranges": ["94-135"]},
+    {"id": "people", "name": "사람·소통", "ranges": ["136-166", "509-513"]},
+    {"id": "file", "name": "파일·폴더", "ranges": ["167-190"]},
+    {"id": "media", "name": "재생·미디어", "ranges": ["191-216"]},
+    {"id": "text", "name": "글 서식", "ranges": ["217-255"]},
+    {"id": "view", "name": "보기·차트", "ranges": ["256-284"]},
+    {"id": "money", "name": "쇼핑·돈", "ranges": ["285-311", "514-514"]},
+    {"id": "time", "name": "시간·일정", "ranges": ["312-323"]},
+    {"id": "place", "name": "장소·지도", "ranges": ["324-333", "524-524"]},
+    {"id": "device", "name": "기기·연결", "ranges": ["334-364", "518-520"]},
+    {"id": "security", "name": "보안·권한", "ranges": ["365-383"]},
+    {"id": "dev", "name": "개발·데이터", "ranges": ["384-414", "515-517"]},
+    {"id": "nature", "name": "날씨·자연·감정", "ranges": ["415-441", "522-523", "525-526"]},
+    {"id": "arrow", "name": "화살표·손잡이", "ranges": ["442-466"]},
+    {"id": "symbol", "name": "글자 기호", "ranges": ["467-496", "521-521"]},
+    {"id": "rule", "name": "아이콘 규칙", "ranges": ["497-508"]}
+  ]
+}

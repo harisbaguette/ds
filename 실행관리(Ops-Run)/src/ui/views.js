@@ -65,7 +65,7 @@
   // 스타일 화면: 디자인 스타일마다 휴대폰 첫 화면 견본 한 장. 누르면 앱 전체가 그 스타일로 갈아입는다.
   function styleGrid(state) {
     const p = window.Pattove.parts;
-    return `<section class="style-gallery" aria-labelledby="page-title"><p class="style-lead">스타일은 앱 전체가 한 번에 갈아입는 옷입니다. 고르면 모든 부품의 색·글꼴·모서리·그림자가 함께 바뀝니다. 부품 하나의 생김새는 각 부품 화면의 <b>모양</b>에서 따로 고릅니다.</p><div class="style-grid">${styles.map(style => {
+    return `<section class="style-gallery" aria-labelledby="page-title"><div class="style-grid">${styles.map(style => {
       const active = style.id === state.style;
       return `<article class="style-card${active ? ' is-active' : ''}">
         <div class="style-sample ds theme-${style.id}" data-style="${style.id}" inert aria-hidden="true">

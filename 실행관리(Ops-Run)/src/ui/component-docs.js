@@ -40,7 +40,7 @@
   // 스타일 = the whole app's outfit (#/styles); 모양 = one part's shape inside that style.
   function gallery(item, options, style) {
     const g = item.gallery, kept = chosen(item.id);
-    return `<section id="component-variants" class="component-section"><h3>${e(g.label)} <span class="variant-count">${g.list.length}</span></h3><p class="variant-lead">${e(window.Pattove.views.styleName(style))} 안에서 ${e(item.name)} 하나의 생김새만 바꿉니다. 앱 전체의 색·글꼴·모서리는 <b>스타일</b>에서 바꿉니다.</p><ul class="variant-grid" role="list">${g.list.map(v => card(item, v, options[g.key], kept)).join('')}</ul></section>`;
+    return `<section id="component-variants" class="component-section"><h3>${e(g.label)} <span class="variant-count">${g.list.length}</span></h3><ul class="variant-grid" role="list">${g.list.map(v => card(item, v, options[g.key], kept)).join('')}</ul></section>`;
   }
   // Keeps focus where it is: only the big preview and the card marks change.
   function refresh(state) {

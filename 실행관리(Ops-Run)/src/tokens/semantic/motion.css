@@ -1,0 +1,5 @@
+/* Layer 2 · semantic · motion. Values are var(--duration-*) only. */
+:root,
+.theme-main {
+  --p-duration: var(--duration-140);
+}

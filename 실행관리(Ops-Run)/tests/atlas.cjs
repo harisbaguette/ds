@@ -8,18 +8,20 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
     try{
       const page=await browser.newPage({viewport:{width:1440,height:1080}});page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
       await page.goto('http://127.0.0.1:4173/#/system');await page.evaluate(()=>document.fonts.ready);
-      check(name+' 시작 화면은 첫 부품 한 장',await page.locator('.component-page[data-component="tokens"]').count()===1&&await page.locator('.specimen').count()===0);
+      check(name+' 시작 화면은 첫 부품 한 장',await page.locator('.component-page[data-component="token-color"]').count()===1&&await page.locator('.specimen').count()===0);
       check(name+' 맨 위 필터 줄의 부품 버튼에서 부품 고르기',await page.locator('#filter-bar > .filter-menu').count()===1&&await page.locator('#facet-part a[href="#/system?detail=button"]').count()===1);
       await page.locator('[data-focus="menu-part"]').click();await page.locator('#facet-part a[href="#/system?detail=button"]').click();
       await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
       await page.locator('.brand').click();
       check(name+' 사전 첫 화면은 부품 탭 격자, 탭은 부품·블록·템플릿',await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1&&await page.locator('[data-focus^="tab-"]').count()===await page.evaluate(()=>Pattove.library.shelves.length)&&await page.locator('.dict-entry').count()>0);
-      check(name+' 목록과 상세의 디자인 토큰 그림이 같음',await page.locator('.atlas-sample[data-kind="tokens"] .ds-token-swatches i').count()===4);
+      await page.locator('[data-focus="tab-token"]').click();
+      check(name+' 토큰 탭 목록과 상세의 색 토큰 그림이 같음',await page.locator('[data-focus="tab-token"][aria-current="page"]').count()===1&&await page.locator('.atlas-sample[data-kind="token-color"] .ds-token-swatches i').count()===4);
+      await page.locator('[data-focus="tab-part"]').click();
       await page.locator('#filter-bar .filter-open').click();await page.locator('#filter-panel .filter-chip[data-filter="code:INP"]').click();await page.keyboard.press('Escape');check(name+' 탭→필터→세부 분류 칩→항목으로 탐색',await page.locator('.dict-entry.is-built').count()>=1);
       await page.locator('[data-library-entry="field"]').click();check(name+' 사전에서 부품 그림으로 연결, 설치 칸 없음',await page.locator('.component-page .part-demo input').count()>=1&&await page.locator('.install-panel,[data-system-download]').count()===0);
       await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
       await page.locator('.brand').click();await page.locator('#search-open').click();await page.locator('#query').fill('TOK-01');await page.locator('#query').press('Enter');
-      check(name+' 원문 ID로 같은 구현 조회',await page.locator('[data-library-entry="tokens"]').count()===1);
+      check(name+' 원문 ID로 같은 구현 조회',await page.locator('[data-library-entry="token-color"]').count()===1);
       for(const width of [320,375,768,1440]){
         await page.setViewportSize({width,height:1080});
         for(const route of ['styles','system','dictionary','dictionary?detail=field','system?style=main&detail=page']){

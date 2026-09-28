@@ -1,0 +1,9 @@
+/* Layer 2 · semantic · space. Values are var(--space-*) only. */
+:root,
+.theme-main {
+  --p-space-xs: var(--space-8);
+  --p-space-sm: var(--space-12);
+  --p-space-md: var(--space-16);
+  --p-space-lg: var(--space-24);
+  --p-space-xl: var(--space-32);
+}

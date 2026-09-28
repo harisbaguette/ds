@@ -69,12 +69,21 @@
       { title: '여름 프로젝트', description: '새 작업을 위한 자료와 메모', tag: '진행 중' }
     ]) });
   }
+  // One swatch row per token kind; an empty name marks the kind's default value.
+  function tokenMarks(className, names) {
+    return `<span class="${className}">${names.map(t => t ? `<i data-token="${t}"></i>` : '<i></i>').join('')}</span>`;
+  }
   function renderItem(id, prefix = uid('example'), options = {}) {
     const renderers = {
       checkbox: () => choice({ label: '링크로 공유', checked: options.state !== 'unchecked', disabled: options.state === 'disabled', indeterminate: options.state === 'indeterminate' }),
       radio: () => `<fieldset class="ds-radio-group"><legend>공개 범위</legend>${choice({kind:'radio',label:'나만 보기',checked:options.state !== 'unchecked',disabled:options.state === 'disabled',name:prefix+'-visibility'})}${choice({kind:'radio',label:'링크로 공유',disabled:options.state === 'disabled',name:prefix+'-visibility'})}</fieldset>`,
       switch: () => choice({ kind: 'switch', label: '알림 받기', checked: options.state !== 'unchecked', disabled: options.state === 'disabled' }),
-      tokens: () => '<div class="ds-token-example"><span class="ds-token-swatches">'+['accent','high','soft','text'].map(t=>'<i data-token="'+t+'"></i>').join('')+'</span><strong class="ds-token-type">Aa 가나</strong></div>',
+      'token-color': () => tokenMarks('ds-token-swatches', ['accent','high','soft','text']),
+      'token-typography': () => '<div class="ds-token-typography"><strong class="ds-token-type">Aa 가나</strong><span class="ds-token-sizes">'+['sm','md','lg'].map(t=>'<span data-token="'+t+'">가나 '+t+'</span>').join('')+'</span></div>',
+      'token-space': () => tokenMarks('ds-token-space', ['xs','sm','md','lg','xl']),
+      'token-radius': () => tokenMarks('ds-token-radius', ['','control','surface']),
+      'token-shadow': () => tokenMarks('ds-token-shadow', ['','shadow','inset','float']),
+      'token-motion': () => '<span class="ds-token-motion" aria-label="전환 시간 표본"><i></i></span>',
       icon: () => icon(options.icon || 'search'), divider, 'status-dot': statusDot,
       button: () => button({ variant: options.variant, size: options.size, state: options.state, iconName: options.icon || (options.iconOnly === 'true' ? 'search' : ''), iconOnly: options.iconOnly === 'true' }),
       input: () => `<label class="ds-field" for="${prefix}-input">이름${input({ id: prefix + '-input', disabled: options.state === 'disabled', type: options.type || 'text' })}</label>`,

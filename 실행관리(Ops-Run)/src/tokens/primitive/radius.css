@@ -1,0 +1,6 @@
+/* Layer 1 · primitive · radius. Only src/tokens/semantic/radius.css may reference these. */
+:root {
+  --radius-12: 12px;
+  --radius-16: 16px;
+  --radius-24: 24px;
+}

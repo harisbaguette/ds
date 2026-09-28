@@ -44,14 +44,14 @@
 .variant-use[aria-pressed='true'] { border-color:var(--p-accent); background:var(--p-accent); color:var(--p-on-accent); }
 .variant-use .ui-icon { width:16px; height:16px; }
 /* Phone-bottom frame: the part sits on the screen's bottom edge, rounded like the device corners */
-.variant-frame { grid-area:frame; position:relative; height:176px; overflow:hidden; border:1px solid var(--p-line); border-top:0; border-radius:0 0 32px 32px; background:var(--ds-bg); }
+.variant-frame { grid-area:frame; position:relative; height:176px; overflow:hidden; border:1px solid var(--p-line); border-top:0; border-radius:0 0 32px 32px; background:var(--p-bg); }
 .variant-card:hover .variant-frame { border-color:var(--p-control-border); }
 .variant-card[data-current] .variant-frame { box-shadow:0 0 0 2px var(--p-ink); border-color:var(--p-ink); }
 .variant-screen { position:absolute; inset:0; display:grid; grid-template-rows:10px 10px 1fr; gap:10px; padding:16px 16px 0; }
-.variant-screen i { display:block; border-radius:6px; background:var(--ds-surface); }
+.variant-screen i { display:block; border-radius:6px; background:var(--p-surface); }
 .variant-screen i:nth-child(1) { width:46%; }.variant-screen i:nth-child(2) { width:72%; }
-.variant-screen i:nth-child(3) { margin-top:4px; border-radius:18px 18px 0 0; background:linear-gradient(160deg, var(--ds-soft), var(--ds-surface)); }
-.variant-frame>.ds-bottom-nav { position:absolute; left:var(--ds-nav-inset,0); right:var(--ds-nav-inset,0); bottom:var(--ds-nav-inset,0); }
+.variant-screen i:nth-child(3) { margin-top:4px; border-radius:18px 18px 0 0; background:linear-gradient(160deg, var(--p-soft), var(--p-surface)); }
+.variant-frame>.ds-bottom-nav { position:absolute; left:var(--ds-bottom-nav-offset,0); right:var(--ds-bottom-nav-offset,0); bottom:var(--ds-bottom-nav-offset,0); }
 .component-page .part-demo>.ds.variant-frame { display:block; width:min(390px,100%); height:300px; min-height:0; margin:24px auto; padding:0; }
 @media(max-width:1250px) { .component-layout { grid-template-columns:minmax(0,1fr); }.component-toc { display:none; } }
 @media(max-width:760px) {

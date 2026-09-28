@@ -19,11 +19,11 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
    check(style+' 생성 파일 제거',!fs.readdirSync(path.join(root,'src/registry/r')).some(f=>f.startsWith('pattove-'+style+'-')));
    check(style+' 이전 설치 URL 제거',(await fetch(origin+'/src/registry/r/pattove-'+style+'-button-html.json')).status===404);
    await page.goto(origin+'/#/system?style='+style+'&category=buttons');
-   await page.waitForURL('**/#/system?detail=tokens');
+   await page.waitForURL('**/#/system?detail=token-color');
    check(style+' 이전 주소는 첫 부품으로 이동',!page.url().includes('style=')&&await page.locator('.component-page').count()===1);
   }
   check('이전 스타일 표지 소스 제거',!fs.existsSync(path.join(root,'src/ui/style-covers.js'))&&!fs.existsSync(path.join(root,'src/styles/style-covers.css')));
-  const css=['src/system/parts.css','src/styles/themes.css','src/tokens/primitive.css','src/tokens/semantic.css','src/tokens/component.css'].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('');
+  const css=['src/system/parts.css','src/styles/themes.css',...['primitive','semantic','component'].flatMap(d=>fs.readdirSync(path.join(root,'src/tokens',d)).map(f=>'src/tokens/'+d+'/'+f))].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('');
   check('배포 CSS에 이전 스타일 분기 없음',retired.every(s=>!css.includes('theme-'+s)&&!css.includes('data-style="'+s+'"')));
   await page.goto(origin+'/#/system?style=main&detail=button');
   const contrast=await page.evaluate(()=>{
@@ -32,12 +32,12 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
    const luminance=c=>c.map(x=>x/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4).reduce((v,x,i)=>v+x*[.2126,.7152,.0722][i],0);
    const ratio=(a,b)=>{const x=luminance(rgb(a)),y=luminance(rgb(b));return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
    const token=n=>s.getPropertyValue('--ds-'+n);
-   return {text:ratio(token('text'),token('bg')),muted:ratio(token('muted'),token('bg')),primary:ratio(token('on-accent'),token('accent')),inputBoundary:ratio(token('control-border'),token('bg')),focus:ratio(token('focus'),token('bg')),success:ratio(token('success'),token('surface')),error:ratio(token('error'),token('surface'))};
+   return {text:ratio(token('base-text'),token('base-bg')),muted:ratio(token('base-muted'),token('base-bg')),primary:ratio(token('button-on-accent'),token('button-accent')),inputBoundary:ratio(token('input-control-border'),token('base-bg')),focus:ratio(token('base-focus'),token('base-bg')),success:ratio(token('feedback-success'),token('base-surface')),error:ratio(token('input-error'),token('base-surface'))};
   });
   for(const name of ['text','muted','primary','success','error'])check(name+' 글자 대비 4.5:1 이상',contrast[name]>=4.5);
   for(const name of ['inputBoundary','focus'])check(name+' 조작 경계 대비 3:1 이상',contrast[name]>=3);
   fs.writeFileSync(path.join(out,'contrast.json'),JSON.stringify(contrast,null,2));
-  check('외곽과 부품이 같은 바탕 토큰 사용',await page.evaluate(()=>getComputedStyle(document.body).getPropertyValue('--p-bg').trim()===getComputedStyle(document.querySelector('.part-demo .ds')).getPropertyValue('--ds-bg').trim()));
+  check('외곽과 부품이 같은 바탕 토큰 사용',await page.evaluate(()=>getComputedStyle(document.body).getPropertyValue('--p-bg').trim()===getComputedStyle(document.querySelector('.part-demo .ds')).getPropertyValue('--ds-base-bg').trim()));
   check('비활성 버튼의 그림자 제거',await page.locator('.component-page [data-state="disabled"]').evaluateAll(ns=>ns.length>0&&ns.every(n=>getComputedStyle(n).boxShadow==='none'&&n.disabled)));
   const stateButton=async s=>{await page.goto(origin+'/#/system?style=main&detail=button&option-state='+s);return page.locator('.part-demo [data-state="'+s+'"]').first();};
   check('누름과 키보드 초점은 다른 상태',await (await stateButton('pressed')).evaluate(n=>getComputedStyle(n).boxShadow.includes('inset'))&&await (await stateButton('focus')).evaluate(n=>getComputedStyle(n).outlineStyle==='solid'&&getComputedStyle(n).outlineWidth==='3px'));

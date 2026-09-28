@@ -1,15 +1,44 @@
 {
   "version": "0.3.0",
-  "revision": "610a02404305441fc6f6932de0a775278ac896ab4cec8cc7cbb718636cd26c67",
+  "revision": "88ac75ba4483d87d97e69bf7c5c6b7c474d593f1b944346d9ae614fe30d2346e",
   "sources": [
     "src/system/parts.js",
     "src/system/parts.css",
     "src/system/behaviors.js",
     "src/system/registry.js",
     "src/data/catalog.js",
-    "src/tokens/primitive.css",
-    "src/tokens/semantic.css",
-    "src/tokens/component.css",
+    "src/tokens/primitive/color.css",
+    "src/tokens/primitive/typography.css",
+    "src/tokens/primitive/space.css",
+    "src/tokens/primitive/radius.css",
+    "src/tokens/primitive/shadow.css",
+    "src/tokens/primitive/motion.css",
+    "src/tokens/semantic/color.css",
+    "src/tokens/semantic/typography.css",
+    "src/tokens/semantic/space.css",
+    "src/tokens/semantic/radius.css",
+    "src/tokens/semantic/shadow.css",
+    "src/tokens/semantic/motion.css",
+    "src/tokens/component/badge.css",
+    "src/tokens/component/base.css",
+    "src/tokens/component/bottom-nav.css",
+    "src/tokens/component/button.css",
+    "src/tokens/component/card.css",
+    "src/tokens/component/divider.css",
+    "src/tokens/component/feedback.css",
+    "src/tokens/component/field.css",
+    "src/tokens/component/input.css",
+    "src/tokens/component/search-module.css",
+    "src/tokens/component/selection.css",
+    "src/tokens/component/status-dot.css",
+    "src/tokens/component/tabs.css",
+    "src/tokens/component/template.css",
+    "src/tokens/component/token-color.css",
+    "src/tokens/component/token-motion.css",
+    "src/tokens/component/token-radius.css",
+    "src/tokens/component/token-shadow.css",
+    "src/tokens/component/token-space.css",
+    "src/tokens/component/token-typography.css",
     "src/styles/themes.css"
   ],
   "sections": [
@@ -66,11 +95,11 @@
   ],
   "items": [
     {
-      "id": "tokens",
-      "name": "디자인 토큰",
+      "id": "token-color",
+      "name": "색 토큰",
       "section": "foundations",
       "layer": "Token",
-      "keywords": "색상 컬러 글꼴 타이포 간격 모서리 그림자 color typography spacing radius",
+      "keywords": "색 색상 컬러 배경 글자색 강조 color",
       "deps": [],
       "entry": "TOK-01",
       "version": "0.3.0",
@@ -80,14 +109,219 @@
         "React"
       ],
       "behavior": false,
-      "purpose": "공통 디자인 값",
-      "compatibility": "CSS 변수로 색·간격·서체를 참조",
+      "purpose": "배경·글자·선·강조 색의 역할 이름",
+      "compatibility": "var(--p-*) 역할 이름으로만 참조. 새 색은 원시값에 추가하고 역할에 연결",
       "inputs": [],
       "events": [],
       "controls": [],
       "gallery": null,
       "css": [
-        "tokens"
+        "token-color"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-typography",
+      "name": "글꼴 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "글꼴 서체 글자 크기 타이포 font typography",
+      "deps": [],
+      "entry": "TOK-62",
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "본문·제목 글꼴과 글자 크기 단계",
+      "compatibility": "var(--p-font)·var(--p-text-*)로 참조. 글꼴 파일은 pattove-fonts 항목이 제공",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-typography"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-space",
+      "name": "간격 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "간격 여백 거리 spacing space",
+      "deps": [],
+      "entry": "TOK-76",
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "여백과 간격의 단계",
+      "compatibility": "var(--p-space-*) 단계만 사용. 화면 배치 치수는 부품 CSS에 유지",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-space"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-radius",
+      "name": "모서리 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "모서리 둥글기 반경 radius",
+      "deps": [],
+      "entry": "TOK-91",
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "표면·조작 요소·안쪽 모서리 둥글기",
+      "compatibility": "var(--p-radius)·var(--p-control-radius)·var(--p-inner-radius)로 참조",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-radius"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-shadow",
+      "name": "그림자 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "그림자 입체 층 깊이 shadow elevation",
+      "deps": [],
+      "entry": "TOK-95",
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "띄움·눌림·떠 있는 층의 그림자",
+      "compatibility": "var(--p-shadow)·var(--p-inset)·var(--p-float) 등 역할 이름으로 참조",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-shadow"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-motion",
+      "name": "움직임 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "움직임 시간 전환 애니메이션 motion duration",
+      "deps": [],
+      "entry": "TOK-113",
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "상태 전환 시간",
+      "compatibility": "var(--p-duration)으로 참조. 전환 시간 값을 부품마다 따로 쓰지 않음",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-motion"
       ],
       "source": "src/system/parts.js",
       "reactSource": null,
@@ -277,7 +511,7 @@
       "layer": "Primitive",
       "keywords": "선 분리 경계 divider separator",
       "deps": [
-        "tokens"
+        "token-color"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -319,7 +553,9 @@
       "layer": "Primitive",
       "keywords": "상태 온라인 성공 status dot",
       "deps": [
-        "tokens"
+        "token-color",
+        "token-typography",
+        "token-space"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -363,8 +599,12 @@
       "layer": "Atom",
       "keywords": "button 행동 실행 크기 상태 hover focus disabled loading",
       "deps": [
-        "tokens",
-        "icon"
+        "icon",
+        "token-color",
+        "token-space",
+        "token-radius",
+        "token-shadow",
+        "token-motion"
       ],
       "entry": "ACT-01",
       "version": "0.3.0",
@@ -530,7 +770,10 @@
       "layer": "Atom",
       "keywords": "input text email 입력 텍스트",
       "deps": [
-        "tokens"
+        "token-color",
+        "token-space",
+        "token-radius",
+        "token-shadow"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -621,7 +864,10 @@
       "layer": "Molecule",
       "keywords": "label 오류 검증 validation error 폼 라벨 설명",
       "deps": [
-        "input"
+        "input",
+        "token-color",
+        "token-typography",
+        "token-space"
       ],
       "entry": "INP-47",
       "version": "0.3.0",
@@ -716,7 +962,10 @@
       "layer": "Atom",
       "keywords": "checkbox radio switch toggle 선택 체크박스 토글",
       "deps": [
-        "tokens"
+        "token-color",
+        "token-space",
+        "token-shadow",
+        "token-motion"
       ],
       "behavior": true,
       "version": "0.3.0",
@@ -790,7 +1039,10 @@
       "layer": "Atom",
       "keywords": "checkbox radio switch toggle 선택 체크박스 토글",
       "deps": [
-        "tokens"
+        "token-color",
+        "token-space",
+        "token-shadow",
+        "token-motion"
       ],
       "behavior": true,
       "version": "0.3.0",
@@ -859,7 +1111,10 @@
       "layer": "Atom",
       "keywords": "checkbox radio switch toggle 선택 체크박스 토글",
       "deps": [
-        "tokens"
+        "token-color",
+        "token-space",
+        "token-shadow",
+        "token-motion"
       ],
       "behavior": true,
       "version": "0.3.0",
@@ -926,7 +1181,7 @@
       "layer": "Atom",
       "keywords": "badge status 상태 태그",
       "deps": [
-        "tokens"
+        "token-color"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -994,7 +1249,9 @@
       "layer": "Molecule",
       "keywords": "tabs 메뉴 전환 탐색",
       "deps": [
-        "tokens"
+        "token-color",
+        "token-space",
+        "token-shadow"
       ],
       "entry": "NAV-06",
       "version": "0.3.0",
@@ -1041,8 +1298,11 @@
       "layer": "Molecule",
       "keywords": "navigation bottom dock 모바일 하단 메뉴",
       "deps": [
-        "tokens",
-        "icon"
+        "icon",
+        "token-color",
+        "token-space",
+        "token-radius",
+        "token-shadow"
       ],
       "entry": "NAV-05",
       "version": "0.3.0",
@@ -1261,7 +1521,12 @@
       "keywords": "toast alert progress 알림 저장 완료 진행률",
       "deps": [
         "button",
-        "status-dot"
+        "status-dot",
+        "token-color",
+        "token-typography",
+        "token-space",
+        "token-radius",
+        "token-shadow"
       ],
       "entry": "STA-03",
       "version": "0.3.0",
@@ -1306,7 +1571,11 @@
       "deps": [
         "button",
         "badge",
-        "divider"
+        "divider",
+        "token-color",
+        "token-space",
+        "token-radius",
+        "token-shadow"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -1380,7 +1649,11 @@
       "deps": [
         "field",
         "button",
-        "card"
+        "card",
+        "token-color",
+        "token-typography",
+        "token-space",
+        "token-radius"
       ],
       "entry": "DAT-01",
       "behavior": true,
@@ -1431,7 +1704,11 @@
       "keywords": "template layout 틀 레이아웃 배치 슬롯",
       "deps": [
         "badge",
-        "bottom-nav"
+        "bottom-nav",
+        "token-color",
+        "token-typography",
+        "token-space",
+        "token-radius"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",

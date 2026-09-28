@@ -3,4 +3,4 @@
 .theme-main :is(.sample-field,.sample-progress) { box-shadow:var(--p-inset); }
 .theme-main .sample-tabs { padding:5px; border:0; border-radius:16px; background:var(--p-bg); box-shadow:var(--p-inset); }
 .theme-main .sample-tabs b { background:var(--p-accent); color:var(--p-on-accent); border:0; border-radius:12px; }
-.theme-main .sample-steps > b:first-child { color:#fff; }
+.theme-main .sample-steps > b:first-child { color:var(--p-on-accent); }

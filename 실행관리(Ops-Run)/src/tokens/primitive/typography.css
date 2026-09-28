@@ -1,0 +1,24 @@
+/* Layer 1 · primitive · typography. Font files and raw font values.
+   Only src/tokens/semantic/typography.css may reference these. */
+@font-face {
+  font-family: Pretendard;
+  src: url('../../../assets/fonts/PretendardVariable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: Outfit;
+  src: url('../../../assets/fonts/Outfit-Variable.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  --font-pretendard: Pretendard, sans-serif;
+  --font-outfit: Outfit, Pretendard, sans-serif;
+  --font-size-13: 13px;
+  --font-size-16: 16px;
+  --font-size-24: 24px;
+}

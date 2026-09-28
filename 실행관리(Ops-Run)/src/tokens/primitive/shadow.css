@@ -1,0 +1,18 @@
+/* Layer 1 · primitive · shadow. Whole shadow values with their colors written in place.
+   Only src/tokens/semantic/shadow.css may reference these. */
+:root {
+  --shadow-raised-lg: 6px 7px 16px #bbc4d166, -5px -5px 14px #ffffffed;
+  --shadow-raised-sm: 3px 4px 8px #b9c3d066, -3px -3px 8px #ffffffed;
+  --shadow-inset: inset 3px 3px 6px #b7c1cf55, inset -3px -3px 6px #ffffffd9;
+  --shadow-press-deep: inset 3px 3px 6px #15222f60,inset -1px -1px 3px #ffffff18;
+  --shadow-lift-xs: 0 1px 3px #26344726;
+  --shadow-lift-sm: 0 2px 5px #24314526;
+  --shadow-lift-md: 0 3px 5px #24314526;
+  --shadow-lift-gloss: 0 3px 5px #24314526,inset 0 1px 0 #ffffff24;
+  --shadow-haze-md: 0 8px 24px #38465e12;
+  --shadow-drop-md: 0 10px 12px #24293616;
+  --shadow-float: 0 12px 32px #26394d26;
+  --shadow-float-xl: 0 24px 80px #26344740;
+  --shadow-ring-2: inset 0 0 0 2px #24293610;
+  --shadow-glow-2: 0 0 0 2px #ed667b33;
+}

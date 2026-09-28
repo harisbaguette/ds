@@ -1,0 +1,54 @@
+/* Layer 2 · semantic · color. Fixed role names; a theme swaps only which primitive each role points to.
+   Values are var(--color-*) only. */
+:root,
+.theme-main {
+  color-scheme: light;
+
+  /* Surfaces */
+  --p-bg: var(--color-white);
+  --p-surface: var(--color-gray-50);
+  --p-high: var(--color-gray-25);
+  --p-hover: var(--color-gray-100);
+  --p-row-active: var(--color-gray-75);
+  --p-disabled: var(--color-gray-150);
+  --p-glass: var(--color-frost-a91);
+  --p-backdrop: var(--color-gray-900-a40);
+  --p-tile: var(--color-stone-50);
+  --p-tile-header: var(--color-stone-40);
+  --p-image-well: var(--color-stone-100);
+  --p-selected-surface: var(--color-sage-50);
+
+  /* Content */
+  --p-ink: var(--color-gray-900);
+  --p-muted: var(--color-gray-600);
+  --p-on-accent: var(--color-white);
+
+  /* Lines */
+  --p-line: var(--color-gray-250);
+  --p-line-subtle: var(--color-gray-200);
+  --p-control-border: var(--color-gray-500);
+  --p-edge: var(--color-white);
+  --p-edge-soft: var(--color-white-a66);
+
+  /* Action, emphasis */
+  --p-accent: var(--color-gray-800);
+  --p-accent-hover: var(--color-gray-950);
+  --p-shade: var(--color-black);
+  --p-highlight: var(--color-violet-600);
+  --p-highlight-soft: var(--color-violet-100);
+  --p-soft: var(--color-green-100);
+  --p-mark: var(--color-amber-300);
+  --p-mark-hover: var(--color-amber-200);
+  --p-mark-alt: var(--color-green-300);
+
+  /* Status */
+  --p-error: var(--color-red-700);
+  --p-error-soft: var(--color-red-50);
+  --p-error-line: var(--color-red-300);
+  --p-success: var(--color-green-800);
+  --p-success-soft: var(--color-green-50);
+  --p-success-line: var(--color-green-400);
+  --p-warning: var(--color-amber-800);
+  --p-warning-soft: var(--color-amber-50);
+  --p-warning-line: var(--color-amber-500);
+}

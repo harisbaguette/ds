@@ -1,0 +1,15 @@
+/* Layer 3 · component · search-module. Only this part's rules read these names; values are var(--p-*) only. */
+.ds {
+  --ds-search-module-space-3: var(--p-space-sm);
+  --ds-search-module-text-sm: var(--p-text-sm);
+  --ds-search-module-muted: var(--p-muted);
+  --ds-search-module-space-6: var(--p-space-lg);
+  --ds-search-module-space-4: var(--p-space-md);
+  --ds-search-module-space-8: var(--p-space-xl);
+  --ds-search-module-control-border: var(--p-control-border);
+  --ds-search-module-radius: var(--p-radius);
+  --ds-search-module-border: var(--p-line);
+  --ds-search-module-surface: var(--p-surface);
+  --ds-search-module-text-lg: var(--p-text-lg);
+  --ds-search-module-success: var(--p-success);
+}

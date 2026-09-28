@@ -1,0 +1,18 @@
+/* Layer 2 · semantic · shadow. Values are var(--shadow-*) only. */
+:root,
+.theme-main {
+  --p-shadow: var(--shadow-raised-lg);
+  --p-raised: var(--shadow-raised-sm);
+  --p-inset: var(--shadow-inset);
+  --p-pressed: var(--shadow-press-deep);
+  --p-float: var(--shadow-float);
+  --p-lift: var(--shadow-lift-md);
+  --p-control-shadow: var(--shadow-lift-gloss);
+  --p-selected-shadow: var(--shadow-lift-sm);
+  --p-knob-shadow: var(--shadow-lift-xs);
+  --p-glass-shadow: var(--shadow-haze-md);
+  --p-dialog-shadow: var(--shadow-float-xl);
+  --p-drop: var(--shadow-drop-md);
+  --p-ring: var(--shadow-ring-2);
+  --p-focus-glow: var(--shadow-glow-2);
+}

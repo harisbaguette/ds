@@ -1,0 +1,9 @@
+/* Layer 2 · semantic · typography. Values are var(--font-*) only. */
+:root,
+.theme-main {
+  --p-font: var(--font-pretendard);
+  --p-display-font: var(--font-outfit);
+  --p-text-sm: var(--font-size-13);
+  --p-text-md: var(--font-size-16);
+  --p-text-lg: var(--font-size-24);
+}

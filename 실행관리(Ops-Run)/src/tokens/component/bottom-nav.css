@@ -1,0 +1,19 @@
+/* Layer 3 · component · bottom-nav. Only this part's rules read these names; values are var(--p-*) only. */
+.ds {
+  --ds-bottom-nav-surface: var(--p-surface);
+  --ds-bottom-nav-border: var(--p-line);
+  --ds-bottom-nav-muted: var(--p-muted);
+  --ds-bottom-nav-text: var(--p-ink);
+  --ds-bottom-nav-on-accent: var(--p-on-accent);
+  --ds-bottom-nav-accent: var(--p-accent);
+  --ds-bottom-nav-raised: var(--p-raised);
+  --ds-bottom-nav-bg: var(--p-bg);
+  --ds-bottom-nav-high: var(--p-high);
+  --ds-bottom-nav-glass: var(--p-glass);
+  --ds-bottom-nav-space-3: var(--p-space-sm);
+  --ds-bottom-nav-shadow: var(--p-shadow);
+  --ds-bottom-nav-soft: var(--p-soft);
+  --ds-bottom-nav-radius: var(--p-radius);
+  --ds-bottom-nav-inset: var(--p-inset);
+  --ds-bottom-nav-success: var(--p-success);
+}

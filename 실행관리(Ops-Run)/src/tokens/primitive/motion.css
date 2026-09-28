@@ -1,0 +1,4 @@
+/* Layer 1 · primitive · motion. Only src/tokens/semantic/motion.css may reference these. */
+:root {
+  --duration-140: 140ms;
+}

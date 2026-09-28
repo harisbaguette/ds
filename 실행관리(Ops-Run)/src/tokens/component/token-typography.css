@@ -1,0 +1,8 @@
+/* Layer 3 · component · token-typography. Only this part's rules read these names; values are var(--p-*) only. */
+.ds {
+  --ds-token-typography-display-font: var(--p-display-font);
+  --ds-token-typography-font: var(--p-font);
+  --ds-token-typography-text-sm: var(--p-text-sm);
+  --ds-token-typography-text-md: var(--p-text-md);
+  --ds-token-typography-text-lg: var(--p-text-lg);
+}

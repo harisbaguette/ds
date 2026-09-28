@@ -1,0 +1,41 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-main-token-typography",
+  "type": "registry:item",
+  "title": "메인 스타일 · 글꼴 토큰",
+  "description": "메인 스타일 · 글꼴 토큰. 본문·제목 글꼴과 글자 크기 단계. 글꼴 서체 글자 크기 타이포 font typography",
+  "files": [
+    {
+      "path": "design/styles/main/typography.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/typography.css",
+      "content": ".ds[data-style=\"main\"]{--p-font:Pretendard, sans-serif;--p-display-font:Outfit, Pretendard, sans-serif;--p-text-sm:13px;--p-text-md:16px;--p-text-lg:24px;}\n"
+    },
+    {
+      "path": "design/css/token-typography.css",
+      "type": "registry:file",
+      "target": "~/design/css/token-typography.css",
+      "content": ".ds {\n  --ds-token-typography-display-font:var(--p-display-font,Outfit, Pretendard, sans-serif);\n  --ds-token-typography-font:var(--p-font,Pretendard, sans-serif);\n  --ds-token-typography-text-sm:var(--p-text-sm,13px);\n  --ds-token-typography-text-md:var(--p-text-md,16px);\n  --ds-token-typography-text-lg:var(--p-text-lg,24px);\n}\n.ds .ds-token-typography { display:grid; gap:8px; justify-items:start; }\n.ds .ds-token-type { font:600 38px var(--ds-token-typography-display-font); letter-spacing:-.05em; }\n.ds .ds-token-sizes { display:flex; align-items:baseline; gap:16px; font-family:var(--ds-token-typography-font); }\n.ds .ds-token-sizes [data-token=\"sm\"] { font-size:var(--ds-token-typography-text-sm); }\n.ds .ds-token-sizes [data-token=\"md\"] { font-size:var(--ds-token-typography-text-md); }\n.ds .ds-token-sizes [data-token=\"lg\"] { font-size:var(--ds-token-typography-text-lg); }"
+    },
+    {
+      "path": "design/html/token-typography.html",
+      "type": "registry:file",
+      "target": "~/design/html/token-typography.html",
+      "content": "<div class=\"ds-token-typography\"><strong class=\"ds-token-type\">Aa 가나</strong><span class=\"ds-token-sizes\"><span data-token=\"sm\">가나 sm</span><span data-token=\"md\">가나 md</span><span data-token=\"lg\">가나 lg</span></span></div>"
+    }
+  ],
+  "registryDependencies": [
+    "http://127.0.0.1:4173/src/registry/r/pattove-fonts.json"
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "token-typography",
+    "dictionary": "TOK-62",
+    "purpose": "본문·제목 글꼴과 글자 크기 단계",
+    "keywords": "글꼴 서체 글자 크기 타이포 font typography",
+    "style": "main",
+    "source": "src/tokens/semantic/typography.css"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

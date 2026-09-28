@@ -13,22 +13,29 @@
     { id: 'composition', name: '카드·검색 모듈', group: '조합' },
     { id: 'page', name: '화면 예시', group: '조합' }
   ];
+  // Token deps name the token kinds a part's own CSS reads (checked against src/tokens/component/<part>.css at build).
+  const T = (...kinds) => kinds.map(kind => 'token-' + kind);
   const items = [
-    { id: 'tokens', name: '디자인 토큰', section: 'foundations', layer: 'Token', keywords: '색상 컬러 글꼴 타이포 간격 모서리 그림자 color typography spacing radius', deps: [], entry: 'TOK-01' },
+    { id: 'token-color', name: '색 토큰', section: 'foundations', layer: 'Token', keywords: '색 색상 컬러 배경 글자색 강조 color', deps: [], entry: 'TOK-01' },
+    { id: 'token-typography', name: '글꼴 토큰', section: 'foundations', layer: 'Token', keywords: '글꼴 서체 글자 크기 타이포 font typography', deps: [], entry: 'TOK-62' },
+    { id: 'token-space', name: '간격 토큰', section: 'foundations', layer: 'Token', keywords: '간격 여백 거리 spacing space', deps: [], entry: 'TOK-76' },
+    { id: 'token-radius', name: '모서리 토큰', section: 'foundations', layer: 'Token', keywords: '모서리 둥글기 반경 radius', deps: [], entry: 'TOK-91' },
+    { id: 'token-shadow', name: '그림자 토큰', section: 'foundations', layer: 'Token', keywords: '그림자 입체 층 깊이 shadow elevation', deps: [], entry: 'TOK-95' },
+    { id: 'token-motion', name: '움직임 토큰', section: 'foundations', layer: 'Token', keywords: '움직임 시간 전환 애니메이션 motion duration', deps: [], entry: 'TOK-113' },
     { id: 'icon', name: '아이콘', section: 'primitives', layer: 'Primitive', keywords: '검색 닫기 화살표 svg icon', deps: [], entry: 'ICO-01' },
-    { id: 'divider', name: '구분선', section: 'primitives', layer: 'Primitive', keywords: '선 분리 경계 divider separator', deps: ['tokens'] },
-    { id: 'status-dot', name: '상태 점', section: 'primitives', layer: 'Primitive', keywords: '상태 온라인 성공 status dot', deps: ['tokens'] },
-    { id: 'button', name: '버튼', section: 'buttons', layer: 'Atom', keywords: 'button 행동 실행 크기 상태 hover focus disabled loading', deps: ['tokens', 'icon'], entry: 'ACT-01' },
-    { id: 'input', name: '입력창', section: 'fields', layer: 'Atom', keywords: 'input text email 입력 텍스트', deps: ['tokens'] },
-    { id: 'field', name: '입력 필드', section: 'fields', layer: 'Molecule', keywords: 'label 오류 검증 validation error 폼 라벨 설명', deps: ['input'], entry: 'INP-47' },
-    ...['checkbox','radio','switch'].map((id, i) => ({ id, name: ['체크박스','라디오','스위치'][i], section: 'selection', layer: 'Atom', keywords: 'checkbox radio switch toggle 선택 체크박스 토글', deps: ['tokens'], behavior: true })),
-    { id: 'badge', name: '배지', section: 'feedback', layer: 'Atom', keywords: 'badge status 상태 태그', deps: ['tokens'] },
-    { id: 'tabs', name: '탭', section: 'navigation', layer: 'Molecule', keywords: 'tabs 메뉴 전환 탐색', deps: ['tokens'], entry: 'NAV-06' },
-    { id: 'bottom-nav', name: '하단 탐색', section: 'navigation', layer: 'Molecule', keywords: 'navigation bottom dock 모바일 하단 메뉴', deps: ['tokens', 'icon'], entry: 'NAV-05' },
-    { id: 'feedback', name: '알림·진행률', section: 'feedback', layer: 'Molecule', keywords: 'toast alert progress 알림 저장 완료 진행률', deps: ['button', 'status-dot'], entry: 'STA-03' },
-    { id: 'card', name: '카드', section: 'composition', layer: 'Molecule', keywords: 'card 카드 제목 본문 행동', deps: ['button', 'badge', 'divider'] },
-    { id: 'search-module', name: '검색 모듈', section: 'composition', layer: 'Module', keywords: 'search filter 검색 필터 목록 결과 빈 상태', deps: ['field', 'button', 'card'], entry: 'DAT-01', behavior: true },
-    { id: 'template', name: '목록 레이아웃', section: 'page', layer: 'Template', keywords: 'template layout 틀 레이아웃 배치 슬롯', deps: ['badge', 'bottom-nav'] },
+    { id: 'divider', name: '구분선', section: 'primitives', layer: 'Primitive', keywords: '선 분리 경계 divider separator', deps: T('color') },
+    { id: 'status-dot', name: '상태 점', section: 'primitives', layer: 'Primitive', keywords: '상태 온라인 성공 status dot', deps: T('color','typography','space') },
+    { id: 'button', name: '버튼', section: 'buttons', layer: 'Atom', keywords: 'button 행동 실행 크기 상태 hover focus disabled loading', deps: ['icon', ...T('color','space','radius','shadow','motion')], entry: 'ACT-01' },
+    { id: 'input', name: '입력창', section: 'fields', layer: 'Atom', keywords: 'input text email 입력 텍스트', deps: T('color','space','radius','shadow') },
+    { id: 'field', name: '입력 필드', section: 'fields', layer: 'Molecule', keywords: 'label 오류 검증 validation error 폼 라벨 설명', deps: ['input', ...T('color','typography','space')], entry: 'INP-47' },
+    ...['checkbox','radio','switch'].map((id, i) => ({ id, name: ['체크박스','라디오','스위치'][i], section: 'selection', layer: 'Atom', keywords: 'checkbox radio switch toggle 선택 체크박스 토글', deps: T('color','space','shadow','motion'), behavior: true })),
+    { id: 'badge', name: '배지', section: 'feedback', layer: 'Atom', keywords: 'badge status 상태 태그', deps: T('color') },
+    { id: 'tabs', name: '탭', section: 'navigation', layer: 'Molecule', keywords: 'tabs 메뉴 전환 탐색', deps: T('color','space','shadow'), entry: 'NAV-06' },
+    { id: 'bottom-nav', name: '하단 탐색', section: 'navigation', layer: 'Molecule', keywords: 'navigation bottom dock 모바일 하단 메뉴', deps: ['icon', ...T('color','space','radius','shadow')], entry: 'NAV-05' },
+    { id: 'feedback', name: '알림·진행률', section: 'feedback', layer: 'Molecule', keywords: 'toast alert progress 알림 저장 완료 진행률', deps: ['button', 'status-dot', ...T('color','typography','space','radius','shadow')], entry: 'STA-03' },
+    { id: 'card', name: '카드', section: 'composition', layer: 'Molecule', keywords: 'card 카드 제목 본문 행동', deps: ['button', 'badge', 'divider', ...T('color','space','radius','shadow')] },
+    { id: 'search-module', name: '검색 모듈', section: 'composition', layer: 'Module', keywords: 'search filter 검색 필터 목록 결과 빈 상태', deps: ['field', 'button', 'card', ...T('color','typography','space','radius')], entry: 'DAT-01', behavior: true },
+    { id: 'template', name: '목록 레이아웃', section: 'page', layer: 'Template', keywords: 'template layout 틀 레이아웃 배치 슬롯', deps: ['badge', 'bottom-nav', ...T('color','typography','space','radius')] },
     { id: 'page', name: '컬렉션 화면', section: 'page', layer: 'Page', keywords: 'page layout template 레이아웃 템플릿 화면 흐름', deps: ['template', 'search-module'], behavior: true }
   ].map(item => ({ ...item, version, lifecycle: 'Trial', environments: ['HTML','React'], behavior: item.behavior || ['button', 'tabs', 'bottom-nav', 'feedback'].includes(item.id) }));
   const control = (key, label, values) => ({ key, label, values });
@@ -60,7 +67,12 @@
     Object.assign(c, { values: g.list.map(v => [v.id, v.name]), default: g.default ?? g.list[0].id });
   }
   const contracts = {
-    tokens: ['공통 디자인 값', 'CSS 변수로 색·간격·서체를 참조', [], []],
+    'token-color': ['배경·글자·선·강조 색의 역할 이름', 'var(--p-*) 역할 이름으로만 참조. 새 색은 원시값에 추가하고 역할에 연결', [], []],
+    'token-typography': ['본문·제목 글꼴과 글자 크기 단계', 'var(--p-font)·var(--p-text-*)로 참조. 글꼴 파일은 pattove-fonts 항목이 제공', [], []],
+    'token-space': ['여백과 간격의 단계', 'var(--p-space-*) 단계만 사용. 화면 배치 치수는 부품 CSS에 유지', [], []],
+    'token-radius': ['표면·조작 요소·안쪽 모서리 둥글기', 'var(--p-radius)·var(--p-control-radius)·var(--p-inner-radius)로 참조', [], []],
+    'token-shadow': ['띄움·눌림·떠 있는 층의 그림자', 'var(--p-shadow)·var(--p-inset)·var(--p-float) 등 역할 이름으로 참조', [], []],
+    'token-motion': ['상태 전환 시간', 'var(--p-duration)으로 참조. 전환 시간 값을 부품마다 따로 쓰지 않음', [], []],
     icon: ['한 개의 그림 기호', '아이콘만 있는 행동에는 접근 가능한 이름을 제공', ['icon'], []],
     divider: ['영역의 경계', '부모의 가로 너비에 맞춰 사용', [], []],
     'status-dot': ['상태를 색과 글자로 표시', '상태 이름을 함께 유지', ['label'], []],
@@ -83,7 +95,7 @@
     const [purpose, compatibility, inputs, events] = contracts[item.id];
     Object.assign(item, { purpose, compatibility, inputs, events, controls: controls[item.id] || [], gallery: galleries[item.id] || null,
       css: ['checkbox','radio','switch'].includes(item.id) ? ['selection'] : ['page','icon'].includes(item.id) ? [] : [item.id],
-      source: 'src/system/parts.js', reactSource: ['tokens','icon'].includes(item.id) ? null : 'src/system/react/'+item.id+'.jsx', styles: window.Pattove.catalog.styles.filter(s => s.id !== 'base').map(s => s.id),
+      source: 'src/system/parts.js', reactSource: item.layer === 'Token' || item.id === 'icon' ? null : 'src/system/react/'+item.id+'.jsx', styles: window.Pattove.catalog.styles.filter(s => s.id !== 'base').map(s => s.id),
       minInlineSize: ({ 'bottom-nav': 224, 'search-module': 240, template: 240, page: 240, card: 200, input: 160, field: 160, tabs: 240, feedback: 224 })[item.id] || 160,
       support: { html: 'implemented', react: 'implemented', native: 'not-implemented', print: 'not-verified' },
       verification: { suite: 'tests/system-audit.cjs', evidence: 'test-results/system-audit/results.json' }

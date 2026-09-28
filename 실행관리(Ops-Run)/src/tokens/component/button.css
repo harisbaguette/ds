@@ -1,0 +1,22 @@
+/* Layer 3 · component · button. Only this part's rules read these names; values are var(--p-*) only. */
+.ds {
+  --ds-button-space-2: var(--p-space-xs);
+  --ds-button-accent: var(--p-accent);
+  --ds-button-control-radius: var(--p-control-radius);
+  --ds-button-on-accent: var(--p-on-accent);
+  --ds-button-control-shadow: var(--p-control-shadow);
+  --ds-button-duration: var(--p-duration);
+  --ds-button-control-border: var(--p-control-border);
+  --ds-button-text: var(--p-ink);
+  --ds-button-surface: var(--p-surface);
+  --ds-button-raised: var(--p-raised);
+  --ds-button-shade: var(--p-shade);
+  --ds-button-high: var(--p-high);
+  --ds-button-disabled: var(--p-disabled);
+  --ds-button-pressed: var(--p-pressed);
+  --ds-button-bg: var(--p-bg);
+  --ds-button-inset: var(--p-inset);
+  --ds-button-focus: var(--p-highlight);
+  --ds-button-border: var(--p-line);
+  --ds-button-muted: var(--p-muted);
+}

@@ -1,0 +1,40 @@
+/* Layer 1 · primitive · color. Raw values only, named by what the value is (never by where it is used).
+   Only src/tokens/semantic/color.css may reference these. */
+:root {
+  --color-white: #ffffff;
+  --color-white-a66: #ffffffa8;
+  --color-black: #000;
+  --color-gray-25: #fafbfc;
+  --color-gray-50: #f1f3f6;
+  --color-gray-75: #e5e9f2;
+  --color-gray-100: #e1e6ed;
+  --color-gray-150: #dce1e8;
+  --color-gray-200: #cbd2dc;
+  --color-gray-250: #c2cad5;
+  --color-gray-500: #7b8592;
+  --color-gray-600: #59636f;
+  --color-gray-800: #303b48;
+  --color-gray-900: #2c333d;
+  --color-gray-950: #25303d;
+  --color-gray-900-a40: #2c333d66;
+  --color-frost-a91: #f6f8fbe8;
+  --color-stone-40: #f3f4f1;
+  --color-stone-50: #f2f3f0;
+  --color-stone-100: #e7e9e4;
+  --color-violet-100: #e2ddf3;
+  --color-violet-600: #6153b5;
+  --color-red-50: #f9e8e9;
+  --color-red-300: #d4a2a8;
+  --color-red-700: #a3313e;
+  --color-sage-50: #e7f0eb;
+  --color-green-50: #e5f2eb;
+  --color-green-100: #d3e8de;
+  --color-green-300: #9ad9aa;
+  --color-green-400: #8fb8a5;
+  --color-green-800: #26614f;
+  --color-amber-50: #f6efd9;
+  --color-amber-200: #ffd07b;
+  --color-amber-300: #ffbf63;
+  --color-amber-500: #b9a16f;
+  --color-amber-800: #805719;
+}

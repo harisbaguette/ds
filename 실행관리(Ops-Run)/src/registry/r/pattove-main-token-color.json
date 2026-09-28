@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-main-token-color",
+  "type": "registry:item",
+  "title": "메인 스타일 · 색 토큰",
+  "description": "메인 스타일 · 색 토큰. 배경·글자·선·강조 색의 역할 이름. 색 색상 컬러 배경 글자색 강조 color",
+  "files": [
+    {
+      "path": "design/styles/main/color.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/color.css",
+      "content": ".ds[data-style=\"main\"]{--p-bg:#ffffff;--p-surface:#f1f3f6;--p-high:#fafbfc;--p-hover:#e1e6ed;--p-row-active:#e5e9f2;--p-disabled:#dce1e8;--p-glass:#f6f8fbe8;--p-backdrop:#2c333d66;--p-tile:#f2f3f0;--p-tile-header:#f3f4f1;--p-image-well:#e7e9e4;--p-selected-surface:#e7f0eb;--p-ink:#2c333d;--p-muted:#59636f;--p-on-accent:#ffffff;--p-line:#c2cad5;--p-line-subtle:#cbd2dc;--p-control-border:#7b8592;--p-edge:#ffffff;--p-edge-soft:#ffffffa8;--p-accent:#303b48;--p-accent-hover:#25303d;--p-shade:#000;--p-highlight:#6153b5;--p-highlight-soft:#e2ddf3;--p-soft:#d3e8de;--p-mark:#ffbf63;--p-mark-hover:#ffd07b;--p-mark-alt:#9ad9aa;--p-error:#a3313e;--p-error-soft:#f9e8e9;--p-error-line:#d4a2a8;--p-success:#26614f;--p-success-soft:#e5f2eb;--p-success-line:#8fb8a5;--p-warning:#805719;--p-warning-soft:#f6efd9;--p-warning-line:#b9a16f;}\n"
+    },
+    {
+      "path": "design/css/token-color.css",
+      "type": "registry:file",
+      "target": "~/design/css/token-color.css",
+      "content": ".ds {\n  --ds-token-color-border:var(--p-line,#c2cad5);\n  --ds-token-color-accent:var(--p-accent,#303b48);\n  --ds-token-color-high:var(--p-high,#fafbfc);\n  --ds-token-color-soft:var(--p-soft,#d3e8de);\n  --ds-token-color-text:var(--p-ink,#2c333d);\n}\n.ds .ds-token-swatches { display:flex; gap:8px; }\n.ds .ds-token-swatches i { width:44px; height:44px; border-radius:12px; border:1px solid var(--ds-token-color-border); background:var(--ds-token-color-accent); }\n.ds .ds-token-swatches [data-token=\"high\"] { background:var(--ds-token-color-high); }\n.ds .ds-token-swatches [data-token=\"soft\"] { background:var(--ds-token-color-soft); }\n.ds .ds-token-swatches [data-token=\"text\"] { background:var(--ds-token-color-text); }"
+    },
+    {
+      "path": "design/html/token-color.html",
+      "type": "registry:file",
+      "target": "~/design/html/token-color.html",
+      "content": "<span class=\"ds-token-swatches\"><i data-token=\"accent\"></i><i data-token=\"high\"></i><i data-token=\"soft\"></i><i data-token=\"text\"></i></span>"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "token-color",
+    "dictionary": "TOK-01",
+    "purpose": "배경·글자·선·강조 색의 역할 이름",
+    "keywords": "색 색상 컬러 배경 글자색 강조 color",
+    "style": "main",
+    "source": "src/tokens/semantic/color.css"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

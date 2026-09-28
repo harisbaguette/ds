@@ -1,5 +1,6 @@
 {
   "shelves": [
+    {"id": "token", "name": "토큰", "english": "Token", "icon": "group-expression", "kinds": [], "codes": ["TOK"], "layers": ["token"], "note": "색·글꼴·간격·모서리·그림자·움직임처럼 모든 부품이 꺼내 쓰는 디자인 값과 그 규칙"},
     {"id": "part", "name": "부품", "english": "Atomic", "icon": "box", "kinds": ["부품", "기준"], "note": "아이콘·버튼처럼 어디에나 들어가는 낱개 재료와 그 규칙"},
     {"id": "block", "name": "블록", "english": "Module", "icon": "grid", "kinds": ["모듈"], "note": "재료를 묶은 덩어리 — 목록, 표, 결제 상자"},
     {"id": "template", "name": "템플릿", "english": "Template", "icon": "file", "kinds": ["구성", "흐름"], "note": "블록을 조립한 화면 배치와 이어지는 흐름"}

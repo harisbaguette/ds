@@ -67,7 +67,11 @@ if(covered.length!==categories.length||new Set(covered).size!==covered.length||c
 // Browsing taxonomy: three shelves by kind (부품·블록·템플릿), common role groups vs "쓰는 곳" tags, and a second level inside icons.
 const taxonomy=JSON.parse(fs.readFileSync(path.join(root,'문서/사전 갈래.json'),'utf8').replace(/^﻿/,''));
 const {shelves,places,iconGroups,roleOrder}=taxonomy;
-const shelfKinds=shelves.flatMap(s=>s.kinds), entryKinds=[...new Set(entries.map(e=>e.kind))];
+// A shelf claims entries by source code first (토큰 = TOK), then by kind; every entry lands on exactly one shelf.
+const shelfCodes=shelves.flatMap(s=>s.codes||[]);
+if(new Set(shelfCodes).size!==shelfCodes.length||shelfCodes.some(code=>!categories.some(c=>c.id===code)))throw new Error('Shelf codes must be unique existing categories');
+if(shelves.some(s=>(s.layers||[]).some(id=>!layers.some(l=>l.id===id))))throw new Error('Shelf layers must be known component layers');
+const shelfKinds=shelves.flatMap(s=>s.kinds), entryKinds=[...new Set(entries.filter(e=>!shelfCodes.includes(e.category)).map(e=>e.kind))];
 if(new Set(shelfKinds).size!==shelfKinds.length||entryKinds.some(k=>!shelfKinds.includes(k)))throw new Error('Shelf kinds must cover every entry kind once: '+entryKinds.filter(k=>!shelfKinds.includes(k)).join(','));
 const placeCodes=places.flatMap(p=>p.codes);
 if(new Set(placeCodes).size!==placeCodes.length||placeCodes.some(code=>!categories.some(c=>c.id===code)))throw new Error('Place codes must be unique existing categories');

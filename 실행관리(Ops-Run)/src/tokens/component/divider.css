@@ -1,0 +1,4 @@
+/* Layer 3 · component · divider. Only this part's rules read these names; values are var(--p-*) only. */
+.ds {
+  --ds-divider-border: var(--p-line);
+}

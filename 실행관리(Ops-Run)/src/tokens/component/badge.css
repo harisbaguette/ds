@@ -1,0 +1,15 @@
+/* Layer 3 · component · badge. Only this part's rules read these names; values are var(--p-*) only. */
+.ds {
+  --ds-badge-border: var(--p-line);
+  --ds-badge-soft: var(--p-soft);
+  --ds-badge-text: var(--p-ink);
+  --ds-badge-success-soft: var(--p-success-soft);
+  --ds-badge-success-line: var(--p-success-line);
+  --ds-badge-success: var(--p-success);
+  --ds-badge-error-soft: var(--p-error-soft);
+  --ds-badge-error-line: var(--p-error-line);
+  --ds-badge-error: var(--p-error);
+  --ds-badge-warning-soft: var(--p-warning-soft);
+  --ds-badge-warning-line: var(--p-warning-line);
+  --ds-badge-warning: var(--p-warning);
+}

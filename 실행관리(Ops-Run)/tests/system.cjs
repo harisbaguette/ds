@@ -29,18 +29,19 @@ const fingerprint = element => {
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(url + '#/system');
     await page.evaluate(() => document.fonts.ready);
-    check('부품 진입은 첫 부품 한 장', page.url().endsWith('detail=tokens') && await page.locator('.component-page').count() === 1 && await page.locator('.specimen,.system-board').count() === 0 && await page.locator('[data-style-choice]').count() === 0);
+    check('부품 진입은 첫 부품 한 장', page.url().endsWith('detail=token-color') && await page.locator('.component-page').count() === 1 && await page.locator('.specimen,.system-board').count() === 0 && await page.locator('[data-style-choice]').count() === 0);
     check('현재 스타일은 하나', await page.evaluate(()=>Pattove.catalog.styles.length===1 && Pattove.catalog.styles[0].id==='main'));
     await page.screenshot({ path: path.join(output, 'styles.png') });
-    check('18개 대표 구현과 8개 역할', await page.evaluate(() => Pattove.systemRegistry.items.length === 18 && new Set([...Pattove.systemRegistry.items, ...Pattove.systemRegistry.patterns].map(i=>i.layer)).size === 8));
+    check('23개 대표 구현과 8개 역할', await page.evaluate(() => Pattove.systemRegistry.items.length === 23 && new Set([...Pattove.systemRegistry.items, ...Pattove.systemRegistry.patterns].map(i=>i.layer)).size === 8));
     check('의존 관계는 존재하는 구현을 참조', await page.evaluate(() => Pattove.systemRegistry.items.every(item => item.deps.every(id=>Pattove.systemRegistry.index.has(id)))));
     const sourceBlocks = Object.fromEntries([...fs.readFileSync(path.join(root,'src/system/parts.css'),'utf8').matchAll(/\/\* @part ([\w-]+) \*\/([\s\S]*?)(?=\/\* @part |$)/g)].map(match=>[match[1],match[2].trim()]));
     const generated = { window: { Pattove: {} } };
     vm.runInNewContext(fs.readFileSync(path.join(root,'src/data/system-source.js'),'utf8'), generated);
     check('공용 CSS 생성본이 원본과 일치', JSON.stringify(generated.window.Pattove.systemSource)===JSON.stringify(sourceBlocks));
     // Component tokens: shipped copy keeps each var(--p-*) reference and its fallback equals the live semantic value.
-    const roles = [...fs.readFileSync(path.join(root,'src/tokens/component.css'),'utf8').matchAll(/(--ds-[\w-]+)\s*:\s*var\((--p-[\w-]+)\)/g)].map(m=>[m[1],m[2]]);
-    const shipped = Object.fromEntries([...generated.window.Pattove.systemTokens.matchAll(/(--ds-[\w-]+):var\((--p-[\w-]+),([^;]+)\);/g)].map(m=>[m[1],[m[2],m[3]]]));
+    const componentDir = path.join(root,'src/tokens/component');
+    const roles = fs.readdirSync(componentDir).filter(f=>f.endsWith('.css')).flatMap(f=>[...fs.readFileSync(path.join(componentDir,f),'utf8').matchAll(/(--ds-[\w-]+)\s*:\s*var\((--p-[\w-]+)\)/g)].map(m=>[m[1],m[2]]));
+    const shipped = Object.fromEntries([...Object.values(generated.window.Pattove.systemTokens).join('').matchAll(/(--ds-[\w-]+):var\((--p-[\w-]+),([^;]+)\);/g)].map(m=>[m[1],[m[2],m[3]]]));
     const live = await page.evaluate(names => names.map(n => getComputedStyle(document.documentElement).getPropertyValue(n)), roles.map(r=>r[1]));
     const flat = v => v.replace(/\s+/g,'');
     check('부품 토큰 배포본이 원본·의미 값과 일치', roles.length === Object.keys(shipped).length && roles.every(([ds,p],i) => shipped[ds]?.[0]===p && flat(shipped[ds][1])===flat(live[i])));

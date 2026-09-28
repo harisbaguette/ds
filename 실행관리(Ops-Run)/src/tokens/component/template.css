@@ -1,0 +1,10 @@
+/* Layer 3 · component · template. Only this part's rules read these names; values are var(--p-*) only. */
+.ds {
+  --ds-template-space-8: var(--p-space-xl);
+  --ds-template-space-2: var(--p-space-xs);
+  --ds-template-text-sm: var(--p-text-sm);
+  --ds-template-muted: var(--p-muted);
+  --ds-template-space-6: var(--p-space-lg);
+  --ds-template-control-border: var(--p-control-border);
+  --ds-template-radius: var(--p-radius);
+}

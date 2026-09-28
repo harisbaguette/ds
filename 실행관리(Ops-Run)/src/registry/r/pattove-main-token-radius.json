@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-main-token-radius",
+  "type": "registry:item",
+  "title": "메인 스타일 · 모서리 토큰",
+  "description": "메인 스타일 · 모서리 토큰. 표면·조작 요소·안쪽 모서리 둥글기. 모서리 둥글기 반경 radius",
+  "files": [
+    {
+      "path": "design/styles/main/radius.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/radius.css",
+      "content": ".ds[data-style=\"main\"]{--p-radius:24px;--p-control-radius:16px;--p-inner-radius:12px;}\n"
+    },
+    {
+      "path": "design/css/token-radius.css",
+      "type": "registry:file",
+      "target": "~/design/css/token-radius.css",
+      "content": ".ds {\n  --ds-token-radius-inner-radius:var(--p-inner-radius,12px);\n  --ds-token-radius-control-radius:var(--p-control-radius,16px);\n  --ds-token-radius-radius:var(--p-radius,24px);\n}\n.ds .ds-token-radius { display:flex; gap:12px; }\n.ds .ds-token-radius i { width:48px; height:48px; border:2px solid currentColor; border-radius:var(--ds-token-radius-inner-radius); }\n.ds .ds-token-radius [data-token=\"control\"] { border-radius:var(--ds-token-radius-control-radius); }\n.ds .ds-token-radius [data-token=\"surface\"] { border-radius:var(--ds-token-radius-radius); }"
+    },
+    {
+      "path": "design/html/token-radius.html",
+      "type": "registry:file",
+      "target": "~/design/html/token-radius.html",
+      "content": "<span class=\"ds-token-radius\"><i></i><i data-token=\"control\"></i><i data-token=\"surface\"></i></span>"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "token-radius",
+    "dictionary": "TOK-91",
+    "purpose": "표면·조작 요소·안쪽 모서리 둥글기",
+    "keywords": "모서리 둥글기 반경 radius",
+    "style": "main",
+    "source": "src/tokens/semantic/radius.css"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

@@ -1,0 +1,6 @@
+/* Layer 3 · component · token-radius. Only this part's rules read these names; values are var(--p-*) only. */
+.ds {
+  --ds-token-radius-inner-radius: var(--p-inner-radius);
+  --ds-token-radius-control-radius: var(--p-control-radius);
+  --ds-token-radius-radius: var(--p-radius);
+}

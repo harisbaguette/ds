@@ -11,8 +11,9 @@ const checks=[],errors=[];
 const check=(name,value)=>{assert.ok(value,name);checks.push(name);};
 check('사전 원본의 모든 ID를 누락·중복 없이 연결',sourceIDs.length===data.entries.length&&new Set(sourceIDs).size===new Set(data.entries.map(e=>e.id)).size&&sourceIDs.every(id=>data.entries.some(e=>e.id===id)));
 check('5개 계층 모두 실제 구성요소를 가짐',data.layers.length===5&&data.layers.every(l=>data.components.some(c=>c.layer===l.id)));
-const shelfOf=e=>data.shelves.filter(s=>s.kinds.includes(e.kind));
-check('모든 항목이 부품·블록·템플릿 중 정확히 한 갈래에 들어감',data.shelves.length===3&&data.entries.every(e=>shelfOf(e).length===1));
+const shelfOf=e=>{const byCode=data.shelves.filter(s=>(s.codes||[]).includes(e.category));return byCode.length?byCode:data.shelves.filter(s=>s.kinds.includes(e.kind));};
+check('모든 항목이 토큰·부품·블록·템플릿 중 정확히 한 갈래에 들어감',data.shelves.length===4&&data.entries.every(e=>shelfOf(e).length===1));
+check('토큰 갈래가 맨 앞이고 TOK 146개를 모두 담음',data.shelves[0].id==='token'&&data.entries.filter(e=>shelfOf(e)[0].id==='token').length===146&&data.entries.filter(e=>e.category==='TOK').every(e=>shelfOf(e)[0].id==='token'));
 check('쓰는 곳 태그가 서비스·게임·영역 분류를 한 번씩 덮음',(()=>{const codes=data.places.flatMap(p=>p.codes),use=data.groups.filter(g=>['service','game','domain'].includes(g.id)).flatMap(g=>g.codes);return new Set(codes).size===codes.length&&codes.length===use.length&&use.every(c=>codes.includes(c));})());
 check('아이콘은 모두 아이콘 안쪽 분류 하나를 가짐',data.entries.filter(e=>e.category==='ICO').every(e=>data.iconGroups.some(g=>g.id===e.sub))&&data.entries.every(e=>!e.sub||e.category==='ICO'));
 check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categories.length===data.groups.flatMap(g=>g.codes).length&&new Set(data.groups.flatMap(g=>g.codes)).size===data.categories.length);
@@ -68,7 +69,14 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
     check(shelf.id+'.'+code+' 분류 항목 수 일치',items.length===counts[i]&&await shown()===counts[i]&&await page.locator('.dict-entry:not(.is-built)').count()===Math.min(48,items.filter(e=>!e.implementation).length));
    }
   }
-  check('세 탭을 합치면 사전 전체와 구현 부품이 빠짐없이 들어감',shelfTotal===data.entries.length+await page.evaluate(()=>Pattove.systemRegistry.items.filter(i=>!i.entry).length));
+  const tokenComponents=data.components.filter(c=>c.layer==='token').length;
+  check('네 탭을 합치면 사전 전체·토큰 계층 구성요소·구현 부품이 빠짐없이 들어감',tokenComponents===30&&shelfTotal===data.entries.length+tokenComponents+await page.evaluate(()=>Pattove.systemRegistry.items.filter(i=>!i.entry).length));
+  // 토큰 탭 종류 필터 = 이름의 " — " 앞부분(색·글자·간격 …), 하나뿐인 갈래와 이름만 있는 항목은 기타.
+  await goto('dictionary?shelf=token');
+  const tokenKinds=await page.locator('#filter-panel .filter-chip[data-filter^="kind:"]').evaluateAll(els=>els.map(e=>e.dataset.filter.slice(5)));
+  const colorCount=data.entries.filter(e=>e.category==='TOK'&&e.name.startsWith('색 — ')).length;
+  check('토큰 탭 종류 필터는 이름 앞부분으로 나뉨',['색','글자','간격','움직임','기타','토큰 묶음'].every(k=>tokenKinds.includes(k))&&(await itemsOf('shelf=token&kind=색')).length===colorCount&&(await itemsOf('shelf=token&kind=토큰 묶음')).length===tokenComponents);
+  check('토큰 탭 종류 칩 개수를 합치면 탭 전체',(await Promise.all(tokenKinds.map(k=>itemsOf('shelf=token&kind='+encodeURIComponent(k))))).reduce((n,l)=>n+l.length,0)===(await itemsOf('shelf=token')).length);
   // 어지러움 기준: 머리는 한 줄(로고·탭·필터·돋보기), 결과 개수 글자 없음, 필터 칸 제목은 탭과 겹치지 않음.
   const sections=()=>page.locator('#filter-panel legend').allTextContents();
   for(const route of [...data.shelves.map(s=>'dictionary?shelf='+s.id),'components','patterns','system?detail=button']){

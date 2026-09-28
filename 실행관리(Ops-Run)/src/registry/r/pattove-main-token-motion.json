@@ -1,0 +1,38 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-main-token-motion",
+  "type": "registry:item",
+  "title": "메인 스타일 · 움직임 토큰",
+  "description": "메인 스타일 · 움직임 토큰. 상태 전환 시간. 움직임 시간 전환 애니메이션 motion duration",
+  "files": [
+    {
+      "path": "design/styles/main/motion.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/motion.css",
+      "content": ".ds[data-style=\"main\"]{--p-duration:140ms;}\n"
+    },
+    {
+      "path": "design/css/token-motion.css",
+      "type": "registry:file",
+      "target": "~/design/css/token-motion.css",
+      "content": ".ds {\n  --ds-token-motion-duration:var(--p-duration,140ms);\n}\n.ds .ds-token-motion { position:relative; display:block; width:160px; height:24px; border:2px solid currentColor; border-radius:12px; }\n.ds .ds-token-motion i { position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:currentColor; transition:transform var(--ds-token-motion-duration); }\n.ds .ds-token-motion:hover i { transform:translateX(136px); }"
+    },
+    {
+      "path": "design/html/token-motion.html",
+      "type": "registry:file",
+      "target": "~/design/html/token-motion.html",
+      "content": "<span class=\"ds-token-motion\" aria-label=\"전환 시간 표본\"><i></i></span>"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "token-motion",
+    "dictionary": "TOK-113",
+    "purpose": "상태 전환 시간",
+    "keywords": "움직임 시간 전환 애니메이션 motion duration",
+    "style": "main",
+    "source": "src/tokens/semantic/motion.css"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

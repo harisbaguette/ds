@@ -1,0 +1,12 @@
+/* Layer 3 · component · tabs. Only this part's rules read these names; values are var(--p-*) only. */
+.ds {
+  --ds-tabs-border: var(--p-line);
+  --ds-tabs-bg: var(--p-bg);
+  --ds-tabs-inset: var(--p-inset);
+  --ds-tabs-muted: var(--p-muted);
+  --ds-tabs-surface: var(--p-surface);
+  --ds-tabs-accent: var(--p-accent);
+  --ds-tabs-on-accent: var(--p-on-accent);
+  --ds-tabs-selected-shadow: var(--p-selected-shadow);
+  --ds-tabs-space-6: var(--p-space-lg);
+}

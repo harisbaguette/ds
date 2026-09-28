@@ -1,0 +1,20 @@
+/* Layer 3 · component · shared base rules (.ds root, surfaces). Only this part's rules read these names; values are var(--p-*) only. */
+.ds {
+  --ds-base-text: var(--p-ink);
+  --ds-base-bg: var(--p-bg);
+  --ds-base-text-md: var(--p-text-md);
+  --ds-base-font: var(--p-font);
+  --ds-base-focus: var(--p-highlight);
+  --ds-base-text-sm: var(--p-text-sm);
+  --ds-base-space-3: var(--p-space-sm);
+  --ds-base-muted: var(--p-muted);
+  --ds-base-border: var(--p-line);
+  --ds-base-radius: var(--p-radius);
+  --ds-base-surface: var(--p-surface);
+  --ds-base-shadow: var(--p-shadow);
+  --ds-base-edge: var(--p-edge);
+  --ds-base-inset: var(--p-inset);
+  --ds-base-high: var(--p-high);
+  --ds-base-glass-shadow: var(--p-glass-shadow);
+  --ds-base-glass: var(--p-glass);
+}

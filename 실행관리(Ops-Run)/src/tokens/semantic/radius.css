@@ -1,0 +1,7 @@
+/* Layer 2 · semantic · radius. Values are var(--radius-*) only. */
+:root,
+.theme-main {
+  --p-radius: var(--radius-24);
+  --p-control-radius: var(--radius-16);
+  --p-inner-radius: var(--radius-12);
+}

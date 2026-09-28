@@ -6,14 +6,16 @@ const http = require('node:http');
 const { spawn } = require('node:child_process');
 const root = path.resolve(__dirname, '..');
 const packageRoot = path.dirname(root);
-const executable = path.join(packageRoot, '패토브 실행.exe');
+const mac = process.platform === 'darwin';
+const launcherName = mac ? '패토브 실행.command' : '패토브 실행.exe';
+const executable = path.join(packageRoot, launcherName);
 const out = path.join(root, 'test-results/launcher');
 const origin = 'http://127.0.0.1:4173';
 fs.mkdirSync(out, { recursive: true });
 const checks = [];
 const check = (name, result) => { assert.ok(result, name); checks.push(name); };
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
-const samePath = (a, b) => path.resolve(a).toLowerCase() === path.resolve(b).toLowerCase();
+const samePath = (a, b) => { const real = p => { try { return fs.realpathSync(p); } catch { return path.resolve(p); } }; return real(a).normalize('NFC').toLowerCase() === real(b).normalize('NFC').toLowerCase(); };
 async function status() {
   try {
     const response = await fetch(origin + '/__pattove/status', { signal: AbortSignal.timeout(1200) });
@@ -47,10 +49,15 @@ async function stopOwnServer(expectedRoot) {
     const cacheLink = path.join(packageRoot, 'graft');
     if (fs.existsSync(cacheLink)) check('자동 생성 캐시는 실행관리로 연결', fs.lstatSync(cacheLink).isSymbolicLink() && samePath(fs.realpathSync(cacheLink), path.join(root, 'graft')));
     const visible = fs.readdirSync(packageRoot).filter(name => !name.startsWith('.') && name !== 'graft').sort();
-    check('첫 폴더는 실행 파일·사용방법·실행관리뿐', JSON.stringify(visible) === JSON.stringify(['패토브 실행.exe', '사용방법.md', '실행관리(Ops-Run)'].sort()));
-    check('사용자가 실행할 파일은 EXE 하나', visible.filter(name => /\.(exe|bat|cmd|ps1|vbs|lnk|html)$/i.test(name)).length === 1);
-    const pe = fs.readFileSync(executable), peOffset = pe.readUInt32LE(60);
-    check('콘솔 창 없는 Windows 실행 파일', pe.toString('ascii', 0, 2) === 'MZ' && pe.readUInt16LE(peOffset + 24 + 68) === 2);
+    const launchers = ['패토브 실행.exe', '패토브 실행.command'];
+    check('첫 폴더는 실행 파일·사용방법·실행관리뿐', visible.includes(launcherName) && visible.every(name => ['사용방법.md', '실행관리(Ops-Run)', ...launchers].includes(name)));
+    check('이 운영체제에서 실행할 파일은 하나', visible.filter(name => /\.(exe|app|command|bat|cmd|ps1|vbs|lnk|html)$/i.test(name) && name !== (mac ? '패토브 실행.exe' : '패토브 실행.command')).length === 1);
+    if (mac) {
+      check('더블클릭으로 실행되는 macOS 파일', fs.readFileSync(executable, 'utf8').startsWith('#!/bin/bash') && (fs.statSync(executable).mode & 0o111) !== 0);
+    } else {
+      const pe = fs.readFileSync(executable), peOffset = pe.readUInt32LE(60);
+      check('콘솔 창 없는 Windows 실행 파일', pe.toString('ascii', 0, 2) === 'MZ' && pe.readUInt16LE(peOffset + 24 + 68) === 2);
+    }
     const previous = await status();
     if (previous) assert.ok(samePath(previous.root, root), 'Test port belongs to another project');
     mayRestore = true;
@@ -70,8 +77,9 @@ async function stopOwnServer(expectedRoot) {
     fs.mkdirSync(path.join(fixtureRoot, 'scripts'), { recursive: true });
     fs.copyFileSync(path.join(root, 'scripts/serve.cjs'), path.join(fixtureRoot, 'scripts/serve.cjs'));
     fs.writeFileSync(path.join(fixtureRoot, 'index.html'), '<!doctype html><title>Relocated launcher</title>');
-    const movedExecutable = path.join(fixture, '패토브 실행.exe');
+    const movedExecutable = path.join(fixture, launcherName);
     fs.copyFileSync(executable, movedExecutable);
+    fs.chmodSync(movedExecutable, 0o755);
     check('다른 복사본을 기존 서버로 잘못 연결하지 않음', await launch(movedExecutable) === 1);
     check('다른 복사본 실행 시 현재 서버 보존', (await status()).pid === first.pid);
 

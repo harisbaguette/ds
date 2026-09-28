@@ -1,6 +1,6 @@
 {
   "version": "0.3.0",
-  "revision": "af7b86c28c32175f97e649d12f2fd08b8c21bdcabe5fc44e00fbd5b33426935d",
+  "revision": "3f0c51dced7fcbdab54fff1a4c07816451e40efb17205fb3b089db68648126ff",
   "sources": [
     "src/system/parts.js",
     "src/system/parts.css",
@@ -8,17 +8,45 @@
     "src/system/registry.js",
     "src/data/catalog.js",
     "src/tokens/primitive/color.css",
+    "src/tokens/primitive/gradient.css",
     "src/tokens/primitive/typography.css",
+    "src/tokens/primitive/text.css",
+    "src/tokens/primitive/weight.css",
+    "src/tokens/primitive/leading.css",
+    "src/tokens/primitive/tracking.css",
     "src/tokens/primitive/space.css",
+    "src/tokens/primitive/size.css",
+    "src/tokens/primitive/container.css",
     "src/tokens/primitive/radius.css",
+    "src/tokens/primitive/border.css",
+    "src/tokens/primitive/stroke.css",
     "src/tokens/primitive/shadow.css",
+    "src/tokens/primitive/blur.css",
+    "src/tokens/primitive/opacity.css",
+    "src/tokens/primitive/aspect.css",
     "src/tokens/primitive/motion.css",
+    "src/tokens/primitive/layer.css",
+    "src/tokens/primitive/breakpoint.css",
     "src/tokens/semantic/color.css",
+    "src/tokens/semantic/gradient.css",
     "src/tokens/semantic/typography.css",
+    "src/tokens/semantic/text.css",
+    "src/tokens/semantic/weight.css",
+    "src/tokens/semantic/leading.css",
+    "src/tokens/semantic/tracking.css",
     "src/tokens/semantic/space.css",
+    "src/tokens/semantic/size.css",
+    "src/tokens/semantic/container.css",
     "src/tokens/semantic/radius.css",
+    "src/tokens/semantic/border.css",
+    "src/tokens/semantic/stroke.css",
     "src/tokens/semantic/shadow.css",
+    "src/tokens/semantic/blur.css",
+    "src/tokens/semantic/opacity.css",
+    "src/tokens/semantic/aspect.css",
     "src/tokens/semantic/motion.css",
+    "src/tokens/semantic/layer.css",
+    "src/tokens/semantic/breakpoint.css",
     "src/styles/themes.css"
   ],
   "sections": [
@@ -90,7 +118,7 @@
       ],
       "behavior": false,
       "purpose": "배경·글자·선·강조 색의 역할 이름",
-      "compatibility": "var(--p-*) 역할 이름으로만 참조. 새 색은 원시값에 추가하고 역할에 연결",
+      "compatibility": "var(--p-*) 역할 이름으로만 참조. 새 색은 원시값에 추가하고 역할에 연결. 섞은 색(veil·wash·tint)도 색 역할끼리 섞어 만든 역할로 참조",
       "inputs": [],
       "events": [],
       "controls": [],
@@ -116,12 +144,58 @@
       }
     },
     {
+      "id": "token-gradient",
+      "name": "그러데이션 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "그러데이션 그라디언트 배경 번짐 gradient",
+      "deps": [
+        "token-color"
+      ],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "넓은 배경과 구분선에 쓰는 그러데이션",
+      "compatibility": "var(--p-gradient-*)로 참조. 색은 색 역할에서만 가져오고 각도·멈춤 위치는 원시값에서 가져옴",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-gradient"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
       "id": "token-typography",
       "name": "글꼴 토큰",
       "section": "foundations",
       "layer": "Token",
-      "keywords": "글꼴 서체 글자 크기 타이포 font typography",
-      "deps": [],
+      "keywords": "글꼴 서체 타이포 글자 설정 font typography",
+      "deps": [
+        "token-text",
+        "token-weight",
+        "token-leading"
+      ],
       "entry": "TOK-62",
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -130,14 +204,174 @@
         "React"
       ],
       "behavior": false,
-      "purpose": "본문·제목 글꼴과 글자 크기 단계",
-      "compatibility": "var(--p-font)·var(--p-text-*)로 참조. 글꼴 파일은 pattove-fonts 항목이 제공",
+      "purpose": "글꼴과 글자 설정 묶음",
+      "compatibility": "var(--p-font)·var(--p-display-font)·var(--p-type-*)로 참조. 글꼴 파일은 pattove-fonts 항목이 제공. 크기·굵기·줄 간격은 각 토큰 종류에서 가져옴",
       "inputs": [],
       "events": [],
       "controls": [],
       "gallery": null,
       "css": [
         "token-typography"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-text",
+      "name": "글자 크기 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "글자 크기 본문 제목 크기 font-size text",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "글자 크기 단계",
+      "compatibility": "var(--p-text-*)로만 참조. 글자 크기를 px로 직접 쓰지 않음",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-text"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-weight",
+      "name": "굵기 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "굵기 글자 두께 font-weight weight",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "글자 굵기 단계",
+      "compatibility": "var(--p-weight-*)로 참조. 숫자 굵기를 부품에 직접 쓰지 않음",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-weight"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-leading",
+      "name": "줄 간격 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "줄 간격 행간 line-height leading",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "줄 간격 단계",
+      "compatibility": "var(--p-leading-*)로 참조",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-leading"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-tracking",
+      "name": "자간 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "자간 글자 사이 letter-spacing tracking",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "자간 단계",
+      "compatibility": "큰 제목은 display, 숫자·제목은 tight, 작은 글자는 snug, 넓힌 이름표는 wide",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-tracking"
       ],
       "source": "src/system/parts.js",
       "reactSource": null,
@@ -172,13 +406,93 @@
       ],
       "behavior": false,
       "purpose": "여백과 간격의 단계",
-      "compatibility": "var(--p-space-*) 단계만 사용. 화면 배치 치수는 부품 CSS에 유지",
+      "compatibility": "var(--p-space-*) 단계만 사용. 단계 사이 값은 calc(단계 + 단계), 음수는 calc(단계 * -1)",
       "inputs": [],
       "events": [],
       "controls": [],
       "gallery": null,
       "css": [
         "token-space"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-size",
+      "name": "크기 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "크기 너비 높이 아이콘 조작 크기 size",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "상자·아이콘·조작 요소의 크기",
+      "compatibility": "var(--p-size-*)·var(--p-icon-*)·var(--p-control-size-*)·var(--p-panel-h-*)·var(--p-fill-*)로 참조",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-size"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-container",
+      "name": "너비 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "너비 열 폭 컨테이너 읽기 폭 container measure",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "열과 화면 영역의 너비",
+      "compatibility": "var(--p-column-*)·var(--p-container-*)·var(--p-measure*)로 참조",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-container"
       ],
       "source": "src/system/parts.js",
       "reactSource": null,
@@ -213,13 +527,93 @@
       ],
       "behavior": false,
       "purpose": "표면·조작 요소·안쪽 모서리 둥글기",
-      "compatibility": "var(--p-radius)·var(--p-control-radius)·var(--p-inner-radius)로 참조",
+      "compatibility": "var(--p-radius)·var(--p-control-radius)·var(--p-inner-radius)와 var(--p-radius-*) 단계로 참조",
       "inputs": [],
       "events": [],
       "controls": [],
       "gallery": null,
       "css": [
         "token-radius"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-border",
+      "name": "테두리 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "테두리 선 두께 초점 링 border outline",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "테두리 두께와 초점 링 간격",
+      "compatibility": "var(--p-border-width*)·var(--p-focus-offset*)·var(--p-underline-offset)로 참조",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-border"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-stroke",
+      "name": "선 모양 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "선 모양 점선 파선 아이콘 선 굵기 stroke dashed dotted",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "선 모양과 아이콘 선 굵기",
+      "compatibility": "점선·파선은 var(--p-stroke-dashed|dotted), 아이콘 선 굵기는 var(--p-icon-stroke*)로 참조",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-stroke"
       ],
       "source": "src/system/parts.js",
       "reactSource": null,
@@ -254,7 +648,7 @@
       ],
       "behavior": false,
       "purpose": "띄움·눌림·떠 있는 층의 그림자",
-      "compatibility": "var(--p-shadow)·var(--p-inset)·var(--p-float) 등 역할 이름으로 참조",
+      "compatibility": "var(--p-shadow)·var(--p-inset)·var(--p-float) 등 역할 이름으로 참조. box-shadow를 부품에 직접 쓰지 않음",
       "inputs": [],
       "events": [],
       "controls": [],
@@ -280,11 +674,131 @@
       }
     },
     {
+      "id": "token-blur",
+      "name": "흐림 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "흐림 유리 블러 backdrop blur",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "유리 표면과 배경 흐림",
+      "compatibility": "filter·backdrop-filter 값은 var(--p-blur-*)로 참조",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-blur"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-opacity",
+      "name": "불투명도 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "불투명도 투명도 흐리게 opacity",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "상태별 불투명도",
+      "compatibility": "var(--p-opacity-*)로 참조",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-opacity"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-aspect",
+      "name": "비율 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "비율 가로세로 비 aspect ratio",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "그림·표본의 가로세로 비율",
+      "compatibility": "aspect-ratio는 var(--p-aspect-*)로 참조",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-aspect"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
       "id": "token-motion",
       "name": "움직임 토큰",
       "section": "foundations",
       "layer": "Token",
-      "keywords": "움직임 시간 전환 애니메이션 motion duration",
+      "keywords": "움직임 시간 전환 애니메이션 가속 motion duration easing",
       "deps": [],
       "entry": "TOK-113",
       "version": "0.3.0",
@@ -294,8 +808,8 @@
         "React"
       ],
       "behavior": false,
-      "purpose": "상태 전환 시간",
-      "compatibility": "var(--p-duration)으로 참조. 전환 시간 값을 부품마다 따로 쓰지 않음",
+      "purpose": "상태 전환 시간과 가속 곡선",
+      "compatibility": "var(--p-duration*)·var(--p-ease-*)·var(--p-rise-*)로 참조. 전환 시간 값을 부품마다 따로 쓰지 않음",
       "inputs": [],
       "events": [],
       "controls": [],
@@ -321,13 +835,97 @@
       }
     },
     {
+      "id": "token-layer",
+      "name": "쌓임 순서 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "쌓임 순서 겹침 z-index layer",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "겹치는 층의 앞뒤 순서",
+      "compatibility": "z-index는 var(--p-layer-*)로만 참조",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-layer"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "token-breakpoint",
+      "name": "화면 폭 기준 토큰",
+      "section": "foundations",
+      "layer": "Token",
+      "keywords": "화면 폭 기준 반응형 분기 breakpoint media query",
+      "deps": [],
+      "version": "0.3.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "화면 폭과 영역 폭의 분기 기준",
+      "compatibility": "@media·@container는 var()를 못 읽으므로 px를 쓰되 이 목록의 값만 사용(빌드가 검사)",
+      "inputs": [],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "token-breakpoint"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": null,
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
       "id": "icon",
       "name": "아이콘",
       "section": "primitives",
       "layer": "Primitive",
       "keywords": "검색 닫기 화살표 svg icon",
       "deps": [
-        "token-color"
+        "token-color",
+        "token-text",
+        "token-leading",
+        "token-space",
+        "token-size"
       ],
       "entry": "ICO-01",
       "version": "0.3.0",
@@ -475,10 +1073,6 @@
           "label": "모양",
           "values": [
             [
-              "filled",
-              "채움"
-            ],
-            [
               "label",
               "아이콘 + 이름"
             ],
@@ -501,13 +1095,6 @@
           },
           {
             "no": "02",
-            "id": "filled",
-            "name": "채움",
-            "when": "지금 선택된 곳 표시",
-            "saves": "위치 찾기"
-          },
-          {
-            "no": "03",
             "id": "label",
             "name": "아이콘 + 이름",
             "when": "처음 보는 아이콘",
@@ -546,7 +1133,11 @@
       "keywords": "선 분리 경계 divider separator",
       "deps": [
         "token-color",
-        "token-typography"
+        "token-gradient",
+        "token-text",
+        "token-leading",
+        "token-space",
+        "token-border"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -571,10 +1162,6 @@
             [
               "label",
               "가운데 글자"
-            ],
-            [
-              "inset",
-              "들여쓴 선"
             ]
           ],
           "default": "solid"
@@ -595,13 +1182,6 @@
             "name": "가운데 글자",
             "when": "두 방법 중 하나(또는)",
             "saves": "두 묶음 관계 추측"
-          },
-          {
-            "no": "03",
-            "id": "inset",
-            "name": "들여쓴 선",
-            "when": "아이콘 붙은 목록",
-            "saves": "줄 시작 맞춰 보기"
           }
         ],
         "key": "look",
@@ -636,8 +1216,11 @@
       "keywords": "상태 온라인 성공 status dot",
       "deps": [
         "token-color",
-        "token-typography",
-        "token-space"
+        "token-text",
+        "token-space",
+        "token-size",
+        "token-radius",
+        "token-border"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -664,10 +1247,6 @@
             [
               "avatar",
               "프로필 모서리"
-            ],
-            [
-              "check",
-              "체크 원"
             ]
           ],
           "default": "dot"
@@ -688,13 +1267,6 @@
             "name": "프로필 모서리",
             "when": "사람 목록의 접속 여부",
             "saves": "이름 옆 글 찾기"
-          },
-          {
-            "no": "03",
-            "id": "check",
-            "name": "체크 원",
-            "when": "끝났는지만 알면 될 때",
-            "saves": "색으로 완료 추측"
           }
         ],
         "key": "look",
@@ -730,9 +1302,16 @@
       "deps": [
         "icon",
         "token-color",
+        "token-text",
+        "token-weight",
+        "token-leading",
         "token-space",
+        "token-size",
         "token-radius",
+        "token-border",
+        "token-stroke",
         "token-shadow",
+        "token-opacity",
         "token-motion"
       ],
       "entry": "ACT-01",
@@ -958,9 +1537,15 @@
       "deps": [
         "token-color",
         "token-typography",
+        "token-text",
+        "token-weight",
+        "token-leading",
         "token-space",
+        "token-size",
         "token-radius",
-        "token-shadow"
+        "token-border",
+        "token-shadow",
+        "token-opacity"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -970,7 +1555,7 @@
       ],
       "behavior": false,
       "purpose": "한 줄 값 입력",
-      "compatibility": "label과 id를 연결. 오류에는 설명과 aria-invalid를 함께 사용",
+      "compatibility": "label과 id를 연결. 오류에는 설명과 aria-invalid를 함께 사용. 비밀번호 보기 단추는 이름(보기·숨기기)으로 상태 제공",
       "inputs": [
         "id",
         "value",
@@ -1041,6 +1626,10 @@
             [
               "stepper",
               "빼기·더하기"
+            ],
+            [
+              "reveal",
+              "보기 단추"
             ]
           ],
           "default": "box"
@@ -1053,7 +1642,7 @@
             "id": "box",
             "name": "기본 칸",
             "when": "한 번 쓰고 끝나는 값",
-            "saves": "모양 해석"
+            "saves": "무엇인지 알아보기"
           },
           {
             "no": "02",
@@ -1075,6 +1664,13 @@
             "name": "빼기·더하기",
             "when": "작은 수를 바꿀 때",
             "saves": "키보드 열기"
+          },
+          {
+            "no": "05",
+            "id": "reveal",
+            "name": "보기 단추",
+            "when": "가려진 비밀번호를 칠 때",
+            "saves": "틀렸는지 몰라 다시 치기"
           }
         ],
         "key": "look",
@@ -1110,8 +1706,13 @@
       "deps": [
         "input",
         "token-color",
-        "token-typography",
-        "token-space"
+        "token-text",
+        "token-weight",
+        "token-leading",
+        "token-space",
+        "token-size",
+        "token-radius",
+        "token-border"
       ],
       "entry": "INP-47",
       "version": "0.3.0",
@@ -1176,10 +1777,6 @@
               "옆 라벨"
             ],
             [
-              "float",
-              "테두리 라벨"
-            ],
-            [
               "row",
               "시작~끝 한 줄"
             ]
@@ -1205,13 +1802,6 @@
           },
           {
             "no": "03",
-            "id": "float",
-            "name": "테두리 라벨",
-            "when": "세로 공간이 빠듯할 때",
-            "saves": "스크롤"
-          },
-          {
-            "no": "04",
             "id": "row",
             "name": "시작~끝 한 줄",
             "when": "짝을 이루는 값(기간·범위)",
@@ -1264,10 +1854,17 @@
       "keywords": "checkbox radio switch toggle 선택 체크박스 토글",
       "deps": [
         "token-color",
+        "token-text",
+        "token-weight",
         "token-space",
+        "token-size",
+        "token-container",
         "token-radius",
+        "token-border",
         "token-shadow",
-        "token-motion"
+        "token-opacity",
+        "token-motion",
+        "token-layer"
       ],
       "behavior": true,
       "version": "0.3.0",
@@ -1277,7 +1874,7 @@
         "React"
       ],
       "purpose": "여러 개 중 선택",
-      "compatibility": "연결된 label을 조작 영역으로 유지",
+      "compatibility": "연결된 label을 조작 영역으로 유지. 전체 선택은 일부만 고르면 중간 상태(indeterminate)",
       "inputs": [
         "label",
         "checked",
@@ -1331,6 +1928,10 @@
             [
               "list",
               "목록 줄"
+            ],
+            [
+              "all",
+              "전체 선택"
             ]
           ],
           "default": "square"
@@ -1343,7 +1944,7 @@
             "id": "square",
             "name": "네모",
             "when": "항목이 적은 동의·선택",
-            "saves": "모양 해석"
+            "saves": "무엇인지 알아보기"
           },
           {
             "no": "02",
@@ -1365,6 +1966,13 @@
             "name": "목록 줄",
             "when": "설정 화면의 여러 항목",
             "saves": "줄과 칸 맞춰 보기"
+          },
+          {
+            "no": "05",
+            "id": "all",
+            "name": "전체 선택",
+            "when": "같은 종류 항목이 여러 개일 때",
+            "saves": "하나씩 누르기"
           }
         ],
         "key": "look",
@@ -1399,10 +2007,17 @@
       "keywords": "checkbox radio switch toggle 선택 체크박스 토글",
       "deps": [
         "token-color",
+        "token-text",
+        "token-weight",
         "token-space",
+        "token-size",
+        "token-container",
         "token-radius",
+        "token-border",
         "token-shadow",
-        "token-motion"
+        "token-opacity",
+        "token-motion",
+        "token-layer"
       ],
       "behavior": true,
       "version": "0.3.0",
@@ -1473,7 +2088,7 @@
             "id": "dot",
             "name": "가운데 점",
             "when": "선택지가 3~5개",
-            "saves": "모양 해석"
+            "saves": "무엇인지 알아보기"
           },
           {
             "no": "02",
@@ -1529,10 +2144,17 @@
       "keywords": "checkbox radio switch toggle 선택 체크박스 토글",
       "deps": [
         "token-color",
+        "token-text",
+        "token-weight",
         "token-space",
+        "token-size",
+        "token-container",
         "token-radius",
+        "token-border",
         "token-shadow",
-        "token-motion"
+        "token-opacity",
+        "token-motion",
+        "token-layer"
       ],
       "behavior": true,
       "version": "0.3.0",
@@ -1579,10 +2201,6 @@
               "기본 트랙"
             ],
             [
-              "text",
-              "켬·끔 글자"
-            ],
-            [
               "list",
               "설정 줄"
             ]
@@ -1601,13 +2219,6 @@
           },
           {
             "no": "02",
-            "id": "text",
-            "name": "켬·끔 글자",
-            "when": "색만으로 상태를 알기 어려울 때",
-            "saves": "켜졌는지 추측"
-          },
-          {
-            "no": "03",
             "id": "list",
             "name": "설정 줄",
             "when": "설정 항목이 여러 개",
@@ -1645,7 +2256,15 @@
       "layer": "Atom",
       "keywords": "badge status 상태 태그",
       "deps": [
-        "token-color"
+        "token-color",
+        "token-text",
+        "token-weight",
+        "token-leading",
+        "token-space",
+        "token-size",
+        "token-radius",
+        "token-border",
+        "token-stroke"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -1654,11 +2273,12 @@
         "React"
       ],
       "behavior": false,
-      "purpose": "짧은 상태 이름",
-      "compatibility": "색만으로 상태를 구분하지 않음",
+      "purpose": "짧은 상태 이름과 쌓인 개수",
+      "compatibility": "색만으로 상태를 구분하지 않음. 개수는 읽을 이름(예: 새 알림 3개)을 함께 제공",
       "inputs": [
         "label",
-        "tone"
+        "tone",
+        "count"
       ],
       "events": [],
       "controls": [
@@ -1693,12 +2313,12 @@
               "연한 면"
             ],
             [
-              "dot",
-              "점 붙음"
-            ],
-            [
               "icon",
               "아이콘 붙음"
+            ],
+            [
+              "count",
+              "개수 붙음"
             ]
           ],
           "default": "soft"
@@ -1715,17 +2335,17 @@
           },
           {
             "no": "02",
-            "id": "dot",
-            "name": "점 붙음",
-            "when": "여러 상태를 한 줄에 둘 때",
-            "saves": "색 칸 크기 비교"
-          },
-          {
-            "no": "03",
             "id": "icon",
             "name": "아이콘 붙음",
             "when": "색을 구분하기 어려운 사람도 볼 때",
             "saves": "색으로 뜻 해석"
+          },
+          {
+            "no": "03",
+            "id": "count",
+            "name": "개수 붙음",
+            "when": "아이콘 뒤에 새 항목이 쌓일 때",
+            "saves": "열어서 세기"
           }
         ],
         "key": "look",
@@ -1760,7 +2380,14 @@
       "keywords": "tabs 메뉴 전환 탐색",
       "deps": [
         "token-color",
+        "token-text",
+        "token-weight",
+        "token-leading",
         "token-space",
+        "token-size",
+        "token-radius",
+        "token-border",
+        "token-stroke",
         "token-shadow"
       ],
       "entry": "NAV-06",
@@ -1772,7 +2399,7 @@
       ],
       "behavior": true,
       "purpose": "같은 영역의 내용 전환",
-      "compatibility": "탭과 패널의 id 연결을 유지. 세로 모양은 위아래 방향키",
+      "compatibility": "탭과 패널의 id 연결을 유지. 세로 탭은 위아래 방향키. 옆으로 밀기 탭은 고른 탭이 화면 안에 보이도록 스크롤",
       "inputs": [
         "prefix",
         "look"
@@ -1800,6 +2427,10 @@
             [
               "vertical",
               "세로"
+            ],
+            [
+              "scroll",
+              "옆으로 밀기"
             ]
           ],
           "default": "filled"
@@ -1837,6 +2468,13 @@
             "name": "세로",
             "when": "탭이 5개 넘는 넓은 화면",
             "saves": "가로 스크롤"
+          },
+          {
+            "no": "05",
+            "id": "scroll",
+            "name": "옆으로 밀기",
+            "when": "휴대폰에서 탭이 5개 넘을 때",
+            "saves": "메뉴 열어 탭 찾기"
           }
         ]
       },
@@ -1865,12 +2503,20 @@
       "name": "하단 탐색",
       "section": "navigation",
       "layer": "Molecule",
-      "keywords": "navigation bottom dock 모바일 하단 메뉴",
+      "keywords": "navigation bottom tab bar 모바일 하단 메뉴",
       "deps": [
         "icon",
         "token-color",
+        "token-text",
+        "token-weight",
         "token-space",
-        "token-shadow"
+        "token-size",
+        "token-radius",
+        "token-border",
+        "token-stroke",
+        "token-shadow",
+        "token-blur",
+        "token-layer"
       ],
       "entry": "NAV-05",
       "version": "0.3.0",
@@ -1881,7 +2527,7 @@
       ],
       "behavior": true,
       "purpose": "주요 목적지 선택",
-      "compatibility": "목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float·fab)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공",
+      "compatibility": "목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공",
       "inputs": [
         "variant",
         "onCreate (React)"
@@ -1912,20 +2558,8 @@
               "알약 강조"
             ],
             [
-              "fab",
-              "가운데 큰 버튼"
-            ],
-            [
-              "outline",
-              "윤곽 아이콘"
-            ],
-            [
               "line",
               "위쪽 표시줄"
-            ],
-            [
-              "dock",
-              "독"
             ]
           ],
           "default": "line"
@@ -1967,31 +2601,10 @@
           },
           {
             "no": "05",
-            "id": "fab",
-            "name": "가운데 큰 버튼",
-            "when": "새로 만들기가 핵심인 앱",
-            "saves": "만들기 찾아 헤매기"
-          },
-          {
-            "no": "06",
-            "id": "outline",
-            "name": "윤곽 아이콘",
-            "when": "선택된 곳을 채움으로 구분할 때",
-            "saves": "색만 보고 위치 추측"
-          },
-          {
-            "no": "07",
             "id": "line",
             "name": "위쪽 표시줄",
             "when": "처음 쓰는 사람이 많은 앱",
-            "saves": "낯선 모양 해석"
-          },
-          {
-            "no": "08",
-            "id": "dock",
-            "name": "독",
-            "when": "태블릿·넓은 화면",
-            "saves": "엄지를 끝까지 뻗기"
+            "saves": "낯선 표시 알아보기"
           }
         ]
       },
@@ -2026,9 +2639,16 @@
         "status-dot",
         "token-color",
         "token-typography",
+        "token-text",
+        "token-weight",
+        "token-leading",
+        "token-tracking",
         "token-space",
+        "token-size",
         "token-radius",
-        "token-shadow"
+        "token-border",
+        "token-shadow",
+        "token-aspect"
       ],
       "entry": "STA-03",
       "version": "0.3.0",
@@ -2138,9 +2758,17 @@
         "badge",
         "divider",
         "token-color",
+        "token-text",
+        "token-weight",
+        "token-leading",
+        "token-tracking",
         "token-space",
+        "token-size",
         "token-radius",
-        "token-shadow"
+        "token-border",
+        "token-shadow",
+        "token-opacity",
+        "token-aspect"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -2193,7 +2821,7 @@
             "id": "raised",
             "name": "기본",
             "when": "글이 주인공인 카드",
-            "saves": "모양 해석"
+            "saves": "무엇인지 알아보기"
           },
           {
             "no": "02",
@@ -2264,10 +2892,17 @@
         "button",
         "card",
         "token-color",
-        "token-typography",
+        "token-text",
+        "token-weight",
+        "token-leading",
         "token-space",
+        "token-size",
+        "token-container",
         "token-radius",
-        "token-shadow"
+        "token-border",
+        "token-stroke",
+        "token-shadow",
+        "token-breakpoint"
       ],
       "entry": "DAT-01",
       "behavior": true,
@@ -2313,10 +2948,6 @@
             [
               "picker",
               "검색 + 얼굴 목록"
-            ],
-            [
-              "media",
-              "이미지 카드"
             ],
             [
               "feature",
@@ -2368,13 +2999,6 @@
           },
           {
             "no": "06",
-            "id": "media",
-            "name": "이미지 카드",
-            "when": "사진으로 고르는 항목",
-            "saves": "제목 읽기"
-          },
-          {
-            "no": "07",
             "id": "feature",
             "name": "큰 첫 결과",
             "when": "추천 하나를 앞세울 때",
@@ -2413,8 +3037,16 @@
         "bottom-nav",
         "token-color",
         "token-typography",
+        "token-text",
+        "token-weight",
+        "token-leading",
+        "token-tracking",
         "token-space",
-        "token-radius"
+        "token-size",
+        "token-container",
+        "token-radius",
+        "token-border",
+        "token-stroke"
       ],
       "version": "0.3.0",
       "lifecycle": "Trial",
@@ -2455,10 +3087,6 @@
               "겹친 시트"
             ],
             [
-              "magazine",
-              "잡지형"
-            ],
-            [
               "dashboard",
               "대시보드형"
             ]
@@ -2489,8 +3117,8 @@
             "no": "03",
             "id": "appbar",
             "name": "가운데 앱 바",
-            "when": "항목을 빠르게 비교할 때",
-            "saves": "카드 사이 눈 이동"
+            "when": "목록을 한 화면에 더 보고 싶을 때",
+            "saves": "더 보려고 스크롤"
           },
           {
             "no": "04",
@@ -2501,13 +3129,6 @@
           },
           {
             "no": "05",
-            "id": "magazine",
-            "name": "잡지형",
-            "when": "추천 하나를 앞세울 때",
-            "saves": "무엇부터 볼지 고민"
-          },
-          {
-            "no": "06",
             "id": "dashboard",
             "name": "대시보드형",
             "when": "개수부터 파악할 때",
@@ -2581,10 +3202,6 @@
               "겹친 시트"
             ],
             [
-              "magazine",
-              "잡지형"
-            ],
-            [
               "dashboard",
               "대시보드형"
             ]
@@ -2615,8 +3232,8 @@
             "no": "03",
             "id": "appbar",
             "name": "가운데 앱 바",
-            "when": "항목을 빠르게 비교할 때",
-            "saves": "카드 사이 눈 이동"
+            "when": "목록을 한 화면에 더 보고 싶을 때",
+            "saves": "더 보려고 스크롤"
           },
           {
             "no": "04",
@@ -2627,13 +3244,6 @@
           },
           {
             "no": "05",
-            "id": "magazine",
-            "name": "잡지형",
-            "when": "추천 하나를 앞세울 때",
-            "saves": "무엇부터 볼지 고민"
-          },
-          {
-            "no": "06",
             "id": "dashboard",
             "name": "대시보드형",
             "when": "개수부터 파악할 때",

@@ -1,15 +1,13 @@
-/* Layer 2 · semantic · leading. Line-height scale: 01 tightest upward. */
+/* Layer 2 · semantic · leading. Line heights from none (1) to looser. */
 :root,
 .theme-main {
-  --p-leading-01: var(--leading-100);
-  --p-leading-02: var(--leading-105);
-  --p-leading-03: var(--leading-110);
-  --p-leading-04: var(--leading-120);
-  --p-leading-05: var(--leading-130);
-  --p-leading-06: var(--leading-140);
-  --p-leading-07: var(--leading-145);
-  --p-leading-08: var(--leading-150);
-  --p-leading-09: var(--leading-160);
-  --p-leading-10: var(--leading-170);
-  --p-leading-11: var(--leading-180);
+  --p-leading-none: var(--leading-100);
+  --p-leading-tight: var(--leading-110);
+  --p-leading-snug: var(--leading-120);
+  --p-leading-compact: var(--leading-130);
+  --p-leading-cozy: var(--leading-140);
+  --p-leading-normal: var(--leading-150);
+  --p-leading-relaxed: var(--leading-160);
+  --p-leading-loose: var(--leading-170);
+  --p-leading-looser: var(--leading-180);
 }

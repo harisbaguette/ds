@@ -3,19 +3,49 @@
   "name": "pattove-main-token-motion",
   "type": "registry:item",
   "title": "메인 스타일 · 움직임 토큰",
-  "description": "메인 스타일 · 움직임 토큰. 상태 전환 시간. 움직임 시간 전환 애니메이션 motion duration",
+  "description": "메인 스타일 · 움직임 토큰. 상태 전환 시간과 가속 곡선. 움직임 시간 전환 애니메이션 가속 motion duration easing",
   "files": [
+    {
+      "path": "design/styles/main/space.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/space.css",
+      "content": ".ds[data-style=\"main\"]{--p-space-4xs:2px;--p-space-3xs:4px;--p-space-2xs:6px;--p-space-xs:8px;--p-space-xs-plus:10px;--p-space-sm:12px;--p-space-sm-plus:14px;--p-space-md:16px;--p-space-md-plus:20px;--p-space-lg:24px;--p-space-lg-plus:28px;--p-space-xl:32px;--p-space-xl-plus:36px;--p-space-2xl:40px;--p-space-3xl:48px;--p-space-4xl:56px;--p-space-5xl:64px;--p-space-6xl:80px;--p-space-7xl:104px;}\n"
+    },
+    {
+      "path": "design/styles/main/size.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/size.css",
+      "content": ".ds[data-style=\"main\"]{--p-size-hairline:1px;--p-size-4xs:2px;--p-size-3xs:4px;--p-size-label:4.6em;--p-size-2xs:6px;--p-size-xs:8px;--p-size-xs-plus:10px;--p-size-sm:12px;--p-size-sm-plus:14px;--p-size-md:16px;--p-size-md-plus:20px;--p-size-lg:24px;--p-size-lg-plus:28px;--p-size-xl:32px;--p-size-xl-plus:36px;--p-size-2xl:40px;--p-size-3xl:48px;--p-size-4xl:56px;--p-size-5xl:64px;--p-size-6xl:80px;--p-icon-3xs:12px;--p-icon-2xs:14px;--p-icon-xs:16px;--p-icon-sm:18px;--p-icon-md:20px;--p-icon-lg:22px;--p-icon-xl:24px;--p-icon-2xl:26px;--p-icon-3xl:28px;--p-icon-4xl:32px;--p-icon-5xl:40px;--p-control-size-sm:44px;--p-control-size-sm-plus:46px;--p-control-size-md:48px;--p-control-size-md-plus:52px;--p-control-size-lg:56px;--p-control-size-xl:64px;--p-panel-h-6xs-plus:120px;--p-panel-h-5xs:128px;--p-panel-h-5xs-plus:130px;--p-panel-h-4xs:150px;--p-panel-h-4xs-plus:154px;--p-panel-h-3xs:160px;--p-panel-h-3xs-plus:164px;--p-panel-h-2xs:168px;--p-panel-h-2xs-plus:170px;--p-panel-h-xs:176px;--p-panel-h-xs-plus:180px;--p-panel-h-sm:208px;--p-panel-h-sm-plus:220px;--p-panel-h-md:240px;--p-panel-h-md-plus:256px;--p-panel-h-lg:260px;--p-panel-h-lg-plus:270px;--p-panel-h-xl:276px;--p-panel-h-xl-plus:300px;--p-panel-h-2xl:330px;--p-panel-h-2xl-plus:360px;--p-panel-h-3xl:380px;--p-panel-h-3xl-plus:400px;--p-panel-h-4xl:480px;--p-panel-h-4xl-plus:760px;--p-panel-h-5xl:780px;--p-fill-3xs:18%;--p-fill-2xs:24%;--p-fill-xs:38%;--p-fill-sm:46%;--p-fill-md:60%;--p-fill-lg:62%;--p-fill-xl:65%;--p-fill-2xl:68%;--p-fill-3xl:72%;--p-fill-4xl:76%;--p-zoom-sm:.38;--p-zoom-md:.44;--p-zoom-lg:.58;--p-zoom-xl:.76;--p-viewport-h-sm:44vh;--p-viewport-h-md:56vh;--p-viewport-w-lg:86vw;}\n"
+    },
+    {
+      "path": "design/styles/main/container.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/container.css",
+      "content": ".ds[data-style=\"main\"]{--p-measure-narrow:60ch;--p-measure:72ch;--p-column-5xs:120px;--p-column-4xs:144px;--p-column-3xs:160px;--p-column-2xs:170px;--p-column-xs:200px;--p-column-sm:210px;--p-column-md:220px;--p-column-lg:236px;--p-column-xl:240px;--p-column-2xl:248px;--p-column-3xl:250px;--p-column-4xl:270px;--p-column-5xl:280px;--p-column-6xl:300px;--p-container-6xs:324px;--p-container-5xs:360px;--p-container-4xs:380px;--p-container-3xs:390px;--p-container-2xs:400px;--p-container-xs:420px;--p-container-sm:480px;--p-container-md:500px;--p-container-lg:560px;--p-container-xl:600px;--p-container-2xl:820px;--p-container-3xl:1080px;--p-container-4xl:1200px;--p-container-5xl:1320px;--p-container-6xl:1520px;}\n"
+    },
+    {
+      "path": "design/styles/main/radius.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/radius.css",
+      "content": ".ds[data-style=\"main\"]{--p-radius-4xs:2px;--p-radius-3xs:4px;--p-radius-2xs:6px;--p-radius-xs:8px;--p-radius-xs-plus:10px;--p-radius-sm:12px;--p-radius-sm-plus:14px;--p-radius-md:16px;--p-radius-md-plus:20px;--p-radius-lg:24px;--p-radius-lg-plus:28px;--p-radius-xl:32px;--p-radius-circle:50%;--p-radius-full:999px;--p-inner-radius:var(--p-radius-sm);--p-control-radius:var(--p-radius-md);--p-radius:var(--p-radius-lg);}\n"
+    },
+    {
+      "path": "design/styles/main/border.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/border.css",
+      "content": ".ds[data-style=\"main\"]{--p-underline-offset:3px;--p-border-width:1px;--p-border-width-strong:2px;--p-border-width-focus:3px;--p-focus-offset:3px;--p-focus-offset-tight:2px;--p-focus-offset-hairline:1px;}\n"
+    },
     {
       "path": "design/styles/main/motion.css",
       "type": "registry:file",
       "target": "~/design/styles/main/motion.css",
-      "content": ".ds[data-style=\"main\"]{--p-duration:140ms;}\n"
+      "content": ".ds[data-style=\"main\"]{--p-rise-sm:1px;--p-rise-md:2px;--p-duration:140ms;--p-duration-instant:70ms;--p-duration-fast:110ms;--p-duration-normal:150ms;--p-duration-slow:240ms;--p-duration-slower:400ms;--p-duration-spin:800ms;--p-ease-standard:cubic-bezier(.2, 0, .38, .9);--p-ease-enter:cubic-bezier(0, 0, .38, .9);--p-ease-exit:cubic-bezier(.2, 0, 1, .9);--p-ease-linear:linear;}\n"
     },
     {
       "path": "design/css/token-motion.css",
       "type": "registry:file",
       "target": "~/design/css/token-motion.css",
-      "content": ".ds .ds-token-motion { position:relative; display:block; width:160px; height:24px; border:2px solid currentColor; border-radius:12px; }\n.ds .ds-token-motion i { position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:currentColor; transition:transform var(--p-duration); }\n.ds .ds-token-motion:hover i { transform:translateX(136px); }"
+      "content": ".ds .ds-token-motion { position:relative; display:block; width:var(--p-column-3xs); height:var(--p-size-lg); border:var(--p-border-width-strong) solid currentColor; border-radius:var(--p-radius-sm); }\n.ds .ds-token-motion i { position:absolute; top:var(--p-space-4xs); left:var(--p-space-4xs); width:var(--p-size-md); height:var(--p-size-md); border-radius:var(--p-radius-circle); background:currentColor; transition:transform var(--p-duration) var(--p-ease-standard); }\n.ds .ds-token-motion:hover i { transform:translateX(calc(var(--p-column-3xs) - var(--p-size-lg))); }"
     },
     {
       "path": "design/html/token-motion.html",
@@ -29,8 +59,8 @@
     "lifecycle": "Trial",
     "item": "token-motion",
     "dictionary": "TOK-113",
-    "purpose": "상태 전환 시간",
-    "keywords": "움직임 시간 전환 애니메이션 motion duration",
+    "purpose": "상태 전환 시간과 가속 곡선",
+    "keywords": "움직임 시간 전환 애니메이션 가속 motion duration easing",
     "style": "main",
     "source": "src/tokens/semantic/motion.css"
   },

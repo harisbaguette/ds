@@ -15,4 +15,7 @@
   --shadow-float-xl: 0 24px 80px #26344740;
   --shadow-ring-2: inset 0 0 0 2px #24293610;
   --shadow-glow-2: 0 0 0 2px #ed667b33;
+
+  /* stage shadow under the phone frame */
+  --shadow-stage: 0 24px 44px -28px #303b4873;
 }

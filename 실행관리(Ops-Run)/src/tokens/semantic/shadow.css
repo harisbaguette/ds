@@ -15,4 +15,7 @@
   --p-drop: var(--shadow-drop-md);
   --p-ring: var(--shadow-ring-2);
   --p-focus-glow: var(--shadow-glow-2);
+
+  /* Stage shadow */
+  --p-stage-shadow: var(--shadow-stage);
 }

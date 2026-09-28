@@ -1,9 +1,10 @@
-/* Layer 2 · semantic · typography. Values are var(--font-*) only. */
+/* Layer 2 · semantic · typography. Font families and whole type settings (font shorthand values) composed from text, leading and weight roles. */
 :root,
 .theme-main {
   --p-font: var(--font-pretendard);
   --p-display-font: var(--font-outfit);
-  --p-text-sm: var(--font-size-13);
-  --p-text-md: var(--font-size-16);
-  --p-text-lg: var(--font-size-24);
+  --p-type-body: var(--p-text-md)/var(--p-leading-normal) var(--p-font);
+  --p-type-display: var(--p-weight-semibold) var(--p-text-display-sm) var(--p-display-font);
+  --p-type-figure: var(--p-weight-bold) var(--p-text-md)/var(--p-leading-none) var(--p-display-font);
+  --p-type-stat: var(--p-weight-bold) var(--p-text-title-lg)/var(--p-leading-snug) var(--p-display-font);
 }

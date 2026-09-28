@@ -51,4 +51,14 @@
   --p-warning: var(--color-amber-800);
   --p-warning-soft: var(--color-amber-50);
   --p-warning-line: var(--color-amber-500);
+
+  /* Mixed roles, composed from the roles above */
+  --p-accent-shaded: color-mix(in srgb, var(--p-accent) var(--color-mix-84), var(--p-shade));
+  --p-glass-veil: color-mix(in oklab, var(--p-glass) var(--color-mix-68), transparent);
+  --p-high-veil: color-mix(in oklab, var(--p-high) var(--color-mix-80), transparent);
+  --p-current-tint: color-mix(in oklab, currentColor var(--color-mix-14), transparent);
+  --p-on-accent-muted: color-mix(in oklab, var(--p-on-accent) var(--color-mix-74), transparent);
+  --p-accent-wash: color-mix(in oklab, var(--p-accent) var(--color-mix-26), transparent);
+  --p-success-wash: color-mix(in oklab, var(--p-success) var(--color-mix-34), transparent);
+  --p-soft-success: color-mix(in oklab, var(--p-success) var(--color-mix-16), var(--p-soft));
 }

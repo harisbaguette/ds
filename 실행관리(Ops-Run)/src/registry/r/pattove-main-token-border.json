@@ -1,0 +1,55 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-main-token-border",
+  "type": "registry:item",
+  "title": "메인 스타일 · 테두리 토큰",
+  "description": "메인 스타일 · 테두리 토큰. 테두리 두께와 초점 링 간격. 테두리 선 두께 초점 링 border outline",
+  "files": [
+    {
+      "path": "design/styles/main/color.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/color.css",
+      "content": ".ds[data-style=\"main\"]{--p-bg:#ffffff;--p-surface:#f1f3f6;--p-high:#fafbfc;--p-hover:#e1e6ed;--p-row-active:#e5e9f2;--p-disabled:#dce1e8;--p-glass:#f6f8fbe8;--p-backdrop:#2c333d66;--p-tile:#f2f3f0;--p-tile-header:#f3f4f1;--p-image-well:#e7e9e4;--p-selected-surface:#e7f0eb;--p-ink:#2c333d;--p-muted:#59636f;--p-on-accent:#ffffff;--p-line:#c2cad5;--p-line-subtle:#cbd2dc;--p-control-border:#7b8592;--p-edge:#ffffff;--p-edge-soft:#ffffffa8;--p-accent:#303b48;--p-accent-hover:#25303d;--p-shade:#000;--p-highlight:#6153b5;--p-highlight-soft:#e2ddf3;--p-soft:#d3e8de;--p-mark:#ffbf63;--p-mark-hover:#ffd07b;--p-mark-alt:#9ad9aa;--p-error:#a3313e;--p-error-soft:#f9e8e9;--p-error-line:#d4a2a8;--p-success:#26614f;--p-success-soft:#e5f2eb;--p-success-line:#8fb8a5;--p-warning:#805719;--p-warning-soft:#f6efd9;--p-warning-line:#b9a16f;--p-accent-shaded:color-mix(in srgb, var(--p-accent) 84%, var(--p-shade));--p-glass-veil:color-mix(in oklab, var(--p-glass) 68%, transparent);--p-high-veil:color-mix(in oklab, var(--p-high) 80%, transparent);--p-current-tint:color-mix(in oklab, currentColor 14%, transparent);--p-on-accent-muted:color-mix(in oklab, var(--p-on-accent) 74%, transparent);--p-accent-wash:color-mix(in oklab, var(--p-accent) 26%, transparent);--p-success-wash:color-mix(in oklab, var(--p-success) 34%, transparent);--p-soft-success:color-mix(in oklab, var(--p-success) 16%, var(--p-soft));}\n"
+    },
+    {
+      "path": "design/styles/main/size.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/size.css",
+      "content": ".ds[data-style=\"main\"]{--p-size-hairline:1px;--p-size-4xs:2px;--p-size-3xs:4px;--p-size-label:4.6em;--p-size-2xs:6px;--p-size-xs:8px;--p-size-xs-plus:10px;--p-size-sm:12px;--p-size-sm-plus:14px;--p-size-md:16px;--p-size-md-plus:20px;--p-size-lg:24px;--p-size-lg-plus:28px;--p-size-xl:32px;--p-size-xl-plus:36px;--p-size-2xl:40px;--p-size-3xl:48px;--p-size-4xl:56px;--p-size-5xl:64px;--p-size-6xl:80px;--p-icon-3xs:12px;--p-icon-2xs:14px;--p-icon-xs:16px;--p-icon-sm:18px;--p-icon-md:20px;--p-icon-lg:22px;--p-icon-xl:24px;--p-icon-2xl:26px;--p-icon-3xl:28px;--p-icon-4xl:32px;--p-icon-5xl:40px;--p-control-size-sm:44px;--p-control-size-sm-plus:46px;--p-control-size-md:48px;--p-control-size-md-plus:52px;--p-control-size-lg:56px;--p-control-size-xl:64px;--p-panel-h-6xs-plus:120px;--p-panel-h-5xs:128px;--p-panel-h-5xs-plus:130px;--p-panel-h-4xs:150px;--p-panel-h-4xs-plus:154px;--p-panel-h-3xs:160px;--p-panel-h-3xs-plus:164px;--p-panel-h-2xs:168px;--p-panel-h-2xs-plus:170px;--p-panel-h-xs:176px;--p-panel-h-xs-plus:180px;--p-panel-h-sm:208px;--p-panel-h-sm-plus:220px;--p-panel-h-md:240px;--p-panel-h-md-plus:256px;--p-panel-h-lg:260px;--p-panel-h-lg-plus:270px;--p-panel-h-xl:276px;--p-panel-h-xl-plus:300px;--p-panel-h-2xl:330px;--p-panel-h-2xl-plus:360px;--p-panel-h-3xl:380px;--p-panel-h-3xl-plus:400px;--p-panel-h-4xl:480px;--p-panel-h-4xl-plus:760px;--p-panel-h-5xl:780px;--p-fill-3xs:18%;--p-fill-2xs:24%;--p-fill-xs:38%;--p-fill-sm:46%;--p-fill-md:60%;--p-fill-lg:62%;--p-fill-xl:65%;--p-fill-2xl:68%;--p-fill-3xl:72%;--p-fill-4xl:76%;--p-zoom-sm:.38;--p-zoom-md:.44;--p-zoom-lg:.58;--p-zoom-xl:.76;--p-viewport-h-sm:44vh;--p-viewport-h-md:56vh;--p-viewport-w-lg:86vw;}\n"
+    },
+    {
+      "path": "design/styles/main/radius.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/radius.css",
+      "content": ".ds[data-style=\"main\"]{--p-radius-4xs:2px;--p-radius-3xs:4px;--p-radius-2xs:6px;--p-radius-xs:8px;--p-radius-xs-plus:10px;--p-radius-sm:12px;--p-radius-sm-plus:14px;--p-radius-md:16px;--p-radius-md-plus:20px;--p-radius-lg:24px;--p-radius-lg-plus:28px;--p-radius-xl:32px;--p-radius-circle:50%;--p-radius-full:999px;--p-inner-radius:var(--p-radius-sm);--p-control-radius:var(--p-radius-md);--p-radius:var(--p-radius-lg);}\n"
+    },
+    {
+      "path": "design/styles/main/border.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/border.css",
+      "content": ".ds[data-style=\"main\"]{--p-underline-offset:3px;--p-border-width:1px;--p-border-width-strong:2px;--p-border-width-focus:3px;--p-focus-offset:3px;--p-focus-offset-tight:2px;--p-focus-offset-hairline:1px;}\n"
+    },
+    {
+      "path": "design/css/token-border.css",
+      "type": "registry:file",
+      "target": "~/design/css/token-border.css",
+      "content": ".ds .ds-token-border i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); border:var(--p-border-width) solid currentColor; }\n.ds .ds-token-border [data-token=\"strong\"] { border-width:var(--p-border-width-strong); }\n.ds .ds-token-border [data-token=\"focus\"] { border:0; outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset-tight); }"
+    },
+    {
+      "path": "design/html/token-border.html",
+      "type": "registry:file",
+      "target": "~/design/html/token-border.html",
+      "content": "<span class=\"ds-token-row ds-token-border\"><i></i><i data-token=\"strong\"></i><i data-token=\"focus\"></i></span>"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "token-border",
+    "purpose": "테두리 두께와 초점 링 간격",
+    "keywords": "테두리 선 두께 초점 링 border outline",
+    "style": "main",
+    "source": "src/tokens/semantic/border.css"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

@@ -1,0 +1,12 @@
+/* Layer 1 · primitive · gradient. Gradient angles, stop positions and fade lengths.
+   Only src/tokens/semantic/gradient.css may reference these. */
+:root {
+  --gradient-angle-160: 160deg;
+  --gradient-angle-115: 115deg;
+  --gradient-stop-40: 40%;
+  --gradient-stop-47: 47%;
+  --gradient-angle-28: 28deg;
+  --gradient-stop-56: 56%;
+  --gradient-stop-68: 68%;
+  --gradient-fade-96: 96px;
+}

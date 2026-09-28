@@ -1,0 +1,8 @@
+/* Layer 1 · primitive · blur. Blur radii and the saturation boost used with glass.
+   Only src/tokens/semantic/blur.css may reference these. */
+:root {
+  --blur-3: 3px;
+  --blur-16: 16px;
+  --blur-20: 20px;
+  --blur-saturate-120: 1.2;
+}

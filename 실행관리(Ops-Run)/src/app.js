@@ -160,7 +160,8 @@
     $('#menu-toggle').setAttribute('aria-expanded', String(open));
     $('#main').inert = open;
     $('.app-top').inert = open;
-    if (open) ($('#primary-nav [aria-current="page"]') || $('#primary-nav a')).focus();
+    // Opening lands on where the reader is: the current item of a long list (focus also scrolls it into view), else the current tab.
+    if (open) [$('#filter-bar:not([hidden]) a[aria-current="page"]'), $('#primary-nav [aria-current="page"]'), $('#primary-nav a')].find(e => e?.checkVisibility())?.focus();
     else if (returnFocus) $('#menu-toggle').focus();
   }
   function openSuggestion(id) {

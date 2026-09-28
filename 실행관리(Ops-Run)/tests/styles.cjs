@@ -41,7 +41,7 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
   // Central tokens: editing one role in src/tokens/semantic/color.css must repaint the shell and every part.
   const partIds=await page.evaluate(()=>[...new Set([...document.querySelectorAll('a[href*="detail="]')].map(a=>(a.hash.match(/detail=([^&]+)/)||[])[1]).filter(Boolean))]);
   check('부품 목록 확보',partIds.length>=20);
-  const linkage={};
+  const linkage={},partBlocks=Object.fromEntries([...fs.readFileSync(path.join(root,'src/system/parts.css'),'utf8').matchAll(/\/\* @part ([\w-]+) \*\/([\s\S]*?)(?=\/\* @part |$)/g)].map(m=>[m[1],m[2]]));
   for(const id of partIds){
    await page.goto(origin+'/#/system?style=main&detail='+id);await page.locator('.part-demo').first().waitFor();
    linkage[id]=await page.evaluate(()=>{
@@ -62,6 +62,35 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
    const r=linkage[id];
    check(id+' 바탕·글자 역할 한 줄 수정이 외곽과 부품에 함께 반영',r.rules===1&&r.shell&&r.partBg>0&&r.partInk>0);
    check(id+' 옛 바탕색에 머문 요소 없음',r.stale===0);
+   // Size roles: one line in a semantic file must reach the shell and, whenever a rule of the part's own CSS (or of a
+   // part it composes) reading the role styles a rendered element, the part too; then it must revert cleanly.
+   const blocks=await page.evaluate(id=>{const reg=Pattove.systemRegistry,of=k=>{const it=reg.index.get(k);return it?[...it.css,...it.deps.filter(d=>!d.startsWith('token-')).flatMap(of)]:[];};return of(id);},id);
+   const own=[...new Set(blocks)].map(k=>partBlocks[k]||'').join('\n');
+   r.sizes=await page.evaluate(({own,sizeRoles})=>{
+    const freeze=document.createElement('style');freeze.textContent='*,*::before,*::after{transition:none!important;animation:none!important}';document.head.append(freeze);
+    const live=x=>!(x instanceof CSSMediaRule)||matchMedia(x.conditionText||x.media.mediaText).matches;
+    const flat=list=>[...list].filter(live).flatMap(x=>x.cssRules&&!x.style?flat(x.cssRules):[x]);
+    const all=flat([...document.styleSheets].flatMap(x=>{try{return [...x.cssRules];}catch{return [];}}));
+    // Rules of the part's own CSS (and the parts it composes), parsed the same way the page parses them.
+    const ownSheet=new CSSStyleSheet();ownSheet.replaceSync(own);const ownSelectors=new Set(flat(ownSheet.cssRules).map(x=>x.selectorText).filter(Boolean));
+    const nodes=[...document.querySelectorAll('body, body *')],side=n=>n.closest('.part-demo')?(n.closest('.part-demo .ds')?'part':null):'shell';
+    const out=Object.fromEntries(sizeRoles.map(([kind,role,value])=>{
+     const home=all.filter(x=>x.style&&(x.parentStyleSheet?.href||'').includes('/src/tokens/semantic/'+kind+'.css')&&x.style.getPropertyValue(role));
+     const reads=new RegExp('var\\('+role+'\\s*[,)]');
+     const pairs=[];
+     for(const x of all.filter(x=>x.style&&x.selectorText&&!home.includes(x)))for(const [prop,v] of x.style.cssText.split(/;(?![^(]*\))/).map(d=>d.split(/:(.*)/s)))if(v&&reads.test(v))for(const sel of x.selectorText.split(/,(?![^(]*\))/)){
+      const pe=sel.match(/::?(before|after|placeholder|marker)\s*$/),base=(pe?sel.slice(0,pe.index):sel).trim();if(base.includes('::'))continue;
+      for(const n of nodes){let hit=false;try{hit=n.matches(base||'*');}catch{}if(hit&&side(n))pairs.push([n,pe?'::'+pe[1]:null,prop.trim(),side(n),ownSelectors.has(x.selectorText)]);}
+     }
+     const read=()=>pairs.map(([n,pe,p])=>getComputedStyle(n,pe).getPropertyValue(p));
+     const before=read(),old=home.map(x=>x.style.getPropertyValue(role));
+     home.forEach(x=>x.style.setProperty(role,value));const after=read();home.forEach((x,i)=>x.style.setProperty(role,old[i]));
+     const moved=w=>pairs.filter((q,i)=>q[3]===w&&after[i]!==before[i]).length;
+     return [role,{rules:home.length,shell:moved('shell'),part:moved('part'),partReads:pairs.filter(q=>q[3]==='part'&&q[4]).length,restored:read().every((v,i)=>v===before[i])}];
+    }));
+    freeze.remove();return out;
+   },{own,sizeRoles:[['text','--p-text-md','29px'],['space','--p-space-sm','37px'],['radius','--p-control-radius','31px'],['size','--p-control-size-sm','83px']]});
+   for(const [role,v] of Object.entries(r.sizes))check(id+' '+role+' 한 줄 수정이 외곽과 부품에 함께 반영되고 되돌림',v.rules===1&&v.shell>0&&(!v.partReads||v.part>0)&&v.restored);
   }
   fs.writeFileSync(path.join(out,'token-linkage.json'),JSON.stringify(linkage,null,2));
   await page.goto(origin+'/#/system?style=main&detail=button');

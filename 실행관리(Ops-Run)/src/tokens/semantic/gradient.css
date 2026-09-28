@@ -1,0 +1,8 @@
+/* Layer 2 · semantic · gradient. Gradients composed from colour roles; angles and stops come from the gradient primitives. */
+:root,
+.theme-main {
+  --p-gradient-sheen: linear-gradient(var(--gradient-angle-160), var(--p-soft), var(--p-surface));
+  --p-gradient-backdrop: linear-gradient(var(--gradient-angle-115), transparent var(--gradient-stop-40), var(--p-accent-wash) var(--gradient-stop-40) var(--gradient-stop-47), transparent var(--gradient-stop-47)), linear-gradient(var(--gradient-angle-28), transparent var(--gradient-stop-56), var(--p-success-wash) var(--gradient-stop-56) var(--gradient-stop-68), transparent var(--gradient-stop-68)), linear-gradient(var(--gradient-angle-160), var(--p-soft-success), var(--p-soft));
+  --p-gradient-fade-up: linear-gradient(to top, var(--p-bg) var(--gradient-fade-96), transparent);
+  --p-gradient-rule: linear-gradient(var(--p-line), var(--p-line));
+}

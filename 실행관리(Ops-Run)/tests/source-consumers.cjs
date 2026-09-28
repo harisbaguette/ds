@@ -28,7 +28,7 @@ function install(names, folder) {
   const fixture = fs.mkdtempSync(path.join(out,'run-'));
   const html = path.join(fixture,'html'), react = path.join(fixture,'react'), svg = path.join(fixture,'svg');
   install(['pattove-main-page-html','pattove-main-tabs-html','pattove-main-field-html'],html);
-  install(['pattove-main-page-react','pattove-main-tabs-react','pattove-main-checkbox-react'],react);
+  install(['pattove-main-page-react','pattove-main-tabs-react','pattove-main-checkbox-react','pattove-main-input-react','pattove-main-badge-react'],react);
   install(['pattove-icon-search-html'],svg);
   check('SVG 하나에는 폰트·프레임워크·다른 아이콘이 설치되지 않음',fs.readdirSync(path.join(svg,'design')).join(',')==='icons' && fs.readdirSync(path.join(svg,'design/icons')).join(',')==='search.svg');
   check('HTML과 React 소비자가 별도 components.json 없이 설치됨',!fs.existsSync(path.join(html,'components.json'))&&!fs.existsSync(path.join(react,'components.json')));
@@ -39,11 +39,15 @@ import React,{useState} from 'react';
 import Example from '../design/examples/main/page.jsx';
 import { CollectionPage } from '../design/react/page.jsx';
 import { Tabs } from '../design/react/tabs.jsx';
-import { Checkbox } from '../design/react/checkbox.jsx';
+import { Checkbox, CheckboxAll } from '../design/react/checkbox.jsx';
+import { PasswordInput } from '../design/react/input.jsx';
+import { Badge } from '../design/react/badge.jsx';
 import { Field } from '../design/react/field.jsx';
 import { Button } from '../design/react/button.jsx';
-import '../design/css/tabs.css';import '../design/css/selection.css';
-export default function Page(){const [saved,setSaved]=useState(0);return <><Example/><section className="ds" data-style="main" style={{padding:32}}><h2>다른 콘텐츠로 재사용</h2><CollectionPage title="도서 목록" records={[{id:'book-1',title:'긴 한글 제목이 들어가는 책과 오래도록 기억하고 싶은 문장들',description:'디자인과 편집',tag:'진행 중'},{id:'book-2',title:'그림으로 설명하기',description:'시각 언어',tag:'완료'}]} onSave={async(record)=>{if(record.id==='book-2'){if(!window.bookSaveAttempt){window.bookSaveAttempt=1;throw Error('저장 실패');}await new Promise(resolve=>{window.finishBookSave=resolve;});}setSaved(n=>n+1);}}/><output aria-label="저장 횟수">{saved}</output><Tabs label="첫 번째 탭"/><Tabs label="두 번째 탭"/><form aria-label="다른 폼"><Field label="배송 이름" error="이름을 다시 확인해 주세요."/><Checkbox name="consent">동의하기</Checkbox><Button type="submit">신청하기</Button></form></section></>;}
+import '../design/css/tabs.css';import '../design/css/selection.css';import '../design/css/input.css';import '../design/css/badge.css';
+const many=['전체','진행 중','완료','보관함','공유받음','휴지통'].map((label,i)=>({value:'t'+i,label,content:label}));
+function Alerts(){const [picked,setPicked]=useState([]);return <CheckboxAll items={[{value:'c',label:'댓글'},{value:'l',label:'좋아요'},{value:'f',label:'새 팔로워'}]} value={picked} onChange={setPicked}/>;}
+export default function Page(){const [saved,setSaved]=useState(0);return <><Example/><section className="ds" data-style="main" style={{padding:32}}><h2>다른 콘텐츠로 재사용</h2><CollectionPage title="도서 목록" records={[{id:'book-1',title:'긴 한글 제목이 들어가는 책과 오래도록 기억하고 싶은 문장들',description:'디자인과 편집',tag:'진행 중'},{id:'book-2',title:'그림으로 설명하기',description:'시각 언어',tag:'완료'}]} onSave={async(record)=>{if(record.id==='book-2'){if(!window.bookSaveAttempt){window.bookSaveAttempt=1;throw Error('저장 실패');}await new Promise(resolve=>{window.finishBookSave=resolve;});}setSaved(n=>n+1);}}/><output aria-label="저장 횟수">{saved}</output><Tabs label="첫 번째 탭"/><Tabs label="두 번째 탭"/><form aria-label="다른 폼"><Field label="배송 이름" error="이름을 다시 확인해 주세요."/><Checkbox name="consent">동의하기</Checkbox><Button type="submit">신청하기</Button></form><PasswordInput aria-label="비밀번호" defaultValue="pattove8"/><Alerts/><Badge look="count" count={3}>알림</Badge><Badge look="count" count={0}>알림</Badge><div style={{maxWidth:240}}><Tabs label="많은 탭" look="scroll" items={many} defaultValue="t5"/></div></section></>;}
 `;
   write(path.join(react,'package.json'),JSON.stringify({name:'pattove-consumer-proof',private:true,scripts:{dev:'next dev'}}));
   write(path.join(react,'app/page.jsx'),demo);
@@ -74,6 +78,7 @@ export default function Page(){const [saved,setSaved]=useState(0);return <><Exam
     let ready=false;for(let i=0;i<80;i++){try{const response=await fetch('http://127.0.0.1:4184');if(response.ok){ready=true;break;}}catch{} await new Promise(r=>setTimeout(r,500));}
     assert.ok(ready,'Next.js 서버 기동');
     await page.goto('http://127.0.0.1:4184');await page.evaluate(()=>document.fonts.ready);
+    await page.getByRole('tablist',{name:'많은 탭'}).waitFor();const topAfterLoad=await page.evaluate(()=>scrollY);
     const example=page.locator('main').first();
     await example.getByRole('textbox',{name:'컬렉션 검색'}).fill('없는 결과');await example.getByRole('button',{name:'검색',exact:true}).click();
     check('설치한 React 예시의 빈 결과·복구',await example.locator('.ds-empty').isVisible());await example.getByRole('button',{name:'전체 보기',exact:true}).click();
@@ -105,6 +110,14 @@ export default function Page(){const [saved,setSaved]=useState(0);return <><Exam
     check('React 탭 키보드와 여러 인스턴스 독립',await first.getByRole('tab').last().getAttribute('aria-selected')==='true'&&await second.getByRole('tab').first().getAttribute('aria-selected')==='true');
     const input=page.getByRole('textbox',{name:'배송 이름'});check('필드의 라벨·오류를 다른 폼에 재사용',await input.getAttribute('aria-invalid')==='true'&&!!await input.getAttribute('aria-describedby'));
     await page.getByRole('checkbox',{name:'동의하기'}).check();check('React native checkbox',await page.getByRole('checkbox',{name:'동의하기'}).isChecked());
+    const secret=page.getByLabel('비밀번호',{exact:true});await page.getByRole('button',{name:'비밀번호 보기'}).click();
+    check('React 비밀번호 보기는 이름으로 상태를 알리고 값은 그대로',await secret.getAttribute('type')==='text'&&await secret.inputValue()==='pattove8'&&await page.getByRole('button',{name:'비밀번호 숨기기'}).getAttribute('aria-pressed')===null);
+    const all=page.getByRole('checkbox',{name:'모두 선택'});await page.getByRole('checkbox',{name:'댓글'}).check();
+    check('React 전체 선택: 하나만 고르면 부모는 일부 선택',await all.evaluate(n=>n.indeterminate&&!n.checked));
+    await all.click();check('React 전체 선택: 부모를 누르면 모두 켜짐',await page.getByRole('checkbox',{name:'새 팔로워'}).isChecked()&&await all.evaluate(n=>n.checked&&!n.indeterminate));
+    check('React 개수 배지: 3은 읽고 0은 숫자를 숨김',await page.getByRole('img',{name:'새 알림 3개'}).count()===1&&await page.getByRole('img',{name:'새 알림 없음'}).locator('.ds-badge-count').count()===0);
+    const row=page.getByRole('tablist',{name:'많은 탭'});
+    check('React 옆으로 미는 탭: 처음부터 고른 탭이 보이고 페이지는 끌려가지 않음',topAfterLoad===0&&await row.evaluate(list=>{const l=list.getBoundingClientRect(),t=list.querySelector('[aria-selected="true"]').getBoundingClientRect();return list.scrollLeft>0&&t.left>=l.left-1&&t.right<=l.right+1;}));
     check('조합 후 중복 ID 없음',await page.locator('[id]').evaluateAll(nodes=>new Set(nodes.map(n=>n.id)).size===nodes.length));
     await page.screenshot({path:path.join(out,'next-react.png'),fullPage:true});
     for(const width of [320,375,768,1440]) { await page.setViewportSize({width,height:900});check(`Next.js ${width}px 가로 넘침 없음`,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)); }

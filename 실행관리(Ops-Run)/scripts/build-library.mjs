@@ -4,6 +4,7 @@ import crypto from 'node:crypto';
 import { Lexer } from 'marked';
 import { fileURLToPath } from 'node:url';
 import { iconSets, writeSprites, checkNames } from './icon-sets.mjs';
+import { kinds, kindLabels } from './tokens.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'src/data');
 const plain = tokens => tokens.map(t => t.tokens ? plain(t.tokens) : t.text ?? t.raw ?? '').join('');
@@ -22,7 +23,8 @@ const groups = [
 const layers = [['token','토큰','Token'],['atom','원자','Atom'],['molecule','분자','Molecule'],['organism','유기체','Organism'],['screen','화면','Screen']].map(([id,name,english]) => ({id,name,english}));
 const levelLayer = ['token','atom','atom','molecule','organism','organism','screen','screen'];
 const uses = {
-  token:[['color','색'],['type','글꼴'],['space','간격'],['shape','모양'],['shadow','그림자'],['motion','움직임']],
+  // Token uses are the token kinds themselves (scripts/tokens.mjs is the one list).
+  token:kinds.map(kind=>[kind,kindLabels[kind]]),
   part:[['action','행동'],['input','입력'],['navigation','탐색'],['display','보여주기'],['feedback','알림'],['layout','배치'],['media','미디어']],
   screen:[['template','템플릿'],['page','페이지'],['flow','흐름']]
 };
@@ -94,8 +96,10 @@ if(new Set(placeCodes).size!==placeCodes.length||placeCodes.some(code=>!categori
 const useGroups=['service','game','domain'].flatMap(id=>groups.find(g=>g.id===id)?.codes||[]);
 if(useGroups.some(code=>!placeCodes.includes(code))||placeCodes.some(code=>!useGroups.includes(code)))throw new Error('Places must cover exactly the service, game and domain categories');
 if(groups.some(g=>!useGroups.some(code=>g.codes.includes(code))&&!roleOrder.includes(g.id)))throw new Error('Role order is missing a common group');
+// Icon guidelines (기준) apply to every icon, so they sit in their own section outside the icon categories.
 for(const e of entries.filter(e=>e.category==='ICO')){
   const hit=iconGroups.find(g=>e.section===g.name+' — '+g.english);
+  if(!hit&&e.kind==='기준')continue;
   if(!hit)throw new Error('Icon heading matches no icon group: '+e.id+' '+e.section);
   e.sub=hit.id;
 }

@@ -1,14 +1,8 @@
 /* Layer 1 · primitive · tracking. Letter spacing; n = negative, em scales with the text, px stays fixed.
    Only src/tokens/semantic/tracking.css may reference these. */
 :root {
-  --tracking-n050em: -.05em;
   --tracking-n040em: -.04em;
-  --tracking-n035em: -.035em;
-  --tracking-n030em: -.03em;
   --tracking-n020em: -.02em;
-  --tracking-n200px: -2px;
-  --tracking-n050px: -.5px;
   --tracking-n035px: -.35px;
-  --tracking-n020px: -.2px;
   --tracking-p040px: .4px;
 }

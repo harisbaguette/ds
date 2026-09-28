@@ -1,4 +1,4 @@
-/* Layer 1 · primitive · typography. Font files and raw font values.
+/* Layer 1 · primitive · typography. Font files and font families.
    Only src/tokens/semantic/typography.css may reference these. */
 @font-face {
   font-family: Pretendard;
@@ -18,7 +18,4 @@
 :root {
   --font-pretendard: Pretendard, sans-serif;
   --font-outfit: Outfit, Pretendard, sans-serif;
-  --font-size-13: 13px;
-  --font-size-16: 16px;
-  --font-size-24: 24px;
 }

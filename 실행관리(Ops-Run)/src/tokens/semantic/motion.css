@@ -1,6 +1,8 @@
-/* Layer 2 · semantic · motion. --p-duration keeps its original name; the rest follow Carbon. */
+/* Layer 2 · semantic · motion. --p-duration keeps its original name; the rest follow Carbon. rise-* is the hover lift distance. */
 :root,
 .theme-main {
+  --p-rise-sm: var(--distance-1);
+  --p-rise-md: var(--distance-2);
   --p-duration: var(--duration-140);
   --p-duration-instant: var(--duration-70);
   --p-duration-fast: var(--duration-110);

@@ -1,0 +1,11 @@
+/* Layer 2 · semantic · stroke. Dashed and dotted line styles, icon stroke weights and the slash slant. */
+:root,
+.theme-main {
+  --p-stroke-dashed: var(--stroke-dashed);
+  --p-stroke-dotted: var(--stroke-dotted);
+  --p-stroke-slant: var(--stroke-slant-18);
+  --p-icon-stroke-heavy: var(--stroke-220);
+  --p-icon-stroke: var(--stroke-160);
+  --p-icon-stroke-bold: var(--stroke-200);
+  --p-icon-stroke-thin: var(--stroke-130);
+}

@@ -1,42 +1,42 @@
 ﻿/* Library tiles and the dictionary detail. */
-.catalog-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: var(--p-space-10); }
-.catalog-tile { min-width: 0; min-height: var(--p-size-46); display: flex; flex-direction: column; align-items: flex-start; padding: var(--p-space-10); border: 0; border-radius: var(--p-radius-12); text-align: left; background: var(--p-tile); box-shadow: var(--p-shadow); }
-.catalog-tile:hover { background: var(--p-high); transform: translateY(-2px); }
-.record-code { font: var(--p-weight-extrabold) var(--p-text-02)/var(--p-leading-05) var(--p-display-font); color: var(--p-ink); letter-spacing: var(--p-tracking-wide); margin-bottom: var(--p-space-09); padding: var(--p-space-02) var(--p-space-04); border-radius: var(--p-radius-full); background: var(--p-mark); box-shadow: inset 0 0 0 3px var(--p-ink); }
+.catalog-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: var(--p-space-md-plus); }
+.catalog-tile { min-width: 0; min-height: var(--p-panel-h-2xs-plus); display: flex; flex-direction: column; align-items: flex-start; padding: var(--p-space-md-plus); border: 0; border-radius: var(--p-radius-lg); text-align: left; background: var(--p-tile); box-shadow: var(--p-shadow); }
+.catalog-tile:hover { background: var(--p-high); transform: translateY(calc(var(--p-rise-md) * -1)); }
+.record-code { font: var(--p-weight-extrabold) var(--p-text-caption)/var(--p-leading-compact) var(--p-display-font); color: var(--p-ink); letter-spacing: var(--p-tracking-wide); margin-bottom: calc(var(--p-space-md) + var(--p-space-4xs)); padding: var(--p-space-3xs) var(--p-space-xs); border-radius: var(--p-radius-full); background: var(--p-mark); box-shadow: inset 0 0 0 var(--p-border-width-focus) var(--p-ink); }
 .entry-tile .record-code { background: var(--p-mark-alt); }
-.catalog-tile h3 { font-size: var(--p-text-06); line-height: var(--p-leading-08); font-weight: var(--p-weight-bold-plus); overflow-wrap: anywhere; }
-.tile-foot { width: 100%; display: flex; align-items: center; padding-top: var(--p-space-09); margin-top: auto; color: var(--p-muted); font-size: var(--p-text-03); font-weight: var(--p-weight-bold); }
+.catalog-tile h3 { font-size: var(--p-text-body-lg); line-height: var(--p-leading-normal); font-weight: var(--p-weight-bold-plus); overflow-wrap: anywhere; }
+.tile-foot { width: 100%; display: flex; align-items: center; padding-top: calc(var(--p-space-md) + var(--p-space-4xs)); margin-top: auto; color: var(--p-muted); font-size: var(--p-text-label); font-weight: var(--p-weight-bold); }
 .tile-foot .ui-icon { width: var(--p-icon-xs); height: var(--p-icon-xs); margin-left: auto; }
-.load-more { display: flex; justify-content: center; margin-top: var(--p-space-14); }
-.load-more span { font-size: var(--p-text-03); color: var(--p-muted); }
-.record-detail { padding: var(--p-space-17); max-width: var(--p-size-73); }
-.record-kind { color: var(--p-muted); font-size: var(--p-text-04); margin-bottom: var(--p-space-14); }
-.record-detail section + section { margin-top: var(--p-space-12); }
-.record-detail h3 { font-size: var(--p-text-04); color: var(--p-muted); margin-bottom: var(--p-space-05); }
-.record-detail section p { font-size: var(--p-text-07); line-height: var(--p-leading-11); overflow-wrap: anywhere; }
+.load-more { display: flex; justify-content: center; margin-top: var(--p-space-lg-plus); }
+.load-more span { font-size: var(--p-text-label); color: var(--p-muted); }
+.record-detail { padding: calc(var(--p-space-xl) + var(--p-space-4xs)); max-width: var(--p-container-2xl); }
+.record-kind { color: var(--p-muted); font-size: var(--p-text-sm); margin-bottom: var(--p-space-lg-plus); }
+.record-detail section + section { margin-top: var(--p-space-lg); }
+.record-detail h3 { font-size: var(--p-text-sm); color: var(--p-muted); margin-bottom: var(--p-space-xs-plus); }
+.record-detail section p { font-size: var(--p-text-md); line-height: var(--p-leading-looser); overflow-wrap: anywhere; }
 /* Dictionary detail = the tile picture, enlarged. */
-.detail-art { display: grid; place-items: center; min-height: min(var(--p-viewport-h-02), var(--p-size-67)); margin: 0 var(--p-space-12) var(--p-space-12); border-radius: var(--p-radius-10); background: var(--p-bg); }
-.detail-art .dict-kind-art { width: min(100%, var(--p-size-69)); height: auto; aspect-ratio: 120 / 72; stroke-width: 1.2; }
-.detail-glyph { width: min(var(--p-fill-02), var(--p-size-49)); height: auto; aspect-ratio: 1; color: var(--p-ink); }
-.detail-glyph.is-emoji { font-size: var(--p-text-22); width: auto; }
+.detail-art { display: grid; place-items: center; min-height: min(var(--p-viewport-h-md), var(--p-panel-h-4xl)); margin: 0 var(--p-space-lg) var(--p-space-lg); border-radius: var(--p-radius-md-plus); background: var(--p-bg); }
+.detail-art .dict-kind-art { width: min(100%, var(--p-container-lg)); height: auto; aspect-ratio: var(--p-aspect-landscape); stroke-width: var(--p-icon-stroke-thin); }
+.detail-glyph { width: min(var(--p-fill-md), var(--p-column-xs)); height: auto; aspect-ratio: var(--p-aspect-square); color: var(--p-ink); }
+.detail-glyph.is-emoji { font-size: var(--p-text-glyph-xl); width: auto; }
 /* Each picture key under the enlarged icon, with the set, version and license it comes from. */
-.glyph-keys { display: grid; gap: var(--p-space-04); margin: 0 var(--p-space-12) var(--p-space-12); padding: 0; list-style: none; }
-.glyph-keys li { display: flex; align-items: center; gap: var(--p-space-06); flex-wrap: wrap; }
-.glyph-keys code { font-size: var(--p-text-05); overflow-wrap: anywhere; }
-.glyph-keys span { color: var(--p-muted); font-size: var(--p-text-04); }
-.glyph-mini { width: var(--p-size-13); height: var(--p-size-13); color: var(--p-ink); flex-shrink: 0; }
-.glyph-mini.is-emoji { font-size: var(--p-text-09); }
+.glyph-keys { display: grid; gap: var(--p-space-xs); margin: 0 var(--p-space-lg) var(--p-space-lg); padding: 0; list-style: none; }
+.glyph-keys li { display: flex; align-items: center; gap: var(--p-space-sm); flex-wrap: wrap; }
+.glyph-keys code { font-size: var(--p-text-body); overflow-wrap: anywhere; }
+.glyph-keys span { color: var(--p-muted); font-size: var(--p-text-sm); }
+.glyph-mini { width: var(--p-icon-xl); height: var(--p-icon-xl); color: var(--p-ink); flex-shrink: 0; }
+.glyph-mini.is-emoji { font-size: var(--p-text-title); }
 .search-suggestion > span { overflow-wrap: anywhere; }
 .search-suggestion small { flex-shrink: 0; }
 @media (max-width: 1200px) {
   .catalog-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
 }
 @media (max-width: 760px) {
-  .catalog-grid { gap: var(--p-space-07); }
-  .catalog-tile { min-height: var(--p-size-42); padding: var(--p-space-08); border-radius: var(--p-radius-11); }
-  .catalog-tile h3 { font-size: var(--p-text-04); }
-  .record-code { font-size: var(--p-text-01); margin-bottom: var(--p-space-06); }
-  .record-detail { padding: var(--p-space-11); }
-  .detail-art { min-height: var(--p-viewport-h-01); margin: 0 var(--p-space-08) var(--p-space-08); }
-  .glyph-keys { margin: 0 var(--p-space-08) var(--p-space-08); }
+  .catalog-grid { gap: var(--p-space-sm-plus); }
+  .catalog-tile { min-height: var(--p-panel-h-4xs-plus); padding: var(--p-space-md); border-radius: calc(var(--p-radius-md-plus) + var(--p-radius-4xs)); }
+  .catalog-tile h3 { font-size: var(--p-text-sm); }
+  .record-code { font-size: var(--p-text-micro); margin-bottom: var(--p-space-sm); }
+  .record-detail { padding: calc(var(--p-space-md-plus) + var(--p-space-4xs)); }
+  .detail-art { min-height: var(--p-viewport-h-sm); margin: 0 var(--p-space-md) var(--p-space-md); }
+  .glyph-keys { margin: 0 var(--p-space-md) var(--p-space-md); }
 }

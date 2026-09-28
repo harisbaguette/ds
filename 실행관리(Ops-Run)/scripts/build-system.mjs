@@ -3,7 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
 import crypto from 'node:crypto';
-import { loadTokens, tokenFiles } from './tokens.mjs';
+import { loadTokens, tokenFiles, kinds, kindLabels } from './tokens.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = name => fs.readFileSync(path.join(root, name), 'utf8');
 const css = read('src/system/parts.css');
@@ -44,13 +44,20 @@ for (const item of registry.items) {
     target.deps.forEach(dep => visit(dep,[...ancestors,id]));
   };
   visit(item.id);
-  // Token deps must be exactly the kinds the item's own CSS blocks read.
-  const usedKinds = [...new Set(item.css.flatMap(block => blockKinds[block]))].map(kind => 'token-' + kind).filter(id => id !== item.id);
+  // Token deps must be exactly the kinds the item's own CSS blocks read. A token item instead needs the kinds its
+  // semantic values are composed from (its demo swatches ship those theme files without making the kinds depend on each other).
+  const usedKinds = (item.layer === 'Token' ? tokens.kindDeps[item.id.slice(6)] : [...new Set(item.css.flatMap(block => blockKinds[block]))]).map(kind => 'token-' + kind).filter(id => id !== item.id);
   const tokenDeps = item.deps.filter(dep => dep.startsWith('token-'));
   if (usedKinds.sort().join() !== [...tokenDeps].sort().join()) throw new Error(`${item.id}: token deps [${tokenDeps}] must be [${usedKinds}]`);
   context.window.Pattove.parts.renderItem(item.id, 'build-check', registry.normalizeOptions(item.id));
   for (const control of item.controls) for (const [value] of control.values) context.window.Pattove.parts.renderItem(item.id, 'build-check', registry.normalizeOptions(item.id,{[control.key]:value}));
 }
+// One token item per kind, named after the kind, and the page links every token file in layer order.
+const tokenItems = registry.items.filter(item => item.layer === 'Token');
+if (tokenItems.map(item => item.id).join() !== kinds.map(kind => 'token-' + kind).join()) throw new Error(`Token items [${tokenItems.map(item => item.id)}] must be one per kind in tokens.mjs order`);
+for (const item of tokenItems) if (item.name !== kindLabels[item.id.slice(6)] + ' 토큰') throw new Error(`${item.id}: name must be "${kindLabels[item.id.slice(6)]} 토큰"`);
+const linked = [...read('index.html').matchAll(/href="(src\/tokens\/[^"]+)"/g)].map(m => m[1]);
+if (linked.join() !== tokenFiles().join()) throw new Error('index.html must link exactly the token files, primitives first: ' + tokenFiles().filter(f => !linked.includes(f)).join(', '));
 const sources = ['src/system/parts.js','src/system/parts.css','src/system/behaviors.js','src/system/registry.js','src/data/catalog.js',...tokenFiles(),'src/styles/themes.css'];
 const revision = crypto.createHash('sha256').update(sources.map(file => file + '\0' + read(file)).join('\0')).digest('hex');
 fs.writeFileSync(path.join(root, 'src/data/system-registry.json'), JSON.stringify({ version: registry.version, revision, sources, sections: registry.sections, items: registry.items, patterns: registry.patterns }, null, 2) + '\n');

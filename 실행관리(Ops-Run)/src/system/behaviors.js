@@ -12,6 +12,13 @@ window.Pattove.mountParts = function mountParts(root) {
       item.setAttribute('aria-selected', String(active)); item.tabIndex = active ? 0 : -1;
       tabs.querySelector('#' + CSS.escape(item.getAttribute('aria-controls'))).hidden = !active;
     });
+    // A sideways-scrolling list brings the chosen tab fully into view.
+    if (tabs.dataset.look === 'scroll') {
+      const list = tab.parentElement;
+      const pad = parseFloat(getComputedStyle(list).scrollPaddingLeft) || 0, lr = list.getBoundingClientRect(), tr = tab.getBoundingClientRect();
+      if (tr.left - pad < lr.left) list.scrollLeft -= lr.left - tr.left + pad;
+      else if (tr.right + pad > lr.right) list.scrollLeft += tr.right - lr.right + pad;
+    }
     tabs.dispatchEvent(new CustomEvent('pattove:tabchange', { bubbles: true, detail: { label: tab.textContent.trim(), panel: tab.getAttribute('aria-controls') } }));
   }
   function filter(form) {
@@ -39,6 +46,15 @@ window.Pattove.mountParts = function mountParts(root) {
   root.addEventListener('change', event => {
     // The status filter is a select, or a radio chip group in the chips look.
     if (event.target.matches('[data-part-search] [name="status"]')) filter(event.target.form);
+    // Select-all: the parent sets every child, and each child sets the parent to all, some, or none.
+    const group = event.target.closest('.ds-select-all');
+    if (group) {
+      const parent = group.querySelector('[data-part="select-all"]');
+      const kids = [...group.querySelectorAll('input[type="checkbox"]:not([data-part="select-all"])')];
+      if (event.target === parent) kids.forEach(kid => { kid.checked = parent.checked; });
+      const on = kids.filter(kid => kid.checked).length;
+      parent.checked = on === kids.length; parent.indeterminate = on > 0 && on < kids.length;
+    }
   });
   root.addEventListener('click', event => {
     const tab = event.target.closest('.ds-tab');
@@ -79,6 +95,12 @@ window.Pattove.mountParts = function mountParts(root) {
     } else if (action === 'clear-input') {
       const input = button.closest('.ds-input-group').querySelector('input');
       input.value = ''; input.dispatchEvent(new Event('input', { bubbles: true })); input.focus();
+    } else if (action === 'reveal') {
+      const input = button.closest('.ds-input-group').querySelector('input');
+      const shown = input.type === 'password';
+      input.type = shown ? 'text' : 'password';
+      button.textContent = shown ? '숨기기' : '보기';
+      button.setAttribute('aria-label', button.getAttribute('aria-label').replace(/ (보기|숨기기)$/, shown ? ' 숨기기' : ' 보기'));
     } else if (action === 'step') {
       const input = button.closest('.ds-input-group').querySelector('input');
       input.value = String(Math.max(Number(input.min || 0), (Number(input.value) || 0) + Number(button.dataset.step)));

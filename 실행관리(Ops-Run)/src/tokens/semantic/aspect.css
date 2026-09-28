@@ -1,0 +1,7 @@
+/* Layer 2 · semantic · aspect. Media ratios. */
+:root,
+.theme-main {
+  --p-aspect-square: var(--aspect-1x1);
+  --p-aspect-landscape: var(--aspect-5x3);
+  --p-aspect-portrait: var(--aspect-1x2);
+}

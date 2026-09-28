@@ -1,9 +1,11 @@
-/* Layer 1 · primitive · motion. Durations (Carbon 70/110/150/240/400 plus the original 140) and easing curves.
+/* Layer 1 · primitive · motion. Durations, easing curves and hover travel distances.
    Only src/tokens/semantic/motion.css may reference these. */
 :root {
+  --distance-1: 1px;
+  --distance-2: 2px;
+  --duration-140: 140ms;
   --duration-70: 70ms;
   --duration-110: 110ms;
-  --duration-140: 140ms;
   --duration-150: 150ms;
   --duration-240: 240ms;
   --duration-400: 400ms;

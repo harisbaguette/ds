@@ -1,0 +1,7 @@
+/* Layer 2 · semantic · blur. Filter values for frosted surfaces and backdrops. */
+:root,
+.theme-main {
+  --p-blur-sm: blur(var(--blur-3));
+  --p-blur-md: blur(var(--blur-16));
+  --p-blur-glass: blur(var(--blur-20)) saturate(var(--blur-saturate-120));
+}

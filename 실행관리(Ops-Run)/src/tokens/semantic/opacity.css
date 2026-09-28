@@ -7,6 +7,7 @@
   --p-opacity-dragged: var(--opacity-16);
   --p-opacity-disabled: var(--opacity-38);
   --p-opacity-faint: var(--opacity-35);
+  --p-opacity-placeholder: var(--opacity-55);
   --p-opacity-dim: var(--opacity-65);
   --p-opacity-full: var(--opacity-100);
 }

@@ -49,11 +49,11 @@ const partCSS = block => css[block];
 // Token kinds and icons ship as their own items, never inside a part's closure.
 const standalone = id => id.startsWith('token-') || id === 'icon';
 for (const style of catalog.styles.filter(s => s.id !== 'base')) {
-  // One semantic file per token kind; an install gets only the kinds its CSS reads.
+  // One semantic file per token kind; an install gets only the kinds its CSS reads (a token item also gets the kinds its swatches read).
   const theme = kind => file(`styles/${style.id}/${kind}.css`, styleCSS(style.id, [kind]));
   for (const kind of kinds) {
     const id = 'token-' + kind, item = registry.index.get(id);
-    emit(`pattove-${style.id}-${id}`, `${style.name} · ${item.name}`, [theme(kind), file(`css/${id}.css`, partCSS(id)), file(`html/${id}.html`, parts.renderItem(id, `pattove-${id}`))], { item:id, dictionary:item.entry, purpose:item.purpose, keywords:item.keywords, style:style.id, source:`src/tokens/semantic/${kind}.css` }, kind === 'typography' ? [`${base}/pattove-fonts.json`] : []);
+    emit(`pattove-${style.id}-${id}`, `${style.name} · ${item.name}`, [...kinds.filter(k => k === kind || kindsIn(partCSS(id), id).includes(k)).map(theme), file(`css/${id}.css`, partCSS(id)), file(`html/${id}.html`, parts.renderItem(id, `pattove-${id}`))], { item:id, dictionary:item.entry, purpose:item.purpose, keywords:item.keywords, style:style.id, source:`src/tokens/semantic/${kind}.css` }, kind === 'typography' ? [`${base}/pattove-fonts.json`] : []);
   }
   for (const item of registry.items.filter(i => !standalone(i.id))) for (const environment of ['html','react']) {
     const closure = environment === 'html' ? [...registry.dependencies(item.id).map(i => i.id), item.id].filter(id => !standalone(id)) : [...reactClosure(item.id)];

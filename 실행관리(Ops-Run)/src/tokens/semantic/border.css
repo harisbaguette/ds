@@ -1,6 +1,7 @@
-/* Layer 2 · semantic · border. Border widths and the focus ring (3px ring, 3px gap by default). */
+/* Layer 2 · semantic · border. Border widths, focus ring offsets and the link underline offset. */
 :root,
 .theme-main {
+  --p-underline-offset: var(--border-3);
   --p-border-width: var(--border-1);
   --p-border-width-strong: var(--border-2);
   --p-border-width-focus: var(--border-3);

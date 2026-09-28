@@ -37,4 +37,14 @@
   --color-amber-300: #ffbf63;
   --color-amber-500: #b9a16f;
   --color-amber-800: #805719;
+
+  /* mix amounts for colour-mix() roles */
+  --color-mix-84: 84%;
+  --color-mix-68: 68%;
+  --color-mix-80: 80%;
+  --color-mix-14: 14%;
+  --color-mix-74: 74%;
+  --color-mix-26: 26%;
+  --color-mix-34: 34%;
+  --color-mix-16: 16%;
 }

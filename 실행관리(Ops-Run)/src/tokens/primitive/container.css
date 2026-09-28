@@ -1,0 +1,35 @@
+/* Layer 1 · primitive · container. Column and container widths in px, and reading measures in ch.
+   Only src/tokens/semantic/container.css may reference these. */
+:root {
+  --container-ch-60: 60ch;
+  --container-ch-72: 72ch;
+  --container-120: 120px;
+  --container-144: 144px;
+  --container-160: 160px;
+  --container-170: 170px;
+  --container-200: 200px;
+  --container-210: 210px;
+  --container-220: 220px;
+  --container-236: 236px;
+  --container-240: 240px;
+  --container-248: 248px;
+  --container-250: 250px;
+  --container-270: 270px;
+  --container-280: 280px;
+  --container-300: 300px;
+  --container-324: 324px;
+  --container-360: 360px;
+  --container-380: 380px;
+  --container-390: 390px;
+  --container-400: 400px;
+  --container-420: 420px;
+  --container-480: 480px;
+  --container-500: 500px;
+  --container-560: 560px;
+  --container-600: 600px;
+  --container-820: 820px;
+  --container-1080: 1080px;
+  --container-1200: 1200px;
+  --container-1320: 1320px;
+  --container-1520: 1520px;
+}

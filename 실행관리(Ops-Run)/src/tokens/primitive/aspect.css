@@ -1,0 +1,7 @@
+/* Layer 1 · primitive · aspect. Width / height ratios.
+   Only src/tokens/semantic/aspect.css may reference these. */
+:root {
+  --aspect-1x1: 1;
+  --aspect-5x3: 5 / 3;
+  --aspect-1x2: 1 / 2;
+}

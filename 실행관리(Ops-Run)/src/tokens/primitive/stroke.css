@@ -1,0 +1,11 @@
+/* Layer 1 · primitive · stroke. Line styles, icon stroke widths and the slash slant.
+   Only src/tokens/semantic/stroke.css may reference these. */
+:root {
+  --stroke-dashed: dashed;
+  --stroke-dotted: dotted;
+  --stroke-slant-18: 18deg;
+  --stroke-220: 2.2;
+  --stroke-160: 1.6;
+  --stroke-200: 2;
+  --stroke-130: 1.3;
+}

@@ -7,7 +7,7 @@ import { Card, CardBody, CardTitle, CardDescription, CardActions } from './card.
 const defaults = [{ id: 'spring', title: '봄의 색', description: '연한 초록과 따뜻한 노랑', tag: '진행 중' }, { id: 'weekend', title: '주말의 기록', description: '산책하며 모은 장면들', tag: '완료' }, { id: 'studio', title: '작은 작업실', description: '다음 프로젝트의 첫 아이디어', tag: '진행 중' }];
 const statuses = [['all', '전체'], ['진행 중', '진행 중'], ['완료', '완료']];
 // look matches the HTML data-look values. The chips look swaps the status select for a radio group with the same name,
-// the media and feature looks give every card, or only the first, a picture area, and the picker look narrows
+// the feature look gives only the first card a picture area, and the picker look narrows
 // the list while typing (one field, no status menu, no search button) with each result a face row to tap.
 export function SearchModule({ records = defaults, onSave, look = 'grid' }) {
   const id = useId(); const form = useRef(null); const opener = useRef(null); const detail = useRef(null);
@@ -42,7 +42,7 @@ export function SearchModule({ records = defaults, onSave, look = 'grid' }) {
   const pick = event => setFilter({ query: form.current.elements.query.value.trim(), status: event.target.value });
   const picker = look === 'picker';
   const live = event => setFilter({ query: event.target.value.trim(), status: 'all' });
-  const cardLook = index => picker ? 'row' : look === 'media' || (look === 'feature' && index === 0) ? 'media' : 'raised';
+  const cardLook = index => picker ? 'row' : look === 'feature' && index === 0 ? 'media' : 'raised';
   const status = look === 'chips'
     ? <fieldset className="ds-chip-group"><legend>상태</legend>{statuses.map(([value, label]) => <label key={value} className="ds-chip"><input type="radio" name="status" value={value} defaultChecked={value === 'all'} onChange={pick} /><span>{label}</span></label>)}</fieldset>
     : <label className="ds-select-field" htmlFor={`${id}-status`}><span>상태</span><select id={`${id}-status`} className="ds-input" name="status" onChange={pick}>{statuses.map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></label>;

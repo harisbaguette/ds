@@ -1,0 +1,55 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-main-token-stroke",
+  "type": "registry:item",
+  "title": "메인 스타일 · 선 모양 토큰",
+  "description": "메인 스타일 · 선 모양 토큰. 선 모양과 아이콘 선 굵기. 선 모양 점선 파선 아이콘 선 굵기 stroke dashed dotted",
+  "files": [
+    {
+      "path": "design/styles/main/size.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/size.css",
+      "content": ".ds[data-style=\"main\"]{--p-size-hairline:1px;--p-size-4xs:2px;--p-size-3xs:4px;--p-size-label:4.6em;--p-size-2xs:6px;--p-size-xs:8px;--p-size-xs-plus:10px;--p-size-sm:12px;--p-size-sm-plus:14px;--p-size-md:16px;--p-size-md-plus:20px;--p-size-lg:24px;--p-size-lg-plus:28px;--p-size-xl:32px;--p-size-xl-plus:36px;--p-size-2xl:40px;--p-size-3xl:48px;--p-size-4xl:56px;--p-size-5xl:64px;--p-size-6xl:80px;--p-icon-3xs:12px;--p-icon-2xs:14px;--p-icon-xs:16px;--p-icon-sm:18px;--p-icon-md:20px;--p-icon-lg:22px;--p-icon-xl:24px;--p-icon-2xl:26px;--p-icon-3xl:28px;--p-icon-4xl:32px;--p-icon-5xl:40px;--p-control-size-sm:44px;--p-control-size-sm-plus:46px;--p-control-size-md:48px;--p-control-size-md-plus:52px;--p-control-size-lg:56px;--p-control-size-xl:64px;--p-panel-h-6xs-plus:120px;--p-panel-h-5xs:128px;--p-panel-h-5xs-plus:130px;--p-panel-h-4xs:150px;--p-panel-h-4xs-plus:154px;--p-panel-h-3xs:160px;--p-panel-h-3xs-plus:164px;--p-panel-h-2xs:168px;--p-panel-h-2xs-plus:170px;--p-panel-h-xs:176px;--p-panel-h-xs-plus:180px;--p-panel-h-sm:208px;--p-panel-h-sm-plus:220px;--p-panel-h-md:240px;--p-panel-h-md-plus:256px;--p-panel-h-lg:260px;--p-panel-h-lg-plus:270px;--p-panel-h-xl:276px;--p-panel-h-xl-plus:300px;--p-panel-h-2xl:330px;--p-panel-h-2xl-plus:360px;--p-panel-h-3xl:380px;--p-panel-h-3xl-plus:400px;--p-panel-h-4xl:480px;--p-panel-h-4xl-plus:760px;--p-panel-h-5xl:780px;--p-fill-3xs:18%;--p-fill-2xs:24%;--p-fill-xs:38%;--p-fill-sm:46%;--p-fill-md:60%;--p-fill-lg:62%;--p-fill-xl:65%;--p-fill-2xl:68%;--p-fill-3xl:72%;--p-fill-4xl:76%;--p-zoom-sm:.38;--p-zoom-md:.44;--p-zoom-lg:.58;--p-zoom-xl:.76;--p-viewport-h-sm:44vh;--p-viewport-h-md:56vh;--p-viewport-w-lg:86vw;}\n"
+    },
+    {
+      "path": "design/styles/main/radius.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/radius.css",
+      "content": ".ds[data-style=\"main\"]{--p-radius-4xs:2px;--p-radius-3xs:4px;--p-radius-2xs:6px;--p-radius-xs:8px;--p-radius-xs-plus:10px;--p-radius-sm:12px;--p-radius-sm-plus:14px;--p-radius-md:16px;--p-radius-md-plus:20px;--p-radius-lg:24px;--p-radius-lg-plus:28px;--p-radius-xl:32px;--p-radius-circle:50%;--p-radius-full:999px;--p-inner-radius:var(--p-radius-sm);--p-control-radius:var(--p-radius-md);--p-radius:var(--p-radius-lg);}\n"
+    },
+    {
+      "path": "design/styles/main/border.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/border.css",
+      "content": ".ds[data-style=\"main\"]{--p-underline-offset:3px;--p-border-width:1px;--p-border-width-strong:2px;--p-border-width-focus:3px;--p-focus-offset:3px;--p-focus-offset-tight:2px;--p-focus-offset-hairline:1px;}\n"
+    },
+    {
+      "path": "design/styles/main/stroke.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/stroke.css",
+      "content": ".ds[data-style=\"main\"]{--p-stroke-dashed:dashed;--p-stroke-dotted:dotted;--p-stroke-slant:18deg;--p-icon-stroke-heavy:2.2;--p-icon-stroke:1.6;--p-icon-stroke-bold:2;--p-icon-stroke-thin:1.3;}\n"
+    },
+    {
+      "path": "design/css/token-stroke.css",
+      "type": "registry:file",
+      "target": "~/design/css/token-stroke.css",
+      "content": ".ds .ds-token-stroke i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); border:var(--p-border-width-strong) var(--p-stroke-dashed) currentColor; }\n.ds .ds-token-stroke [data-token=\"dotted\"] { border-style:var(--p-stroke-dotted); }"
+    },
+    {
+      "path": "design/html/token-stroke.html",
+      "type": "registry:file",
+      "target": "~/design/html/token-stroke.html",
+      "content": "<span class=\"ds-token-row ds-token-stroke\"><i></i><i data-token=\"dotted\"></i></span>"
+    }
+  ],
+  "meta": {
+    "version": "0.3.0",
+    "lifecycle": "Trial",
+    "item": "token-stroke",
+    "purpose": "선 모양과 아이콘 선 굵기",
+    "keywords": "선 모양 점선 파선 아이콘 선 굵기 stroke dashed dotted",
+    "style": "main",
+    "source": "src/tokens/semantic/stroke.css"
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

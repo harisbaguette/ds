@@ -121,7 +121,7 @@ html { scroll-padding-top: var(--chrome-bottom, var(--p-space-md)); }
 :is(.primary-nav a, .filter-option, .filter-section > summary)::before { content: ''; position: absolute; inset: var(--p-space-2xs) 0; z-index: var(--p-layer-below); border-radius: var(--p-radius-md); }
 :is(.primary-nav a, .filter-option, .filter-section > summary):focus-visible { outline: none; }
 :is(.primary-nav a, .filter-option, .filter-section > summary):focus-visible::before { outline: var(--p-border-width-strong) solid var(--p-highlight); outline-offset: var(--p-focus-offset-tight); }
-:is(.primary-nav a, .filter-option:not(:disabled), .filter-section > summary):hover::before { background: var(--p-surface); }
+:is(.primary-nav a, .filter-option, .filter-section > summary):not([aria-current='page'], [aria-pressed='true'], :disabled):hover::before { background: var(--p-surface); }
 .primary-nav { display: grid; }
 .primary-nav a { color: var(--p-muted); font-weight: var(--p-weight-semibold); }
 .primary-nav a .ui-icon { width: var(--p-icon-sm); height: var(--p-icon-sm); }

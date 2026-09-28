@@ -75,7 +75,7 @@
             ${p.card({title:'봄의 색', description:'연한 초록과 따뜻한 노랑', action:'열기'})}
             ${p.card({title:'주말의 기록', description:'산책하며 모은 장면들', tag:'완료', action:'열기'})}
           </div>
-          ${p.navigation('dock')}
+          ${p.navigation('float')}
         </div>
         <button type="button" class="style-choose" data-style-select="${style.id}" data-focus="style-${style.id}" aria-pressed="${active}">
           <strong>${escape(style.name)}</strong>

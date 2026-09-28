@@ -31,7 +31,7 @@
     ...['checkbox','radio','switch'].map((id, i) => ({ id, name: ['체크박스','라디오','스위치'][i], section: 'selection', layer: 'Atom', keywords: 'checkbox radio switch toggle 선택 체크박스 토글', deps: T('color','space','radius','shadow','motion'), behavior: true })),
     { id: 'badge', name: '배지', section: 'feedback', layer: 'Atom', keywords: 'badge status 상태 태그', deps: T('color') },
     { id: 'tabs', name: '탭', section: 'navigation', layer: 'Molecule', keywords: 'tabs 메뉴 전환 탐색', deps: T('color','space','shadow'), entry: 'NAV-06' },
-    { id: 'bottom-nav', name: '하단 탐색', section: 'navigation', layer: 'Molecule', keywords: 'navigation bottom dock 모바일 하단 메뉴', deps: ['icon', ...T('color','space','shadow')], entry: 'NAV-05' },
+    { id: 'bottom-nav', name: '하단 탐색', section: 'navigation', layer: 'Molecule', keywords: 'navigation bottom tab bar 모바일 하단 메뉴', deps: ['icon', ...T('color','space','shadow')], entry: 'NAV-05' },
     { id: 'feedback', name: '알림·진행률', section: 'feedback', layer: 'Molecule', keywords: 'toast alert progress 알림 저장 완료 진행률', deps: ['button', 'status-dot', ...T('color','typography','space','radius','shadow')], entry: 'STA-03' },
     { id: 'card', name: '카드', section: 'composition', layer: 'Molecule', keywords: 'card 카드 제목 본문 행동', deps: ['button', 'badge', 'divider', ...T('color','space','radius','shadow')] },
     { id: 'search-module', name: '검색 모듈', section: 'composition', layer: 'Module', keywords: 'search filter 검색 필터 목록 결과 빈 상태', deps: ['field', 'button', 'card', ...T('color','typography','space','radius','shadow')], entry: 'DAT-01', behavior: true },
@@ -56,10 +56,9 @@
   const pageLooks = [
     look('01','stack','기본 쌓기','처음 만드는 목록 화면','배치 고민'),
     look('02','hero','큰 머리글','검색이 첫 할 일인 화면','검색창 찾기'),
-    look('03','appbar','가운데 앱 바','항목을 빠르게 비교할 때','카드 사이 눈 이동'),
+    look('03','appbar','가운데 앱 바','목록을 한 화면에 더 보고 싶을 때','더 보려고 스크롤'),
     look('04','sheet','겹친 시트','필터를 자주 바꿀 때','드롭다운 열기'),
-    look('05','magazine','잡지형','추천 하나를 앞세울 때','무엇부터 볼지 고민'),
-    look('06','dashboard','대시보드형','개수부터 파악할 때','탭마다 세어 보기')
+    look('05','dashboard','대시보드형','개수부터 파악할 때','탭마다 세어 보기')
   ];
   const galleries = {
     'bottom-nav': { key: 'variant', label: '모양', default: 'line', frame: 'phone-bottom', list: [
@@ -67,10 +66,7 @@
       look('02','glass','유리','사진·지도가 바닥까지 깔릴 때','가려진 내용 보러 스크롤'),
       look('03','float','떠 있는 바','만들기가 가장 잦은 앱','만들기 버튼 찾기'),
       look('04','pill','알약 강조','지금 위치를 한눈에 알아야 할 때','현재 탭 찾기'),
-      look('05','fab','가운데 큰 버튼','새로 만들기가 핵심인 앱','만들기 찾아 헤매기'),
-      look('06','outline','윤곽 아이콘','선택된 곳을 채움으로 구분할 때','색만 보고 위치 추측'),
-      look('07','line','위쪽 표시줄','처음 쓰는 사람이 많은 앱','낯선 모양 해석'),
-      look('08','dock','독','태블릿·넓은 화면','엄지를 끝까지 뻗기')
+      look('05','line','위쪽 표시줄','처음 쓰는 사람이 많은 앱','낯선 모양 해석')
     ] },
     // Atoms share one key: `look` → data-look on the markup, drawn by [data-look] rules in parts.css. First entry = current shape.
     // Button colour roles (primary/outline/ghost) stay on `variant`; looks here are arrangements of actions.
@@ -126,8 +122,7 @@
     ] },
     icon: { list: [
       look('01','line','선','뜻이 널리 알려진 아이콘','글 읽기'),
-      look('02','filled','채움','지금 선택된 곳 표시','위치 찾기'),
-      look('03','label','아이콘 + 이름','처음 보는 아이콘','뜻 추측')
+      look('02','label','아이콘 + 이름','처음 보는 아이콘','뜻 추측')
     ] },
     tabs: { key: 'look', label: '모양', frame: 'stage', list: [
       look('01','filled','채움 트랙','이름이 짧은 2~4개 화면','지금 탭 찾기'),
@@ -153,8 +148,7 @@
       look('03','chips','필터 칩 줄','몇 가지 상태로 자주 거를 때','드롭다운 열기'),
       look('04','list','목록형','이름으로 빠르게 비교할 때','카드 사이 눈 이동'),
       look('05','picker','검색 + 얼굴 목록','사람·항목이 많아 고를 때','드롭다운 스크롤'),
-      look('06','media','이미지 카드','사진으로 고르는 항목','제목 읽기'),
-      look('07','feature','큰 첫 결과','추천 하나를 앞세울 때','무엇부터 볼지 고민')
+      look('06','feature','큰 첫 결과','추천 하나를 앞세울 때','무엇부터 볼지 고민')
     ] },
     template: { key: 'look', label: '모양', frame: 'phone', list: pageLooks },
     page: { key: 'look', label: '모양', frame: 'phone', list: pageLooks }
@@ -183,7 +177,7 @@
     switch: ['설정을 켜고 끄기', '동작 이름을 label로 제공', ['label','checked','disabled'], ['change']],
     badge: ['짧은 상태 이름', '색만으로 상태를 구분하지 않음', ['label','tone'], []],
     tabs: ['같은 영역의 내용 전환', '탭과 패널의 id 연결을 유지. 세로 모양은 위아래 방향키', ['prefix','look'], ['pattove:tabchange']],
-    'bottom-nav': ['주요 목적지 선택', '목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float·fab)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공', ['variant','onCreate (React)'], ['pattove:navigate','pattove:create (HTML)']],
+    'bottom-nav': ['주요 목적지 선택', '목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공', ['variant','onCreate (React)'], ['pattove:navigate','pattove:create (HTML)']],
     feedback: ['행동의 결과와 진행률', '표본 저장 알림과 68% 진행률. 실제 저장·업로드는 프로젝트에서 연결', ['look'], []],
     card: ['제목·본문·상태·행동 조합', '단독 표본은 선택 토글, 검색 모듈에서는 상세 열기', ['title','description','tag','action','behavior','look'], ['pattove:select']],
     'search-module': ['이름·상태로 검색하고 상세 확인', 'records에 고유 id·title·description·tag 필요. HTML은 화면 안의 보관 상태를 바꾸고 이벤트로 알림. React는 onSave(record)의 성공·실패와 대기 상태를 처리. 영구 저장은 프로젝트에서 연결', ['prefix','records','look','onSave (React)'], ['pattove:save (HTML)','onSave(record) (React)']],

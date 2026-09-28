@@ -68,6 +68,8 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .style-sample .ds-card-actions { padding:10px 16px; }
 .style-sample .ds-bottom-nav { position:absolute; left:12px; right:12px; bottom:12px; }
 .style-sample .ds-bottom-nav > button { min-height:52px; gap:3px; font-size:11px; }
+/* The part rule (.ds …) sets 44px items; five of them plus the create button overflow this narrow sample. */
+.style-sample.ds .ds-bottom-nav > :not(.ds-bottom-nav-create) { min-width:40px; }
 .style-sample .ds-bottom-nav .ui-icon { width:18px; height:18px; }
 .style-choose { display:flex; flex-direction:column; align-items:flex-start; gap:4px; padding:0 6px; text-align:left; color:var(--p-ink); background:none; border:0; }
 .style-choose strong { font-size:15px; font-weight:650; }

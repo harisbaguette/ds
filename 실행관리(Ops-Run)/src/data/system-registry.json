@@ -1,6 +1,6 @@
 {
   "version": "0.3.0",
-  "revision": "af7b86c28c32175f97e649d12f2fd08b8c21bdcabe5fc44e00fbd5b33426935d",
+  "revision": "62478e42ed8a0b7cc6411b624ef1ef516482a521e24fe569d36df89511ec4c1b",
   "sources": [
     "src/system/parts.js",
     "src/system/parts.css",
@@ -475,10 +475,6 @@
           "label": "모양",
           "values": [
             [
-              "filled",
-              "채움"
-            ],
-            [
               "label",
               "아이콘 + 이름"
             ],
@@ -501,13 +497,6 @@
           },
           {
             "no": "02",
-            "id": "filled",
-            "name": "채움",
-            "when": "지금 선택된 곳 표시",
-            "saves": "위치 찾기"
-          },
-          {
-            "no": "03",
             "id": "label",
             "name": "아이콘 + 이름",
             "when": "처음 보는 아이콘",
@@ -1865,7 +1854,7 @@
       "name": "하단 탐색",
       "section": "navigation",
       "layer": "Molecule",
-      "keywords": "navigation bottom dock 모바일 하단 메뉴",
+      "keywords": "navigation bottom tab bar 모바일 하단 메뉴",
       "deps": [
         "icon",
         "token-color",
@@ -1881,7 +1870,7 @@
       ],
       "behavior": true,
       "purpose": "주요 목적지 선택",
-      "compatibility": "목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float·fab)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공",
+      "compatibility": "목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공",
       "inputs": [
         "variant",
         "onCreate (React)"
@@ -1912,20 +1901,8 @@
               "알약 강조"
             ],
             [
-              "fab",
-              "가운데 큰 버튼"
-            ],
-            [
-              "outline",
-              "윤곽 아이콘"
-            ],
-            [
               "line",
               "위쪽 표시줄"
-            ],
-            [
-              "dock",
-              "독"
             ]
           ],
           "default": "line"
@@ -1967,31 +1944,10 @@
           },
           {
             "no": "05",
-            "id": "fab",
-            "name": "가운데 큰 버튼",
-            "when": "새로 만들기가 핵심인 앱",
-            "saves": "만들기 찾아 헤매기"
-          },
-          {
-            "no": "06",
-            "id": "outline",
-            "name": "윤곽 아이콘",
-            "when": "선택된 곳을 채움으로 구분할 때",
-            "saves": "색만 보고 위치 추측"
-          },
-          {
-            "no": "07",
             "id": "line",
             "name": "위쪽 표시줄",
             "when": "처음 쓰는 사람이 많은 앱",
             "saves": "낯선 모양 해석"
-          },
-          {
-            "no": "08",
-            "id": "dock",
-            "name": "독",
-            "when": "태블릿·넓은 화면",
-            "saves": "엄지를 끝까지 뻗기"
           }
         ]
       },
@@ -2315,10 +2271,6 @@
               "검색 + 얼굴 목록"
             ],
             [
-              "media",
-              "이미지 카드"
-            ],
-            [
               "feature",
               "큰 첫 결과"
             ]
@@ -2368,13 +2320,6 @@
           },
           {
             "no": "06",
-            "id": "media",
-            "name": "이미지 카드",
-            "when": "사진으로 고르는 항목",
-            "saves": "제목 읽기"
-          },
-          {
-            "no": "07",
             "id": "feature",
             "name": "큰 첫 결과",
             "when": "추천 하나를 앞세울 때",
@@ -2455,10 +2400,6 @@
               "겹친 시트"
             ],
             [
-              "magazine",
-              "잡지형"
-            ],
-            [
               "dashboard",
               "대시보드형"
             ]
@@ -2489,8 +2430,8 @@
             "no": "03",
             "id": "appbar",
             "name": "가운데 앱 바",
-            "when": "항목을 빠르게 비교할 때",
-            "saves": "카드 사이 눈 이동"
+            "when": "목록을 한 화면에 더 보고 싶을 때",
+            "saves": "더 보려고 스크롤"
           },
           {
             "no": "04",
@@ -2501,13 +2442,6 @@
           },
           {
             "no": "05",
-            "id": "magazine",
-            "name": "잡지형",
-            "when": "추천 하나를 앞세울 때",
-            "saves": "무엇부터 볼지 고민"
-          },
-          {
-            "no": "06",
             "id": "dashboard",
             "name": "대시보드형",
             "when": "개수부터 파악할 때",
@@ -2581,10 +2515,6 @@
               "겹친 시트"
             ],
             [
-              "magazine",
-              "잡지형"
-            ],
-            [
               "dashboard",
               "대시보드형"
             ]
@@ -2615,8 +2545,8 @@
             "no": "03",
             "id": "appbar",
             "name": "가운데 앱 바",
-            "when": "항목을 빠르게 비교할 때",
-            "saves": "카드 사이 눈 이동"
+            "when": "목록을 한 화면에 더 보고 싶을 때",
+            "saves": "더 보려고 스크롤"
           },
           {
             "no": "04",
@@ -2627,13 +2557,6 @@
           },
           {
             "no": "05",
-            "id": "magazine",
-            "name": "잡지형",
-            "when": "추천 하나를 앞세울 때",
-            "saves": "무엇부터 볼지 고민"
-          },
-          {
-            "no": "06",
             "id": "dashboard",
             "name": "대시보드형",
             "when": "개수부터 파악할 때",

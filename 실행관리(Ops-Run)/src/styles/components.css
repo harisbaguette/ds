@@ -64,18 +64,20 @@
 .variant-card>.variant-frame:is([data-frame="stage"],[data-frame="phone"]) { align-self:stretch; }
 .variant-frame[data-frame="stage"]:has(>:is(.ds-tabs,.ds-feedback-example,.ds-card,.ds-search-module)) { height:auto; min-height:176px; }
 .variant-frame[data-frame="stage"]>:is(.ds-tabs,.ds-feedback-example,.ds-card) { width:100%; }
-.variant-frame[data-frame="stage"]:has(>.ds-search-module) { align-items:flex-start; padding:16px; }
+.variant-frame[data-frame="stage"]:has(>.ds-search-module) { align-items:center; padding:16px; }
 .variant-frame[data-frame="stage"]>.ds-search-module { flex:none; width:600px; zoom:.38; }
 .component-page .part-demo>.ds.variant-frame[data-frame="stage"]:has(>.ds-search-module) { display:block; width:100%; padding:24px 0; border:0; }
 .component-page .part-demo>.ds.variant-frame[data-frame="stage"]:has(>.ds-search-module)>.ds-search-module { width:auto; zoom:1; }
 /* The glass bottom bar needs something behind it, or the blur has nothing to show. */
-.variant-frame:has(.ds-bottom-nav[data-variant="glass"]) .variant-screen i:nth-child(3) { background:radial-gradient(circle at 22% 55%, color-mix(in oklab, var(--p-success) 70%, transparent) 0 36px, transparent 37px), radial-gradient(circle at 70% 58%, var(--p-accent) 0 28px, transparent 29px), linear-gradient(160deg, var(--p-soft), var(--p-surface)); }
+.variant-frame:has(.ds-bottom-nav[data-variant="glass"]) .variant-screen i:nth-child(3) { background:linear-gradient(115deg, transparent 40%, color-mix(in oklab, var(--p-accent) 26%, transparent) 40% 47%, transparent 47%), linear-gradient(28deg, transparent 56%, color-mix(in oklab, var(--p-success) 34%, transparent) 56% 68%, transparent 68%), linear-gradient(160deg, color-mix(in oklab, var(--p-success) 16%, var(--p-soft)), var(--p-soft)); }
 /* Phone frame: a whole screen drawn at device size, shrunk into the card; the bottom bar stays pinned to the phone's lower edge. */
 .variant-frame[data-frame="phone"] { display:grid; place-items:center; height:auto; padding:20px 0; border-top:1px solid var(--p-line); border-radius:24px; background:var(--p-surface); }
 .variant-phone { position:relative; width:390px; height:780px; zoom:.44; overflow:hidden; padding:56px 16px 0; border:1px solid var(--p-control-border); border-radius:52px; background:var(--p-bg); box-shadow:0 24px 44px -28px color-mix(in oklab, var(--p-accent) 45%, transparent); }
 .variant-phone::before { content:''; position:absolute; top:16px; left:50%; width:100px; height:28px; margin-left:-50px; border-radius:14px; background:var(--p-accent); }
 .variant-phone>.ds-page { height:100%; overflow:hidden; padding-bottom:104px; }
-.variant-phone>.ds-page>.ds-bottom-nav { position:absolute; left:var(--ds-bottom-nav-offset,0); right:var(--ds-bottom-nav-offset,0); bottom:var(--ds-bottom-nav-offset,0); margin:0; max-width:none; }
+.variant-phone>.ds-page>.ds-bottom-nav { position:absolute; z-index:1; left:var(--ds-bottom-nav-offset,0); right:var(--ds-bottom-nav-offset,0); bottom:var(--ds-bottom-nav-offset,0); margin:0; max-width:none; }
+/* A card shows one still screen: the list fades out above the bar instead of running under it. */
+.variant-card .variant-phone::after { content:''; position:absolute; inset:auto 0 0; height:150px; background:linear-gradient(to top, var(--p-bg) 96px, transparent); pointer-events:none; }
 .component-page .part-demo>.ds.variant-frame[data-frame="phone"] { display:flex; justify-content:center; width:100%; height:auto; padding:24px 0; }
 .component-page .part-demo .variant-phone { width:min(390px,100%); height:760px; zoom:1; }
 .component-page .part-demo .variant-phone>.ds-page { overflow:auto; }

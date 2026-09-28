@@ -4,7 +4,7 @@ import { Template } from './template.jsx';
 import { SearchModule } from './search-module.jsx';
 // Each screen look brings the bottom bar shape and search look that suit it, the same pairs the HTML renderer uses.
 // Pass a <BottomNav variant={pageLooks[look].navigation} /> as navigation to complete the screen.
-export const pageLooks = { stack: { navigation: 'dock', search: 'grid' }, hero: { navigation: 'pill', search: 'pill' }, appbar: { navigation: 'line', search: 'list' }, sheet: { navigation: 'glass', search: 'chips' }, magazine: { navigation: 'minimal', search: 'feature' }, dashboard: { navigation: 'float', search: 'list' } };
+export const pageLooks = { stack: { navigation: 'minimal', search: 'grid' }, hero: { navigation: 'pill', search: 'pill' }, appbar: { navigation: 'line', search: 'list' }, sheet: { navigation: 'glass', search: 'chips' }, dashboard: { navigation: 'float', search: 'list' } };
 export function CollectionPage({ title = '컬렉션', records, onSave, look = 'stack', navigation }) {
   const pair = pageLooks[look] ?? pageLooks.stack;
   const list = records ?? [{ tag: '진행 중' }, { tag: '완료' }, { tag: '진행 중' }];

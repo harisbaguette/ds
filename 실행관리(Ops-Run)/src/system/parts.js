@@ -87,7 +87,7 @@
     return `<div class="ds-tabs" data-look="${look}"><div class="ds-tablist" role="tablist" aria-label="컬렉션 분류"${look === 'vertical' ? ' aria-orientation="vertical"' : ''}>${['전체','진행 중','완료'].map((name, i) => `<button type="button" class="ds-tab" id="${prefix}-tab-${i}" role="tab" aria-selected="${i === 0}" aria-controls="${prefix}-panel-${i}" tabindex="${i === 0 ? 0 : -1}"${counts.length ? ` aria-label="${name} ${counts[i]}개"` : ''}>${art[i] ? icon(art[i]) : ''}${name}${counts.length ? `<span class="ds-tab-count" aria-hidden="true">${counts[i]}</span>` : ''}</button>`).join('')}</div>${['모든 컬렉션을 보고 있어요.','진행 중인 컬렉션을 보고 있어요.','완료한 컬렉션을 보고 있어요.'].map((text, i) => `<div class="ds-tabpanel" id="${prefix}-panel-${i}" role="tabpanel" aria-labelledby="${prefix}-tab-${i}" tabindex="0"${i ? ' hidden' : ''}>${text}</div>`).join('')}</div>`;
   }
   // Shapes with a raised center action put a create button between the second and third destination.
-  const navCenter = ['float', 'fab'];
+  const navCenter = ['float'];
   function navigation(variant = 'line', label = '하단 탐색') {
     const items = [['홈','grid'],['탐색','search'],['저장','bookmark'],['설정','layers']].map(([name, art], i) => `<button type="button" data-part-action="nav" aria-pressed="${i === 0}">${icon(art)}<span>${name}</span></button>`);
     if (navCenter.includes(variant)) items.splice(2, 0, `<button type="button" class="ds-bottom-nav-create" data-part-action="create" aria-label="만들기">${icon('plus')}</button>`);
@@ -109,7 +109,7 @@
     const media = look === 'media' || look === 'row' ? `<div class="ds-card-media" aria-hidden="true">${esc(initial)}</div>` : '';
     return `<article class="ds-card" data-look="${look}">${media}${cardBody(badge(tag)+cardTitle(title)+cardDescription(description))}${divider()}${cardActions(button({ label: action, variant: 'outline', size: 'sm', iconName: 'arrow', action: behavior }))}</article>`;
   }
-  const searchLooks = ['grid','pill','chips','list','picker','media','feature'];
+  const searchLooks = ['grid','pill','chips','list','picker','feature'];
   const statuses = [['all','전체'],['진행 중','진행 중'],['완료','완료']];
   // The chips look swaps the status select for a radio group with the same name, so filtering and reset stay identical.
   const statusControl = chips => chips
@@ -124,14 +124,14 @@
     ];
     // The picker narrows the list while typing: one field, no status menu, no search button, each row a face to tap.
     const picker = look === 'picker';
-    const cardLook = index => picker ? 'row' : look === 'media' || (look === 'feature' && index === 0) ? 'media' : 'raised';
+    const cardLook = index => picker ? 'row' : look === 'feature' && index === 0 ? 'media' : 'raised';
     const form = picker
       ? `<form class="ds-search-form" data-part-search data-live>${field({ id: prefix + '-query', label: '컬렉션 찾기', name: 'query', placeholder: '이름 한두 글자', type: 'search' })}</form>`
       : `<form class="ds-search-form" data-part-search>${field({ id: prefix + '-query', label: '컬렉션 검색', name: 'query', placeholder: '이름으로 검색' })}${statusControl(look === 'chips')}${button({ label: '검색', type: 'submit', iconName: 'search', action: '' })}</form>`;
     return `<section class="ds-search-module" data-look="${look}" aria-label="컬렉션 검색">${form}<p class="ds-result-count" role="status">${data.length}개의 컬렉션</p><div class="ds-results">${data.map((item, index) => `<div data-record-id="${esc(item.id ?? index)}" data-result="${esc(item.title + ' ' + item.description)}" data-result-status="${esc(item.tag)}">${card({ ...item, action: picker ? '고르기' : '열기', behavior: 'open-record', look: cardLook(index), initial: picker ? [...item.title][0] : '' })}</div>`).join('')}</div><div class="ds-empty" hidden><p>일치하는 컬렉션이 없어요.</p>${button({ label: '전체 보기', variant: 'outline', action: 'reset-search' })}</div><section class="ds-record-detail" aria-label="컬렉션 상세" tabindex="-1" hidden><h3></h3><p></p><div>${button({ label: '목록으로', variant: 'outline', action: 'close-record' })}${button({ label: '컬렉션에 보관', action: 'save-record' })}</div></section><p class="ds-demo-note" role="status"></p></section>`;
   }
   // Each screen arrangement brings its own bottom bar shape and, for the page, the search look that suits it.
-  const pageLooks = { stack: ['dock','grid'], hero: ['pill','pill'], appbar: ['line','list'], sheet: ['glass','chips'], magazine: ['minimal','feature'], dashboard: ['float','list'] };
+  const pageLooks = { stack: ['minimal','grid'], hero: ['pill','pill'], appbar: ['line','list'], sheet: ['glass','chips'], dashboard: ['float','list'] };
   const stats = list => `<ul class="ds-page-stats" role="list">${list.map(([label, value]) => `<li><strong>${esc(value)}</strong><span>${esc(label)}</span></li>`).join('')}</ul>`;
   function template({ title = '컬렉션', eyebrow = '나의 작업실', count = '3개', body = '<div class="ds-template-slot">검색·목록 모듈이 들어가는 자리</div>', look = 'stack', summary = [['전체', count], ['진행 중', '2개'], ['완료', '1개']] } = {}) {
     look = option(look, Object.keys(pageLooks), 'stack');

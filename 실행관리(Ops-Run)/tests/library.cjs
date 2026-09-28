@@ -122,7 +122,7 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   await pick('icon','navigation');
   // An icon shows in its home category and in the up-to-two categories it also belongs to.
   const navigation=data.entries.filter(e=>e.sub==='navigation'||e.also?.includes('navigation')).length+glyphOnly.filter(([,,sub,also=[]])=>sub==='navigation'||also.includes('navigation')).length;
-  check('아이콘 카드는 세트 그림을 실제로 그림',await page.locator('.dict-entry .dict-glyph use').count()>0&&await page.locator('.dict-entry svg.dict-glyph').first().evaluate(async svg=>{for(let i=0;i<50;i++){const b=svg.querySelector('use').getBBox();if(b.width>0&&b.height>0)return true;await new Promise(r=>setTimeout(r,100));}return false;}));
+  check('아이콘은 아직 그리지 않았으니 카드마다 빌린 그림 대신 미구현 표시',await page.locator('.dict-entry').count()>0&&await page.locator('.dict-entry:not(.is-todo), .dict-entry svg').count()===0);
   const navItems=await itemsOf('shelf=icon&icon=navigation');
   check('아이콘 카테고리로 좁히기',await page.locator('.dict-entry:not(.is-built)').count()===Math.min(48,navItems.filter(e=>!e.implementation).length)&&await shown()===navigation&&navItems.length===navigation&&await pressed()===1);
   check('쓰는 곳으로 게임 전용 부품 모으기',(await itemsOf('shelf=part&place=game')).every(e=>data.places.find(p=>p.id==='game').codes.includes(e.category)&&e.shelf==='part'));
@@ -157,11 +157,11 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   check('아이콘 탭 종류에 세트 그림이 있고 이름 없는 그림이 없음',await shown()===glyphOnly.length&&await page.locator('.dict-entry strong').first().textContent()!=='');
   await page.locator('button.dict-entry').first().click();
   const glyphKey=await page.locator('dialog .glyph-keys code').first().textContent();
-  check('세트 그림 상세는 큰 그림과 복사할 그림 키·출처를 보여 줌',await page.locator('dialog .detail-art svg.detail-glyph use').count()===1&&glyphOnly.some(([key])=>key===glyphKey)&&/Lucide|Tabler|Phosphor|Material/.test(await page.locator('dialog .glyph-keys span').first().textContent()));
+  check('세트 그림 상세는 미구현을 먼저 말하고, 빌린 그림은 참고로 키·출처와 함께 보여 줌',/미구현/.test(await page.locator('dialog .detail-art.is-todo').textContent())&&await page.locator('dialog .detail-art svg').count()===0&&/빌려 온/.test(await page.locator('dialog .glyph-ref h3').textContent())&&glyphOnly.some(([key])=>key===glyphKey)&&/Lucide|Tabler|Phosphor|Material/.test(await page.locator('dialog .glyph-keys span').first().textContent()));
   await shot('07-glyph-art');
   await close();
   await page.locator('#query').fill('rocket');await page.locator('#query').press('Enter');
-  check('영문 그림 이름으로도 아이콘을 찾음',await page.locator('.dict-entry .dict-glyph').count()>0);
+  check('영문 그림 이름으로도 아이콘을 찾음',await page.locator('.dict-entry.is-todo').count()>0);
   await goto('docs?doc=definition');await page.waitForFunction(()=>!location.hash.startsWith('#/docs'));
   check('없앤 문서 주소는 문서 화면을 열지 않음',!page.url().includes('docs')&&await page.locator('.document-body').count()===0);
   const inView=sel=>page.locator(sel).evaluate(p=>{const r=p.getBoundingClientRect();return r.width>0&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight;});

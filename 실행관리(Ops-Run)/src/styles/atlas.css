@@ -40,7 +40,6 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .dict-todo,.detail-todo { color:var(--p-muted); font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); }
 .is-todo strong { color:var(--p-muted); }
 /* Icon-set pictures carry no paint of their own: outline sets draw with a stroke, filled sets with a fill, both in the ink color. */
-.dict-glyph { width:var(--p-control-size-lg); height:var(--p-control-size-lg); color:var(--p-ink); }
 .paint-stroke { fill:none; stroke:currentColor; stroke-width:var(--p-icon-stroke-bold); stroke-linecap:round; stroke-linejoin:round; }
 .paint-fill { fill:currentColor; }
 .is-emoji { display:grid; place-items:center; font-size:calc(var(--p-space-unit) * 12); line-height:var(--p-leading-none); width:auto; height:auto; }
@@ -52,8 +51,6 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .dict[data-shelf='icon'] .dict-entries { grid-template-columns:repeat(auto-fill,minmax(calc(var(--p-space-unit) * 24),1fr)); gap:var(--p-space-xs); }
 .dict[data-shelf='icon'] .dict-entry { align-items:center; border-radius:var(--p-radius-lg); padding:var(--p-space-xs); }
 .dict[data-shelf='icon'] .dict-thumb { height:calc(var(--p-space-unit) * 16); background:none; }
-.dict[data-shelf='icon'] .dict-glyph { width:var(--p-icon-lg); height:var(--p-icon-lg); }
-.dict[data-shelf='icon'] .is-emoji { font-size:var(--p-text-title); }
 .dict[data-shelf='icon'] .dict-entry strong { min-height:calc(var(--p-text-sm) * 3); padding:0; text-align:center; font-weight:var(--p-weight-medium); }
 .dict[data-shelf='template'] .dict-entries { grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--p-container-xs)),1fr)); }
 .dict[data-shelf='template'] .is-built .dict-thumb { height:auto; min-height:calc(var(--p-space-unit) * 105); }
@@ -107,7 +104,7 @@ body { background:var(--p-bg); color:var(--p-ink); }
 @media(max-width:760px) {
   .dict-entries { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .dict-grid { gap:var(--p-space-sm); }
-  .dict-thumb,.dict-thumb.atlas-preview { height:calc(var(--p-space-unit) * 30); }.dict-glyph { width:var(--p-control-size-sm); height:var(--p-control-size-sm); }
+  .dict-thumb,.dict-thumb.atlas-preview { height:calc(var(--p-space-unit) * 30); }
   .dict-entry.is-built { grid-column:span 2; }.dict-entry.is-built .dict-thumb { height:calc(var(--p-space-unit) * 42); }
   .dict[data-shelf='template'] .dict-entry.is-built, .dict[data-shelf='block'] .dict-entry.is-built { grid-column:auto; }
   .dict[data-shelf='icon'] .dict-entries { grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--p-space-xs); }

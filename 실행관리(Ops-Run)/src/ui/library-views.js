@@ -59,7 +59,8 @@
   const kindOf=e=>registry.index.has(e.id)?registry.index.get(e.id).browse.kind:!e.category?shelves.get(shelfOf(e))?.name+' 묶음':!byName(shelfOf(e))?e.kind:family(e)&&families.get(family(e))>1?family(e):'기타';
   const shelfKinds=new Map(data.shelves.map(s=>[s.id,[...new Set([...(s.kinds.length?s.kinds:[...data.entries,...data.components].filter(e=>shelfOf(e)===s.id).map(kindOf)),...registry.items.filter(i=>itemShelf(i)===s.id).map(i=>i.browse.kind)])]
     .sort((x,y)=>(x==='기타')-(y==='기타')||0)]));
-  // An entry with no built sample and no set picture shows only that it is not built yet — a drawn stand-in would read as a real preview.
+  // An entry with no built sample shows only that it is not built yet — a drawn stand-in or a borrowed icon-set picture would read as the finished thing.
+  // The icons are drawn later by the operator, so the borrowed set picture stays only in the detail, labeled as a reference.
   const todoArt=cls=>'<span class="'+cls+'">미구현</span>';
   // A picture is drawn from its set's sprite (stroke or fill paint, per set); an emoji key is the character itself.
   function glyphArt(key, cls) {
@@ -194,7 +195,7 @@
     if (e.implementation) return '<div class="dict-entry is-built"><span class="dict-thumb atlas-preview" inert aria-hidden="true">'+(['template','page'].includes(e.id)?window.Pattove.componentDocs.live(e.id,{},state.style,'thumb-'+e.id):sample(e,state.style,'thumb-'+e.id))+'</span><button class="dict-hit" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><strong>'+escape(e.name)+'</strong></button></div>';
     // On a family-sorted shelf the family is the filter, so the tile keeps the whole name (색 — primary), not just 색.
     const kind=e.kind||'기준', label=byName(shelfOf(e))?e.name:short(e.name);
-    return '<button class="dict-entry'+(e.glyph?'':' is-todo')+'" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(kind)+'" title="'+escape(e.name+(e.glyph?' · '+e.glyph.join(', '):''))+'"><span class="dict-thumb">'+(e.glyph?glyphArt(e.glyph[0],'dict-glyph'):todoArt('dict-todo'))+'</span><strong>'+escape(label)+'</strong></button>';
+    return '<button class="dict-entry is-todo" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(kind)+'" title="'+escape(e.name)+'"><span class="dict-thumb">'+todoArt('dict-todo')+'</span><strong>'+escape(label)+'</strong></button>';
   }
   const empty='<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary" data-action="clear-filters" data-focus="empty-clear">필터 지우기</button></div>';
   const more=(shown,total)=>total>shown?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+shown+' / '+total+'</span></button></div>':'';
@@ -210,16 +211,16 @@
     // A hierarchy component opened from the 토큰 shelf reads like its components-page record.
     const e=state.page==='dictionary'&&entries.get(state.detail)||components.get(state.detail);
     const dict=!!e.category, category=dict?null:data.layers.find(l=>l.id===e.layer);
-    // The dictionary detail is the enlarged picture; an icon also lists its picture keys to copy and the set each comes from.
+    // An unbuilt entry says so; an icon then lists the borrowed set pictures it stands in for, with their keys and sources.
     return '<header class="dialog-header"><div><span class="dialog-category">'+escape(dict?[shelves.get(shelfOf(e))?.name,e.sub?'':short(categoryById.get(e.category)?.name||''),places.get(placeOf.get(e.category))?.name,iconGroups.get(e.sub)?.name].filter(Boolean).join(' · '):category.english)+'</span><h2 id="detail-title" tabindex="-1">'+escape(e.name)+'</h2></div><button class="icon-button" data-action="close-dialog" aria-label="상세 닫기">'+icon('close')+'</button></header>'+
-      (dict&&e.glyph?'<div class="detail-art" data-kind="'+escape(e.kind)+'">'+glyphArt(e.glyph[0],'detail-glyph')+'</div><ul class="glyph-keys">'+e.glyph.map(g=>'<li>'+glyphArt(g,'glyph-mini')+'<code>'+escape(g)+'</code><span>'+escape(glyphSource(g))+'</span></li>').join('')+'</ul>'
-      :dict?'<div class="detail-art is-todo">'+todoArt('detail-todo')+'<p>아직 견본이 없어요</p></div>'
+      (dict?'<div class="detail-art is-todo">'+todoArt('detail-todo')+'<p>'+(e.glyph?'아직 그리지 않았어요':'아직 견본이 없어요')+'</p></div>'
+        +(e.glyph?'<section class="glyph-ref"><h3>참고로 빌려 온 그림</h3><ul class="glyph-keys">'+e.glyph.map(g=>'<li>'+glyphArt(g,'glyph-mini')+'<code>'+escape(g)+'</code><span>'+escape(glyphSource(g))+'</span></li>').join('')+'</ul></section>':'')
         :'<div class="record-detail"><p class="record-kind">'+escape(category.name)+'</p><section><h3>대표 항목</h3><p>'+escape(e.examples)+'</p></section></div>');
   }
   window.Pattove.libraryUI={
     pages,navigation,subnavigation,filters,readFilters,writeFilters,collection,detail,currentItems,suggestions,searchAll,
     validDetail:(page,id)=>components.has(id)||(page==='dictionary'&&(entries.has(id)||registry.index.has(id))),
-    suggestionGroup:(page,e)=>page==='dictionary'?(e.implementation?'구현 · '+e.layer:(e.glyph?'':'미구현 · ')+shelves.get(shelfOf(e))?.name+' · '+(e.sub?iconGroups.get(e.sub).name:e.category?short(categoryById.get(e.category)?.name||''):kindOf(e))):data.layers.find(l=>l.id===e.layer).name,
+    suggestionGroup:(page,e)=>page==='dictionary'?(e.implementation?'구현 · '+e.layer:'미구현 · '+shelves.get(shelfOf(e))?.name+' · '+(e.sub?iconGroups.get(e.sub).name:e.category?short(categoryById.get(e.category)?.name||''):kindOf(e))):data.layers.find(l=>l.id===e.layer).name,
     sample,itemShelf,
     shelfFor:state=>shelves.get(state.page==='system'?itemShelf(registry.index.get(state.detail)):state.filters.shelf),
     peers:id=>builtInShelf(itemShelf(registry.index.get(id)))

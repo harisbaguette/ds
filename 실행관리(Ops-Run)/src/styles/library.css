@@ -19,9 +19,8 @@
 .detail-art.is-todo { align-content: center; gap: var(--p-space-xs); border: var(--p-border-width) dashed var(--p-control-border); background: none; }
 .detail-art.is-todo .detail-todo { font-size: var(--p-text-title); }
 .detail-art.is-todo p { margin: 0; color: var(--p-muted); }
-.detail-glyph { width: min(100% * 3 / 5, var(--p-space-unit) * 50); height: auto; aspect-ratio: var(--p-aspect-square); color: var(--p-ink); }
-.detail-glyph.is-emoji { font-size: calc(var(--p-space-unit) * 40); width: auto; }
 /* Each picture key under the enlarged icon, with the set, version and license it comes from. */
+.glyph-ref h3 { margin: 0 var(--p-space-lg) var(--p-space-sm); color: var(--p-muted); font-size: var(--p-text-sm); font-weight: var(--p-weight-semibold); }
 .glyph-keys { display: grid; gap: var(--p-space-xs); margin: 0 var(--p-space-lg) var(--p-space-lg); padding: 0; list-style: none; }
 .glyph-keys li { display: flex; align-items: center; gap: var(--p-space-sm); flex-wrap: wrap; }
 .glyph-keys code { font-size: var(--p-text-body); overflow-wrap: anywhere; }
@@ -40,5 +39,6 @@
   .record-code { font-size: var(--p-text-sm); margin-bottom: var(--p-space-sm); }
   .record-detail { padding: var(--p-space-lg); }
   .detail-art { min-height: calc(100vh * 5 / 12); margin: 0 var(--p-space-md) var(--p-space-md); }
+  .glyph-ref h3 { margin-inline: var(--p-space-md); }
   .glyph-keys { margin: 0 var(--p-space-md) var(--p-space-md); }
 }

@@ -38,7 +38,10 @@
 .variant-pick:focus-visible { outline:none; }.variant-pick:focus-visible::after { outline:3px solid var(--p-highlight); outline-offset:0; }
 .variant-no { font-family:var(--p-display-font); font-size:12px; color:var(--p-muted); font-variant-numeric:tabular-nums; }
 .variant-pick strong { font-size:15px; font-weight:650; }
-.variant-tags { grid-column:2; font-size:12px; color:var(--p-muted); margin-top:2px; }
+.variant-when,.variant-save { grid-column:2; display:flex; gap:6px; font-size:12px; line-height:1.4; color:var(--p-muted); }
+.variant-when { margin-top:4px; }
+.variant-when b,.variant-save b { flex:none; min-width:4.6em; font-weight:600; color:var(--p-ink); }
+.variant-save { color:var(--p-ink); }
 .variant-use { grid-area:use; position:relative; z-index:1; display:inline-flex; align-items:center; gap:4px; min-height:44px; padding:0 14px; border:1px solid var(--p-control-border); border-radius:999px; color:var(--p-ink); background:var(--p-bg); font-size:13px; font-weight:600; white-space:nowrap; }
 .variant-use:hover { background:var(--p-hover); }
 .variant-use[aria-pressed='true'] { border-color:var(--p-accent); background:var(--p-accent); color:var(--p-on-accent); }
@@ -65,9 +68,7 @@
 .variant-frame[data-frame="stage"]>.ds-search-module { flex:none; width:600px; zoom:.38; }
 .component-page .part-demo>.ds.variant-frame[data-frame="stage"]:has(>.ds-search-module) { display:block; width:100%; padding:24px 0; border:0; }
 .component-page .part-demo>.ds.variant-frame[data-frame="stage"]:has(>.ds-search-module)>.ds-search-module { width:auto; zoom:1; }
-/* See-through looks need something behind them, or the blur has nothing to show. */
-.variant-frame[data-frame="stage"]:has(>[data-look="glass"]) { background:radial-gradient(circle at 14% 50%, color-mix(in oklab, var(--ds-success) 55%, transparent) 0 18%, transparent 19%), radial-gradient(circle at 86% 46%, color-mix(in oklab, var(--ds-accent) 40%, transparent) 0 16%, transparent 17%), linear-gradient(135deg, var(--ds-soft), var(--ds-surface)); }
-.variant-frame[data-frame="stage"]:has(>.ds-card[data-look="neumorph"]) { background:var(--ds-surface); }
+/* The glass bottom bar needs something behind it, or the blur has nothing to show. */
 .variant-frame:has(.ds-bottom-nav[data-variant="glass"]) .variant-screen i:nth-child(3) { background:radial-gradient(circle at 22% 55%, color-mix(in oklab, var(--ds-success) 70%, transparent) 0 36px, transparent 37px), radial-gradient(circle at 70% 58%, var(--ds-accent) 0 28px, transparent 29px), linear-gradient(160deg, var(--ds-soft), var(--ds-surface)); }
 /* Phone frame: a whole screen drawn at device size, shrunk into the card; the bottom bar stays pinned to the phone's lower edge. */
 .variant-frame[data-frame="phone"] { display:grid; place-items:center; height:auto; padding:20px 0; border-top:1px solid var(--p-line); border-radius:24px; background:var(--ds-surface); }

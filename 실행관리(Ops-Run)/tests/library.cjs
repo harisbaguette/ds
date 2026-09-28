@@ -14,12 +14,12 @@ check('5개 계층 모두 실제 구성요소를 가짐',data.layers.length===5&
 check('모든 항목이 토큰·부품·블록·템플릿·아이콘 중 정확히 한 갈래에 들어가고, 아이콘 사전은 통째로 아이콘 갈래',data.shelves.length===5&&data.entries.every(e=>data.shelves.filter(s=>s.id===e.shelf).length===1)&&data.entries.every(e=>(e.category==='ICO')===(e.shelf==='icon')));
 check('토큰 갈래가 맨 앞이고 TOK 146개를 모두 담음',data.shelves[0].id==='token'&&data.entries.filter(e=>e.shelf==='token').length===146&&data.entries.filter(e=>e.category==='TOK').every(e=>e.shelf==='token'));
 check('쓰는 곳 태그가 서비스·게임·영역 분류를 한 번씩 덮음',(()=>{const codes=data.places.flatMap(p=>p.codes),use=data.groups.filter(g=>['service','game','domain'].includes(g.id)).flatMap(g=>g.codes);return new Set(codes).size===codes.length&&codes.length===use.length&&use.every(c=>codes.includes(c));})());
-check('아이콘은 모두 카테고리 하나를 가지고, 빈 카테고리가 없음',data.iconGroups.every(g=>data.entries.some(e=>e.sub===g.id))&&data.entries.filter(e=>e.category==='ICO').every(e=>data.iconGroups.some(g=>g.id===e.sub))&&data.entries.every(e=>!e.sub||e.category==='ICO'));
+check('아이콘은 모두 카테고리 하나를 가지고, 빈 카테고리가 없음',data.iconGroups.every(g=>data.entries.some(e=>e.sub===g.id))&&data.entries.filter(e=>e.category==='ICO').every(e=>e.kind==='기준'?!e.sub:data.iconGroups.some(g=>g.id===e.sub))&&data.entries.every(e=>!e.sub||e.category==='ICO'));
 // Every installed icon-set picture is named and filed; the ones no meaning entry points at join the icon tab as 세트 그림.
 const glyphOnly=data.glyphs.filter(([key])=>!data.entries.some(e=>e.glyph?.includes(key)));
 check('설치된 아이콘 세트 그림은 모두 한국어 이름과 아이콘 카테고리 하나를 가짐',data.glyphs.length===data.glyphSets.reduce((n,s)=>n+s.count,0)&&data.glyphs.every(([key,name,sub])=>key.includes(':')&&name&&data.iconGroups.some(g=>g.id===sub))&&new Set(data.glyphs.map(g=>g[0])).size===data.glyphs.length);
 check('아이콘 부품은 모두 실제 그림 키를 가짐',data.entries.filter(e=>e.category==='ICO'&&e.kind==='부품').every(e=>e.glyph?.length>0)&&data.entries.flatMap(e=>e.glyph||[]).every(g=>g.startsWith('emoji:')||data.glyphs.some(([key])=>key===g)));
-check('아이콘 카테고리마다 세트 그림이 들어 있음',data.iconGroups.filter(g=>g.id!=='rules').every(g=>data.glyphs.some(([,,sub])=>sub===g.id)));
+check('아이콘 카테고리마다 세트 그림이 들어 있음',data.iconGroups.every(g=>data.glyphs.some(([,,sub])=>sub===g.id)));
 check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categories.length===data.groups.flatMap(g=>g.codes).length&&new Set(data.groups.flatMap(g=>g.codes)).size===data.categories.length);
 (async()=>{
  const browser=await chromium.launch({headless:true});

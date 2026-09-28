@@ -94,8 +94,10 @@ if(new Set(placeCodes).size!==placeCodes.length||placeCodes.some(code=>!categori
 const useGroups=['service','game','domain'].flatMap(id=>groups.find(g=>g.id===id)?.codes||[]);
 if(useGroups.some(code=>!placeCodes.includes(code))||placeCodes.some(code=>!useGroups.includes(code)))throw new Error('Places must cover exactly the service, game and domain categories');
 if(groups.some(g=>!useGroups.some(code=>g.codes.includes(code))&&!roleOrder.includes(g.id)))throw new Error('Role order is missing a common group');
+// Icon guidelines (기준) apply to every icon, so they sit in their own section outside the icon categories.
 for(const e of entries.filter(e=>e.category==='ICO')){
   const hit=iconGroups.find(g=>e.section===g.name+' — '+g.english);
+  if(!hit&&e.kind==='기준')continue;
   if(!hit)throw new Error('Icon heading matches no icon group: '+e.id+' '+e.section);
   e.sub=hit.id;
 }

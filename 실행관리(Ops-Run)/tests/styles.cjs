@@ -49,11 +49,15 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
     const nodes=[...document.querySelectorAll('body, body *')],read=()=>nodes.map(n=>[getComputedStyle(n).backgroundColor,getComputedStyle(n).color]);
     const before=read(),old=rules.map(r=>[r.style.getPropertyValue('--p-bg'),r.style.getPropertyValue('--p-ink')]);
     rules.forEach(r=>{r.style.setProperty('--p-bg','rgb(255, 0, 170)');r.style.setProperty('--p-ink','rgb(0, 170, 255)');});
-    const after=read();rules.forEach((r,i)=>{r.style.setProperty('--p-bg',old[i][0]);r.style.setProperty('--p-ink',old[i][1]);});
-    const oldBg=before[0][0],inDemo=i=>!!nodes[i].closest('.part-demo');
+    const after=read();
+    // Other roles may share the bg primitive (e.g. on-accent = white); repaint them too so only hard-coded colors stay behind.
+    const twins=rules.flatMap(r=>[...r.style].filter(k=>k.startsWith('--p-')&&k!=='--p-bg'&&r.style.getPropertyValue(k).trim()===old[0][0].trim()).map(k=>[r,k,r.style.getPropertyValue(k)]));
+    twins.forEach(([r,k],i)=>r.style.setProperty(k,'rgb(1, 2, '+(3+i)+')'));
+    const oldBg=before[0][0],stale=read().filter(c=>c[0]===oldBg).length;
+    twins.forEach(([r,k,v])=>r.style.setProperty(k,v));rules.forEach((r,i)=>{r.style.setProperty('--p-bg',old[i][0]);r.style.setProperty('--p-ink',old[i][1]);});
+    const inDemo=i=>!!nodes[i].closest('.part-demo');
     return {rules:rules.length,shell:after[0][0]==='rgb(255, 0, 170)',
-     partBg:after.filter((c,i)=>inDemo(i)&&c[0]==='rgb(255, 0, 170)').length,partInk:after.filter((c,i)=>inDemo(i)&&c[1]==='rgb(0, 170, 255)').length,
-     stale:after.filter(c=>c[0]===oldBg).length};
+     partBg:after.filter((c,i)=>inDemo(i)&&c[0]==='rgb(255, 0, 170)').length,partInk:after.filter((c,i)=>inDemo(i)&&c[1]==='rgb(0, 170, 255)').length,stale};
    });
    const r=linkage[id];
    check(id+' 바탕·글자 역할 한 줄 수정이 외곽과 부품에 함께 반영',r.rules===1&&r.shell&&r.partBg>0&&r.partInk>0);

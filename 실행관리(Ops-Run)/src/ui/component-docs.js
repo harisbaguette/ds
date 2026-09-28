@@ -34,7 +34,7 @@
     return control ? control.values.map(([value,label])=>[label,{[control.key]:value}]) : [];
   }
   function card(item, v, current, kept) {
-    return `<li class="variant-card" data-variant-card="${v.id}"${v.id === current ? ' data-current' : ''}><button type="button" class="variant-pick" data-variant-pick="${v.id}" aria-pressed="${v.id === current}"><span class="variant-no">${v.no}</span><strong>${e(v.name)}</strong><span class="variant-tags">${e(v.tags.join(' · '))}</span></button>${live(item.id, { [item.gallery.key]: v.id }, 'main', undefined, item.gallery.sample).replace('<div ', '<div inert ')}${useButton(v, v.id === kept)}</li>`;
+    return `<li class="variant-card" data-variant-card="${v.id}"${v.id === current ? ' data-current' : ''}><button type="button" class="variant-pick" data-variant-pick="${v.id}" aria-pressed="${v.id === current}"><span class="variant-no">${v.no}</span><strong>${e(v.name)}</strong><span class="variant-when"><b>이럴 때</b>${e(v.when)}</span><span class="variant-save"><b>덜 하는 일</b>${e(v.saves)}</span></button>${live(item.id, { [item.gallery.key]: v.id }, 'main', undefined, item.gallery.sample).replace('<div ', '<div inert ')}${useButton(v, v.id === kept)}</li>`;
   }
   const useButton = (v, kept) => `<button type="button" class="variant-use" data-variant-use="${v.id}" aria-pressed="${kept}" aria-label="${e(v.name)} ${kept ? '사용 중' : '이걸로 쓰기'}">${kept ? p.icon('check') + '사용 중' : '이걸로 쓰기'}</button>`;
   function gallery(item, options) {

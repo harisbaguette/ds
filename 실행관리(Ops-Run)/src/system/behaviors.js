@@ -17,7 +17,8 @@ window.Pattove.mountParts = function mountParts(root) {
   function filter(form) {
     const module = form.closest('.ds-search-module');
     const query = form.elements.query.value.trim().toLocaleLowerCase();
-    const status = form.elements.status.value;
+    // The picker look has no status menu, so it always searches every status.
+    const status = form.elements.status?.value ?? 'all';
     let count = 0;
     module.querySelectorAll('[data-result]').forEach(item => {
       const match = query.split(/\s+/).every(term => item.dataset.result.toLocaleLowerCase().includes(term)) && (status === 'all' || item.dataset.resultStatus === status);
@@ -30,6 +31,10 @@ window.Pattove.mountParts = function mountParts(root) {
   root.addEventListener('submit', event => {
     if (!event.target.matches('[data-part-search]')) return;
     event.preventDefault(); filter(event.target);
+  });
+  // The picker look filters as the person types; the other looks wait for the search button.
+  root.addEventListener('input', event => {
+    if (event.target.matches('[data-part-search][data-live] [name="query"]')) filter(event.target.form);
   });
   root.addEventListener('change', event => {
     // The status filter is a select, or a radio chip group in the chips look.
@@ -71,6 +76,19 @@ window.Pattove.mountParts = function mountParts(root) {
       detail.hidden = !open;
       module.querySelector('.ds-demo-note').textContent = '';
       if (open) detail.focus(); else module.__recordOpener?.focus();
+    } else if (action === 'clear-input') {
+      const input = button.closest('.ds-input-group').querySelector('input');
+      input.value = ''; input.dispatchEvent(new Event('input', { bubbles: true })); input.focus();
+    } else if (action === 'step') {
+      const input = button.closest('.ds-input-group').querySelector('input');
+      input.value = String(Math.max(Number(input.min || 0), (Number(input.value) || 0) + Number(button.dataset.step)));
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    } else if (action === 'undo') {
+      // Undo closes the notice and hands focus back to the action that raised it.
+      const example = button.closest('.ds-feedback-example');
+      example.querySelector('[data-part-feedback]').hidden = true;
+      example.querySelector('[data-part-action="notify"]')?.focus();
+      button.dispatchEvent(new CustomEvent('pattove:undo', { bubbles: true }));
     } else if (action === 'notify') {
       button.closest('.ds-feedback-example').querySelector('[data-part-feedback]').hidden = false;
     } else if (action === 'nav') {

@@ -22,16 +22,16 @@
     { id: 'token-radius', name: '모서리 토큰', section: 'foundations', layer: 'Token', keywords: '모서리 둥글기 반경 radius', deps: [], entry: 'TOK-91' },
     { id: 'token-shadow', name: '그림자 토큰', section: 'foundations', layer: 'Token', keywords: '그림자 입체 층 깊이 shadow elevation', deps: [], entry: 'TOK-95' },
     { id: 'token-motion', name: '움직임 토큰', section: 'foundations', layer: 'Token', keywords: '움직임 시간 전환 애니메이션 motion duration', deps: [], entry: 'TOK-113' },
-    { id: 'icon', name: '아이콘', section: 'primitives', layer: 'Primitive', keywords: '검색 닫기 화살표 svg icon', deps: T('color','shadow'), entry: 'ICO-01' },
+    { id: 'icon', name: '아이콘', section: 'primitives', layer: 'Primitive', keywords: '검색 닫기 화살표 svg icon', deps: T('color'), entry: 'ICO-01' },
     { id: 'divider', name: '구분선', section: 'primitives', layer: 'Primitive', keywords: '선 분리 경계 divider separator', deps: T('color','typography') },
     { id: 'status-dot', name: '상태 점', section: 'primitives', layer: 'Primitive', keywords: '상태 온라인 성공 status dot', deps: T('color','typography','space') },
     { id: 'button', name: '버튼', section: 'buttons', layer: 'Atom', keywords: 'button 행동 실행 크기 상태 hover focus disabled loading', deps: ['icon', ...T('color','space','radius','shadow','motion')], entry: 'ACT-01' },
-    { id: 'input', name: '입력창', section: 'fields', layer: 'Atom', keywords: 'input text email 입력 텍스트', deps: T('color','space','radius','shadow') },
-    { id: 'field', name: '입력 필드', section: 'fields', layer: 'Molecule', keywords: 'label 오류 검증 validation error 폼 라벨 설명', deps: ['input', ...T('color','typography','space','radius')], entry: 'INP-47' },
+    { id: 'input', name: '입력창', section: 'fields', layer: 'Atom', keywords: 'input text email 입력 텍스트', deps: T('color','typography','space','radius','shadow') },
+    { id: 'field', name: '입력 필드', section: 'fields', layer: 'Molecule', keywords: 'label 오류 검증 validation error 폼 라벨 설명', deps: ['input', ...T('color','typography','space')], entry: 'INP-47' },
     ...['checkbox','radio','switch'].map((id, i) => ({ id, name: ['체크박스','라디오','스위치'][i], section: 'selection', layer: 'Atom', keywords: 'checkbox radio switch toggle 선택 체크박스 토글', deps: T('color','space','radius','shadow','motion'), behavior: true })),
-    { id: 'badge', name: '배지', section: 'feedback', layer: 'Atom', keywords: 'badge status 상태 태그', deps: T('color','shadow') },
-    { id: 'tabs', name: '탭', section: 'navigation', layer: 'Molecule', keywords: 'tabs 메뉴 전환 탐색', deps: T('color','space','radius','shadow'), entry: 'NAV-06' },
-    { id: 'bottom-nav', name: '하단 탐색', section: 'navigation', layer: 'Molecule', keywords: 'navigation bottom dock 모바일 하단 메뉴', deps: ['icon', ...T('color','space','radius','shadow')], entry: 'NAV-05' },
+    { id: 'badge', name: '배지', section: 'feedback', layer: 'Atom', keywords: 'badge status 상태 태그', deps: T('color') },
+    { id: 'tabs', name: '탭', section: 'navigation', layer: 'Molecule', keywords: 'tabs 메뉴 전환 탐색', deps: T('color','space','shadow'), entry: 'NAV-06' },
+    { id: 'bottom-nav', name: '하단 탐색', section: 'navigation', layer: 'Molecule', keywords: 'navigation bottom dock 모바일 하단 메뉴', deps: ['icon', ...T('color','space','shadow')], entry: 'NAV-05' },
     { id: 'feedback', name: '알림·진행률', section: 'feedback', layer: 'Molecule', keywords: 'toast alert progress 알림 저장 완료 진행률', deps: ['button', 'status-dot', ...T('color','typography','space','radius','shadow')], entry: 'STA-03' },
     { id: 'card', name: '카드', section: 'composition', layer: 'Molecule', keywords: 'card 카드 제목 본문 행동', deps: ['button', 'badge', 'divider', ...T('color','space','radius','shadow')] },
     { id: 'search-module', name: '검색 모듈', section: 'composition', layer: 'Module', keywords: 'search filter 검색 필터 목록 결과 빈 상태', deps: ['field', 'button', 'card', ...T('color','typography','space','radius','shadow')], entry: 'DAT-01', behavior: true },
@@ -49,110 +49,112 @@
     radio: [control('state','상태',choiceStates)], switch: [control('state','상태',choiceStates)],
     badge: [control('tone','상태',[['neutral','진행 중'],['success','완료'],['warning','확인 필요'],['error','실패']])],
   };
-  // Look-alike versions of one part. Same tokens, different shape. Adding a list here is all another part needs for the variant grid.
-  const look = (no, id, name, tags) => ({ no, id, name, tags });
+  // Look-alike versions of one part. Every look is a different structure for a different situation:
+  // `when` = the situation it fits, `saves` = the effort it takes away from the person using it.
+  const look = (no, id, name, when, saves) => ({ no, id, name, when, saves });
   // Template and page share the screen arrangements; the page fills each with a matching search look.
   const pageLooks = [
-    look('01','stack','기본 쌓기',['제목','독','기본']), look('02','hero','큰 머리글',['첫인상','여백','브랜드']),
-    look('03','appbar','가운데 앱 바',['앱','익숙함','단정']), look('04','sheet','겹친 시트',['진함','겹침','몰입']),
-    look('05','magazine','잡지형',['큰 글자','편집','위계']), look('06','dashboard','대시보드형',['숫자','요약','관리'])
+    look('01','stack','기본 쌓기','처음 만드는 목록 화면','배치 고민'),
+    look('02','hero','큰 머리글','검색이 첫 할 일인 화면','검색창 찾기'),
+    look('03','appbar','가운데 앱 바','항목을 빠르게 비교할 때','카드 사이 눈 이동'),
+    look('04','sheet','겹친 시트','필터를 자주 바꿀 때','드롭다운 열기'),
+    look('05','magazine','잡지형','추천 하나를 앞세울 때','무엇부터 볼지 고민'),
+    look('06','dashboard','대시보드형','개수부터 파악할 때','탭마다 세어 보기')
   ];
   const galleries = {
     'bottom-nav': { key: 'variant', label: '모양', default: 'line', frame: 'phone-bottom', list: [
-      look('01','minimal','미니멀',['가벼움','정돈','기본']), look('02','glass','유리',['투명','겹침','가벼움']),
-      look('03','float','떠 있는 바',['떠 있음','중심 행동','둥긂']), look('04','neumorph','뉴모피즘',['부드러움','입체감','촉감']),
-      look('05','pill','알약 강조',['또렷함','집중','간결']), look('06','fab','가운데 큰 버튼',['만들기 강조','솟음','역동']),
-      look('07','gradient','그라데이션',['진함','고급','대비']), look('08','outline','윤곽 아이콘',['얇음','단정','여백']),
-      look('09','line','위쪽 표시줄',['익숙함','명확','평평함']), look('10','curve','곡선 진한 바',['곡선','몰입','개성']),
-      look('11','dock','독',['떠 있음','고급','입체감'])
+      look('01','minimal','미니멀','내용이 주인공인 읽기 앱','메뉴가 눈을 뺏는 일'),
+      look('02','glass','유리','사진·지도가 바닥까지 깔릴 때','가려진 내용 보러 스크롤'),
+      look('03','float','떠 있는 바','만들기가 가장 잦은 앱','만들기 버튼 찾기'),
+      look('04','pill','알약 강조','지금 위치를 한눈에 알아야 할 때','현재 탭 찾기'),
+      look('05','fab','가운데 큰 버튼','새로 만들기가 핵심인 앱','만들기 찾아 헤매기'),
+      look('06','outline','윤곽 아이콘','선택된 곳을 채움으로 구분할 때','색만 보고 위치 추측'),
+      look('07','line','위쪽 표시줄','처음 쓰는 사람이 많은 앱','낯선 모양 해석'),
+      look('08','dock','독','태블릿·넓은 화면','엄지를 끝까지 뻗기')
     ] },
     // Atoms share one key: `look` → data-look on the markup, drawn by [data-look] rules in parts.css. First entry = current shape.
+    // Button colour roles (primary/outline/ghost) stay on `variant`; looks here are arrangements of actions.
     button: { list: [
-      look('01','fill','채움',['기본','또렷함','단단함']), look('02','soft','부드러운 채움',['차분함','연함','보조']),
-      look('03','line','굵은 윤곽',['가벼움','선명','평평함']), look('04','text','밑줄 글자',['최소','링크','조용함']),
-      look('05','pill','알약',['둥긂','친근함','모바일']), look('06','gradient','그라데이션',['진함','고급','대비']),
-      look('07','3d','눌리는 입체',['손맛','놀이','턱']), look('08','neumorph','뉴모피즘',['부드러움','입체감','촉감']),
-      look('09','glass','유리',['투명','겹침','가벼움']), look('10','cta','화살표 원',['행동 유도','방향','강조'])
+      look('01','fill','하나','할 일이 하나뿐인 화면','무엇을 누를지 고르기'),
+      look('02','hero','주 행동 + 아이콘','행동이 4개 이상 나란할 때','어느 걸 누를지 고민'),
+      look('03','pair','확인·취소 한 줄','되돌리기 어려운 결정 직전','잘못 누르기'),
+      look('04','bar','엄지 자리 가득','휴대폰 긴 화면 끝의 결정','스크롤해 버튼 찾기')
     ] },
     input: { list: [
-      look('01','box','테두리 상자',['기본','익숙함','단정']), look('02','underline','밑줄',['최소','여백','가벼움']),
-      look('03','filled','채운 칸',['머티리얼','면','또렷함']), look('04','pill','알약',['검색','둥긂','모바일']),
-      look('05','float','테두리 라벨',['공간 절약','정돈','라벨']), look('06','neumorph','오목 뉴모피즘',['부드러움','눌림','촉감']),
-      look('07','glass','유리',['투명','떠 있음','가벼움']), look('08','sharp','각진 굵은 선',['대담함','각','개성'])
+      look('01','box','기본 칸','한 번 쓰고 끝나는 값','모양 해석'),
+      look('02','clear','칸 안 지우기','통째로 다시 쓰는 값','지우기 키 연타'),
+      look('03','unit','숫자 + 단위 한 칸','단위가 붙는 숫자','두 칸 오가기'),
+      look('04','stepper','빼기·더하기','작은 수를 바꿀 때','키보드 열기')
     ] },
     field: { list: [
-      look('01','stack','위 라벨',['기본','읽기 쉬움','세로']), look('02','inline','옆 라벨',['가로','조밀','설정']),
-      look('03','float','테두리 라벨',['공간 절약','정돈','라벨']), look('04','underline','밑줄',['최소','여백','가벼움']),
-      look('05','filled','안쪽 라벨',['머티리얼','면','조밀']), look('06','card','카드 묶음',['묶음','구획','또렷함']),
-      look('07','pill','알약',['둥긂','친근함','모바일']), look('08','neumorph','뉴모피즘',['부드러움','눌림','촉감'])
+      look('01','stack','위 라벨','처음 보는 양식','라벨 찾기'),
+      look('02','inline','옆 라벨','짧은 설정 값이 여러 줄','세로 스크롤'),
+      look('03','float','테두리 라벨','세로 공간이 빠듯할 때','스크롤'),
+      look('04','row','시작~끝 한 줄','짝을 이루는 값(기간·범위)','눈이 멈추는 곳 절반')
     ] },
     checkbox: { list: [
-      look('01','square','네모',['기본','익숙함','단정']), look('02','round','동그라미',['둥긂','친근함','할 일']),
-      look('03','outline','윤곽 체크',['가벼움','선','조용함']), look('04','card','선택 카드',['넓은 칸','또렷함','묶음']),
-      look('05','chip','알약 칩',['필터','조밀','모바일']), look('06','list','목록 줄',['설정','오른쪽','정돈']),
-      look('07','neumorph','뉴모피즘',['부드러움','입체감','촉감'])
+      look('01','square','네모','항목이 적은 동의·선택','모양 해석'),
+      look('02','card','선택 카드','설명이 붙은 선택지','작은 네모 겨누기'),
+      look('03','chip','알약 칩','여러 필터를 빠르게 켤 때','세로 목록 훑기'),
+      look('04','list','목록 줄','설정 화면의 여러 항목','줄과 칸 맞춰 보기')
     ] },
     radio: { list: [
-      look('01','dot','가운데 점',['기본','익숙함','단정']), look('02','check','체크 원',['확정','또렷함','둥긂']),
-      look('03','outline','윤곽 점',['가벼움','선','고전']), look('04','card','선택 카드',['넓은 칸','또렷함','묶음']),
-      look('05','segment','나란한 버튼',['전환','조밀','가로']), look('06','list','목록 줄',['설정','오른쪽','정돈']),
-      look('07','neumorph','뉴모피즘',['부드러움','입체감','촉감'])
+      look('01','dot','가운데 점','선택지가 3~5개','모양 해석'),
+      look('02','card','선택 카드','설명이 붙은 선택지','작은 원 겨누기'),
+      look('03','segment','나란한 버튼','2~4개 중 바로 바꿀 때','세로로 훑기'),
+      look('04','list','목록 줄','설정 화면의 한 가지 고르기','줄과 칸 맞춰 보기')
     ] },
     switch: { list: [
-      look('01','track','기본 트랙',['기본','단정','익숙함']), look('02','ios','큰 초록',['모바일','또렷함','켜짐']),
-      look('03','slim','가는 트랙',['머티리얼','가벼움','손잡이']), look('04','text','켬·끔 글자',['명확','글자','안내']),
-      look('05','square','네모',['각','단단함','개성']), look('06','outline','커지는 손잡이',['윤곽','변화','또렷함']),
-      look('07','neumorph','뉴모피즘',['부드러움','입체감','촉감']), look('08','list','설정 줄',['설정','오른쪽','정돈'])
+      look('01','track','기본 트랙','바로 적용되는 켜기·끄기','저장 버튼 찾기'),
+      look('02','text','켬·끔 글자','색만으로 상태를 알기 어려울 때','켜졌는지 추측'),
+      look('03','list','설정 줄','설정 항목이 여러 개','줄과 칸 맞춰 보기')
     ] },
     badge: { list: [
-      look('01','soft','연한 면',['기본','차분함','둥긂']), look('02','outline','윤곽',['가벼움','선','조용함']),
-      look('03','solid','진한 면',['강조','대비','또렷함']), look('04','dot','점 붙음',['상태','작음','정돈']),
-      look('05','square','네모',['각','표','단단함']), look('06','tag','꼬리표',['분류','물건','개성']),
-      look('07','raised','떠 있는',['입체감','가벼움','부드러움'])
+      look('01','soft','연한 면','목록 옆 짧은 상태','상태 글 읽기'),
+      look('02','dot','점 붙음','여러 상태를 한 줄에 둘 때','색 칸 크기 비교'),
+      look('03','icon','아이콘 붙음','색을 구분하기 어려운 사람도 볼 때','색으로 뜻 해석')
     ] },
     divider: { list: [
-      look('01','solid','실선',['기본','단정','얇음']), look('02','dashed','파선',['임시','가벼움','구획']),
-      look('03','dotted','점선',['부드러움','리듬','가벼움']), look('04','label','가운데 글자',['또는','나눔','안내']),
-      look('05','inset','들여쓴 선',['목록','정렬','조용함']), look('06','bar','짧은 막대',['강조','제목','중심']),
-      look('07','fade','흐려지는 선',['부드러움','여운','고급']), look('08','thick','두꺼운 띠',['구역','모바일','또렷함'])
+      look('01','solid','실선','내용 묶음 사이','어디서 끊기는지 찾기'),
+      look('02','label','가운데 글자','두 방법 중 하나(또는)','두 묶음 관계 추측'),
+      look('03','inset','들여쓴 선','아이콘 붙은 목록','줄 시작 맞춰 보기')
     ] },
     'status-dot': { list: [
-      look('01','dot','점',['기본','작음','단정']), look('02','ring','후광',['또렷함','부드러움','주목']),
-      look('03','pulse','맥박',['실시간','움직임','주목']), look('04','badge','배지형',['묶음','또렷함','면']),
-      look('05','avatar','프로필 모서리',['사람','접속','익숙함']), look('06','bar','세로 막대',['목록','정렬','조용함']),
-      look('07','check','체크 원',['완료','확정','또렷함'])
+      look('01','dot','점','글 옆 짧은 상태','상태 글 읽기'),
+      look('02','avatar','프로필 모서리','사람 목록의 접속 여부','이름 옆 글 찾기'),
+      look('03','check','체크 원','끝났는지만 알면 될 때','색으로 완료 추측')
     ] },
     icon: { list: [
-      look('01','line','선',['기본','가벼움','단정']), look('02','bold','굵은 선',['또렷함','작은 크기','강조']),
-      look('03','duotone','두 톤',['깊이','부드러움','면']), look('04','filled','채움',['선택됨','단단함','강조']),
-      look('05','circle','동그라미 받침',['둥긂','친근함','면']), look('06','square','진한 네모 받침',['앱','강조','대비']),
-      look('07','ring','윤곽 원',['가벼움','선','단정']), look('08','raised','떠 있는 받침',['입체감','부드러움','촉감'])
+      look('01','line','선','뜻이 널리 알려진 아이콘','글 읽기'),
+      look('02','filled','채움','지금 선택된 곳 표시','위치 찾기'),
+      look('03','label','아이콘 + 이름','처음 보는 아이콘','뜻 추측')
     ] },
     tabs: { key: 'look', label: '모양', frame: 'stage', list: [
-      look('01','filled','채움 트랙',['또렷함','단단함','기본']), look('02','underline','밑줄',['익숙함','가벼움','평평함']),
-      look('03','segmented','분할 버튼',['떠 있는 칸','단정','설정']), look('04','outline','윤곽 상자',['경계','분리','문서']),
-      look('05','float','떠 있는 알약',['여백','부드러움','가벼움']), look('06','icon','아이콘 위 글자',['그림','앱','직관']),
-      look('07','vertical','세로',['옆 메뉴','넓은 화면','설정']), look('08','folder','폴더 탭',['서류철','연결','고전'])
+      look('01','filled','채움 트랙','이름이 짧은 2~4개 화면','지금 탭 찾기'),
+      look('02','icon','아이콘 위 글자','휴대폰 좁은 폭의 탭','긴 이름 읽기'),
+      look('03','count','개수 붙음','탭마다 쌓인 수가 중요할 때','하나씩 눌러 보기'),
+      look('04','vertical','세로','탭이 5개 넘는 넓은 화면','가로 스크롤')
     ] },
     // sample: options that only the gallery cards add, so the chosen shape is visible without pressing anything.
     feedback: { key: 'look', label: '모양', frame: 'stage', sample: { open: true }, list: [
-      look('01','card','떠 있는 카드',['입체','안정','기본']), look('02','dot','점 알림',['최소','여백','가벼움']),
-      look('03','stripe','왼쪽 띠',['상태 강조','문서','단정']), look('04','toast','진한 토스트',['대비','순간','또렷함']),
-      look('05','glass','떠 있는 유리',['투명','겹침','가벼움']), look('06','ring','진행 고리',['원형','숫자 강조','대시보드']),
-      look('07','pill','두꺼운 알약 막대',['굵음','숫자 강조','친근']), look('08','steps','마디 막대',['단계','리듬','정돈'])
+      look('01','card','떠 있는 카드','결과를 읽고 넘어갈 때','알림 찾기'),
+      look('02','toast','되돌리기 붙음','되돌릴 수 있는 행동 직후','확인 창 한 번 더'),
+      look('03','ring','진행 고리','남은 양이 중요할 때','막대 길이 가늠'),
+      look('04','steps','마디 막대','단계가 정해진 일','몇 단계 남았는지 세기')
     ] },
     card: { key: 'look', label: '모양', frame: 'stage', list: [
-      look('01','raised','기본 입체',['테두리','얕은 그림자','기본']), look('02','line','테두리만',['평평함','단정','문서']),
-      look('03','float','그림자 떠 있음',['떠 있음','경계 없음','가벼움']), look('04','fill','채움 배경',['부드러움','묶음','색면']),
-      look('05','row','가로형',['목록','조밀','한 줄 행동']), look('06','media','이미지 위',['그림','갤러리','첫인상']),
-      look('07','glass','유리',['투명','겹침','고급']), look('08','neumorph','뉴모피즘',['촉감','입체감','부드러움']),
-      look('09','accent','강조 윗띠',['표시','분류','또렷함'])
+      look('01','raised','기본','글이 주인공인 카드','모양 해석'),
+      look('02','row','가로형','여러 항목을 위아래로 비교','카드 사이 눈 이동'),
+      look('03','media','이미지 위','사진으로 고르는 항목','제목 읽기')
     ] },
     'search-module': { key: 'look', label: '모양', frame: 'stage', list: [
-      look('01','grid','카드 격자',['훑어보기','넓음','기본']), look('02','pill','알약 검색창',['한 줄','간결','모바일']),
-      look('03','chips','필터 칩 줄',['빠른 필터','손가락','한눈에']), look('04','list','목록형',['조밀','빠른 비교','글 중심']),
-      look('05','command','명령 팔레트형',['키보드','집중','떠 있음']), look('06','media','이미지 카드',['그림','갤러리','탐색']),
-      look('07','feature','큰 첫 결과',['추천','위계','잡지'])
+      look('01','grid','카드 격자','훑어보며 고를 때','한 줄씩 읽기'),
+      look('02','pill','알약 검색창','검색어 하나로 찾을 때','필터 칸 채우기'),
+      look('03','chips','필터 칩 줄','몇 가지 상태로 자주 거를 때','드롭다운 열기'),
+      look('04','list','목록형','이름으로 빠르게 비교할 때','카드 사이 눈 이동'),
+      look('05','picker','검색 + 얼굴 목록','사람·항목이 많아 고를 때','드롭다운 스크롤'),
+      look('06','media','이미지 카드','사진으로 고르는 항목','제목 읽기'),
+      look('07','feature','큰 첫 결과','추천 하나를 앞세울 때','무엇부터 볼지 고민')
     ] },
     template: { key: 'look', label: '모양', frame: 'phone', list: pageLooks },
     page: { key: 'look', label: '모양', frame: 'phone', list: pageLooks }

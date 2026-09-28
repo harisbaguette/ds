@@ -33,7 +33,7 @@
       "path": "design/css/token-opacity.css",
       "type": "registry:file",
       "target": "~/design/css/token-opacity.css",
-      "content": ".ds .ds-token-opacity i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); background:var(--p-ink); opacity:var(--p-opacity-full); }\n.ds .ds-token-opacity [data-token=\"dim\"] { opacity:var(--p-opacity-dim); }\n.ds .ds-token-opacity [data-token=\"disabled\"] { opacity:var(--p-opacity-disabled); }\n.ds .ds-token-opacity [data-token=\"faint\"] { opacity:var(--p-opacity-faint); }"
+      "content": ".ds .ds-token-opacity i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); background:var(--p-ink); opacity:var(--p-opacity-full); }\r\n.ds .ds-token-opacity [data-token=\"dim\"] { opacity:var(--p-opacity-dim); }\r\n.ds .ds-token-opacity [data-token=\"disabled\"] { opacity:var(--p-opacity-disabled); }\r\n.ds .ds-token-opacity [data-token=\"faint\"] { opacity:var(--p-opacity-faint); }"
     },
     {
       "path": "design/html/token-opacity.html",

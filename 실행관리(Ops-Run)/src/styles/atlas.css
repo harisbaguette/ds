@@ -12,8 +12,6 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .atlas-sample[data-kind='icon'] { display:grid; grid-template-columns:repeat(4,var(--p-size-lg)); gap:var(--p-space-lg); justify-content:center; }
 .atlas-sample[data-kind='icon'] .ui-icon { width:var(--p-icon-lg); height:var(--p-icon-lg); }
 .atlas-sample[data-kind^='token-'] { justify-content:flex-start; }
-.atlas-sample:is([data-kind='card'],[data-kind='search-module'],[data-kind='page'],[data-kind='template']) { width:var(--p-container-md); height:calc(var(--p-space-unit) * 90); transform:scale(.58); transform-origin:top left; padding:var(--p-space-lg); display:block; }
-.atlas-sample[data-kind='card'] { width:var(--p-container-sm); transform:scale(.76); }
 .atlas-sample[data-kind='tabs'] { display:block; padding-top:var(--p-space-2xl); }
 .atlas-sample:is([data-kind='input'],[data-kind='field']) { display:block; padding-top:calc(var(--p-space-unit) * 11); }
 .catalog-tile { box-shadow:none; border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-xl); background:var(--p-high); min-height:calc(var(--p-space-unit) * 32); }
@@ -49,31 +47,74 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .dict-hit { flex:1; width:100%; display:flex; flex-direction:column; gap:var(--p-space-xs); text-align:left; color:inherit; }
 .dict-hit::after { content:''; position:absolute; inset:0; border-radius:var(--p-radius-2xl); }
 .dict-hit:focus-visible { outline:none; }.dict-hit:focus-visible::after { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
-/* 스타일 화면: 디자인 스타일 견본 카드 격자. 카드 전체가 하나의 선택 버튼이다. */
-.style-gallery { max-width:var(--p-container-2xl); margin:auto; }
-.style-grid { display:grid; gap:calc(var(--p-space-unit) * 5); grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--p-container-2xs)),var(--p-container-xs))); }
-.style-card { position:relative; min-width:0; display:flex; flex-direction:column; gap:var(--p-space-xs); padding:var(--p-space-sm) var(--p-space-sm) var(--p-space-xs); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-2xl); background:var(--p-high); transition:border-color var(--p-duration),box-shadow var(--p-duration); }
-.style-card:hover { border-color:var(--p-control-border); box-shadow:var(--p-raised); }
-.style-card.is-active { border-color:var(--p-accent); box-shadow:0 0 0 var(--p-border-width) var(--p-accent); }
-/* 견본은 휴대폰 첫 화면을 실제 기기 폭(384px)으로 그린 뒤 카드 안쪽 폭에 맞춰 통째로 줄인다(부품 화면의 휴대폰 틀과 같은 방식).
-   부품은 제 크기 그대로 두고, 견본만을 위해 글자·높이를 따로 줄이지 않는다 — 따로 줄이면 부품끼리 비율이 어긋난다. */
-.style-sample { --style-sample-zoom:.68; position:relative; width:var(--p-container-sm); aspect-ratio:var(--p-aspect-portrait); zoom:var(--style-sample-zoom); border:calc(var(--p-border-width) / var(--style-sample-zoom)) solid var(--p-line); border-radius:calc(var(--p-radius-2xl) / var(--style-sample-zoom)); background:var(--p-bg); overflow:hidden; pointer-events:none; }
-.style-phone-screen { display:flex; flex-direction:column; gap:var(--p-space-md); padding:var(--p-space-xl) var(--p-space-md) 0; }
-.style-sample .ds-page-header { margin:0; }
-.style-sample .ds-card { height:auto; flex-shrink:0; }
-/* 떠 있는 탐색 막대는 휴대폰 아래 끝에 붙고, 그 위 목록은 막대 뒤로 흐려지며 사라진다. */
-.style-sample .ds-bottom-nav { position:absolute; z-index:var(--p-layer-raised); left:var(--ds-bottom-nav-offset,0); right:var(--ds-bottom-nav-offset,0); bottom:var(--ds-bottom-nav-offset,0); margin:0; }
-.style-sample::after { content:''; position:absolute; inset:auto 0 0; height:calc(var(--p-space-unit) * 38); background:var(--p-gradient-fade-up); pointer-events:none; }
-.style-choose { display:flex; align-items:center; justify-content:space-between; gap:var(--p-space-xs); padding:0 var(--p-space-xs); text-align:left; color:var(--p-ink); background:none; border:0; }
-.style-choose strong { font-size:var(--p-text-md); font-weight:var(--p-weight-semibold); }
-.style-choose::after { content:''; position:absolute; inset:0; border-radius:var(--p-radius-2xl); }
-.style-choose:focus-visible { outline:none; }.style-choose:focus-visible::after { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
-.style-badge { display:inline-flex; align-items:center; gap:var(--p-space-2xs); padding:var(--p-space-3xs) var(--p-space-xs); border-radius:var(--p-radius-full); background:var(--p-accent); color:var(--p-on-accent); font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); }
-.style-badge .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); }
-@media(max-width:760px) { .style-grid { gap:var(--p-space-sm); justify-content:center; } }
+/* Compact glyphs, legible parts and complete screens each get an appropriate canvas. */
+.dict[data-shelf='icon'] .dict-entries { grid-template-columns:repeat(auto-fill,minmax(calc(var(--p-space-unit) * 24),1fr)); gap:var(--p-space-xs); }
+.dict[data-shelf='icon'] .dict-entry { align-items:center; border-radius:var(--p-radius-lg); padding:var(--p-space-xs); }
+.dict[data-shelf='icon'] .dict-thumb { height:calc(var(--p-space-unit) * 16); background:none; }
+.dict[data-shelf='icon'] .dict-glyph { width:var(--p-icon-lg); height:var(--p-icon-lg); }
+.dict[data-shelf='icon'] .is-emoji { font-size:var(--p-text-title); }
+.dict[data-shelf='icon'] .dict-entry strong { min-height:calc(var(--p-text-sm) * 3); padding:0; text-align:center; font-weight:var(--p-weight-medium); }
+.dict[data-shelf='icon'] .dict-kind-art { width:100%; height:var(--p-control-size-lg); }
+.dict[data-shelf='template'] .dict-entries { grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--p-container-xs)),1fr)); }
+.dict[data-shelf='template'] .is-built .dict-thumb { height:auto; min-height:calc(var(--p-space-unit) * 105); }
+.dict[data-shelf='template'] .variant-frame { grid-area:auto; width:100%; border:0; }
+.dict[data-shelf='template'] .dict-entry { align-self:start; }
+.dict[data-shelf='template'] .preview-viewport[data-phone] { max-width:calc(var(--p-space-unit) * 48); }
+.dict[data-shelf='block'] .dict-entries { grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--p-container-xs)),1fr)); }
+.dict[data-shelf='block'] .is-built .dict-thumb { height:calc(var(--p-space-unit) * 62); }
+.style-overview { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)) minmax(0,1.05fr); gap:var(--p-space-lg); max-width:var(--p-container-2xl); margin:auto; }
+.overview-tile { position:relative; display:flex; flex-direction:column; min-width:0; border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-xl); background:var(--p-high); }
+.overview-preview { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:var(--p-space-sm); flex:1; min-height:calc(var(--p-space-unit) * 43); padding:var(--p-space-lg); border-radius:var(--p-radius-xl); background:var(--p-bg); overflow:clip; }
+.overview-link { display:flex; align-items:center; justify-content:space-between; gap:var(--p-space-sm); min-height:var(--p-control-size-sm); padding:var(--p-space-sm) var(--p-space-md); }
+.overview-link h2 { font-size:var(--p-text-sm); font-weight:var(--p-weight-medium); }
+.overview-link .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); color:var(--p-muted); }
+.overview-link::after { content:''; position:absolute; inset:0; border-radius:var(--p-radius-xl); }
+.overview-link:hover::after { box-shadow:inset 0 0 0 var(--p-border-width) var(--p-control-border); }
+.overview-link:focus-visible { outline:none; }
+.overview-link:focus-visible::after { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
+.overview-tile[data-overview='page'] { grid-column:3; grid-row:1 / span 3; }
+.overview-tile[data-overview='page'] .overview-preview { padding:var(--p-space-md) var(--p-space-xs); }
+.style-overview .variant-frame[data-frame='phone'] { width:100%; padding:var(--p-space-md) var(--p-space-sm); border:0; background:none; }
+.style-overview .preview-viewport[data-phone] { max-width:var(--p-container-2xs); }
+.preview-fit { display:flex; align-items:center; justify-content:center; width:100%; min-width:0; }
+.preview-viewport { position:relative; flex:none; }
+.preview-viewport[data-phone] { max-width:calc(var(--p-space-unit) * 42); }
+.preview-viewport > [data-preview-scene] { position:absolute; top:0; left:0; transform:scale(var(--preview-scale)); transform-origin:top left; }
+.preview-scene { flex:none; width:var(--p-container-xs); }
+.overview-actions { display:flex; align-items:center; gap:var(--p-space-sm); width:max-content; }
+.dict-thumb .atlas-sample[data-preview-scene] { width:var(--p-container-sm); height:auto; padding:var(--p-space-lg); display:block; }
+.dict-thumb .atlas-sample[data-kind='bottom-nav'] { width:var(--p-container-xs); padding:var(--p-space-sm); }
+.dict-thumb .atlas-sample[data-kind='search-module'] { width:var(--p-container-md); }
+.overview-tile[data-overview='input'] .ds-field, .overview-tile[data-overview='card'] .ds-card { width:100%; }
+.overview-tile[data-overview='selection'] .overview-preview { flex-direction:column; align-items:flex-start; padding-inline:var(--p-space-xl); }
+.overview-tile[data-overview='bottom-nav'] .overview-preview { padding-inline:var(--p-space-sm); }
+.overview-tile[data-overview='bottom-nav'] .ds-bottom-nav { width:100%; }
+.overview-tile[data-overview='token-color'] .overview-preview { flex-direction:column; gap:var(--p-space-lg); }
+.overview-colors, .overview-surfaces { display:flex; gap:var(--p-space-sm); }
+.overview-colors i { width:var(--p-icon-2xl); height:var(--p-icon-2xl); border-radius:var(--p-radius-circle); border:var(--p-border-width) solid var(--p-line); background:var(--p-accent); }
+.overview-colors i:nth-child(2) { background:var(--p-muted); }
+.overview-colors i:nth-child(3) { background:var(--p-soft); }
+.overview-colors i:nth-child(4) { background:var(--p-bg); }
+.overview-surfaces i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-radius-md); background:var(--p-surface); box-shadow:var(--p-raised); }
+.overview-surfaces i:nth-child(2) { box-shadow:var(--p-inset); }
+.overview-surfaces i:nth-child(3) { box-shadow:none; border:var(--p-border-width) solid var(--p-line); }
+@media(max-width:1100px) {
+  .style-overview { grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--p-space-md); }
+  .overview-tile[data-overview='page'] { grid-column:2; grid-row:2 / span 3; }
+  .overview-tile[data-overview='card'] { grid-column:1 / -1; }
+  .overview-tile[data-overview='card'] .ds-card { max-width:var(--p-container-sm); }
+}
 @media(max-width:760px) {
   .dict-entries { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .dict-grid { gap:var(--p-space-sm); }
   .dict-thumb,.dict-thumb.atlas-preview { height:calc(var(--p-space-unit) * 30); }.dict-kind-art { width:calc(var(--p-space-unit) * 24); height:calc(var(--p-space-unit) * 14); }.dict-glyph { width:var(--p-control-size-sm); height:var(--p-control-size-sm); }
   .dict-entry.is-built { grid-column:span 2; }.dict-entry.is-built .dict-thumb { height:calc(var(--p-space-unit) * 42); }
+  .dict[data-shelf='template'] .dict-entry.is-built, .dict[data-shelf='block'] .dict-entry.is-built { grid-column:auto; }
+  .dict[data-shelf='icon'] .dict-entries { grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--p-space-xs); }
+  .dict[data-shelf='icon'] .dict-thumb { height:calc(var(--p-space-unit) * 16); }
+  .style-overview { grid-template-columns:minmax(0,1fr); }
+  .overview-tile[data-overview='page'] { grid-column:auto; grid-row:auto; order:1; }
+  .overview-tile[data-overview='card'] { grid-column:auto; }
+  .overview-preview { min-height:calc(var(--p-space-unit) * 40); }
+  .overview-tile[data-overview='page'] .overview-preview { padding:var(--p-space-lg) var(--p-space-xs); }
 }

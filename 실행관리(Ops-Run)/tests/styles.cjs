@@ -12,7 +12,7 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
   await page.goto(origin+'#/styles');await page.evaluate(()=>document.fonts.ready);
   check('메인 스타일 하나만 등록',await page.evaluate(()=>Pattove.catalog.styles.length===1&&Pattove.catalog.styles[0].id==='main'));
   check('이전 스타일 선택 UI 제거',await page.locator('.style-picker,#style-switch,#style-menu,.style-cover').count()===0);
-  check('스타일 화면은 스타일 카드 격자, 부품 문서 없음',await page.locator('.style-grid .style-card').count()===1&&await page.locator('.component-page,.specimen,.system-board').count()===0);
+  check('스타일 화면은 실제 부품과 완성 화면 미리보기',await page.locator('.style-overview .overview-tile').count()===7&&await page.locator('.style-overview .variant-phone .ds-page').count()===1&&await page.locator('.component-page,.style-choose').count()===0);
   const registry=JSON.parse(fs.readFileSync(path.join(root,'src/registry/registry.json'),'utf8'));
   check('배포 목록은 메인과 공용 아이콘·글꼴뿐',registry.items.every(i=>!i.meta.style||i.meta.style==='main'));
   for(const style of retired){
@@ -39,7 +39,7 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
   fs.writeFileSync(path.join(out,'contrast.json'),JSON.stringify(contrast,null,2));
   check('외곽과 부품이 같은 바탕 토큰 사용',await page.evaluate(()=>getComputedStyle(document.body).getPropertyValue('--p-bg').trim()===getComputedStyle(document.querySelector('.part-demo .ds')).getPropertyValue('--p-bg').trim()));
   // Central tokens: editing one role in src/tokens/semantic/color.css must repaint the shell and every part.
-  const partIds=await page.evaluate(()=>[...new Set([...document.querySelectorAll('a[href*="detail="]')].map(a=>(a.hash.match(/detail=([^&]+)/)||[])[1]).filter(Boolean))]);
+  const partIds=await page.evaluate(()=>Pattove.systemRegistry.items.map(item=>item.id));
   check('부품 목록 확보',partIds.length>=20);
   const linkage={},partBlocks=Object.fromEntries([...fs.readFileSync(path.join(root,'src/system/parts.css'),'utf8').matchAll(/\/\* @part ([\w-]+) \*\/([\s\S]*?)(?=\/\* @part |$)/g)].map(m=>[m[1],m[2]]));
   for(const id of partIds){

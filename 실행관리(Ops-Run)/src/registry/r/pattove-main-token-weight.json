@@ -33,7 +33,7 @@
       "path": "design/css/token-weight.css",
       "type": "registry:file",
       "target": "~/design/css/token-weight.css",
-      "content": ".ds .ds-token-weight { font-size:var(--p-text-heading); font-family:var(--p-font); }\n.ds .ds-token-weight [data-token=\"regular\"] { font-weight:var(--p-weight-regular); }\n.ds .ds-token-weight [data-token=\"medium\"] { font-weight:var(--p-weight-medium); }\n.ds .ds-token-weight [data-token=\"semibold\"] { font-weight:var(--p-weight-semibold); }\n.ds .ds-token-weight [data-token=\"bold\"] { font-weight:var(--p-weight-bold); }\n.ds .ds-token-weight [data-token=\"extrabold\"] { font-weight:var(--p-weight-extrabold); }"
+      "content": ".ds .ds-token-weight { font-size:var(--p-text-heading); font-family:var(--p-font); }\r\n.ds .ds-token-weight [data-token=\"regular\"] { font-weight:var(--p-weight-regular); }\r\n.ds .ds-token-weight [data-token=\"medium\"] { font-weight:var(--p-weight-medium); }\r\n.ds .ds-token-weight [data-token=\"semibold\"] { font-weight:var(--p-weight-semibold); }\r\n.ds .ds-token-weight [data-token=\"bold\"] { font-weight:var(--p-weight-bold); }\r\n.ds .ds-token-weight [data-token=\"extrabold\"] { font-weight:var(--p-weight-extrabold); }"
     },
     {
       "path": "design/html/token-weight.html",

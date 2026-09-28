@@ -39,7 +39,7 @@
       "path": "design/css/token-gradient.css",
       "type": "registry:file",
       "target": "~/design/css/token-gradient.css",
-      "content": ".ds .ds-token-gradients i { width:var(--p-control-size-lg); height:var(--p-control-size-lg); border-radius:var(--p-inner-radius); border:var(--p-border-width) solid var(--p-line); background:var(--p-gradient-sheen); }\n.ds .ds-token-gradients [data-token=\"backdrop\"] { background:var(--p-gradient-backdrop); }\n.ds .ds-token-gradients [data-token=\"rule\"] { border-color:transparent; background:var(--p-gradient-rule) 0 50%/100% var(--p-border-width-strong) no-repeat; }"
+      "content": ".ds .ds-token-gradients i { width:var(--p-control-size-lg); height:var(--p-control-size-lg); border-radius:var(--p-inner-radius); border:var(--p-border-width) solid var(--p-line); background:var(--p-gradient-sheen); }\r\n.ds .ds-token-gradients [data-token=\"backdrop\"] { background:var(--p-gradient-backdrop); }\r\n.ds .ds-token-gradients [data-token=\"rule\"] { border-color:transparent; background:var(--p-gradient-rule) 0 50%/100% var(--p-border-width-strong) no-repeat; }"
     },
     {
       "path": "design/html/token-gradient.html",

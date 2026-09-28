@@ -33,7 +33,7 @@
       "path": "design/css/token-container.css",
       "type": "registry:file",
       "target": "~/design/css/token-container.css",
-      "content": ".ds .ds-token-container { display:grid; gap:var(--p-space-xs); justify-items:start; }\n.ds .ds-token-container i { display:block; height:var(--p-size-xs); border-radius:var(--p-radius-full); background:currentColor; width:calc(var(--p-measure-narrow) / 10); }\n.ds .ds-token-container [data-token=\"measure\"] { width:calc(var(--p-measure) / 10); }\n.ds .ds-token-container [data-token=\"xs\"] { width:calc(var(--p-container-xs) / 10); }\n.ds .ds-token-container [data-token=\"lg\"] { width:calc(var(--p-container-lg) / 10); }"
+      "content": ".ds .ds-token-container { display:grid; gap:var(--p-space-xs); justify-items:start; }\r\n.ds .ds-token-container i { display:block; height:var(--p-size-xs); border-radius:var(--p-radius-full); background:currentColor; width:calc(var(--p-measure-narrow) / 10); }\r\n.ds .ds-token-container [data-token=\"measure\"] { width:calc(var(--p-measure) / 10); }\r\n.ds .ds-token-container [data-token=\"xs\"] { width:calc(var(--p-container-xs) / 10); }\r\n.ds .ds-token-container [data-token=\"lg\"] { width:calc(var(--p-container-lg) / 10); }"
     },
     {
       "path": "design/html/token-container.html",

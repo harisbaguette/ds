@@ -45,7 +45,7 @@
       "path": "design/css/token-tracking.css",
       "type": "registry:file",
       "target": "~/design/css/token-tracking.css",
-      "content": ".ds .ds-token-tracking { display:grid; gap:var(--p-space-xs); justify-items:start; font-size:var(--p-text-title); font-family:var(--p-display-font); }\n.ds .ds-token-tracking [data-token=\"tighter\"] { letter-spacing:var(--p-tracking-tighter); }\n.ds .ds-token-tracking [data-token=\"tight\"] { letter-spacing:var(--p-tracking-tight); }\n.ds .ds-token-tracking [data-token=\"wide\"] { letter-spacing:var(--p-tracking-wide); }"
+      "content": ".ds .ds-token-tracking { display:grid; gap:var(--p-space-xs); justify-items:start; font-size:var(--p-text-title); font-family:var(--p-display-font); }\r\n.ds .ds-token-tracking [data-token=\"tighter\"] { letter-spacing:var(--p-tracking-tighter); }\r\n.ds .ds-token-tracking [data-token=\"tight\"] { letter-spacing:var(--p-tracking-tight); }\r\n.ds .ds-token-tracking [data-token=\"wide\"] { letter-spacing:var(--p-tracking-wide); }"
     },
     {
       "path": "design/html/token-tracking.html",

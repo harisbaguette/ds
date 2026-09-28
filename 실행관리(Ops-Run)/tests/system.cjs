@@ -49,10 +49,10 @@ const fingerprint = element => {
     await page.screenshot({ path: path.join(output, 'button.png') });
     await page.locator('#query').fill('버튼');
     await page.locator('#query').press('Enter');
-    await page.waitForURL(/detail=button/);
+    await page.waitForURL(/dictionary/);
     await page.reload();
-    check('검색하면 첫 맞는 부품으로, 새로고침해도 유지', await page.locator('.component-page[data-component="button"]').count() === 1);
-    await page.locator('#filter-bar a[href="#/system?detail=button"]').click();
+    check('검색 결과와 검색어가 새로고침해도 유지', await page.locator('[data-library-entry="button"]').count() === 1 && await page.locator('#query').inputValue() === '버튼');
+    await page.locator('[data-library-entry="button"]').click();
     await page.locator('[data-part-option="variant"]').selectOption('outline');
     await page.locator('[data-part-option="size"]').selectOption('lg');
     check('고른 변형이 미리보기에 바로 반영', await page.locator('.part-demo .ds-button').getAttribute('data-size') === 'lg' && await page.locator('.part-demo .ds-button').getAttribute('data-variant') === 'outline');

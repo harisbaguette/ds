@@ -58,8 +58,8 @@
   function page(state) {
     const item = r.index.get(state.detail);
     const options = r.normalizeOptions(item.id, state.options);
-    const index = r.items.indexOf(item);
-    const adjacent = [[r.items[index-1],'이전','prev'],[r.items[index+1],'다음','next']].filter(([i])=>i).map(([i,label,rel])=>`<a href="${url(i.id)}" rel="${rel}" aria-label="${label}: ${i.name}">${label} · ${e(i.name)} ${p.icon('arrow')}</a>`).join('');
+    const peers = window.Pattove.libraryUI.peers(item.id), index = peers.indexOf(item);
+    const adjacent = [[peers[index-1],'이전','prev'],[peers[index+1],'다음','next']].filter(([i])=>i).map(([i,label,rel])=>`<a href="${url(i.id)}" rel="${rel}" aria-label="${label}: ${i.name}">${label} · ${e(i.name)} ${p.icon('arrow')}</a>`).join('');
     const variants = examples(item);
     const selects = item.controls.filter(c => c.key !== item.gallery?.key);
     const sections = [['preview','미리보기'],...(item.gallery?[['variants',item.gallery.label]]:[]),...(variants.length?[['examples','예시']]:[]),...(item.deps.length?[['dependencies','함께 쓰는 부품']]:[])];

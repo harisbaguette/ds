@@ -1,6 +1,6 @@
 ﻿(() => {
   'use strict';
-  const { catalog, views, libraryUI: library, systemUI: system, systemRegistry, componentDocs } = window.Pattove;
+  const { catalog, views, previews, libraryUI: library, systemUI: system, systemRegistry, componentDocs } = window.Pattove;
   const isCollection = () => ['dictionary', 'components'].includes(state.page);
   const $ = selector => document.querySelector(selector);
   const validPattern = id => catalog.patterns.some(p => p.id === id);
@@ -21,13 +21,16 @@
   let filterScope = '';
   let sectionOpen = {};
   let facetSearch = {};
+  let filtersOpen = false;
+  history.scrollRestoration = 'manual';
   const dialog = $('#detail-dialog');
 
-  // In-page anchors land below the thin top bar on phones; on wider screens the menu sits at the side and nothing covers the top.
+  // In-page anchors clear the persistent style/search header at every viewport size.
   function updateChromeOffset() {
     const bar = $('.app-top');
     const shown = bar.getClientRects().length && getComputedStyle(bar).position === 'sticky';
     document.documentElement.style.setProperty('--chrome-bottom', `${shown ? Math.ceil(bar.getBoundingClientRect().height + 16) : 16}px`);
+    $('#query').placeholder = phone.matches ? '검색' : $('#query').dataset.placeholder || '구성요소 검색';
   }
   const list = value => [...new Set(String(value || '').split(',').filter(Boolean))];
   function readFilters(page, params) {
@@ -48,24 +51,35 @@
     input.parentElement.querySelectorAll('[data-facet-name]').forEach(option => { option.hidden = !!term && !option.dataset.facetName.includes(term); });
   }
   function renderFilterBar() {
-    const html = state.page === 'system' ? system.partLinks(state) : state.page === 'patterns' ? views.patternFilters(state) : isCollection() ? library.filters(state) : '';
-    const bar = $('#filter-bar'), body = $('.menu-body');
-    bar.hidden = !html;
-    if (html === filterBarHTML) return;
-    filterBarHTML = html;
-    // Inside one tab a re-render keeps folds, section searches and the menu scroll; a section that newly appears opens.
-    // A new tab starts over from the folds written in the markup and shows the open part.
-    const scope = state.page + '|' + (state.filters.shelf || ''), sameTab = scope === filterScope, top = body.scrollTop;
-    if (!sameTab) { filterScope = scope; sectionOpen = {}; facetSearch = {}; }
-    bar.innerHTML = html;
-    bar.querySelectorAll('details[data-section]').forEach(d => {
-      const key = d.dataset.section;
-      if (sameTab) d.open = key in sectionOpen ? sectionOpen[key] : true;
-      sectionOpen[key] = d.open;
-    });
-    bar.querySelectorAll('[data-facet-search]').forEach(input => { if (facetSearch[searchKey(input)]) { input.value = facetSearch[searchKey(input)]; searchPanel(input); } });
-    if (sameTab) body.scrollTop = top;
-    else { body.scrollTop = 0; bar.querySelector('[aria-current="page"]')?.scrollIntoView({ block: 'nearest' }); }
+    const html = state.page === 'patterns' ? views.patternFilters(state) : isCollection() ? library.filters(state) : '';
+    const bar = $('#filter-bar');
+    const scope = state.page + '|' + (state.filters.shelf || ''), sameTab = scope === filterScope;
+    if (!sameTab) { filterScope = scope; sectionOpen = {}; facetSearch = {}; filtersOpen = false; }
+    if (html !== filterBarHTML) {
+      filterBarHTML = html;
+      bar.innerHTML = html;
+      bar.querySelectorAll('details[data-section]').forEach(d => {
+        const key = d.dataset.section;
+        if (sameTab && key in sectionOpen) d.open = sectionOpen[key];
+        sectionOpen[key] = d.open;
+      });
+      bar.querySelectorAll('[data-facet-search]').forEach(input => { if (facetSearch[searchKey(input)]) { input.value = facetSearch[searchKey(input)]; searchPanel(input); } });
+    }
+    const picked = [...bar.querySelectorAll('[data-filter][aria-pressed="true"]')];
+    $('#filter-toggle').hidden = !html;
+    $('#filter-toggle').innerHTML = '필터' + (picked.length ? ' <span class="filter-section-num">'+picked.length+'</span>' : '');
+    $('#active-filters').hidden = !picked.length;
+    $('#active-filters').innerHTML = picked.map(button=>'<button type="button" class="filter-chip" data-filter="'+views.escape(button.dataset.filter)+'" data-focus="chip-'+views.escape(button.dataset.filter)+'" aria-label="'+views.escape(button.textContent.trim())+' 필터 해제">'+views.escape(button.textContent.trim())+previews.icon('close')+'</button>').join('') + (picked.length ? '<button type="button" class="filter-clear" data-action="clear-filters" data-focus="active-clear">모두 지우기</button>' : '');
+    setFilters(filtersOpen && !!html);
+  }
+  function setFilters(open, returnFocus = false) {
+    filtersOpen = open;
+    $('#filter-bar').hidden = !open;
+    $('#filter-toggle').setAttribute('aria-expanded', String(open));
+    if (returnFocus) $('#filter-toggle').focus({preventScroll:true});
+  }
+  function rememberLocation(focus = document.activeElement?.dataset.focus) {
+    history.replaceState({...history.state,pattoveScroll:[scrollX,scrollY],pattoveFocus:focus},'',location.href);
   }
   function hash(overrides = {}) {
     const next = { ...state, ...overrides };
@@ -88,7 +102,7 @@
     const [path, query = ''] = location.hash.slice(1).split('?');
     const params = new URLSearchParams(query);
     const page = path.replace(/^\//, '');
-    state.page = ['styles', 'patterns', 'system', ...library.pages].includes(page) ? page : 'system';
+    state.page = ['styles', 'patterns', 'system', ...library.pages].includes(page) ? page : 'styles';
     state.filters = readFilters(state.page, params);
     state.query = ['styles'].includes(state.page) ? '' : (params.get('q') || '').slice(0, 100);
     state.section = (params.get('section') || '').slice(0, 250);
@@ -102,8 +116,9 @@
       if (implementation) { state.page='system'; state.detail=implementation.id; state.filters={}; state.options=systemRegistry.normalizeOptions(implementation.id, componentDocs.defaults(implementation.id)); }
     }
   }
-  function navigate(overrides, { replace = false, overlay = false } = {}) {
-    if (overlay && state.page !== 'system' && !state.detail) lastOpener = document.activeElement?.dataset.focus || null;
+  function navigate(overrides, { replace = false, overlay = false, opener } = {}) {
+    rememberLocation(opener);
+    if (overlay && state.page !== 'system' && !state.detail) lastOpener = opener || document.activeElement?.dataset.focus || null;
     const entry = overlay && state.page !== 'system' ? { pattoveOverlay: true, origin: history.state?.pattoveOverlay ? history.state.origin : location.hash, depth: (history.state?.pattoveOverlay ? history.state.depth || 1 : 0) + 1 } : {};
     if (replace) history.replaceState(state.detail ? history.state : entry, '', hash(overrides));
     else history.pushState(entry, '', hash(overrides));
@@ -135,56 +150,78 @@
   }
   function showSuggestions() {
     const query = $('#query').value.trim();
-    if (!query || ['styles'].includes(state.page)) { hideSuggestions(); return; }
-    suggestions = state.page === 'system' ? systemRegistry.matching(query).slice(0, 6) : isCollection() ? library.suggestions(state, query) : catalog.patterns.filter(p => matches(p, query)).slice(0, 6);
+    if (!query) { hideSuggestions(); return; }
+    suggestions = state.page === 'styles' ? library.searchAll(query) : state.page === 'system' ? systemRegistry.matching(query).filter(i=>library.itemShelf(i)===library.shelfFor(state).id).slice(0, 6) : isCollection() ? library.suggestions(state, query) : catalog.patterns.filter(p => matches(p, query)).slice(0, 6);
     suggestionIndex = -1;
-    $('#search-suggestions').innerHTML = suggestions.length ? suggestions.map((p, i) => `<button type="button" role="option" aria-selected="false" tabindex="-1" class="search-suggestion" id="suggestion-${i}" data-suggest-open="${p.id}"><span>${views.escape(p.name)}</span><small>${views.escape(state.page === 'system' ? p.layer : isCollection() ? library.suggestionGroup(state.page, p) : catalog.categories.find(c => c.id === p.category).name)}</small></button>`).join('') : '<p class="search-no-match">일치하는 항목이 없어요</p>';
+    $('#search-suggestions').innerHTML = suggestions.length ? suggestions.map((p, i) => `<button type="button" role="option" aria-selected="false" tabindex="-1" class="search-suggestion" id="suggestion-${i}" data-suggest-open="${p.id}"><span>${views.escape(p.name)}</span><small>${views.escape(state.page === 'styles' ? library.suggestionGroup('dictionary',p) : state.page === 'system' ? p.layer : isCollection() ? library.suggestionGroup(state.page, p) : catalog.categories.find(c => c.id === p.category).name)}</small></button>`).join('') : '<p class="search-no-match">일치하는 항목이 없어요</p>';
     $('#search-popover').hidden = false;
     $('#query').setAttribute('aria-expanded', 'true');
     $('#query').removeAttribute('aria-activedescendant');
   }
-  // Searching from 스타일 looks through 부품. On phones the menu folds away so the results show.
+  // Detail search returns to its category's results; the query stays in the address.
   function submitSearch() {
     const query = $('#query').value.trim();
     hideSuggestions();
     setMenu(false, false);
-    if (state.page === 'styles') { history.pushState({}, '', '#/dictionary?shelf=part' + (query ? '&q=' + encodeURIComponent(query) : '')); renderRoute(); }
+    if (['styles','system'].includes(state.page)) {
+      rememberLocation();
+      const shelf = state.page === 'system' ? library.shelfFor(state).id : library.searchAll(query)[0]?.shelf || 'part';
+      history.pushState({}, '', '#/dictionary?shelf='+shelf + (query ? '&q=' + encodeURIComponent(query) : '')); renderRoute();
+    }
     else navigate({ query, detail: null, section: '', limit: 48 }, { replace: true });
     $('#main').focus({ preventScroll: true });
   }
-  // Phones keep the side menu as a drawer: the menu button slides it in over a dimmed page; Esc, a tap outside or a link inside closes it,
-  // and a close by hand gives focus back to the menu button. Picking a filter leaves it open.
+  // Phones use a navigation-only drawer. Closing by hand returns focus to the menu button.
   function setMenu(open, returnFocus = true) {
+    if (open && $('#app-menu').hidden) return;
     if (open === document.documentElement.classList.contains('menu-open')) return;
     document.documentElement.classList.toggle('menu-open', open);
     $('#menu-toggle').setAttribute('aria-expanded', String(open));
     $('#main').inert = open;
     $('.app-top').inert = open;
-    // Opening lands on where the reader is: the current item of a long list (focus also scrolls it into view), else the current tab.
-    if (open) [$('#filter-bar:not([hidden]) a[aria-current="page"]'), $('#primary-nav [aria-current="page"]'), $('#primary-nav a')].find(e => e?.checkVisibility())?.focus();
+    if (open) ($('#secondary-nav [aria-current]') || $('#secondary-nav a'))?.focus();
     else if (returnFocus) $('#menu-toggle').focus();
   }
   function openSuggestion(id) {
     setMenu(false, false);
-    if (isCollection()) { navigate({ detail: id }, { overlay: true }); lastOpener = 'search-query'; return; }
-    navigate({ detail: id }, { overlay: true });
+    if (state.page === 'styles') {
+      const entry = suggestions.find(e=>e.id===id);
+      navigate({page:'dictionary',filters:library.readFilters('dictionary',new URLSearchParams({shelf:entry.shelf})),detail:id},{overlay:true,opener:'search-query'});
+      lastOpener='search-query';
+      return;
+    }
+    if (isCollection()) { navigate({ detail: id }, { overlay: true, opener: 'search-query' }); lastOpener = 'search-query'; return; }
+    navigate({ detail: id }, { overlay: true, opener: 'search-query' });
     lastOpener = 'search-query';
   }
   function render(previousDetail = state.detail, focus = document.activeElement?.dataset.focus) {
     document.body.dataset.page = state.page;
     document.body.className = 'theme-' + state.style;
     document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : state.page === 'patterns' ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
+    const oldShelf = $('#primary-nav [aria-current="page"]')?.dataset.focus;
+    const subnavScroll = $('.menu-body').scrollTop;
     $('#primary-nav').innerHTML = library.navigation(state);
+    const subnav=library.subnavigation(state);
+    $('#secondary-nav').innerHTML=subnav;
+    $('#app-menu').hidden=!subnav;
+    $('#menu-toggle').hidden=!subnav;
+    if (!subnav) setMenu(false,false);
+    document.body.classList.toggle('has-subnav',!!subnav);
+    $('#top-title').textContent=$('#primary-nav [aria-current="page"]')?.textContent || '';
+    $('.menu-body').scrollTop=oldShelf === $('#primary-nav [aria-current="page"]')?.dataset.focus ? subnavScroll : 0;
     $('#header-context').innerHTML = views.header(state);
-    $('#top-title').textContent = $('#primary-nav [aria-current="page"]')?.textContent || ({ components: '구성요소' })[state.page] || '';
+    if (state.page === 'styles') $('#style-context').setAttribute('aria-current','page');
+    else $('#style-context').removeAttribute('aria-current');
     renderFilterBar();
-    $('#query').placeholder = ({ system: '부품 검색', styles: '부품 검색', dictionary: '사전 검색', components: '구성요소 검색' })[state.page] || '패턴 검색';
+    $('#catalog-toolbar').hidden = state.page === 'styles';
+    $('#query').placeholder = ['dictionary','system'].includes(state.page) ? library.shelfFor(state).name+' 검색' : ['styles','components'].includes(state.page) ? '구성요소 검색' : '패턴 검색';
+    $('#query').dataset.placeholder = $('#query').placeholder;
     $('#query').setAttribute('aria-label', $('#query').placeholder);
     if (document.activeElement !== $('#query')) $('#query').value = state.query;
     $('#search-clear').hidden = !$('#query').value;
     const nextMainKey = JSON.stringify([state.page, state.style, state.filters, state.query, state.limit, state.page==='system'?[state.detail,state.options]:null]);
     if (mainRenderKey !== nextMainKey) {
-      $('#main').innerHTML = state.page === 'styles' ? views.styleGrid(state) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
+      $('#content').innerHTML = state.page === 'styles' ? views.styleGrid(state) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
       mainRenderKey = nextMainKey;
     }
     if (state.detail && state.page !== 'system') {
@@ -207,7 +244,7 @@
     system.hydrate(document);
     updateChromeOffset();
   }
-  function renderRoute() {
+  function renderRoute({ restore = false } = {}) {
     hideSuggestions();
     const previousPage = state.page;
     const previousDetail = state.detail;
@@ -230,7 +267,11 @@
       const section = document.getElementById('component-'+state.section);
       if (section) { section.tabIndex=-1; section.focus({preventScroll:true}); section.scrollIntoView({block:'start'}); }
     }
-    $('#announcer').textContent = state.page === 'styles' ? `스타일 ${catalog.styles.filter(s => s.id !== 'base').length}개, ${views.styleName(state.style)} 사용 중` : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개`;
+    if (restore) {
+      focusKey(history.state?.pattoveFocus);
+      if (history.state?.pattoveScroll) window.scrollTo(...history.state.pattoveScroll);
+    }
+    $('#announcer').textContent = state.page === 'styles' ? `${views.styleName(state.style)} 전체 미리보기` : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개`;
   }
   document.addEventListener('click', event => {
     if (!event.target.closest('.search-area')) hideSuggestions();
@@ -247,20 +288,27 @@
       render();
       $('#announcer').textContent = `${views.styleName(state.style)} 적용함`;
     }
-    else if (target.matches('a[href^="#/"]')) {
+    else if (data.action === 'back-to-list' && history.state?.pattoveOverlay && new URLSearchParams(history.state.origin?.split('?')[1]).get('shelf') === library.shelfFor(state).id) {
+      event.preventDefault(); rememberLocation(); history.go(-(history.state.depth || 1));
+    } else if (target.matches('a[href^="#/"]')) {
       event.preventDefault();
       if (target.closest('#app-menu')) setMenu(false, false);
-      history.pushState({}, '', target.getAttribute('href'));
+      rememberLocation();
+      const related = state.page === 'system' && target.getAttribute('href').startsWith('#/system') && history.state?.pattoveOverlay;
+      history.pushState(related ? {pattoveOverlay:true,origin:history.state.origin,depth:(history.state.depth||1)+1} : {}, '', target.getAttribute('href'));
       renderRoute();
     } else if (data.suggestOpen) openSuggestion(data.suggestOpen);
-    else if (data.filter) toggleFilter(...data.filter.split(/:(.*)/s, 2));
-    else if (data.libraryEntry) navigate({ detail: data.libraryEntry }, { overlay: true });
-    else if (data.open) navigate({ detail: data.open, style: data.style || state.style }, { overlay: true });
+    else if (data.filter) {
+      toggleFilter(...data.filter.split(/:(.*)/s, 2));
+      if (!document.activeElement?.closest('button,input,summary')) $('#filter-toggle').focus({preventScroll:true});
+    }
+    else if (data.libraryEntry) navigate({ detail: data.libraryEntry }, { overlay: true, opener: data.focus });
+    else if (data.open) navigate({ detail: data.open, style: data.style || state.style }, { overlay: true, opener: data.focus });
     else if (data.action === 'clear-filters') {
-      // From the menu focus moves to the first section (the link itself goes away); from an empty result, to the content.
-      const inMenu = target.closest('#filter-bar');
+      // Clearing removes the clicked control, so return focus to a remaining filter control.
+      const inMenu = target.closest('#filter-bar, #active-filters');
       navigate({ filters: cleared(state.filters), query: '', limit: 48 }, { replace: true });
-      if (inMenu) firstFilter();
+      if (inMenu) { if (filtersOpen) firstFilter(); else $('#filter-toggle').focus({preventScroll:true}); }
       else $('#main').focus({ preventScroll: true });
     } else if (data.action === 'clear-query') navigate({ query: '', limit: 48 }, { replace: true });
     else if (data.action === 'load-more') {
@@ -269,6 +317,7 @@
       if (firstNew) document.querySelector(`[data-focus="entry-${CSS.escape(firstNew)}"]`)?.focus();
     } else if (data.action === 'search-all') submitSearch();
     else if (data.action === 'close-dialog') closeDetail();
+    else if (data.action === 'close-menu') setMenu(false);
     else if (data.variantPick || data.variantUse) pickVariant(data.variantPick || data.variantUse, Boolean(data.variantUse));
   });
   // A version card swaps the big preview; "이걸로 쓰기" also keeps it as this part's opening version.
@@ -283,7 +332,11 @@
     $('#announcer').textContent = `${look.name} ${keep ? '사용 중' : '미리보기'}`;
   }
   document.addEventListener('change', event => {
-    if (event.target.matches('[data-part-option]')) {
+    if (event.target.matches('[data-item-switch]')) {
+      rememberLocation();
+      const origin = history.state?.pattoveOverlay ? {pattoveOverlay:true,origin:history.state.origin,depth:(history.state.depth||1)+1} : {};
+      history.pushState(origin, '', '#/system?detail='+encodeURIComponent(event.target.value)); renderRoute();
+    } else if (event.target.matches('[data-part-option]')) {
       state.options = systemRegistry.normalizeOptions(state.detail, { ...state.options, ...Object.fromEntries([...document.querySelectorAll('.system-inspector [data-part-option]')].map(el => [el.dataset.partOption,el.value])) });
       history.replaceState(history.state, '', hash()); renderedHash = location.hash;
       system.updateInspector(state);
@@ -294,6 +347,7 @@
     if (event.target.matches?.('#filter-bar details[data-section]')) sectionOpen[event.target.dataset.section] = event.target.open;
   }, true);
   $('#menu-toggle').addEventListener('click', () => setMenu(true));
+  $('#filter-toggle').addEventListener('click', () => setFilters(!filtersOpen));
   $('#menu-backdrop').addEventListener('click', () => setMenu(false));
   phone.addEventListener('change', () => setMenu(false, false));
   $('#search-clear').addEventListener('click', () => {
@@ -324,9 +378,16 @@
   document.addEventListener('keydown', event => {
     if (event.key === '/' && !dialog.open && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest('input,textarea,select,[contenteditable="true"]')) {
       event.preventDefault();
-      if (phone.matches) setMenu(true, false);
+      setMenu(false, false);
       $('#query').focus();
     } else if (event.key === 'Escape' && document.documentElement.classList.contains('menu-open')) { event.preventDefault(); setMenu(false); }
+    else if (event.key === 'Escape' && filtersOpen && !dialog.open) { event.preventDefault(); setFilters(false, true); }
+    else if (event.key === 'Tab' && document.documentElement.classList.contains('menu-open')) {
+      const nodes = [...$('#app-menu').querySelectorAll('a,button,input,summary')].filter(e=>!e.disabled&&e.checkVisibility());
+      const first=nodes[0],last=nodes.at(-1);
+      if (event.shiftKey && document.activeElement===first) { event.preventDefault();last.focus(); }
+      else if (!event.shiftKey && document.activeElement===last) { event.preventDefault();first.focus(); }
+    }
   });
   dialog.addEventListener('keydown', event => {
     if (event.key !== 'Tab' || !dialog.open || event.ctrlKey || event.metaKey || event.altKey) return;
@@ -346,10 +407,10 @@
     const r = dialog.getBoundingClientRect();
     if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) closeDetail();
   });
-  window.addEventListener('popstate', renderRoute);
+  window.addEventListener('popstate', () => renderRoute({restore:true}));
   window.addEventListener('hashchange', () => { if (location.hash !== renderedHash && location.hash !== '#main') renderRoute(); });
   window.addEventListener('resize', updateChromeOffset);
   window.visualViewport?.addEventListener('resize', updateChromeOffset);
-  if (!location.hash || location.hash === '#main') history.replaceState({}, '', '#/dictionary');
+  if (!location.hash || location.hash === '#main') history.replaceState({}, '', '#/styles');
   renderRoute();
 })();

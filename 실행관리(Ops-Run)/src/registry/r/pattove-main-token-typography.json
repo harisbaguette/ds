@@ -45,7 +45,7 @@
       "path": "design/css/token-typography.css",
       "type": "registry:file",
       "target": "~/design/css/token-typography.css",
-      "content": ".ds .ds-token-typography { display:grid; gap:var(--p-space-xs); justify-items:start; }\n.ds .ds-token-type { font:var(--p-type-display); letter-spacing:var(--p-tracking-tighter); }\n.ds .ds-token-sizes { display:flex; align-items:baseline; gap:var(--p-space-md); font-family:var(--p-font); }\n.ds .ds-token-sizes [data-token=\"sm\"] { font-size:var(--p-text-sm); }\n.ds .ds-token-sizes [data-token=\"md\"] { font-size:var(--p-text-md); }\n.ds .ds-token-sizes [data-token=\"lg\"] { font-size:var(--p-text-lg); }"
+      "content": ".ds .ds-token-typography { display:grid; gap:var(--p-space-xs); justify-items:start; }\r\n.ds .ds-token-type { font:var(--p-type-display); letter-spacing:var(--p-tracking-tighter); }\r\n.ds .ds-token-sizes { display:flex; align-items:baseline; gap:var(--p-space-md); font-family:var(--p-font); }\r\n.ds .ds-token-sizes [data-token=\"sm\"] { font-size:var(--p-text-sm); }\r\n.ds .ds-token-sizes [data-token=\"md\"] { font-size:var(--p-text-md); }\r\n.ds .ds-token-sizes [data-token=\"lg\"] { font-size:var(--p-text-lg); }"
     },
     {
       "path": "design/html/token-typography.html",

@@ -27,7 +27,7 @@
       "path": "design/css/token-space.css",
       "type": "registry:file",
       "target": "~/design/css/token-space.css",
-      "content": ".ds .ds-token-space { display:grid; gap:var(--p-space-xs); justify-items:start; }\n.ds .ds-token-space i { display:block; height:var(--p-size-xs); border-radius:var(--p-radius-full); background:currentColor; }\n.ds .ds-token-space [data-token=\"xs\"] { width:calc(var(--p-space-xs) * 4); }\n.ds .ds-token-space [data-token=\"sm\"] { width:calc(var(--p-space-sm) * 4); }\n.ds .ds-token-space [data-token=\"md\"] { width:calc(var(--p-space-md) * 4); }\n.ds .ds-token-space [data-token=\"lg\"] { width:calc(var(--p-space-lg) * 4); }\n.ds .ds-token-space [data-token=\"xl\"] { width:calc(var(--p-space-xl) * 4); }"
+      "content": ".ds .ds-token-space { display:grid; gap:var(--p-space-xs); justify-items:start; }\r\n.ds .ds-token-space i { display:block; height:var(--p-size-xs); border-radius:var(--p-radius-full); background:currentColor; }\r\n.ds .ds-token-space [data-token=\"xs\"] { width:calc(var(--p-space-xs) * 4); }\r\n.ds .ds-token-space [data-token=\"sm\"] { width:calc(var(--p-space-sm) * 4); }\r\n.ds .ds-token-space [data-token=\"md\"] { width:calc(var(--p-space-md) * 4); }\r\n.ds .ds-token-space [data-token=\"lg\"] { width:calc(var(--p-space-lg) * 4); }\r\n.ds .ds-token-space [data-token=\"xl\"] { width:calc(var(--p-space-xl) * 4); }"
     },
     {
       "path": "design/html/token-space.html",

@@ -32,20 +32,20 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
  const shot=async name=>{await page.mouse.move(0,0);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(out,name+'.png')});};
  try{
   await goto('styles');
-  check('레일은 토큰·부품·블록·템플릿·아이콘과 스타일',await page.locator('#primary-nav a').count()===data.shelves.length+1);
+  check('상단에 구성요소 다섯 갈래와 스타일',await page.locator('.app-top .nav-shelf-link').count()===data.shelves.length&&await page.locator('.app-top #style-context').isVisible());
   await shot('01-styles');
   // The count is not printed on screen any more; the screen-reader announcement still carries it.
   const shown=async()=>Number((await page.locator('#announcer').textContent()).replace(/[^0-9]/g,''));
-  // The side menu holds tabs and folding filter sections; content fills the rest.
+  // The side menu holds navigation; folding filters live above the content.
   const menuSide=async()=>await page.locator('#app-menu').isVisible()&&await page.evaluate(()=>Math.round(document.querySelector('main').getBoundingClientRect().left)===Math.round(document.querySelector('#app-menu').getBoundingClientRect().right));
   const option=(key,id)=>page.locator('#filter-bar .filter-option[data-filter="'+key+':'+id+'"]');
   const section=key=>page.locator('#filter-bar details.filter-section[data-section="'+key+'"]');
-  const openSection=async key=>{if(!await section(key).evaluate(d=>d.open))await section(key).locator('summary').click();};
+  const openSection=async key=>{if(!await page.locator('#filter-bar').isVisible())await page.locator('#filter-toggle').click();if(!await section(key).evaluate(d=>d.open))await section(key).locator('summary').click();};
   const pick=async(key,id)=>{await openSection(key);await option(key,id).click();};
   const pressed=()=>page.locator('#filter-bar .filter-option[aria-pressed="true"]').count();
   const sections=()=>page.locator('#filter-bar .filter-section > summary > span:first-child').allTextContents();
   await goto('components');
-  check('구성요소는 옆 메뉴에 계층 칸',await menuSide()&&JSON.stringify(await sections())==='["계층"]'&&await page.locator('#filter-bar .filter-option[data-filter^="layer:"]').count()===data.layers.length&&await shown()===data.components.length);
+  check('구성요소의 본문 필터에 계층 칸',await page.locator('#app-menu').evaluate(e=>e.hidden)&&await page.locator('main #filter-bar').count()===1&&JSON.stringify(await sections())==='["계층"]'&&await page.locator('#filter-bar .filter-option[data-filter^="layer:"]').count()===data.layers.length&&await shown()===data.components.length);
   await shot('02-components');
   for(const layer of data.layers){
    await pick('layer',layer.id);
@@ -56,7 +56,7 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    await pick('layer',layer.id);
    check(layer.english+' 계층을 다시 끄면 전부',await pressed()===0&&await shown()===data.components.length);
   }
-  await page.locator('.brand').click();
+  await page.locator('[data-focus="tab-part"]').click();
   check('사전 첫 화면은 부품 탭 격자',await menuSide()&&await page.locator('[data-focus^="tab-"]').count()===data.shelves.length&&await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1&&await page.locator('.dict-entry').count()>0);
   check('필터에 전체 항목 없음',await page.locator('#app-menu :is(a,button,label)').evaluateAll(els=>els.every(e=>e.textContent.trim()!=='전체')));
   await shot('03-dictionary');
@@ -98,13 +98,13 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   const whole=await shown(),role=page.locator('#filter-bar .filter-option[data-filter^="role:"]:not([disabled])');
   const firstKey=(await role.first().getAttribute('data-filter')).slice(5),secondKey=(await role.nth(1).getAttribute('data-filter')).slice(5);
   await option('role',firstKey).click();const one=await shown();
-  check('쓰임 한 줄 누르면 바로 줄고 칸 제목에 1, 칸은 열린 채, 모두 지우기가 생김',one<whole&&await pressed()===1&&await section('role').evaluate(d=>d.open)&&(await section('role').locator('.filter-section-num').textContent()).includes('1')&&await page.locator('#filter-bar .filter-clear').count()===1);
+  check('쓰임 한 줄 누르면 바로 줄고 칸 제목에 1, 칸은 열린 채, 모두 지우기가 생김',one<whole&&await pressed()===1&&await section('role').evaluate(d=>d.open)&&(await section('role').locator('.filter-section-num').textContent()).includes('1')&&await page.locator('#active-filters .filter-clear').count()===1);
   await option('role',secondKey).click();const two=await shown();
   check('여러 개를 함께 켜면 합쳐서 보여줌',two>one&&two<=whole&&await pressed()===2);
   await page.reload();
   check('고른 값과 개수 새로고침 유지',await shown()===two&&await pressed()===2);
-  await page.locator('#filter-bar [data-action="clear-filters"]').click();
-  check('모두 지우기로 전부 복귀, 모두 지우기도 사라짐',await shown()===whole&&await pressed()===0&&await page.locator('#filter-bar .filter-clear').count()===0);
+  await page.locator('#active-filters [data-action="clear-filters"]').click();
+  check('모두 지우기로 전부 복귀, 모두 지우기도 사라짐',await shown()===whole&&await pressed()===0&&await page.locator('#active-filters .filter-clear').count()===0);
   await openSection('role');
   await option('role',firstKey).focus();await page.keyboard.press('Space');
   check('키보드 스페이스로 켜기',await shown()===one&&await pressed()===1);
@@ -116,7 +116,7 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   await codeSearch.fill('입력');
   const codeRows=page.locator('#filter-bar .filter-option[data-filter^="code:"]'),codeShown=page.locator('#filter-bar .filter-option[data-filter^="code:"]:not([hidden])');
   check('세부 분류 안에서 찾기',await codeShown.count()>=1&&await codeShown.count()<await codeRows.count());
-  check('아이콘은 부품 탭 세부 분류에 없음',await option('code','ICO').count()===0);
+  check('아이콘 표시 부품은 부품 탭, 개별 아이콘은 아이콘 탭',(await itemsOf('shelf=part&code=ICO')).every(e=>e.id==='icon')&&(await itemsOf('shelf=icon')).every(e=>!e.implementation));
   await goto('dictionary?shelf=icon');
   check('아이콘 탭 필터 칸은 종류·카테고리, 카테고리는 전부',JSON.stringify(await sections())==='["종류","카테고리"]'&&await page.locator('#filter-bar .filter-option[data-filter^="icon:"]').count()===data.iconGroups.length);
   await pick('icon','navigation');
@@ -176,13 +176,14 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    if(width<=760){
     await goto('dictionary?shelf=part');
     await openMenu();
-    await pick('code','NAV');
-    check(width+' 모바일 메뉴가 옆 서랍으로 화면 안에 열리고 고른 분류가 켜짐',await inView('#app-menu')&&await option('code','NAV').getAttribute('aria-pressed')==='true');
+    check(width+' 모바일 메뉴는 이동 링크만 표시',await inView('#app-menu')&&await page.locator('#app-menu #filter-bar').count()===0);
     await page.keyboard.press('Escape');
     check(width+' Esc로 메뉴 서랍 닫기',!await page.evaluate(()=>document.documentElement.classList.contains('menu-open')));
+    await pick('code','NAV');
+    check(width+' 본문에서 필터를 별도로 선택',await option('code','NAV').getAttribute('aria-pressed')==='true');
     await goto('system?detail=button');await page.evaluate(()=>document.fonts.ready);
     await openMenu();
-    check(width+' 부품 화면 메뉴 서랍에 지금 부품이 화면 안에 보임',await inView('#app-menu')&&await inView('#filter-bar a[aria-current="page"][href="#/system?detail=button"]'));
+    check(width+' 부품 상세에서도 소속 분류가 서랍 안에 보임',await inView('#app-menu')&&await inView('#secondary-nav [aria-current="true"]'));
     await page.keyboard.press('Escape');
    }
   }

@@ -13,9 +13,16 @@
     }).join('')}</div>` : ''}`;
   }
   function header(state) {
-    return `<h1 id="page-title" class="sr-only">${escape(({styles:'스타일',system:'부품',patterns:'패턴',dictionary:'사전',components:'구성요소'})[state.page])}</h1>`;
+    const library = window.Pattove.libraryUI;
+    const shelf = ['dictionary','system'].includes(state.page) ? library.shelfFor(state) : null;
+    if (state.page === 'system') {
+      const item = window.Pattove.systemRegistry.index.get(state.detail);
+      return `<h1 id="page-title" class="sr-only">${escape(item.name)}</h1><nav class="content-breadcrumb" aria-label="현재 위치"><a href="#/dictionary?shelf=${shelf.id}" data-action="back-to-list" data-focus="back-to-list">${escape(shelf.name)}</a>${icon('chevron')}<span aria-current="page">${escape(item.name)}</span></nav>${window.Pattove.systemUI.partLinks(state)}`;
+    }
+    const current = document.querySelector('.nav-subcategory[aria-current="true"]')?.textContent;
+    return `<h1 id="page-title" class="collection-title">${escape(current || shelf?.name || ({styles:'전체 미리보기',patterns:'패턴',components:'구성요소'})[state.page])}</h1>`;
   }
-  // Side-menu filters: folding sections of plain rows. A row switches at once (no apply step) and shows a check while on;
+  // Content filters: folding sections of plain rows. A row switches at once (no apply step) and shows a check while on;
   // nothing picked shows everything. At first only the sections holding a pick are open (the first one when nothing is picked).
   // groups: [{key, label, options}]; an option is {id, name, count, pressed}.
   // A long list gets its own search box; it hides the rows whose name does not match.
@@ -28,8 +35,7 @@
   }
   function filterBar(groups) {
     const on = groups.some(g => g.options.some(o => o.pressed));
-    return (on ? '<div class="filter-top"><button type="button" class="filter-clear" data-action="clear-filters" data-focus="filter-clear">모두 지우기</button></div>' : '')
-      + groups.map((g, i) => section(g, on ? g.options.some(o => o.pressed) : i === 0)).join('');
+    return groups.map((g, i) => section(g, on ? g.options.some(o => o.pressed) : i === 0)).join('');
   }
   function patternFilters(state) {
     const options = catalog.categories.filter(c => c.id !== 'all').map(c => ({ id: c.id, name: c.name, pressed: state.filters.category.includes(c.id) }));
@@ -62,27 +68,20 @@
           ${entry ? `<a class="secondary pattern-dictionary-link" href="#/dictionary?code=${entry.category}&detail=${entry.id}">사전에서 자세히 보기 ${icon('arrow')}</a>` : ''}
         </div></div>`;
   }
-  // 스타일 화면: 디자인 스타일마다 휴대폰 첫 화면 견본 한 장. 누르면 앱 전체가 그 스타일로 갈아입는다.
+  // One main style: its real parts and a composed screen, with direct links to the specimens.
   function styleGrid(state) {
     const p = window.Pattove.parts;
-    return `<section class="style-gallery" aria-labelledby="page-title"><div class="style-grid">${styles.map(style => {
-      const active = style.id === state.style;
-      return `<article class="style-card${active ? ' is-active' : ''}">
-        <div class="style-sample ds theme-${style.id}" data-style="${style.id}" inert aria-hidden="true">
-          <div class="style-phone-screen">
-            <header class="ds-page-header"><div><span class="ds-eyebrow">나의 작업실</span><h2>컬렉션</h2></div>${p.badge('3개')}</header>
-            ${p.input({id:'style-sample-'+style.id, type:'search', placeholder:'이름으로 검색'})}
-            ${p.card({title:'봄의 색', description:'연한 초록과 따뜻한 노랑', action:'열기'})}
-            ${p.card({title:'주말의 기록', description:'산책하며 모은 장면들', tag:'완료', action:'열기'})}
-          </div>
-          ${p.navigation('float')}
-        </div>
-        <button type="button" class="style-choose" data-style-select="${style.id}" data-focus="style-${style.id}" aria-pressed="${active}">
-          <strong>${escape(style.name)}</strong>
-          ${active ? `<span class="style-badge">${icon('check')} 사용 중</span>` : ''}
-        </button>
-      </article>`;
-    }).join('')}</div></section>`;
+    const tile = (id,name,body,href='#/system?detail='+id) => `<article class="overview-tile" data-overview="${id}"><div class="overview-preview ds theme-${state.style}" data-style="${state.style}" inert aria-hidden="true">${body}</div><a class="overview-link" href="${href}" data-focus="overview-${id}"><h2>${name}</h2>${icon('arrow')}</a></article>`;
+    return `<section class="style-overview" aria-label="메인 스타일 전체 미리보기">
+      <h1 class="sr-only">메인 스타일 전체 미리보기</h1>
+      ${tile('button','버튼','<div class="preview-fit"><div class="preview-scene overview-actions" data-preview-scene>'+p.button({label:'계속하기'})+p.button({label:'취소',variant:'outline'})+p.button({label:'검색',iconName:'search',iconOnly:true})+'</div></div>')}
+      ${tile('input','입력',p.field({id:'overview-field',label:'이름',placeholder:'이름을 입력하세요'}))}
+      ${tile('page','컬렉션 화면',window.Pattove.componentDocs.live('page',{},state.style,'overview-page'))}
+      ${tile('selection','선택',p.renderItem('checkbox','overview-checkbox')+p.renderItem('switch','overview-switch'),'#/dictionary?shelf=part&group=selection')}
+      ${tile('bottom-nav','탐색','<div class="preview-fit"><div class="preview-scene" data-preview-scene>'+p.navigation('float')+'</div></div>')}
+      ${tile('token-color','색·표면','<div class="overview-colors"><i></i><i></i><i></i><i></i></div><div class="overview-surfaces"><i></i><i></i><i></i></div>')}
+      ${tile('card','카드',p.card({title:'봄의 색',description:'연한 초록과 따뜻한 노랑',action:'열기'}))}
+    </section>`;
   }
   window.Pattove.views = { escape, styleName, styleReferences, header, filterBar, facetSearch, patternFilters, patterns, detail, styleGrid };
 })();

@@ -33,7 +33,7 @@
       "path": "design/css/token-border.css",
       "type": "registry:file",
       "target": "~/design/css/token-border.css",
-      "content": ".ds .ds-token-border i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); border:var(--p-border-width) solid currentColor; }\n.ds .ds-token-border [data-token=\"strong\"] { border-width:var(--p-border-width-strong); }\n.ds .ds-token-border [data-token=\"focus\"] { border:0; outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset-tight); }"
+      "content": ".ds .ds-token-border i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); border:var(--p-border-width) solid currentColor; }\r\n.ds .ds-token-border [data-token=\"strong\"] { border-width:var(--p-border-width-strong); }\r\n.ds .ds-token-border [data-token=\"focus\"] { border:0; outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset-tight); }"
     },
     {
       "path": "design/html/token-border.html",

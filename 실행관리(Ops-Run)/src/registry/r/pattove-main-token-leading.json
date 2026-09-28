@@ -39,7 +39,7 @@
       "path": "design/css/token-leading.css",
       "type": "registry:file",
       "target": "~/design/css/token-leading.css",
-      "content": ".ds .ds-token-leading { align-items:start; gap:var(--p-space-md); font-size:var(--p-text-body); }\n.ds .ds-token-leading span { padding-inline:var(--p-space-xs); border-inline-start:var(--p-border-width-strong) solid var(--p-line); }\n.ds .ds-token-leading [data-token=\"tight\"] { line-height:var(--p-leading-tight); }\n.ds .ds-token-leading [data-token=\"normal\"] { line-height:var(--p-leading-normal); }\n.ds .ds-token-leading [data-token=\"loose\"] { line-height:var(--p-leading-loose); }"
+      "content": ".ds .ds-token-leading { align-items:start; gap:var(--p-space-md); font-size:var(--p-text-body); }\r\n.ds .ds-token-leading span { padding-inline:var(--p-space-xs); border-inline-start:var(--p-border-width-strong) solid var(--p-line); }\r\n.ds .ds-token-leading [data-token=\"tight\"] { line-height:var(--p-leading-tight); }\r\n.ds .ds-token-leading [data-token=\"normal\"] { line-height:var(--p-leading-normal); }\r\n.ds .ds-token-leading [data-token=\"loose\"] { line-height:var(--p-leading-loose); }"
     },
     {
       "path": "design/html/token-leading.html",

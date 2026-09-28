@@ -70,18 +70,13 @@
 </head>
 <body class="theme-main">
   <a class="skip-link" href="#main">본문으로</a>
-  <div class="app-top">
-    <button type="button" id="menu-toggle" class="menu-toggle" aria-label="메뉴" aria-expanded="false" aria-controls="app-menu" data-focus="menu-toggle"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
-    <a class="top-brand" href="#/dictionary" aria-label="패토브 사전 처음"><img src="assets/mark.svg" alt="" width="26" height="26"></a>
-    <span class="top-title" id="top-title"></span>
-  </div>
-  <div class="menu-backdrop" id="menu-backdrop"></div>
-  <aside class="app-menu" id="app-menu" aria-label="메뉴">
-    <div class="menu-head">
-      <a class="brand" href="#/dictionary" aria-label="패토브 사전 처음" data-focus="home"><img src="assets/mark.svg" alt="" width="32" height="32"></a>
+  <header class="app-top">
+    <a class="top-brand" href="#/styles" aria-label="메인 스타일 전체 미리보기" data-focus="home"><img src="assets/mark.svg" alt="" width="32" height="32"></a>
+    <a class="style-context" id="style-context" href="#/styles" data-focus="style-context">메인 스타일</a>
+    <nav id="primary-nav" class="primary-nav" aria-label="주 메뉴"></nav>
       <div class="search-area">
         <form class="search" id="search-form" role="search">
-          <label class="sr-only" for="query">패턴 검색</label>
+          <label class="sr-only" for="query">검색</label>
           <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
           <input id="query" name="query" placeholder="패턴 검색" autocomplete="off" maxlength="100" role="combobox" aria-autocomplete="list" aria-controls="search-suggestions" aria-expanded="false" aria-keyshortcuts="/" data-focus="search-query">
           <button id="search-clear" type="button" aria-label="검색어 지우기" data-focus="search-clear" hidden><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><path d="m7 7 10 10M7 17 17 7"></path></svg></button>
@@ -91,14 +86,27 @@
           <button type="button" class="search-all" data-action="search-all">검색 결과 보기 <span aria-hidden="true">↵</span></button>
         </div>
       </div>
+  </header>
+  <div class="menu-backdrop" id="menu-backdrop"></div>
+  <aside class="app-menu" id="app-menu" aria-label="하위 분류" hidden>
+    <div class="menu-head">
+      <span class="top-title" id="top-title"></span>
+      <button type="button" class="menu-close" data-action="close-menu" aria-label="메뉴 닫기">×</button>
     </div>
     <div class="menu-body">
-      <nav id="primary-nav" class="primary-nav" aria-label="주 메뉴"></nav>
-      <div id="filter-bar" class="filter-bar" hidden></div>
+      <nav id="secondary-nav" class="secondary-nav" aria-label="하위 분류"></nav>
     </div>
   </aside>
-  <div id="header-context" class="header-context"></div>
-  <main id="main" tabindex="-1"></main>
+  <main id="main" tabindex="-1">
+    <div id="catalog-toolbar" class="catalog-toolbar">
+      <button type="button" id="menu-toggle" class="menu-toggle" aria-label="하위 분류 열기" aria-expanded="false" aria-controls="app-menu" data-focus="menu-toggle"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><path d="M4 7h16M4 12h16M4 17h16"></path></svg><span>분류</span></button>
+      <div id="header-context" class="header-context"></div>
+      <button type="button" id="filter-toggle" class="filter-toggle" aria-expanded="false" aria-controls="filter-bar" data-focus="filter-toggle">필터</button>
+    </div>
+    <div id="active-filters" class="active-filters" hidden></div>
+    <section id="filter-bar" class="filter-bar" aria-label="검색 필터" hidden></section>
+    <div id="content"></div>
+  </main>
   <dialog id="detail-dialog" aria-labelledby="detail-title"></dialog>
   <p class="sr-only" id="announcer" role="status" aria-live="polite"></p>
   <noscript><p class="noscript">화면 이동과 저장을 사용하려면 JavaScript를 켜 주세요.</p></noscript>

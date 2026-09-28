@@ -33,7 +33,7 @@
       "path": "design/css/token-stroke.css",
       "type": "registry:file",
       "target": "~/design/css/token-stroke.css",
-      "content": ".ds .ds-token-stroke i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); border:var(--p-border-width-strong) var(--p-stroke-dashed) currentColor; }\n.ds .ds-token-stroke [data-token=\"dotted\"] { border-style:var(--p-stroke-dotted); }"
+      "content": ".ds .ds-token-stroke i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); border:var(--p-border-width-strong) var(--p-stroke-dashed) currentColor; }\r\n.ds .ds-token-stroke [data-token=\"dotted\"] { border-style:var(--p-stroke-dotted); }"
     },
     {
       "path": "design/html/token-stroke.html",

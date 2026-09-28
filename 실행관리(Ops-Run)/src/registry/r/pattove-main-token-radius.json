@@ -33,7 +33,7 @@
       "path": "design/css/token-radius.css",
       "type": "registry:file",
       "target": "~/design/css/token-radius.css",
-      "content": ".ds .ds-token-radius { gap:var(--p-space-sm); }\n.ds .ds-token-radius i { width:var(--p-control-size-md); height:var(--p-control-size-md); border:var(--p-border-width-strong) solid currentColor; border-radius:var(--p-inner-radius); }\n.ds .ds-token-radius [data-token=\"control\"] { border-radius:var(--p-control-radius); }\n.ds .ds-token-radius [data-token=\"surface\"] { border-radius:var(--p-radius); }"
+      "content": ".ds .ds-token-radius { gap:var(--p-space-sm); }\r\n.ds .ds-token-radius i { width:var(--p-control-size-md); height:var(--p-control-size-md); border:var(--p-border-width-strong) solid currentColor; border-radius:var(--p-inner-radius); }\r\n.ds .ds-token-radius [data-token=\"control\"] { border-radius:var(--p-control-radius); }\r\n.ds .ds-token-radius [data-token=\"surface\"] { border-radius:var(--p-radius); }"
     },
     {
       "path": "design/html/token-radius.html",

@@ -1,6 +1,6 @@
 {
   "version": "0.3.0",
-  "revision": "88fdb2c3bfdade3b679fb7128142aecb8fdba70557582b60ebab4886873f26ed",
+  "revision": "94eb4067226be4caf9b76d76004d2b8b49a870f9e440859d39e50479f2d4f104",
   "sources": [
     "src/system/parts.js",
     "src/system/parts.css",
@@ -104,6 +104,11 @@
   "items": [
     {
       "id": "token-color",
+      "browse": {
+        "shelf": "token",
+        "kind": "색",
+        "code": "TOK"
+      },
       "name": "색 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -145,6 +150,11 @@
     },
     {
       "id": "token-gradient",
+      "browse": {
+        "shelf": "token",
+        "kind": "그러데이션",
+        "code": "TOK"
+      },
       "name": "그러데이션 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -187,6 +197,11 @@
     },
     {
       "id": "token-typography",
+      "browse": {
+        "shelf": "token",
+        "kind": "글꼴",
+        "code": "TOK"
+      },
       "name": "글꼴 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -232,6 +247,11 @@
     },
     {
       "id": "token-text",
+      "browse": {
+        "shelf": "token",
+        "kind": "글자",
+        "code": "TOK"
+      },
       "name": "글자 크기 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -272,6 +292,11 @@
     },
     {
       "id": "token-weight",
+      "browse": {
+        "shelf": "token",
+        "kind": "글자",
+        "code": "TOK"
+      },
       "name": "굵기 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -312,6 +337,11 @@
     },
     {
       "id": "token-leading",
+      "browse": {
+        "shelf": "token",
+        "kind": "글자",
+        "code": "TOK"
+      },
       "name": "줄 간격 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -352,6 +382,11 @@
     },
     {
       "id": "token-tracking",
+      "browse": {
+        "shelf": "token",
+        "kind": "글자",
+        "code": "TOK"
+      },
       "name": "자간 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -392,6 +427,11 @@
     },
     {
       "id": "token-space",
+      "browse": {
+        "shelf": "token",
+        "kind": "간격",
+        "code": "TOK"
+      },
       "name": "간격 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -433,6 +473,11 @@
     },
     {
       "id": "token-size",
+      "browse": {
+        "shelf": "token",
+        "kind": "크기",
+        "code": "TOK"
+      },
       "name": "크기 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -473,6 +518,11 @@
     },
     {
       "id": "token-container",
+      "browse": {
+        "shelf": "token",
+        "kind": "너비",
+        "code": "TOK"
+      },
       "name": "너비 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -513,6 +563,11 @@
     },
     {
       "id": "token-radius",
+      "browse": {
+        "shelf": "token",
+        "kind": "반경",
+        "code": "TOK"
+      },
       "name": "모서리 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -554,6 +609,11 @@
     },
     {
       "id": "token-border",
+      "browse": {
+        "shelf": "token",
+        "kind": "테두리",
+        "code": "TOK"
+      },
       "name": "테두리 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -594,6 +654,11 @@
     },
     {
       "id": "token-stroke",
+      "browse": {
+        "shelf": "token",
+        "kind": "선 모양",
+        "code": "TOK"
+      },
       "name": "선 모양 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -634,6 +699,11 @@
     },
     {
       "id": "token-shadow",
+      "browse": {
+        "shelf": "token",
+        "kind": "그림자",
+        "code": "TOK"
+      },
       "name": "그림자 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -675,6 +745,11 @@
     },
     {
       "id": "token-blur",
+      "browse": {
+        "shelf": "token",
+        "kind": "흐림",
+        "code": "TOK"
+      },
       "name": "흐림 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -715,6 +790,11 @@
     },
     {
       "id": "token-opacity",
+      "browse": {
+        "shelf": "token",
+        "kind": "불투명도",
+        "code": "TOK"
+      },
       "name": "불투명도 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -755,6 +835,11 @@
     },
     {
       "id": "token-aspect",
+      "browse": {
+        "shelf": "token",
+        "kind": "비율",
+        "code": "TOK"
+      },
       "name": "비율 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -795,6 +880,11 @@
     },
     {
       "id": "token-motion",
+      "browse": {
+        "shelf": "token",
+        "kind": "움직임",
+        "code": "TOK"
+      },
       "name": "움직임 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -836,6 +926,11 @@
     },
     {
       "id": "token-layer",
+      "browse": {
+        "shelf": "token",
+        "kind": "층",
+        "code": "TOK"
+      },
       "name": "쌓임 순서 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -876,6 +971,11 @@
     },
     {
       "id": "token-breakpoint",
+      "browse": {
+        "shelf": "token",
+        "kind": "브레이크포인트",
+        "code": "TOK"
+      },
       "name": "화면 폭 기준 토큰",
       "section": "foundations",
       "layer": "Token",
@@ -916,7 +1016,12 @@
     },
     {
       "id": "icon",
-      "name": "아이콘",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "ICO"
+      },
+      "name": "아이콘 표시",
       "section": "primitives",
       "layer": "Primitive",
       "keywords": "검색 닫기 화살표 svg icon",
@@ -927,7 +1032,6 @@
         "token-space",
         "token-size"
       ],
-      "entry": "ICO-01",
       "version": "0.3.0",
       "lifecycle": "Trial",
       "environments": [
@@ -1127,6 +1231,11 @@
     },
     {
       "id": "divider",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "LAY"
+      },
       "name": "구분선",
       "section": "primitives",
       "layer": "Primitive",
@@ -1210,6 +1319,11 @@
     },
     {
       "id": "status-dot",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "STA"
+      },
       "name": "상태 점",
       "section": "primitives",
       "layer": "Primitive",
@@ -1295,6 +1409,11 @@
     },
     {
       "id": "button",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "ACT"
+      },
       "name": "버튼",
       "section": "buttons",
       "layer": "Atom",
@@ -1530,6 +1649,11 @@
     },
     {
       "id": "input",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "INP"
+      },
       "name": "입력창",
       "section": "fields",
       "layer": "Atom",
@@ -1699,6 +1823,11 @@
     },
     {
       "id": "field",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "INP"
+      },
       "name": "입력 필드",
       "section": "fields",
       "layer": "Molecule",
@@ -1848,6 +1977,11 @@
     },
     {
       "id": "checkbox",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "INP"
+      },
       "name": "체크박스",
       "section": "selection",
       "layer": "Atom",
@@ -2000,6 +2134,11 @@
     },
     {
       "id": "radio",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "INP"
+      },
       "name": "라디오",
       "section": "selection",
       "layer": "Atom",
@@ -2136,6 +2275,11 @@
     },
     {
       "id": "switch",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "INP"
+      },
       "name": "스위치",
       "section": "selection",
       "layer": "Atom",
@@ -2248,6 +2392,11 @@
     },
     {
       "id": "badge",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "STA"
+      },
       "name": "배지",
       "section": "feedback",
       "layer": "Atom",
@@ -2371,6 +2520,11 @@
     },
     {
       "id": "tabs",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "NAV"
+      },
       "name": "탭",
       "section": "navigation",
       "layer": "Molecule",
@@ -2497,6 +2651,11 @@
     },
     {
       "id": "bottom-nav",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "NAV"
+      },
       "name": "하단 탐색",
       "section": "navigation",
       "layer": "Molecule",
@@ -2627,6 +2786,11 @@
     },
     {
       "id": "feedback",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "STA"
+      },
       "name": "알림·진행률",
       "section": "feedback",
       "layer": "Molecule",
@@ -2746,6 +2910,11 @@
     },
     {
       "id": "card",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "LAY"
+      },
       "name": "카드",
       "section": "composition",
       "layer": "Molecule",
@@ -2879,6 +3048,11 @@
     },
     {
       "id": "search-module",
+      "browse": {
+        "shelf": "block",
+        "kind": "모듈",
+        "code": "DAT"
+      },
       "name": "검색 모듈",
       "section": "composition",
       "layer": "Module",
@@ -3023,6 +3197,11 @@
     },
     {
       "id": "template",
+      "browse": {
+        "shelf": "template",
+        "kind": "구성",
+        "code": "LAY"
+      },
       "name": "목록 레이아웃",
       "section": "page",
       "layer": "Template",
@@ -3152,6 +3331,11 @@
     },
     {
       "id": "page",
+      "browse": {
+        "shelf": "template",
+        "kind": "구성",
+        "code": "LAY"
+      },
       "name": "컬렉션 화면",
       "section": "page",
       "layer": "Page",

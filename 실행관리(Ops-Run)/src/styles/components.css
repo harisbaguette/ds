@@ -15,7 +15,7 @@
 .component-page[data-component='divider'] .part-demo>.ds { display:flex; align-items:center; }
 .component-page .inspector-options { border-top:var(--p-border-width) solid var(--p-line); padding:calc(var(--p-space-unit) * 5) 0 0; gap:var(--p-space-md); }
 .component-page .inspector-options select { border:var(--p-border-width) solid var(--p-control-border); border-radius:var(--p-radius-md); background:var(--p-surface); }
-.component-section { margin-top:var(--p-space-2xl); scroll-margin-top:var(--chrome-bottom, var(--p-space-md)); }
+.component-section { margin-top:var(--p-space-2xl); }
 .component-section>h3 { font-size:var(--p-text-title); font-weight:var(--p-weight-semibold); margin-bottom:var(--p-space-md); }
 .component-section>p,.component-section>ul { font-size:var(--p-text-body); line-height:var(--p-leading-loose); max-width:var(--p-measure); color:var(--p-muted); }
 .component-section>ul { margin-top:var(--p-space-sm); padding-left:calc(var(--p-space-unit) * 5); }
@@ -73,11 +73,12 @@
 /* Phone frame: a whole screen drawn at device size, shrunk into the card; the bottom bar stays pinned to the phone's lower edge. */
 .variant-frame[data-frame="phone"] { display:grid; place-items:center; height:auto; padding:calc(var(--p-space-unit) * 5) 0; border-top:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-2xl); background:var(--p-surface); }
 .variant-phone { position:relative; width:var(--p-container-sm); height:calc(var(--p-space-unit) * 195); zoom:.44; overflow:hidden; padding:calc(var(--p-space-unit) * 14) var(--p-space-md) 0; border:var(--p-border-width) solid var(--p-control-border); border-radius:calc(var(--p-radius-2xl) * 2); background:var(--p-bg); box-shadow:var(--p-stage-shadow); }
+.preview-viewport > .variant-phone[data-preview-scene] { zoom:1; }
 .variant-phone::before { content:''; position:absolute; top:var(--p-space-md); left:50%; width:calc(var(--p-space-unit) * 25); height:calc(var(--p-space-unit) * 7); margin-left:calc((var(--p-space-3xl) + var(--p-space-3xs)) * -1); border-radius:var(--p-radius-xl); background:var(--p-accent); }
 .variant-phone>.ds-page { height:100%; overflow:hidden; padding-bottom:calc(var(--p-space-unit) * 26); }
 .variant-phone>.ds-page>.ds-bottom-nav { position:absolute; z-index:var(--p-layer-raised); left:var(--ds-bottom-nav-offset,0); right:var(--ds-bottom-nav-offset,0); bottom:var(--ds-bottom-nav-offset,0); margin:0; max-width:none; }
 /* A card shows one still screen: the list fades out above the bar instead of running under it. */
-.variant-card .variant-phone::after { content:''; position:absolute; inset:auto 0 0; height:calc(var(--p-space-unit) * 38); background:var(--p-gradient-fade-up); pointer-events:none; }
+:is(.variant-card,.overview-preview,.dict-thumb) .variant-phone::after { content:''; position:absolute; inset:auto 0 0; height:calc(var(--p-space-unit) * 38); background:var(--p-gradient-fade-up); pointer-events:none; }
 .component-page .part-demo>.ds.variant-frame[data-frame="phone"] { display:flex; justify-content:center; width:100%; height:auto; padding:var(--p-space-lg) 0; }
 .component-page .part-demo .variant-phone { width:min(var(--p-container-sm),100%); height:calc(var(--p-space-unit) * 190); zoom:1; }
 .component-page .part-demo .variant-phone>.ds-page { overflow:auto; }

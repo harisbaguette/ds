@@ -1,2 +1,2 @@
 import React from 'react';
-export function Switch({ children, ...props }) { return <label className="ds-choice"><input {...props} type="checkbox" role="switch" className="ds-switch" />{children}</label>; }
+export function Switch({ children, look, ...props }) { return <label className="ds-choice" data-look={look}><input {...props} type="checkbox" role="switch" className="ds-switch" />{children}</label>; }

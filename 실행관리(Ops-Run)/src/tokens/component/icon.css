@@ -1,0 +1,9 @@
+/* Layer 3 · component · icon. Only this part's rules read these names; values are var(--p-*) only. */
+.ds {
+  --ds-icon-soft: var(--p-soft);
+  --ds-icon-accent: var(--p-accent);
+  --ds-icon-on-accent: var(--p-on-accent);
+  --ds-icon-control-border: var(--p-control-border);
+  --ds-icon-surface: var(--p-surface);
+  --ds-icon-shadow: var(--p-shadow);
+}

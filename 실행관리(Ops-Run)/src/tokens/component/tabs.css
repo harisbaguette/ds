@@ -9,4 +9,10 @@
   --ds-tabs-on-accent: var(--p-on-accent);
   --ds-tabs-selected-shadow: var(--p-selected-shadow);
   --ds-tabs-space-6: var(--p-space-lg);
+  --ds-tabs-text: var(--p-ink);
+  --ds-tabs-high: var(--p-high);
+  --ds-tabs-raised: var(--p-raised);
+  --ds-tabs-control-border: var(--p-control-border);
+  --ds-tabs-control-radius: var(--p-control-radius);
+  --ds-tabs-soft: var(--p-soft);
 }

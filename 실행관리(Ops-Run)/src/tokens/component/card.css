@@ -10,4 +10,9 @@
   --ds-card-space-4: var(--p-space-md);
   --ds-card-muted: var(--p-muted);
   --ds-card-space-2: var(--p-space-xs);
+  --ds-card-high: var(--p-high);
+  --ds-card-accent: var(--p-accent);
+  --ds-card-soft: var(--p-soft);
+  --ds-card-glass: var(--p-glass);
+  --ds-card-shadow: var(--p-shadow);
 }

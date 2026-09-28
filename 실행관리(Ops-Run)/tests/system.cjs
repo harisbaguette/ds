@@ -6,6 +6,7 @@ const assert = require('node:assert/strict');
 const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
 const url = pathToFileURL(path.join(root, 'index.html')).href;
+const origin = process.env.ORIGIN || 'http://127.0.0.1:4173';
 const output = path.join(root, 'test-results/system');
 fs.mkdirSync(output, { recursive: true });
 const checks = [], errors = [];
@@ -114,6 +115,24 @@ const fingerprint = element => {
     await inspect(page,'main','feedback');
     await demo.locator('[data-part-action="notify"]').click();
     check('알림 실제 표시', await demo.locator('[data-part-feedback]').isVisible());
+    // Look galleries on the six larger parts: every card shows its own look, and picking one swaps the big preview.
+    for (const id of ['tabs','feedback','card','search-module','template','page']) {
+      await inspect(page,'main',id);
+      const cards = await page.locator('.variant-card').evaluateAll(nodes => nodes.map(n => [n.dataset.variantCard, n.querySelector('.variant-frame [data-look]')?.dataset.look]));
+      check(id+' 모양 6가지 이상, 카드마다 제 모양', cards.length >= 6 && new Set(cards.map(c => c[0])).size === cards.length && cards.every(([v, look]) => v === look));
+      const last = cards.at(-1)[0];
+      await page.locator('[data-variant-pick="'+last+'"]').click();
+      check(id+' 카드를 누르면 큰 미리보기 data-look이 바뀜', await demo.locator('[data-look]').first().getAttribute('data-look') === last && await page.locator('[data-variant-pick="'+last+'"]').getAttribute('aria-pressed') === 'true' && page.url().includes('option-look='+last));
+    }
+    await inspect(page,'main','search-module');
+    await page.locator('[data-variant-pick="chips"]').click();
+    await demo.locator('.ds-chip', { hasText: '완료' }).click();
+    check('칩 모양의 상태 필터도 실제로 거름', await demo.locator('[name="status"]:checked').getAttribute('value') === '완료' && await demo.locator('[data-result]:visible').count() === 1);
+    await inspect(page,'main','tabs');
+    await page.locator('[data-variant-pick="vertical"]').click();
+    await demo.locator('[role="tab"]').first().focus();
+    await page.keyboard.press('ArrowDown');
+    check('세로 탭은 아래 방향키로 이동', await demo.locator('[role="tablist"]').getAttribute('aria-orientation') === 'vertical' && await demo.locator('[role="tab"]').nth(1).getAttribute('aria-selected') === 'true' && await demo.locator('[role="tab"]').nth(1).evaluate(n=>n===document.activeElement));
     for(const width of [320,375,768,1440]) {
       await page.setViewportSize({width,height:1000});
       for(const [style,id] of [['main','page'],['main','bottom-nav']]) {
@@ -127,7 +146,40 @@ const fingerprint = element => {
     await page.goto(url+'#/system?style=main&detail=button');await page.screenshot({path:path.join(output,'button-page.png')});
     await page.setViewportSize({width:375,height:1000});
     await page.goto(url+'#/system?style=main&detail=page');await page.screenshot({path:path.join(output,'mobile-page.png'),fullPage:true});
-    await page.goto('http://127.0.0.1:4173/#/system?style=main&detail=button');
+    // Look galleries: every atom offers 6+ distinct looks drawn by parts.css [data-look].
+    const lookShots = path.join(root, 'test-results/look-atoms');
+    fs.mkdirSync(lookShots, { recursive: true });
+    for (const id of ['button','input','field','checkbox','radio','switch','badge','divider','status-dot','icon']) {
+      const fresh = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+      const lp = await fresh.newPage();
+      lp.on('pageerror', error => errors.push(id + ' look: ' + error.message));
+      await lp.goto(origin + '/#/system?style=main&detail=' + id);
+      await lp.locator('.component-page[data-component="' + id + '"] .variant-grid').waitFor();
+      await lp.evaluate(() => document.fonts.ready);
+      const looks = await lp.evaluate(id => window.Pattove.systemRegistry.index.get(id).gallery.list.map(v => v.id), id);
+      check(id + ' 모양 6개 이상', looks.length >= 6 && await lp.locator('.variant-card').count() === looks.length);
+      check(id + ' 모양 이름 중복 없음', new Set(looks).size === looks.length);
+      const current = () => lp.locator('.part-demo [data-look]').first().getAttribute('data-look');
+      check(id + ' 기본 data-look은 첫 모양', await current() === looks[0]);
+      check(id + ' 모양은 옵션 목록이 아닌 격자로만', await lp.locator('[data-part-option="look"]').count() === 0);
+      await lp.locator('.variant-grid').first().screenshot({ path: path.join(lookShots, id + '-1440.png') });
+      await lp.locator('[data-variant-pick]').nth(1).click();
+      check(id + ' 카드를 누르면 data-look 변경', await current() === looks[1]);
+      await lp.setViewportSize({ width: 390, height: 900 });
+      await lp.waitForTimeout(100);
+      check(id + ' 390 가로 넘침 없음', await lp.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+      const small = await lp.evaluate(() => [...document.querySelectorAll('.part-demo :is(button,input.ds-input,label.ds-choice),.variant-card :is(button,input.ds-input,label.ds-choice),[data-variant-pick],[data-variant-use]')]
+        .filter(n => n.offsetParent).map(n => n.getBoundingClientRect()).filter(r => r.width < 44 || r.height < 44).length);
+      check(id + ' 390 터치 칸 44px 이상', small === 0);
+      await lp.screenshot({ path: path.join(lookShots, id + '-390.png'), fullPage: true });
+      await fresh.close();
+    }
+    for (const id of ['card','search-module']) {
+      await page.goto(url + '#/system?style=main&detail=' + id); await page.locator('.component-page[data-component="' + id + '"] .part-demo').waitFor();
+      // The module carries its own look; the small parts inside it keep their plain default.
+      check(id + ' 안 작은 부품은 기본 모양 유지(data-look 없음)', await page.locator('.part-demo :is(.ds-button,.ds-badge,.ds-input,.ds-field,.ds-choice,.ds-divider,.ds-status,.ds-icon)[data-look]').count() === 0);
+    }
+    await page.goto(origin + '/#/system?style=main&detail=button');
     check('HTTP 실행에서도 같은 부품 화면', await page.locator('.part-demo .ds-button').count()>=1);
     check('브라우저 실행 오류 없음', errors.length===0);
     fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({checks,errors},null,2));

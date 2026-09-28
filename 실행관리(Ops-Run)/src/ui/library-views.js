@@ -8,8 +8,9 @@
   const registry = window.Pattove.systemRegistry;
   const part = id => registry.index.get(id) || registry.items.find(item => item.entry === id);
   const implemented = e => ({ ...e, usage:e.purpose, category:e.section, kind:e.layer, implementation:true });
-  // Four shelves (토큰 → 부품 → 블록 → 템플릿) are the header tabs. Inside a tab the filter bar narrows by kind, role group or 분야
-  // (one "area" facet, since the two split the categories between them), source category and icon group: OR inside a facet, AND across facets.
+  // The shelves (토큰 by source code, 부품 → 블록 → 템플릿 by kind, then 아이콘 as its own library) are the header tabs. Each entry carries its shelf from the build.
+  // Inside a tab the filter bar narrows by kind, role group or 분야 (one "area" facet, since the two split the categories between them),
+  // source category and, in the icon tab, icon category: OR inside a facet, AND across facets.
   const categoryById=new Map(data.categories.map(c=>[c.id,c]));
   const shelves=new Map(data.shelves.map(s=>[s.id,s]));
   const places=new Map(data.places.map(p=>[p.id,p]));
@@ -20,12 +21,12 @@
   const roles=data.roleOrder.map(id=>data.groups.find(g=>g.id===id)).filter(Boolean)
     .map(g=>({id:g.id,name:groupName[g.id]||g.name,codes:g.codes.filter(code=>!placeOf.has(code))}));
   const roleOf=new Map(roles.flatMap(r=>r.codes.map(code=>[code,r.id])));
-  // A dictionary entry lands on the shelf that claims its source code (토큰 = TOK), else the one holding its kind;
-  // a hierarchy component (no category) lands on the shelf that claims its layer.
-  const shelfOf=e=>(e.category?data.shelves.find(s=>s.codes?.includes(e.category))||data.shelves.find(s=>s.kinds.includes(e.kind)):data.shelves.find(s=>s.layers?.includes(e.layer)))?.id;
+  const iconShelf=data.shelves.find(s=>s.codes?.includes('ICO'))?.id;
+  // A dictionary entry carries its shelf from the build; a hierarchy component (no category) lands on the shelf that claims its layer.
+  const shelfOf=e=>e.category?e.shelf:data.shelves.find(s=>s.layers?.includes(e.layer))?.id;
   const itemShelf=item=>item.entry?shelfOf(entries.get(item.entry)):['Template','Page'].includes(item.layer)?'template':item.layer==='Module'?'block':'part';
   const inShelf=new Map(), bump=key=>inShelf.set(key,(inShelf.get(key)||0)+1);
-  for (const e of data.entries) { const shelf=shelfOf(e); bump(shelf+'|'+e.category); if (e.sub) bump(shelf+'|ICO.'+e.sub); }
+  for (const e of data.entries) { bump(e.shelf+'|'+e.category); if (e.sub) bump(e.shelf+'|ICO.'+e.sub); }
   const short=name=>String(name).split(' — ')[0];
   // A shelf with no kinds (토큰) sorts by the family named before " — " (색, 글자, 간격 …); a family of one or a bare name reads as 기타,
   // and the hierarchy components on that shelf share one 묶음 kind.
@@ -54,7 +55,7 @@
   }
   const match=(entry,query)=>query.trim().toLocaleLowerCase().split(/\s+/).every(term=>searches.get(entry.id).includes(term));
 
-  // Filters live in the address: shelf=part&kind=부품&role=interaction&place=shop&code=ICO&icon=move (lists are comma-separated).
+  // Filters live in the address: shelf=part&kind=부품&role=interaction&place=shop&code=ACT, shelf=icon&icon=navigation (lists are comma-separated).
   // An old ?category=shelf[.code[.icon]] or bare code address still opens; with no shelf, the tab holding most of that category opens.
   const list=value=>[...new Set(String(value||'').split(',').filter(Boolean))];
   const homeShelf=code=>data.shelves.map(s=>s.id).sort((x,y)=>(inShelf.get(y+'|'+code)||0)-(inShelf.get(x+'|'+code)||0))[0];
@@ -73,7 +74,7 @@
       role:list(params.get('role')).filter(id=>roles.some(r=>r.id===id)),
       place:list(params.get('place')).concat(places.has(oldKey)?[oldKey]:[]).filter(id=>places.has(id)),
       code,
-      icon:code.includes('ICO')?list(params.get('icon')).concat(oldKey==='ICO'&&oldSub?[oldSub]:[]).filter(id=>iconGroups.has(id)):[]
+      icon:shelf===iconShelf?list(params.get('icon')).concat(oldKey==='ICO'&&oldSub?[oldSub]:[]).filter(id=>iconGroups.has(id)):[]
     };
   }
   function writeFilters(state, params) {
@@ -88,7 +89,7 @@
     &&(skip==='code'||!f.code.length||f.code.includes(e.category))
     &&(skip==='icon'||!f.icon.length||e.category!=='ICO'||f.icon.includes(e.sub));
 
-  // Header tabs = the four shelves, then 스타일. A built part opens on the system page under its own shelf (token-* under 토큰). A search stays across tabs.
+  // Header tabs = the shelves, then 스타일. A built part opens on the system page under its own shelf (token-* under 토큰). A search stays across tabs.
   function navigation(state) {
     const built=state.page==='system'&&registry.index.get(state.detail);
     const open=state.page==='system'?(built?itemShelf(built):'part'):state.page==='dictionary'?state.filters.shelf:null;
@@ -131,10 +132,10 @@
     const placeOptions=data.places.filter(p=>p.codes.some(here)).map(p=>option('place',p.id,p.name,sum(p.codes)));
     const iconOptions=data.iconGroups.filter(g=>inShelf.has(f.shelf+'|ICO.'+g.id)).map(g=>option('icon',g.id,g.name,icons.get(g.id)||0));
     const codeOptions=data.categories.filter(c=>here(c.id)).map(c=>option('code',c.id,short(c.name),codes.get(c.id)||0));
-    // Sections read top to bottom from broad to fine; the icon shapes open as their own section once 아이콘 is picked.
-    const groups=[{key:'kind',label:'종류',options:kindOptions},{key:'role',label:'쓰임',options:roleOptions},
-      {key:'place',label:'분야',options:placeOptions},{key:'code',label:'세부 분류',options:codeOptions},
-      {key:'icon',label:'아이콘 모양',options:f.code.includes('ICO')?iconOptions:[]}].filter(g=>g.options.length);
+    // Sections read top to bottom from broad to fine. The icon tab holds one source category, so it shows its own categories instead of 쓰임·분야·세부 분류.
+    const groups=(f.shelf===iconShelf?[{key:'kind',label:'종류',options:kindOptions},{key:'icon',label:'카테고리',options:iconOptions}]
+      :[{key:'kind',label:'종류',options:kindOptions},{key:'role',label:'쓰임',options:roleOptions},
+        {key:'place',label:'분야',options:placeOptions},{key:'code',label:'세부 분류',options:codeOptions}]).filter(g=>g.options.length);
     return views.filterBar(groups);
   }
   function suggestions(state,query) {
@@ -150,7 +151,7 @@
     if (e.implementation) return '<div class="dict-entry is-built"><span class="dict-thumb atlas-preview" inert aria-hidden="true">'+sample(e,state.style,'thumb-'+e.id)+'</span><button class="dict-hit" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><strong>'+escape(e.name)+'</strong></button></div>';
     // On a family-sorted shelf the family is the filter, so the tile keeps the whole name (색 — primary), not just 색.
     const kind=e.kind||'기준', label=byName(shelfOf(e))?e.name:short(e.name);
-    return '<button class="dict-entry" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(kind)+'" title="'+escape(e.name)+'"><span class="dict-thumb">'+kindSvg(kind)+'</span><strong>'+escape(label)+'</strong></button>';
+    return '<button class="dict-entry" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(kind)+'" title="'+escape(e.name+(e.lucide?' · Lucide '+e.lucide:''))+'"><span class="dict-thumb">'+kindSvg(kind)+'</span><strong>'+escape(label)+'</strong></button>';
   }
   const empty='<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary" data-action="clear-filters" data-focus="empty-clear">필터 지우기</button></div>';
   const more=(shown,total)=>total>shown?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+shown+' / '+total+'</span></button></div>':'';
@@ -167,14 +168,14 @@
     const e=state.page==='dictionary'&&entries.get(state.detail)||components.get(state.detail);
     const dict=!!e.category, category=dict?null:data.layers.find(l=>l.id===e.layer);
     // The dictionary detail is only the enlarged picture; the tile already carries the name.
-    return '<header class="dialog-header"><div><span class="dialog-category">'+escape(dict?[shelves.get(shelfOf(e))?.name,short(categoryById.get(e.category)?.name||''),places.get(placeOf.get(e.category))?.name,iconGroups.get(e.sub)?.name].filter(Boolean).join(' · '):category.english)+'</span><h2 id="detail-title" tabindex="-1">'+escape(e.name)+'</h2></div><button class="icon-button" data-action="close-dialog" aria-label="상세 닫기">'+icon('close')+'</button></header>'+
+    return '<header class="dialog-header"><div><span class="dialog-category">'+escape(dict?[shelves.get(shelfOf(e))?.name,e.sub?'':short(categoryById.get(e.category)?.name||''),places.get(placeOf.get(e.category))?.name,iconGroups.get(e.sub)?.name].filter(Boolean).join(' · '):category.english)+'</span><h2 id="detail-title" tabindex="-1">'+escape(e.name)+'</h2></div><button class="icon-button" data-action="close-dialog" aria-label="상세 닫기">'+icon('close')+'</button></header>'+
       (dict?'<div class="detail-art" data-kind="'+escape(e.kind||'')+'">'+kindSvg(e.kind)+'</div>'
         :'<div class="record-detail"><p class="record-kind">'+escape(category.name)+'</p><section><h3>대표 항목</h3><p>'+escape(e.examples)+'</p></section></div>');
   }
   window.Pattove.libraryUI={
     pages,navigation,filters,readFilters,writeFilters,collection,detail,currentItems,suggestions,
     validDetail:(page,id)=>components.has(id)||(page==='dictionary'&&(entries.has(id)||registry.index.has(id))),
-    suggestionGroup:(page,e)=>page==='dictionary'?(e.implementation?'구현 · '+e.layer:shelves.get(shelfOf(e))?.name+' · '+(e.category?short(categoryById.get(e.category)?.name||''):kindOf(e))):data.layers.find(l=>l.id===e.layer).name,
+    suggestionGroup:(page,e)=>page==='dictionary'?(e.implementation?'구현 · '+e.layer:shelves.get(shelfOf(e))?.name+' · '+(e.sub?iconGroups.get(e.sub).name:e.category?short(categoryById.get(e.category)?.name||''):kindOf(e))):data.layers.find(l=>l.id===e.layer).name,
     sample
   };
 })();

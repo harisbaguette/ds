@@ -10,4 +10,12 @@
   --ds-feedback-control-border: var(--p-control-border);
   --ds-feedback-bg: var(--p-bg);
   --ds-feedback-inset: var(--p-inset);
+  --ds-feedback-border: var(--p-line);
+  --ds-feedback-surface: var(--p-surface);
+  --ds-feedback-accent: var(--p-accent);
+  --ds-feedback-on-accent: var(--p-on-accent);
+  --ds-feedback-shadow: var(--p-shadow);
+  --ds-feedback-glass: var(--p-glass);
+  --ds-feedback-display-font: var(--p-display-font);
+  --ds-feedback-soft: var(--p-soft);
 }

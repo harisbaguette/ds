@@ -26,7 +26,7 @@
 .component-toc { position:sticky; top:var(--chrome-bottom, 16px); padding-left:12px; border-left:1px solid var(--p-line); }
 .component-toc a { display:flex; align-items:center; min-height:44px; font-size:12px; color:var(--p-muted); }
 .component-toc a:hover { color:var(--p-ink); }
-.part-dependencies>a { display:inline-flex; align-items:center; gap:8px; min-height:44px; font-size:13px; text-decoration:underline; text-underline-offset:4px; }
+.part-dependencies>a { display:inline-flex; align-items:center; gap:8px; min-width:44px; min-height:44px; font-size:13px; text-decoration:underline; text-underline-offset:4px; }
 .component-pagination { display:flex; justify-content:space-between; gap:20px; border-top:1px solid var(--p-line); margin-top:40px; padding-top:16px; }
 .component-pagination a { display:inline-flex; min-height:44px; gap:8px; align-items:center; font-size:13px; }
 .component-pagination [rel=prev] .ui-icon { transform:rotate(180deg); order:-1; }.component-pagination [rel=next] { margin-left:auto; }.component-pagination .ui-icon { width:14px; }
@@ -52,7 +52,32 @@
 .variant-screen i:nth-child(1) { width:46%; }.variant-screen i:nth-child(2) { width:72%; }
 .variant-screen i:nth-child(3) { margin-top:4px; border-radius:18px 18px 0 0; background:linear-gradient(160deg, var(--p-soft), var(--p-surface)); }
 .variant-frame>.ds-bottom-nav { position:absolute; left:var(--ds-bottom-nav-offset,0); right:var(--ds-bottom-nav-offset,0); bottom:var(--ds-bottom-nav-offset,0); }
+/* Stage frame: a plain tray for parts that do not live on a device edge */
+.variant-frame[data-frame="stage"] { display:flex; align-items:center; justify-content:center; padding:20px; border-top:1px solid var(--p-line); border-radius:24px; background:var(--p-bg); }
+.component-page .part-demo>.ds.variant-frame[data-frame="stage"] { display:flex; height:auto; min-height:240px; padding:32px; }
 .component-page .part-demo>.ds.variant-frame { display:block; width:min(390px,100%); height:300px; min-height:0; margin:24px auto; padding:0; }
+/* Stage frames for parts taller than a bar grow with the part, and every card in a row keeps the same frame height. */
+.variant-card:has(>.variant-frame:is([data-frame="stage"],[data-frame="phone"])) { grid-template-rows:1fr auto; }
+.variant-card>.variant-frame:is([data-frame="stage"],[data-frame="phone"]) { align-self:stretch; }
+.variant-frame[data-frame="stage"]:has(>:is(.ds-tabs,.ds-feedback-example,.ds-card,.ds-search-module)) { height:auto; min-height:176px; }
+.variant-frame[data-frame="stage"]>:is(.ds-tabs,.ds-feedback-example,.ds-card) { width:100%; }
+.variant-frame[data-frame="stage"]:has(>.ds-search-module) { align-items:flex-start; padding:16px; }
+.variant-frame[data-frame="stage"]>.ds-search-module { flex:none; width:600px; zoom:.38; }
+.component-page .part-demo>.ds.variant-frame[data-frame="stage"]:has(>.ds-search-module) { display:block; width:100%; padding:24px 0; border:0; }
+.component-page .part-demo>.ds.variant-frame[data-frame="stage"]:has(>.ds-search-module)>.ds-search-module { width:auto; zoom:1; }
+/* See-through looks need something behind them, or the blur has nothing to show. */
+.variant-frame[data-frame="stage"]:has(>[data-look="glass"]) { background:radial-gradient(circle at 14% 50%, color-mix(in oklab, var(--p-success) 55%, transparent) 0 18%, transparent 19%), radial-gradient(circle at 86% 46%, color-mix(in oklab, var(--p-accent) 40%, transparent) 0 16%, transparent 17%), linear-gradient(135deg, var(--p-soft), var(--p-surface)); }
+.variant-frame[data-frame="stage"]:has(>.ds-card[data-look="neumorph"]) { background:var(--p-surface); }
+.variant-frame:has(.ds-bottom-nav[data-variant="glass"]) .variant-screen i:nth-child(3) { background:radial-gradient(circle at 22% 55%, color-mix(in oklab, var(--p-success) 70%, transparent) 0 36px, transparent 37px), radial-gradient(circle at 70% 58%, var(--p-accent) 0 28px, transparent 29px), linear-gradient(160deg, var(--p-soft), var(--p-surface)); }
+/* Phone frame: a whole screen drawn at device size, shrunk into the card; the bottom bar stays pinned to the phone's lower edge. */
+.variant-frame[data-frame="phone"] { display:grid; place-items:center; height:auto; padding:20px 0; border-top:1px solid var(--p-line); border-radius:24px; background:var(--p-surface); }
+.variant-phone { position:relative; width:390px; height:780px; zoom:.44; overflow:hidden; padding:56px 16px 0; border:1px solid var(--p-control-border); border-radius:52px; background:var(--p-bg); box-shadow:0 24px 44px -28px color-mix(in oklab, var(--p-accent) 45%, transparent); }
+.variant-phone::before { content:''; position:absolute; top:16px; left:50%; width:100px; height:28px; margin-left:-50px; border-radius:14px; background:var(--p-accent); }
+.variant-phone>.ds-page { height:100%; overflow:hidden; padding-bottom:104px; }
+.variant-phone>.ds-page>.ds-bottom-nav { position:absolute; left:var(--ds-bottom-nav-offset,0); right:var(--ds-bottom-nav-offset,0); bottom:var(--ds-bottom-nav-offset,0); margin:0; max-width:none; }
+.component-page .part-demo>.ds.variant-frame[data-frame="phone"] { display:flex; justify-content:center; width:100%; height:auto; padding:24px 0; }
+.component-page .part-demo .variant-phone { width:min(390px,100%); height:760px; zoom:1; }
+.component-page .part-demo .variant-phone>.ds-page { overflow:auto; }
 @media(max-width:1250px) { .component-layout { grid-template-columns:minmax(0,1fr); }.component-toc { display:none; } }
 @media(max-width:760px) {
   .component-heading h2 { font-size:28px; }.component-heading { margin-bottom:16px; }
@@ -60,4 +85,6 @@
   .component-examples { grid-template-columns:1fr; }.component-section { margin-top:32px; }
   .component-page .inspector-options { gap:12px; }.component-page .inspector-options label { flex:1 1 120px; }
   .component-section>.variant-grid { grid-template-columns:minmax(0,1fr); gap:28px; }.component-page .part-demo>.ds.variant-frame { height:240px; margin:8px auto; }
+  /* A phone as wide as the screen is its own frame; a tray around it would only hug its edges. */
+  .component-page .part-demo>.ds.variant-frame[data-frame="phone"] { padding:8px 0; border:0; background:none; }
 }

@@ -5,7 +5,7 @@ const output = path.resolve(__dirname, '../test-results');
 const origin = 'http://127.0.0.1:4173';
 const routes = [
   '/patterns?style=main', '/patterns?q=zzzz', '/styles', '/patterns?detail=toast&style=main',
-  '/components', '/components?layer=organism', '/dictionary', '/dictionary?code=ICO',
+  '/components', '/components?layer=organism', '/dictionary', '/dictionary?shelf=icon',
   '/dictionary?code=TOK&detail=TOK-01',
   '/system?style=main', '/system?style=main&detail=button', '/system?style=main&detail=page', '/system?style=main&detail=checkbox'
 ];

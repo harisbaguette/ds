@@ -37,15 +37,24 @@ const chapters = fs.readdirSync(path.join(root,dictionaryDir)).filter(n => n.end
   .map(n => ({...read(dictionaryDir+'/'+n), id:n.split('-')[1]}));
 const categories=[], entries=[];
 const ids=new Set();
+// A chapter may split its table under level-2 headings; each row keeps the heading it sits under.
 for (const doc of chapters) {
-  const table = doc.tokens.find(t=>t.type==='table' && text(t.header[0])==='ID');
-  if(!table)throw new Error('Missing dictionary table: '+doc.source);
-  const category={id:doc.id,name:doc.name.replace(/^\d+\.\s*/,''),count:table.rows.length,source:doc.source};
+  let section='';
+  const tables=[];
+  for(const t of doc.tokens){
+    if(t.type==='heading'&&t.depth===2)section=plain(t.tokens);
+    else if(t.type==='table'&&text(t.header[0])==='ID')tables.push({table:t,section});
+  }
+  if(!tables.length)throw new Error('Missing dictionary table: '+doc.source);
+  const category={id:doc.id,name:doc.name.replace(/^\d+\.\s*/,''),count:tables.reduce((n,{table})=>n+table.rows.length,0),source:doc.source};
   categories.push(category);
-  for(const row of table.rows) {
-    const [id,name,kind,usage,evidence]=row.map(text);
-    if(!id.startsWith(category.id+'-')||ids.has(id)||!name||!usage)throw new Error('Invalid dictionary record: '+id);
-    ids.add(id);entries.push({id,name,kind,usage,evidence,category:category.id});
+  for(const {table,section} of tables) {
+    const lucideColumn=table.header.findIndex(h=>text(h)==='Lucide');
+    for(const row of table.rows) {
+      const [id,name,kind,usage,evidence]=row.map(text), lucide=lucideColumn<0?'':text(row[lucideColumn]);
+      if(!id.startsWith(category.id+'-')||ids.has(id)||!name||!usage)throw new Error('Invalid dictionary record: '+id);
+      ids.add(id);entries.push({id,name,kind,usage,evidence,category:category.id,...(section&&{section}),...(lucide&&lucide!=='—'&&{lucide})});
+    }
   }
 }
 // Layer, use and rule flag per entry are judged item by item and kept beside the dictionary source.
@@ -64,26 +73,33 @@ const ungrouped=categories.filter(c=>!groups.some(g=>g.codes.includes(c.id)));
 if(ungrouped.length)groups.push({id:'additional',name:'추가 분류',codes:ungrouped.map(c=>c.id)});
 const covered=groups.flatMap(g=>g.codes);
 if(covered.length!==categories.length||new Set(covered).size!==covered.length||categories.some(c=>!covered.includes(c.id)))throw new Error('Category group coverage mismatch');
-// Browsing taxonomy: three shelves by kind (부품·블록·템플릿), common role groups vs "쓰는 곳" tags, and a second level inside icons.
-const taxonomy=JSON.parse(fs.readFileSync(path.join(root,'문서/사전 갈래.json'),'utf8').replace(/^﻿/,''));
+// Browsing taxonomy: shelves by kind (부품·블록·템플릿) plus shelves that take whole categories (아이콘), common role groups vs "쓰는 곳" tags,
+// and a second level inside icons read from the chapter's own headings.
+const taxonomy=JSON.parse(fs.readFileSync(path.join(root,'문서/사전 갈래.json'),'utf8').replace(/^\uFEFF/,''));
 const {shelves,places,iconGroups,roleOrder}=taxonomy;
-// A shelf claims entries by source code first (토큰 = TOK), then by kind; every entry lands on exactly one shelf.
-const shelfCodes=shelves.flatMap(s=>s.codes||[]);
-if(new Set(shelfCodes).size!==shelfCodes.length||shelfCodes.some(code=>!categories.some(c=>c.id===code)))throw new Error('Shelf codes must be unique existing categories');
+// A shelf claims entries by source code first (토큰 = TOK, 아이콘 = ICO), then by kind; every entry lands on exactly one shelf.
+const shelfCodes=shelves.flatMap(s=>s.codes||[]), shelfKinds=shelves.flatMap(s=>s.codes?[]:s.kinds);
+if(new Set(shelfCodes).size!==shelfCodes.length||shelfCodes.some(code=>!categories.some(c=>c.id===code))||new Set(shelfKinds).size!==shelfKinds.length)throw new Error('Shelf codes and kinds must each be listed once');
 if(shelves.some(s=>(s.layers||[]).some(id=>!layers.some(l=>l.id===id))))throw new Error('Shelf layers must be known component layers');
-const shelfKinds=shelves.flatMap(s=>s.kinds), entryKinds=[...new Set(entries.filter(e=>!shelfCodes.includes(e.category)).map(e=>e.kind))];
-if(new Set(shelfKinds).size!==shelfKinds.length||entryKinds.some(k=>!shelfKinds.includes(k)))throw new Error('Shelf kinds must cover every entry kind once: '+entryKinds.filter(k=>!shelfKinds.includes(k)).join(','));
+for(const e of entries){
+  e.shelf=shelves.find(s=>s.codes?.includes(e.category))?.id||shelves.find(s=>!s.codes&&s.kinds.includes(e.kind))?.id;
+  if(!e.shelf)throw new Error('Entry fits no shelf: '+e.id+' '+e.kind);
+}
+// A category shelf without declared kinds offers the kinds its entries actually carry; an explicit empty list (토큰) sorts by family instead.
+for(const s of shelves.filter(s=>s.codes&&!s.kinds))s.kinds=[...new Set(entries.filter(e=>e.shelf===s.id).map(e=>e.kind))];
 const placeCodes=places.flatMap(p=>p.codes);
 if(new Set(placeCodes).size!==placeCodes.length||placeCodes.some(code=>!categories.some(c=>c.id===code)))throw new Error('Place codes must be unique existing categories');
 const useGroups=['service','game','domain'].flatMap(id=>groups.find(g=>g.id===id)?.codes||[]);
 if(useGroups.some(code=>!placeCodes.includes(code))||placeCodes.some(code=>!useGroups.includes(code)))throw new Error('Places must cover exactly the service, game and domain categories');
 if(groups.some(g=>!useGroups.some(code=>g.codes.includes(code))&&!roleOrder.includes(g.id)))throw new Error('Role order is missing a common group');
-const icoNumber=id=>Number(id.slice(4));
 for(const e of entries.filter(e=>e.category==='ICO')){
-  const hit=iconGroups.filter(g=>g.ranges.some(r=>{const [a,b]=r.split('-').map(Number);return icoNumber(e.id)>=a&&icoNumber(e.id)<=b;}));
-  if(hit.length!==1)throw new Error('Icon must fall in exactly one icon group: '+e.id);
-  e.sub=hit[0].id;
+  const hit=iconGroups.find(g=>e.section===g.name+' — '+g.english);
+  if(!hit)throw new Error('Icon heading matches no icon group: '+e.id+' '+e.section);
+  e.sub=hit.id;
 }
+const emptyGroups=iconGroups.filter(g=>!entries.some(e=>e.sub===g.id));
+if(emptyGroups.length)throw new Error('Icon groups without entries: '+emptyGroups.map(g=>g.id).join(','));
+for(const e of entries)delete e.section;
 const layerDoc=read('문서/구성요소 계층표.md');
 const table=layerDoc.tokens.find(t=>t.type==='table' && text(t.header[0])==='레벨');
 if(!table)throw new Error('Missing hierarchy table');
@@ -97,7 +113,7 @@ for(const row of table.rows) {
   components.push({id,layer:layer.id,name,examples});
 }
 for(const l of layers)l.count=components.filter(c=>c.layer===l.id).length;
-const payload={categories,groups,layers,uses,shelves,places,roleOrder,iconGroups:iconGroups.map(({id,name})=>({id,name})),entries,components};
+const payload={categories,groups,layers,uses,shelves,places,roleOrder,iconGroups,entries,components};
 fs.writeFileSync(path.join(out,'library.js'),'/* Generated from repository Markdown by scripts/build-library.mjs. */\nwindow.Pattove=window.Pattove||{};\nwindow.Pattove.library='+JSON.stringify(payload)+';\n');
 fs.mkdirSync(path.join(root,'test-results/library'),{recursive:true});
 fs.writeFileSync(path.join(root,'test-results/library/source-audit.json'),JSON.stringify({categories:categories.length,entries:entries.length,layers:layers.length,components:components.length},null,2));

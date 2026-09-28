@@ -4,7 +4,16 @@
   --ds-template-space-2: var(--p-space-xs);
   --ds-template-text-sm: var(--p-text-sm);
   --ds-template-muted: var(--p-muted);
-  --ds-template-space-6: var(--p-space-lg);
-  --ds-template-control-border: var(--p-control-border);
   --ds-template-radius: var(--p-radius);
+  --ds-template-soft: var(--p-soft);
+  --ds-template-space-6: var(--p-space-lg);
+  --ds-template-border: var(--p-line);
+  --ds-template-accent: var(--p-accent);
+  --ds-template-on-accent: var(--p-on-accent);
+  --ds-template-high: var(--p-high);
+  --ds-template-text: var(--p-ink);
+  --ds-template-display-font: var(--p-display-font);
+  --ds-template-space-4: var(--p-space-md);
+  --ds-template-surface: var(--p-surface);
+  --ds-template-control-border: var(--p-control-border);
 }

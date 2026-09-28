@@ -32,7 +32,8 @@ window.Pattove.mountParts = function mountParts(root) {
     event.preventDefault(); filter(event.target);
   });
   root.addEventListener('change', event => {
-    if (event.target.matches('[data-part-search] select')) filter(event.target.form);
+    // The status filter is a select, or a radio chip group in the chips look.
+    if (event.target.matches('[data-part-search] [name="status"]')) filter(event.target.form);
   });
   root.addEventListener('click', event => {
     const tab = event.target.closest('.ds-tab');
@@ -100,11 +101,15 @@ window.Pattove.mountParts = function mountParts(root) {
   });
   root.addEventListener('keydown', event => {
     const tab = event.target.closest('.ds-tab');
-    if (!tab || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+    if (!tab) return;
+    const list = tab.closest('[role="tablist"]');
+    // A vertical tab list moves with the up and down arrows, a horizontal one with left and right.
+    const [back, forward] = list.getAttribute('aria-orientation') === 'vertical' ? ['ArrowUp', 'ArrowDown'] : ['ArrowLeft', 'ArrowRight'];
+    if (![back, forward, 'Home', 'End'].includes(event.key)) return;
     event.preventDefault();
-    const tabs = [...tab.closest('[role="tablist"]').querySelectorAll('.ds-tab')];
+    const tabs = [...list.querySelectorAll('.ds-tab')];
     const current = tabs.indexOf(tab);
-    const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (current + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+    const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (current + (event.key === forward ? 1 : -1) + tabs.length) % tabs.length;
     selectTab(tabs[next]); tabs[next].focus();
   });
 };

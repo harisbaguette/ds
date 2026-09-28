@@ -1,6 +1,6 @@
 {
   "version": "0.3.0",
-  "revision": "d9f639d47e26fc1cd8809047567044d3ff86260d1ce8614022b18055603a7837",
+  "revision": "472277811f985d651087291f18f2eb57c5745996f725bd773646bdcc44e5b76b",
   "sources": [
     "src/system/parts.js",
     "src/system/parts.css",
@@ -239,6 +239,10 @@
             [
               "rotate",
               "rotate"
+            ],
+            [
+              "shapes",
+              "shapes"
             ],
             [
               "upload",
@@ -2231,15 +2235,142 @@
       ],
       "behavior": true,
       "purpose": "같은 영역의 내용 전환",
-      "compatibility": "탭과 패널의 id 연결을 유지",
+      "compatibility": "탭과 패널의 id 연결을 유지. 세로 모양은 위아래 방향키",
       "inputs": [
-        "prefix"
+        "prefix",
+        "look"
       ],
       "events": [
         "pattove:tabchange"
       ],
-      "controls": [],
-      "gallery": null,
+      "controls": [
+        {
+          "key": "look",
+          "label": "모양",
+          "values": [
+            [
+              "filled",
+              "채움 트랙"
+            ],
+            [
+              "underline",
+              "밑줄"
+            ],
+            [
+              "segmented",
+              "분할 버튼"
+            ],
+            [
+              "outline",
+              "윤곽 상자"
+            ],
+            [
+              "float",
+              "떠 있는 알약"
+            ],
+            [
+              "icon",
+              "아이콘 위 글자"
+            ],
+            [
+              "vertical",
+              "세로"
+            ],
+            [
+              "folder",
+              "폴더 탭"
+            ]
+          ],
+          "default": "filled"
+        }
+      ],
+      "gallery": {
+        "key": "look",
+        "label": "모양",
+        "frame": "stage",
+        "list": [
+          {
+            "no": "01",
+            "id": "filled",
+            "name": "채움 트랙",
+            "tags": [
+              "또렷함",
+              "단단함",
+              "기본"
+            ]
+          },
+          {
+            "no": "02",
+            "id": "underline",
+            "name": "밑줄",
+            "tags": [
+              "익숙함",
+              "가벼움",
+              "평평함"
+            ]
+          },
+          {
+            "no": "03",
+            "id": "segmented",
+            "name": "분할 버튼",
+            "tags": [
+              "떠 있는 칸",
+              "단정",
+              "설정"
+            ]
+          },
+          {
+            "no": "04",
+            "id": "outline",
+            "name": "윤곽 상자",
+            "tags": [
+              "경계",
+              "분리",
+              "문서"
+            ]
+          },
+          {
+            "no": "05",
+            "id": "float",
+            "name": "떠 있는 알약",
+            "tags": [
+              "여백",
+              "부드러움",
+              "가벼움"
+            ]
+          },
+          {
+            "no": "06",
+            "id": "icon",
+            "name": "아이콘 위 글자",
+            "tags": [
+              "그림",
+              "앱",
+              "직관"
+            ]
+          },
+          {
+            "no": "07",
+            "id": "vertical",
+            "name": "세로",
+            "tags": [
+              "옆 메뉴",
+              "넓은 화면",
+              "설정"
+            ]
+          },
+          {
+            "no": "08",
+            "id": "folder",
+            "name": "폴더 탭",
+            "tags": [
+              "서류철",
+              "연결",
+              "고전"
+            ]
+          }
+        ]
+      },
       "css": [
         "tabs"
       ],
@@ -2499,10 +2630,141 @@
       "behavior": true,
       "purpose": "행동의 결과와 진행률",
       "compatibility": "표본 저장 알림과 68% 진행률. 실제 저장·업로드는 프로젝트에서 연결",
-      "inputs": [],
+      "inputs": [
+        "look"
+      ],
       "events": [],
-      "controls": [],
-      "gallery": null,
+      "controls": [
+        {
+          "key": "look",
+          "label": "모양",
+          "values": [
+            [
+              "card",
+              "떠 있는 카드"
+            ],
+            [
+              "dot",
+              "점 알림"
+            ],
+            [
+              "stripe",
+              "왼쪽 띠"
+            ],
+            [
+              "toast",
+              "진한 토스트"
+            ],
+            [
+              "glass",
+              "떠 있는 유리"
+            ],
+            [
+              "ring",
+              "진행 고리"
+            ],
+            [
+              "pill",
+              "두꺼운 알약 막대"
+            ],
+            [
+              "steps",
+              "마디 막대"
+            ]
+          ],
+          "default": "card"
+        }
+      ],
+      "gallery": {
+        "key": "look",
+        "label": "모양",
+        "frame": "stage",
+        "sample": {
+          "open": true
+        },
+        "list": [
+          {
+            "no": "01",
+            "id": "card",
+            "name": "떠 있는 카드",
+            "tags": [
+              "입체",
+              "안정",
+              "기본"
+            ]
+          },
+          {
+            "no": "02",
+            "id": "dot",
+            "name": "점 알림",
+            "tags": [
+              "최소",
+              "여백",
+              "가벼움"
+            ]
+          },
+          {
+            "no": "03",
+            "id": "stripe",
+            "name": "왼쪽 띠",
+            "tags": [
+              "상태 강조",
+              "문서",
+              "단정"
+            ]
+          },
+          {
+            "no": "04",
+            "id": "toast",
+            "name": "진한 토스트",
+            "tags": [
+              "대비",
+              "순간",
+              "또렷함"
+            ]
+          },
+          {
+            "no": "05",
+            "id": "glass",
+            "name": "떠 있는 유리",
+            "tags": [
+              "투명",
+              "겹침",
+              "가벼움"
+            ]
+          },
+          {
+            "no": "06",
+            "id": "ring",
+            "name": "진행 고리",
+            "tags": [
+              "원형",
+              "숫자 강조",
+              "대시보드"
+            ]
+          },
+          {
+            "no": "07",
+            "id": "pill",
+            "name": "두꺼운 알약 막대",
+            "tags": [
+              "굵음",
+              "숫자 강조",
+              "친근"
+            ]
+          },
+          {
+            "no": "08",
+            "id": "steps",
+            "name": "마디 막대",
+            "tags": [
+              "단계",
+              "리듬",
+              "정돈"
+            ]
+          }
+        ]
+      },
       "css": [
         "feedback"
       ],
@@ -2548,13 +2810,154 @@
         "description",
         "tag",
         "action",
-        "behavior"
+        "behavior",
+        "look"
       ],
       "events": [
         "pattove:select"
       ],
-      "controls": [],
-      "gallery": null,
+      "controls": [
+        {
+          "key": "look",
+          "label": "모양",
+          "values": [
+            [
+              "raised",
+              "기본 입체"
+            ],
+            [
+              "line",
+              "테두리만"
+            ],
+            [
+              "float",
+              "그림자 떠 있음"
+            ],
+            [
+              "fill",
+              "채움 배경"
+            ],
+            [
+              "row",
+              "가로형"
+            ],
+            [
+              "media",
+              "이미지 위"
+            ],
+            [
+              "glass",
+              "유리"
+            ],
+            [
+              "neumorph",
+              "뉴모피즘"
+            ],
+            [
+              "accent",
+              "강조 윗띠"
+            ]
+          ],
+          "default": "raised"
+        }
+      ],
+      "gallery": {
+        "key": "look",
+        "label": "모양",
+        "frame": "stage",
+        "list": [
+          {
+            "no": "01",
+            "id": "raised",
+            "name": "기본 입체",
+            "tags": [
+              "테두리",
+              "얕은 그림자",
+              "기본"
+            ]
+          },
+          {
+            "no": "02",
+            "id": "line",
+            "name": "테두리만",
+            "tags": [
+              "평평함",
+              "단정",
+              "문서"
+            ]
+          },
+          {
+            "no": "03",
+            "id": "float",
+            "name": "그림자 떠 있음",
+            "tags": [
+              "떠 있음",
+              "경계 없음",
+              "가벼움"
+            ]
+          },
+          {
+            "no": "04",
+            "id": "fill",
+            "name": "채움 배경",
+            "tags": [
+              "부드러움",
+              "묶음",
+              "색면"
+            ]
+          },
+          {
+            "no": "05",
+            "id": "row",
+            "name": "가로형",
+            "tags": [
+              "목록",
+              "조밀",
+              "한 줄 행동"
+            ]
+          },
+          {
+            "no": "06",
+            "id": "media",
+            "name": "이미지 위",
+            "tags": [
+              "그림",
+              "갤러리",
+              "첫인상"
+            ]
+          },
+          {
+            "no": "07",
+            "id": "glass",
+            "name": "유리",
+            "tags": [
+              "투명",
+              "겹침",
+              "고급"
+            ]
+          },
+          {
+            "no": "08",
+            "id": "neumorph",
+            "name": "뉴모피즘",
+            "tags": [
+              "촉감",
+              "입체감",
+              "부드러움"
+            ]
+          },
+          {
+            "no": "09",
+            "id": "accent",
+            "name": "강조 윗띠",
+            "tags": [
+              "표시",
+              "분류",
+              "또렷함"
+            ]
+          }
+        ]
+      },
       "css": [
         "card"
       ],
@@ -2621,14 +3024,127 @@
       "inputs": [
         "prefix",
         "records",
+        "look",
         "onSave (React)"
       ],
       "events": [
         "pattove:save (HTML)",
         "onSave(record) (React)"
       ],
-      "controls": [],
-      "gallery": null,
+      "controls": [
+        {
+          "key": "look",
+          "label": "모양",
+          "values": [
+            [
+              "grid",
+              "카드 격자"
+            ],
+            [
+              "pill",
+              "알약 검색창"
+            ],
+            [
+              "chips",
+              "필터 칩 줄"
+            ],
+            [
+              "list",
+              "목록형"
+            ],
+            [
+              "command",
+              "명령 팔레트형"
+            ],
+            [
+              "media",
+              "이미지 카드"
+            ],
+            [
+              "feature",
+              "큰 첫 결과"
+            ]
+          ],
+          "default": "grid"
+        }
+      ],
+      "gallery": {
+        "key": "look",
+        "label": "모양",
+        "frame": "stage",
+        "list": [
+          {
+            "no": "01",
+            "id": "grid",
+            "name": "카드 격자",
+            "tags": [
+              "훑어보기",
+              "넓음",
+              "기본"
+            ]
+          },
+          {
+            "no": "02",
+            "id": "pill",
+            "name": "알약 검색창",
+            "tags": [
+              "한 줄",
+              "간결",
+              "모바일"
+            ]
+          },
+          {
+            "no": "03",
+            "id": "chips",
+            "name": "필터 칩 줄",
+            "tags": [
+              "빠른 필터",
+              "손가락",
+              "한눈에"
+            ]
+          },
+          {
+            "no": "04",
+            "id": "list",
+            "name": "목록형",
+            "tags": [
+              "조밀",
+              "빠른 비교",
+              "글 중심"
+            ]
+          },
+          {
+            "no": "05",
+            "id": "command",
+            "name": "명령 팔레트형",
+            "tags": [
+              "키보드",
+              "집중",
+              "떠 있음"
+            ]
+          },
+          {
+            "no": "06",
+            "id": "media",
+            "name": "이미지 카드",
+            "tags": [
+              "그림",
+              "갤러리",
+              "탐색"
+            ]
+          },
+          {
+            "no": "07",
+            "id": "feature",
+            "name": "큰 첫 결과",
+            "tags": [
+              "추천",
+              "위계",
+              "잡지"
+            ]
+          }
+        ]
+      },
       "css": [
         "search-module"
       ],
@@ -2672,11 +3188,110 @@
         "title",
         "eyebrow",
         "count",
-        "body"
+        "body",
+        "look"
       ],
       "events": [],
-      "controls": [],
-      "gallery": null,
+      "controls": [
+        {
+          "key": "look",
+          "label": "모양",
+          "values": [
+            [
+              "stack",
+              "기본 쌓기"
+            ],
+            [
+              "hero",
+              "큰 머리글"
+            ],
+            [
+              "appbar",
+              "가운데 앱 바"
+            ],
+            [
+              "sheet",
+              "겹친 시트"
+            ],
+            [
+              "magazine",
+              "잡지형"
+            ],
+            [
+              "dashboard",
+              "대시보드형"
+            ]
+          ],
+          "default": "stack"
+        }
+      ],
+      "gallery": {
+        "key": "look",
+        "label": "모양",
+        "frame": "phone",
+        "list": [
+          {
+            "no": "01",
+            "id": "stack",
+            "name": "기본 쌓기",
+            "tags": [
+              "제목",
+              "독",
+              "기본"
+            ]
+          },
+          {
+            "no": "02",
+            "id": "hero",
+            "name": "큰 머리글",
+            "tags": [
+              "첫인상",
+              "여백",
+              "브랜드"
+            ]
+          },
+          {
+            "no": "03",
+            "id": "appbar",
+            "name": "가운데 앱 바",
+            "tags": [
+              "앱",
+              "익숙함",
+              "단정"
+            ]
+          },
+          {
+            "no": "04",
+            "id": "sheet",
+            "name": "겹친 시트",
+            "tags": [
+              "진함",
+              "겹침",
+              "몰입"
+            ]
+          },
+          {
+            "no": "05",
+            "id": "magazine",
+            "name": "잡지형",
+            "tags": [
+              "큰 글자",
+              "편집",
+              "위계"
+            ]
+          },
+          {
+            "no": "06",
+            "id": "dashboard",
+            "name": "대시보드형",
+            "tags": [
+              "숫자",
+              "요약",
+              "관리"
+            ]
+          }
+        ]
+      },
       "css": [
         "template"
       ],
@@ -2717,11 +3332,110 @@
       "purpose": "실제 콘텐츠가 들어간 조합",
       "compatibility": "템플릿·모듈을 재사용. 서버·로그인 없이 예시 데이터로 실행",
       "inputs": [
-        "prefix"
+        "prefix",
+        "look"
       ],
       "events": [],
-      "controls": [],
-      "gallery": null,
+      "controls": [
+        {
+          "key": "look",
+          "label": "모양",
+          "values": [
+            [
+              "stack",
+              "기본 쌓기"
+            ],
+            [
+              "hero",
+              "큰 머리글"
+            ],
+            [
+              "appbar",
+              "가운데 앱 바"
+            ],
+            [
+              "sheet",
+              "겹친 시트"
+            ],
+            [
+              "magazine",
+              "잡지형"
+            ],
+            [
+              "dashboard",
+              "대시보드형"
+            ]
+          ],
+          "default": "stack"
+        }
+      ],
+      "gallery": {
+        "key": "look",
+        "label": "모양",
+        "frame": "phone",
+        "list": [
+          {
+            "no": "01",
+            "id": "stack",
+            "name": "기본 쌓기",
+            "tags": [
+              "제목",
+              "독",
+              "기본"
+            ]
+          },
+          {
+            "no": "02",
+            "id": "hero",
+            "name": "큰 머리글",
+            "tags": [
+              "첫인상",
+              "여백",
+              "브랜드"
+            ]
+          },
+          {
+            "no": "03",
+            "id": "appbar",
+            "name": "가운데 앱 바",
+            "tags": [
+              "앱",
+              "익숙함",
+              "단정"
+            ]
+          },
+          {
+            "no": "04",
+            "id": "sheet",
+            "name": "겹친 시트",
+            "tags": [
+              "진함",
+              "겹침",
+              "몰입"
+            ]
+          },
+          {
+            "no": "05",
+            "id": "magazine",
+            "name": "잡지형",
+            "tags": [
+              "큰 글자",
+              "편집",
+              "위계"
+            ]
+          },
+          {
+            "no": "06",
+            "id": "dashboard",
+            "name": "대시보드형",
+            "tags": [
+              "숫자",
+              "요약",
+              "관리"
+            ]
+          }
+        ]
+      },
       "css": [],
       "source": "src/system/parts.js",
       "reactSource": "src/system/react/page.jsx",

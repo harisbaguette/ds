@@ -44,6 +44,12 @@
   };
   // Look-alike versions of one part. Same tokens, different shape. Adding a list here is all another part needs for the variant grid.
   const look = (no, id, name, tags) => ({ no, id, name, tags });
+  // Template and page share the screen arrangements; the page fills each with a matching search look.
+  const pageLooks = [
+    look('01','stack','기본 쌓기',['제목','독','기본']), look('02','hero','큰 머리글',['첫인상','여백','브랜드']),
+    look('03','appbar','가운데 앱 바',['앱','익숙함','단정']), look('04','sheet','겹친 시트',['진함','겹침','몰입']),
+    look('05','magazine','잡지형',['큰 글자','편집','위계']), look('06','dashboard','대시보드형',['숫자','요약','관리'])
+  ];
   const galleries = {
     'bottom-nav': { key: 'variant', label: '모양', default: 'line', frame: 'phone-bottom', list: [
       look('01','minimal','미니멀',['가벼움','정돈','기본']), look('02','glass','유리',['투명','겹침','가벼움']),
@@ -114,7 +120,35 @@
       look('03','duotone','두 톤',['깊이','부드러움','면']), look('04','filled','채움',['선택됨','단단함','강조']),
       look('05','circle','동그라미 받침',['둥긂','친근함','면']), look('06','square','진한 네모 받침',['앱','강조','대비']),
       look('07','ring','윤곽 원',['가벼움','선','단정']), look('08','raised','떠 있는 받침',['입체감','부드러움','촉감'])
-    ] }
+    ] },
+    tabs: { key: 'look', label: '모양', frame: 'stage', list: [
+      look('01','filled','채움 트랙',['또렷함','단단함','기본']), look('02','underline','밑줄',['익숙함','가벼움','평평함']),
+      look('03','segmented','분할 버튼',['떠 있는 칸','단정','설정']), look('04','outline','윤곽 상자',['경계','분리','문서']),
+      look('05','float','떠 있는 알약',['여백','부드러움','가벼움']), look('06','icon','아이콘 위 글자',['그림','앱','직관']),
+      look('07','vertical','세로',['옆 메뉴','넓은 화면','설정']), look('08','folder','폴더 탭',['서류철','연결','고전'])
+    ] },
+    // sample: options that only the gallery cards add, so the chosen shape is visible without pressing anything.
+    feedback: { key: 'look', label: '모양', frame: 'stage', sample: { open: true }, list: [
+      look('01','card','떠 있는 카드',['입체','안정','기본']), look('02','dot','점 알림',['최소','여백','가벼움']),
+      look('03','stripe','왼쪽 띠',['상태 강조','문서','단정']), look('04','toast','진한 토스트',['대비','순간','또렷함']),
+      look('05','glass','떠 있는 유리',['투명','겹침','가벼움']), look('06','ring','진행 고리',['원형','숫자 강조','대시보드']),
+      look('07','pill','두꺼운 알약 막대',['굵음','숫자 강조','친근']), look('08','steps','마디 막대',['단계','리듬','정돈'])
+    ] },
+    card: { key: 'look', label: '모양', frame: 'stage', list: [
+      look('01','raised','기본 입체',['테두리','얕은 그림자','기본']), look('02','line','테두리만',['평평함','단정','문서']),
+      look('03','float','그림자 떠 있음',['떠 있음','경계 없음','가벼움']), look('04','fill','채움 배경',['부드러움','묶음','색면']),
+      look('05','row','가로형',['목록','조밀','한 줄 행동']), look('06','media','이미지 위',['그림','갤러리','첫인상']),
+      look('07','glass','유리',['투명','겹침','고급']), look('08','neumorph','뉴모피즘',['촉감','입체감','부드러움']),
+      look('09','accent','강조 윗띠',['표시','분류','또렷함'])
+    ] },
+    'search-module': { key: 'look', label: '모양', frame: 'stage', list: [
+      look('01','grid','카드 격자',['훑어보기','넓음','기본']), look('02','pill','알약 검색창',['한 줄','간결','모바일']),
+      look('03','chips','필터 칩 줄',['빠른 필터','손가락','한눈에']), look('04','list','목록형',['조밀','빠른 비교','글 중심']),
+      look('05','command','명령 팔레트형',['키보드','집중','떠 있음']), look('06','media','이미지 카드',['그림','갤러리','탐색']),
+      look('07','feature','큰 첫 결과',['추천','위계','잡지'])
+    ] },
+    template: { key: 'look', label: '모양', frame: 'phone', list: pageLooks },
+    page: { key: 'look', label: '모양', frame: 'phone', list: pageLooks }
   };
   for (const g of Object.values(galleries)) if (!g.key) Object.assign(g, { key: 'look', label: '모양', frame: 'stage' });
   for (const [id, g] of Object.entries(galleries)) {
@@ -134,13 +168,13 @@
     radio: ['같은 그룹에서 하나 선택', '같은 그룹은 name 공유, 다른 그룹은 name 분리', ['label','checked','disabled','name','value'], ['change']],
     switch: ['설정을 켜고 끄기', '동작 이름을 label로 제공', ['label','checked','disabled'], ['change']],
     badge: ['짧은 상태 이름', '색만으로 상태를 구분하지 않음', ['label','tone'], []],
-    tabs: ['같은 영역의 내용 전환', '탭과 패널의 id 연결을 유지', ['prefix'], ['pattove:tabchange']],
+    tabs: ['같은 영역의 내용 전환', '탭과 패널의 id 연결을 유지. 세로 모양은 위아래 방향키', ['prefix','look'], ['pattove:tabchange']],
     'bottom-nav': ['주요 목적지 선택', '목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float·fab)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공', ['variant','onCreate (React)'], ['pattove:navigate','pattove:create (HTML)']],
-    feedback: ['행동의 결과와 진행률', '표본 저장 알림과 68% 진행률. 실제 저장·업로드는 프로젝트에서 연결', [], []],
-    card: ['제목·본문·상태·행동 조합', '단독 표본은 선택 토글, 검색 모듈에서는 상세 열기', ['title','description','tag','action','behavior'], ['pattove:select']],
-    'search-module': ['이름·상태로 검색하고 상세 확인', 'records에 고유 id·title·description·tag 필요. HTML은 화면 안의 보관 상태를 바꾸고 이벤트로 알림. React는 onSave(record)의 성공·실패와 대기 상태를 처리. 영구 저장은 프로젝트에서 연결', ['prefix','records','onSave (React)'], ['pattove:save (HTML)','onSave(record) (React)']],
-    template: ['제목·본문·하단 탐색의 배치', 'body에는 신뢰할 수 있는 부품 마크업만 전달', ['title','eyebrow','count','body'], []],
-    page: ['실제 콘텐츠가 들어간 조합', '템플릿·모듈을 재사용. 서버·로그인 없이 예시 데이터로 실행', ['prefix'], []]
+    feedback: ['행동의 결과와 진행률', '표본 저장 알림과 68% 진행률. 실제 저장·업로드는 프로젝트에서 연결', ['look'], []],
+    card: ['제목·본문·상태·행동 조합', '단독 표본은 선택 토글, 검색 모듈에서는 상세 열기', ['title','description','tag','action','behavior','look'], ['pattove:select']],
+    'search-module': ['이름·상태로 검색하고 상세 확인', 'records에 고유 id·title·description·tag 필요. HTML은 화면 안의 보관 상태를 바꾸고 이벤트로 알림. React는 onSave(record)의 성공·실패와 대기 상태를 처리. 영구 저장은 프로젝트에서 연결', ['prefix','records','look','onSave (React)'], ['pattove:save (HTML)','onSave(record) (React)']],
+    template: ['제목·본문·하단 탐색의 배치', 'body에는 신뢰할 수 있는 부품 마크업만 전달', ['title','eyebrow','count','body','look'], []],
+    page: ['실제 콘텐츠가 들어간 조합', '템플릿·모듈을 재사용. 서버·로그인 없이 예시 데이터로 실행', ['prefix','look'], []]
   };
   for (const item of items) {
     const [purpose, compatibility, inputs, events] = contracts[item.id];

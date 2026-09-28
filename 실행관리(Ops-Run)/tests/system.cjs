@@ -114,6 +114,24 @@ const fingerprint = element => {
     await inspect(page,'main','feedback');
     await demo.locator('[data-part-action="notify"]').click();
     check('알림 실제 표시', await demo.locator('[data-part-feedback]').isVisible());
+    // Look galleries on the six larger parts: every card shows its own look, and picking one swaps the big preview.
+    for (const id of ['tabs','feedback','card','search-module','template','page']) {
+      await inspect(page,'main',id);
+      const cards = await page.locator('.variant-card').evaluateAll(nodes => nodes.map(n => [n.dataset.variantCard, n.querySelector('.variant-frame [data-look]')?.dataset.look]));
+      check(id+' 모양 6가지 이상, 카드마다 제 모양', cards.length >= 6 && new Set(cards.map(c => c[0])).size === cards.length && cards.every(([v, look]) => v === look));
+      const last = cards.at(-1)[0];
+      await page.locator('[data-variant-pick="'+last+'"]').click();
+      check(id+' 카드를 누르면 큰 미리보기 data-look이 바뀜', await demo.locator('[data-look]').first().getAttribute('data-look') === last && await page.locator('[data-variant-pick="'+last+'"]').getAttribute('aria-pressed') === 'true' && page.url().includes('option-look='+last));
+    }
+    await inspect(page,'main','search-module');
+    await page.locator('[data-variant-pick="chips"]').click();
+    await demo.locator('.ds-chip', { hasText: '완료' }).click();
+    check('칩 모양의 상태 필터도 실제로 거름', await demo.locator('[name="status"]:checked').getAttribute('value') === '완료' && await demo.locator('[data-result]:visible').count() === 1);
+    await inspect(page,'main','tabs');
+    await page.locator('[data-variant-pick="vertical"]').click();
+    await demo.locator('[role="tab"]').first().focus();
+    await page.keyboard.press('ArrowDown');
+    check('세로 탭은 아래 방향키로 이동', await demo.locator('[role="tablist"]').getAttribute('aria-orientation') === 'vertical' && await demo.locator('[role="tab"]').nth(1).getAttribute('aria-selected') === 'true' && await demo.locator('[role="tab"]').nth(1).evaluate(n=>n===document.activeElement));
     for(const width of [320,375,768,1440]) {
       await page.setViewportSize({width,height:1000});
       for(const [style,id] of [['main','page'],['main','bottom-nav']]) {
@@ -157,7 +175,8 @@ const fingerprint = element => {
     }
     for (const id of ['card','search-module']) {
       await page.goto(url + '#/system?style=main&detail=' + id); await page.locator('.component-page[data-component="' + id + '"] .part-demo').waitFor();
-      check(id + ' 안 부품은 기본 모양 유지(data-look 없음)', await page.locator('.part-demo [data-look]').count() === 0);
+      // The module carries its own look; the small parts inside it keep their plain default.
+      check(id + ' 안 작은 부품은 기본 모양 유지(data-look 없음)', await page.locator('.part-demo :is(.ds-button,.ds-badge,.ds-input,.ds-field,.ds-choice,.ds-divider,.ds-status,.ds-icon)[data-look]').count() === 0);
     }
     await page.goto(origin + '/#/system?style=main&detail=button');
     check('HTTP 실행에서도 같은 부품 화면', await page.locator('.part-demo .ds-button').count()>=1);

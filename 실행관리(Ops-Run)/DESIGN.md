@@ -19,19 +19,18 @@
 | `src/system/registry.js` | ID, 역할, 목적, 사전 연결, 의존성, 호환 조건, 버전과 Trial 상태 |
 | `src/tokens/primitive/<종류>.css` | 원시 값. `color`·`typography`·`space`·`radius`·`shadow`·`motion` 여섯 파일. hex를 포함한 값이 적힌 유일한 곳 |
 | `src/tokens/semantic/<종류>.css` | 역할 이름 `--p-*`. 같은 종류의 원시 값만 참조하며, 스타일을 바꿀 때는 이 층의 참조만 교체 |
-| `src/tokens/component/<부품>.css` | 부품 토큰 `--ds-<부품>-*`. 역할 이름 `--p-*`만 참조. 공용 바탕은 `base.css`(`--ds-base-*`) |
-| `scripts/tokens.mjs` | 세 층 폴더를 읽어 층 규칙을 검사하고, 부품별 사용 종류와 배포용 대체값을 계산 |
+| `scripts/tokens.mjs` | 두 층 폴더를 읽어 층 규칙을 검사하고, 부품 CSS가 읽는 역할의 종류와 배포용 원시 값을 계산 |
 | `src/styles/themes.css` | 메인 스타일 표본 규칙. 토큰은 선언하지 않음 |
-| `src/system/parts.css` | 부품과 메인 스타일 표현. HTML·React가 공유 |
+| `src/system/parts.css` | 부품과 메인 스타일 표현. HTML·React가 공유하며 역할 `--p-*`만 읽음 |
 | `src/system/parts.js` | 시트·HTML 예시·HTML 배포의 공통 렌더러 |
 | `src/system/react/` | 실제 React 컴포넌트, 입력 속성·상태·이벤트 |
 | `src/system/behaviors.js` | 일반 HTML의 검색·탭·알림·초점 등 동작 |
 | `assets/icons/` | 개별 아이콘 원본 |
 | `문서/사전/` | 목적·사용 조건·패턴 정의 원문 |
 
-토큰은 `원시 값 → 역할 → 부품` 순서로만 참조한다. 각 층은 바로 아래 층만 참조하며, 이름 접두사가 파일 종류와 다르거나 역할이 다른 종류의 원시 값을 가리키거나 부품 토큰이 `--p-*` 외의 값을 쓰면 빌드가 멈춘다. `parts.css`는 부품 토큰을 쓰기만 하고 선언하지 않으며, 각 `@part` 블록은 자기 부품 토큰(`--ds-<부품>-*`)만 쓸 수 있다. 공용 블록 `shared`는 `base`에 대응한다. 다른 부품의 토큰이나 hex가 들어가면 `build-system.mjs`가 멈춘다.
+토큰은 `원시 값 → 역할(--p-*)` 두 층이며, 두 층 모두 색·글자·간격·모서리·그림자·움직임 여섯 종류 파일로 묶는다. 부품은 이 한 곳에서 역할 `--p-*`만 가져다 쓰고 토큰을 선언하지 않는다. 이름 접두사가 파일 종류와 다르거나 역할이 다른 종류의 원시 값을 가리키면 빌드가 멈춘다. `parts.css`와 `src/styles/`가 원시 값(`--color-*` 등)을 직접 읽거나, 없는 역할을 읽거나, hex를 쓰면 `build-system.mjs`가 멈춘다. `--ds-bottom-nav-offset`처럼 `parts.css` 안에서 선언하고 쓰는 배치 조절값은 토큰이 아니며 부품 CSS 안에만 둔다.
 
-배포본도 같은 경계를 따른다. 부품의 `css/<블록>.css`에는 그 부품의 토큰만 `var(--p-*, 원시 값)` 대체값과 함께 들어가고, `base.css`에는 공용 바탕 토큰만 들어간다. 역할 파일은 `styles/<스타일>/<종류>.css`로 나뉘어 부품이 실제로 쓰는 종류만 설치된다. 토큰 종류마다 `token-color`부터 `token-motion`까지 레지스트리 항목 하나가 있고, 각 항목에 전용 표본과 JSON이 있다. 부품의 토큰 의존성은 그 부품이 실제로 쓰는 종류와 같아야 하며, 다르면 빌드가 멈춘다.
+배포본도 같은 경계를 따른다. 부품의 `css/<블록>.css`에는 규칙만 들어간다. `base.css`에는 공용 규칙이 읽는 역할 종류의 기본값(메인 스타일 원시 값)과 공용 규칙이 들어가며, 모든 항목에서 내용이 같아 여러 항목을 설치해도 서로 덮어쓰지 않는다. 역할 파일은 `styles/<스타일>/<종류>.css`로 나뉘어 부품이 실제로 읽는 종류만 원시 값으로 풀려 설치된다. 토큰 종류마다 `token-color`부터 `token-motion`까지 레지스트리 항목 하나가 있고, 각 항목에 전용 표본과 JSON이 있다. 부품의 토큰 의존성은 그 부품 CSS가 실제로 읽는 `--p-*` 역할의 종류와 같아야 하며, 다르면 빌드가 멈춘다.
 
 `build-system.mjs`는 공유 CSS와 자산을 내보내기용 데이터로 만든다. `build-registry.mjs`는 공식 shadcn Universal Items 형식의 레지스트리를 만든다. `~/design/...` 대상 경로가 명시되어 프레임워크 탐지나 `components.json` 없이 소스를 설치할 수 있다. `build-library.mjs`는 사전의 검색 정보와 문서를 만든다. 새 분류도 누락시키지 않고 기존 그룹 뒤에 추가한다.
 

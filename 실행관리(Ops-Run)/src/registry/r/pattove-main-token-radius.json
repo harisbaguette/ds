@@ -15,7 +15,7 @@
       "path": "design/css/token-radius.css",
       "type": "registry:file",
       "target": "~/design/css/token-radius.css",
-      "content": ".ds {\n  --ds-token-radius-inner-radius:var(--p-inner-radius,12px);\n  --ds-token-radius-control-radius:var(--p-control-radius,16px);\n  --ds-token-radius-radius:var(--p-radius,24px);\n}\n.ds .ds-token-radius { display:flex; gap:12px; }\n.ds .ds-token-radius i { width:48px; height:48px; border:2px solid currentColor; border-radius:var(--ds-token-radius-inner-radius); }\n.ds .ds-token-radius [data-token=\"control\"] { border-radius:var(--ds-token-radius-control-radius); }\n.ds .ds-token-radius [data-token=\"surface\"] { border-radius:var(--ds-token-radius-radius); }"
+      "content": ".ds .ds-token-radius { display:flex; gap:12px; }\n.ds .ds-token-radius i { width:48px; height:48px; border:2px solid currentColor; border-radius:var(--p-inner-radius); }\n.ds .ds-token-radius [data-token=\"control\"] { border-radius:var(--p-control-radius); }\n.ds .ds-token-radius [data-token=\"surface\"] { border-radius:var(--p-radius); }"
     },
     {
       "path": "design/html/token-radius.html",

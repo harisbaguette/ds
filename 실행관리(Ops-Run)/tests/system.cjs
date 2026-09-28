@@ -39,13 +39,10 @@ const fingerprint = element => {
     const generated = { window: { Pattove: {} } };
     vm.runInNewContext(fs.readFileSync(path.join(root,'src/data/system-source.js'),'utf8'), generated);
     check('공용 CSS 생성본이 원본과 일치', JSON.stringify(generated.window.Pattove.systemSource)===JSON.stringify(sourceBlocks));
-    // Component tokens: shipped copy keeps each var(--p-*) reference and its fallback equals the live semantic value.
-    const componentDir = path.join(root,'src/tokens/component');
-    const roles = fs.readdirSync(componentDir).filter(f=>f.endsWith('.css')).flatMap(f=>[...fs.readFileSync(path.join(componentDir,f),'utf8').matchAll(/(--ds-[\w-]+)\s*:\s*var\((--p-[\w-]+)\)/g)].map(m=>[m[1],m[2]]));
-    const shipped = Object.fromEntries([...Object.values(generated.window.Pattove.systemTokens).join('').matchAll(/(--ds-[\w-]+):var\((--p-[\w-]+),([^;]+)\);/g)].map(m=>[m[1],[m[2],m[3]]]));
-    const live = await page.evaluate(names => names.map(n => getComputedStyle(document.documentElement).getPropertyValue(n)), roles.map(r=>r[1]));
-    const flat = v => v.replace(/\s+/g,'');
-    check('부품 토큰 배포본이 원본·의미 값과 일치', roles.length === Object.keys(shipped).length && roles.every(([ds,p],i) => shipped[ds]?.[0]===p && flat(shipped[ds][1])===flat(live[i])));
+    // Two token layers only: parts read --p-* roles that exist in the live semantic layer, never primitives.
+    const partRoles = [...new Set([...Object.values(sourceBlocks).join('').matchAll(/var\((--p-[\w-]+)/g)].map(m=>m[1]))];
+    const liveRoles = await page.evaluate(names => names.map(n => getComputedStyle(document.querySelector('.ds') || document.documentElement).getPropertyValue(n).trim()), partRoles);
+    check('토큰은 원시값·역할 두 층, 부품은 존재하는 --p-* 역할만 읽음', !fs.existsSync(path.join(root,'src/tokens/component')) && fs.readdirSync(path.join(root,'src/tokens')).sort().join()==='primitive,semantic' && partRoles.length > 0 && liveRoles.every(Boolean) && !/var\(--(color|font|space|radius|shadow|duration)-/.test(Object.values(sourceBlocks).join('')) && !('systemTokens' in generated.window.Pattove));
     check('사전 연결 무결성', await page.evaluate(() => Pattove.systemRegistry.items.every(item => !item.entry || Pattove.library.entries.some(e=>e.id===item.entry))));
     await inspect(page, 'main', 'button');
     check('크기와 상태는 버튼의 변형', await page.locator('[data-part-option="size"]').count() === 1 && await page.locator('[data-part-option="state"]').count() === 1);

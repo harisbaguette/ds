@@ -1,7 +1,0 @@
-/* Layer 3 · component · token-shadow. Only this part's rules read these names; values are var(--p-*) only. */
-.ds {
-  --ds-token-shadow-raised: var(--p-raised);
-  --ds-token-shadow-shadow: var(--p-shadow);
-  --ds-token-shadow-inset: var(--p-inset);
-  --ds-token-shadow-float: var(--p-float);
-}

@@ -15,7 +15,7 @@
       "path": "design/css/token-shadow.css",
       "type": "registry:file",
       "target": "~/design/css/token-shadow.css",
-      "content": ".ds {\n  --ds-token-shadow-raised:var(--p-raised,3px 4px 8px #b9c3d066, -3px -3px 8px #ffffffed);\n  --ds-token-shadow-shadow:var(--p-shadow,6px 7px 16px #bbc4d166, -5px -5px 14px #ffffffed);\n  --ds-token-shadow-inset:var(--p-inset,inset 3px 3px 6px #b7c1cf55, inset -3px -3px 6px #ffffffd9);\n  --ds-token-shadow-float:var(--p-float,0 12px 32px #26394d26);\n}\n.ds .ds-token-shadow { display:flex; gap:20px; padding:12px; }\n.ds .ds-token-shadow i { width:52px; height:52px; border-radius:12px; box-shadow:var(--ds-token-shadow-raised); }\n.ds .ds-token-shadow [data-token=\"shadow\"] { box-shadow:var(--ds-token-shadow-shadow); }\n.ds .ds-token-shadow [data-token=\"inset\"] { box-shadow:var(--ds-token-shadow-inset); }\n.ds .ds-token-shadow [data-token=\"float\"] { box-shadow:var(--ds-token-shadow-float); }"
+      "content": ".ds .ds-token-shadow { display:flex; gap:20px; padding:12px; }\n.ds .ds-token-shadow i { width:52px; height:52px; border-radius:12px; box-shadow:var(--p-raised); }\n.ds .ds-token-shadow [data-token=\"shadow\"] { box-shadow:var(--p-shadow); }\n.ds .ds-token-shadow [data-token=\"inset\"] { box-shadow:var(--p-inset); }\n.ds .ds-token-shadow [data-token=\"float\"] { box-shadow:var(--p-float); }"
     },
     {
       "path": "design/html/token-shadow.html",

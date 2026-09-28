@@ -9,12 +9,15 @@ const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const write = (file, content) => { fs.mkdirSync(path.dirname(path.join(root, file)), { recursive: true }); fs.writeFileSync(path.join(root, file), content); };
 const ctx = vm.createContext({ window: {} });
 for (const file of ['src/data/catalog.js','src/ui/icons.js','src/system/registry.js','src/system/parts.js','src/system/behaviors.js','src/data/system-source.js','src/data/system-fonts.js']) vm.runInContext(read(file), ctx);
-const { catalog, systemRegistry: registry, parts, systemSource: css, systemTokens, systemFonts: fonts, iconMarkup } = ctx.window.Pattove;
-// Distributed base.css = the shared block's own component tokens (with resolved fallbacks) + shared rules.
-const baseCSS = systemTokens.base + '\n' + css.shared;
+const { catalog, systemRegistry: registry, parts, systemSource: css, systemFonts: fonts, iconMarkup } = ctx.window.Pattove;
+const { styleCSS, kindsIn } = loadTokens(root);
+// Distributed base.css = default raw values (main style) of only the role kinds the shared rules read,
+// then the shared rules. Same content for every item and style, so installs never fight over it.
+const sharedKinds = kindsIn(css.shared, 'shared');
+const baseCSS = styleCSS('main', sharedKinds, '.ds') + css.shared;
 const base = (process.env.REGISTRY_URL || 'http://127.0.0.1:4173/src/registry/r').replace(/\/$/, '');
 const cliVersion = JSON.parse(read('node_modules/shadcn/package.json')).version;
-const sourceHash = crypto.createHash('sha256').update(['src/system/parts.css','src/system/parts.js','src/system/behaviors.js','src/styles/themes.css',...tokenFiles(root),...fs.readdirSync(path.join(root,'src/system/react')).map(file=>'src/system/react/'+file)].map(read).join('\0')).digest('hex');
+const sourceHash = crypto.createHash('sha256').update(['src/system/parts.css','src/system/parts.js','src/system/behaviors.js','src/styles/themes.css',...tokenFiles(),...fs.readdirSync(path.join(root,'src/system/react')).map(file=>'src/system/react/'+file)].map(read).join('\0')).digest('hex');
 const file = (name, content) => ({ path: `design/${name}`, type: 'registry:file', target: `~/design/${name}`, content });
 const items = [];
 function emit(name, title, files, meta = {}, dependencies = []) {
@@ -24,7 +27,6 @@ function emit(name, title, files, meta = {}, dependencies = []) {
 let fontCSS = '';
 for (const [name, font] of Object.entries(fonts)) fontCSS += `/* ${font.license.replace(/\*\//g,'* /')} */\n@font-face{font-family:${name};font-style:normal;font-weight:100 900;font-display:swap;src:url(data:font/woff2;base64,${font.data}) format('woff2')}\n`;
 emit('pattove-fonts', 'Pretendard · Outfit 및 라이선스', [file('fonts.css', fontCSS)]);
-const { styleCSS, kindsOf } = loadTokens(root);
 const componentNames = { button:'Button', input:'Input', field:'Field', checkbox:'Checkbox', radio:'Radio', switch:'Switch', badge:'Badge', divider:'Divider', 'status-dot':'StatusDot', card:'Card', tabs:'Tabs', 'bottom-nav':'BottomNav', feedback:'Feedback', 'search-module':'SearchModule', template:'Template', page:'CollectionPage' };
 const jsxExamples = {
   button:'<Button onClick={() => alert("실행했어요.")}>계속하기</Button>', input:'<label>이름<Input name="name" placeholder="이름을 입력하세요" /></label>', field:'<Field label="컬렉션 이름" name="name" help="나중에 바꿀 수 있어요." />', checkbox:'<Checkbox name="share" defaultChecked>링크로 공유</Checkbox>', radio:'<fieldset><legend>공개 범위</legend><Radio name="visibility" value="private" defaultChecked>나만 보기</Radio><Radio name="visibility" value="shared">링크로 공유</Radio></fieldset>', switch:'<Switch name="notification" defaultChecked>알림 받기</Switch>', badge:'<Badge>진행 중</Badge>', divider:'<Divider />', 'status-dot':'<StatusDot />', tabs:'<Tabs />', 'bottom-nav':'<BottomNav current="#home" items={[{href:"#home",label:"홈"},{href:"#search",label:"탐색"},{href:"#saved",label:"저장"}]} />', feedback:'<Feedback />', card:'<Card><CardBody><CardTitle>브랜드 리뉴얼</CardTitle><CardDescription>색과 서체, 첫인상을 모아 둔 컬렉션</CardDescription></CardBody><CardActions><Button onClick={() => alert("선택했어요.")} variant="outline">선택하기</Button></CardActions></Card>', 'search-module':'<SearchModule />', template:'<Template title="나의 기록" count="1개"><p>본문이나 다른 모듈을 이 자리에 넣습니다.</p></Template>', page:'<CollectionPage />'
@@ -42,8 +44,8 @@ for (const [name, markup] of Object.entries(iconMarkup)) {
   const jsx = svg.replace(/<svg[^>]*>/, '<svg {...props} viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">');
   emit(`pattove-icon-${name}-react`, `${name} · React`, [file(`icons/${name}.jsx`, `import React from 'react';\nexport function Icon(props){return (${jsx.trim()});}\n`)], { item:'icon', icon:name, environment:'react', source:`assets/icons/${name}.svg` });
 }
-// A part's css/<block>.css carries only that block's own component tokens, then its rules.
-const partCSS = block => (systemTokens[block] ? systemTokens[block] + '\n' : '') + css[block];
+// A part's css/<block>.css carries only its rules; they read --p-* roles shipped by styles/<style>/<kind>.css.
+const partCSS = block => css[block];
 // Token kinds and icons ship as their own items, never inside a part's closure.
 const standalone = id => id.startsWith('token-') || id === 'icon';
 for (const style of catalog.styles.filter(s => s.id !== 'base')) {
@@ -57,7 +59,7 @@ for (const style of catalog.styles.filter(s => s.id !== 'base')) {
     const closure = environment === 'html' ? [...registry.dependencies(item.id).map(i => i.id), item.id].filter(id => !standalone(id)) : [...reactClosure(item.id)];
     if (environment === 'react' && item.id === 'card') closure.push('button');
     const blocks = [...new Set(closure.flatMap(id => registry.index.get(id).css))];
-    const themeKinds = kinds.filter(kind => [kindsOf('base'), ...blocks.map(kindsOf)].some(list => list.includes(kind)));
+    const themeKinds = kinds.filter(kind => [sharedKinds, ...blocks.map(block => kindsIn(css[block], block))].some(list => list.includes(kind)));
     const files = [file('base.css', baseCSS), ...themeKinds.map(theme), ...(style.specification ? [file(`styles/${style.id}.md`, read(style.specification))] : []), ...blocks.map(block => file(`css/${block}.css`, partCSS(block)))];
     const styleImports = ['../../fonts.css','../../base.css',...themeKinds.map(kind => `../../styles/${style.id}/${kind}.css`),...blocks.map(block => `../../css/${block}.css`)];
     let example;

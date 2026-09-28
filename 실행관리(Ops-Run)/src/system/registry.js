@@ -13,7 +13,7 @@
     { id: 'composition', name: '카드·검색 모듈', group: '조합' },
     { id: 'page', name: '화면 예시', group: '조합' }
   ];
-  // Token deps name the token kinds a part's own CSS reads (checked against src/tokens/component/<part>.css at build).
+  // Token deps name the token kinds a part's own CSS reads (checked at build against the --p-* roles the part's CSS blocks read).
   const T = (...kinds) => kinds.map(kind => 'token-' + kind);
   const items = [
     { id: 'token-color', name: '색 토큰', section: 'foundations', layer: 'Token', keywords: '색 색상 컬러 배경 글자색 강조 color', deps: [], entry: 'TOK-01' },

@@ -15,7 +15,7 @@
       "path": "design/css/token-typography.css",
       "type": "registry:file",
       "target": "~/design/css/token-typography.css",
-      "content": ".ds {\n  --ds-token-typography-display-font:var(--p-display-font,Outfit, Pretendard, sans-serif);\n  --ds-token-typography-font:var(--p-font,Pretendard, sans-serif);\n  --ds-token-typography-text-sm:var(--p-text-sm,13px);\n  --ds-token-typography-text-md:var(--p-text-md,16px);\n  --ds-token-typography-text-lg:var(--p-text-lg,24px);\n}\n.ds .ds-token-typography { display:grid; gap:8px; justify-items:start; }\n.ds .ds-token-type { font:600 38px var(--ds-token-typography-display-font); letter-spacing:-.05em; }\n.ds .ds-token-sizes { display:flex; align-items:baseline; gap:16px; font-family:var(--ds-token-typography-font); }\n.ds .ds-token-sizes [data-token=\"sm\"] { font-size:var(--ds-token-typography-text-sm); }\n.ds .ds-token-sizes [data-token=\"md\"] { font-size:var(--ds-token-typography-text-md); }\n.ds .ds-token-sizes [data-token=\"lg\"] { font-size:var(--ds-token-typography-text-lg); }"
+      "content": ".ds .ds-token-typography { display:grid; gap:8px; justify-items:start; }\n.ds .ds-token-type { font:600 38px var(--p-display-font); letter-spacing:-.05em; }\n.ds .ds-token-sizes { display:flex; align-items:baseline; gap:16px; font-family:var(--p-font); }\n.ds .ds-token-sizes [data-token=\"sm\"] { font-size:var(--p-text-sm); }\n.ds .ds-token-sizes [data-token=\"md\"] { font-size:var(--p-text-md); }\n.ds .ds-token-sizes [data-token=\"lg\"] { font-size:var(--p-text-lg); }"
     },
     {
       "path": "design/html/token-typography.html",

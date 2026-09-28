@@ -15,7 +15,7 @@
       "path": "design/css/token-space.css",
       "type": "registry:file",
       "target": "~/design/css/token-space.css",
-      "content": ".ds {\n  --ds-token-space-space-2:var(--p-space-xs,8px);\n  --ds-token-space-space-3:var(--p-space-sm,12px);\n  --ds-token-space-space-4:var(--p-space-md,16px);\n  --ds-token-space-space-6:var(--p-space-lg,24px);\n  --ds-token-space-space-8:var(--p-space-xl,32px);\n}\n.ds .ds-token-space { display:grid; gap:6px; justify-items:start; }\n.ds .ds-token-space i { display:block; height:10px; border-radius:5px; background:currentColor; }\n.ds .ds-token-space [data-token=\"xs\"] { width:calc(var(--ds-token-space-space-2) * 4); }\n.ds .ds-token-space [data-token=\"sm\"] { width:calc(var(--ds-token-space-space-3) * 4); }\n.ds .ds-token-space [data-token=\"md\"] { width:calc(var(--ds-token-space-space-4) * 4); }\n.ds .ds-token-space [data-token=\"lg\"] { width:calc(var(--ds-token-space-space-6) * 4); }\n.ds .ds-token-space [data-token=\"xl\"] { width:calc(var(--ds-token-space-space-8) * 4); }"
+      "content": ".ds .ds-token-space { display:grid; gap:6px; justify-items:start; }\n.ds .ds-token-space i { display:block; height:10px; border-radius:5px; background:currentColor; }\n.ds .ds-token-space [data-token=\"xs\"] { width:calc(var(--p-space-xs) * 4); }\n.ds .ds-token-space [data-token=\"sm\"] { width:calc(var(--p-space-sm) * 4); }\n.ds .ds-token-space [data-token=\"md\"] { width:calc(var(--p-space-md) * 4); }\n.ds .ds-token-space [data-token=\"lg\"] { width:calc(var(--p-space-lg) * 4); }\n.ds .ds-token-space [data-token=\"xl\"] { width:calc(var(--p-space-xl) * 4); }"
     },
     {
       "path": "design/html/token-space.html",

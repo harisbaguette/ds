@@ -15,7 +15,7 @@
       "path": "design/css/token-motion.css",
       "type": "registry:file",
       "target": "~/design/css/token-motion.css",
-      "content": ".ds {\n  --ds-token-motion-duration:var(--p-duration,140ms);\n}\n.ds .ds-token-motion { position:relative; display:block; width:160px; height:24px; border:2px solid currentColor; border-radius:12px; }\n.ds .ds-token-motion i { position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:currentColor; transition:transform var(--ds-token-motion-duration); }\n.ds .ds-token-motion:hover i { transform:translateX(136px); }"
+      "content": ".ds .ds-token-motion { position:relative; display:block; width:160px; height:24px; border:2px solid currentColor; border-radius:12px; }\n.ds .ds-token-motion i { position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:currentColor; transition:transform var(--p-duration); }\n.ds .ds-token-motion:hover i { transform:translateX(136px); }"
     },
     {
       "path": "design/html/token-motion.html",

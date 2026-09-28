@@ -15,7 +15,7 @@
       "path": "design/css/token-color.css",
       "type": "registry:file",
       "target": "~/design/css/token-color.css",
-      "content": ".ds {\n  --ds-token-color-border:var(--p-line,#c2cad5);\n  --ds-token-color-accent:var(--p-accent,#303b48);\n  --ds-token-color-high:var(--p-high,#fafbfc);\n  --ds-token-color-soft:var(--p-soft,#d3e8de);\n  --ds-token-color-text:var(--p-ink,#2c333d);\n}\n.ds .ds-token-swatches { display:flex; gap:8px; }\n.ds .ds-token-swatches i { width:44px; height:44px; border-radius:12px; border:1px solid var(--ds-token-color-border); background:var(--ds-token-color-accent); }\n.ds .ds-token-swatches [data-token=\"high\"] { background:var(--ds-token-color-high); }\n.ds .ds-token-swatches [data-token=\"soft\"] { background:var(--ds-token-color-soft); }\n.ds .ds-token-swatches [data-token=\"text\"] { background:var(--ds-token-color-text); }"
+      "content": ".ds .ds-token-swatches { display:flex; gap:8px; }\n.ds .ds-token-swatches i { width:44px; height:44px; border-radius:12px; border:1px solid var(--p-line); background:var(--p-accent); }\n.ds .ds-token-swatches [data-token=\"high\"] { background:var(--p-high); }\n.ds .ds-token-swatches [data-token=\"soft\"] { background:var(--p-soft); }\n.ds .ds-token-swatches [data-token=\"text\"] { background:var(--p-ink); }"
     },
     {
       "path": "design/html/token-color.html",

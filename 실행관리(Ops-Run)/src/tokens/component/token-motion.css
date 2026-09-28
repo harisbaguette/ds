@@ -1,4 +1,0 @@
-/* Layer 3 · component · token-motion. Only this part's rules read these names; values are var(--p-*) only. */
-.ds {
-  --ds-token-motion-duration: var(--p-duration);
-}

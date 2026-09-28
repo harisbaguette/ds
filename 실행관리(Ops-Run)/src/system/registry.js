@@ -80,19 +80,20 @@
       look('01','box','기본 칸','한 번 쓰고 끝나는 값','무엇인지 알아보기'),
       look('02','clear','칸 안 지우기','통째로 다시 쓰는 값','지우기 키 연타'),
       look('03','unit','숫자 + 단위 한 칸','단위가 붙는 숫자','두 칸 오가기'),
-      look('04','stepper','빼기·더하기','작은 수를 바꿀 때','키보드 열기')
+      look('04','stepper','빼기·더하기','작은 수를 바꿀 때','키보드 열기'),
+      look('05','reveal','보기 단추','가려진 비밀번호를 칠 때','틀렸는지 몰라 다시 치기')
     ] },
     field: { list: [
       look('01','stack','위 라벨','처음 보는 양식','라벨 찾기'),
       look('02','inline','옆 라벨','짧은 설정 값이 여러 줄','세로 스크롤'),
-      look('03','float','테두리 라벨','세로 공간이 빠듯할 때','스크롤'),
-      look('04','row','시작~끝 한 줄','짝을 이루는 값(기간·범위)','눈이 멈추는 곳 절반')
+      look('03','row','시작~끝 한 줄','짝을 이루는 값(기간·범위)','눈이 멈추는 곳 절반')
     ] },
     checkbox: { list: [
       look('01','square','네모','항목이 적은 동의·선택','무엇인지 알아보기'),
       look('02','card','선택 카드','설명이 붙은 선택지','작은 네모 겨누기'),
       look('03','chip','알약 칩','여러 필터를 빠르게 켤 때','세로 목록 훑기'),
-      look('04','list','목록 줄','설정 화면의 여러 항목','줄과 칸 맞춰 보기')
+      look('04','list','목록 줄','설정 화면의 여러 항목','줄과 칸 맞춰 보기'),
+      look('05','all','전체 선택','같은 종류 항목이 여러 개일 때','하나씩 누르기')
     ] },
     radio: { list: [
       look('01','dot','가운데 점','선택지가 3~5개','무엇인지 알아보기'),
@@ -102,23 +103,20 @@
     ] },
     switch: { list: [
       look('01','track','기본 트랙','바로 적용되는 켜기·끄기','저장 버튼 찾기'),
-      look('02','text','켬·끔 글자','색만으로 상태를 알기 어려울 때','켜졌는지 추측'),
-      look('03','list','설정 줄','설정 항목이 여러 개','줄과 칸 맞춰 보기')
+      look('02','list','설정 줄','설정 항목이 여러 개','줄과 칸 맞춰 보기')
     ] },
     badge: { list: [
       look('01','soft','연한 면','목록 옆 짧은 상태','상태 글 읽기'),
-      look('02','dot','점 붙음','여러 상태를 한 줄에 둘 때','색 칸 크기 비교'),
-      look('03','icon','아이콘 붙음','색을 구분하기 어려운 사람도 볼 때','색으로 뜻 해석')
+      look('02','icon','아이콘 붙음','색을 구분하기 어려운 사람도 볼 때','색으로 뜻 해석'),
+      look('03','count','개수 붙음','아이콘 뒤에 새 항목이 쌓일 때','열어서 세기')
     ] },
     divider: { list: [
       look('01','solid','실선','내용 묶음 사이','어디서 끊기는지 찾기'),
-      look('02','label','가운데 글자','두 방법 중 하나(또는)','두 묶음 관계 추측'),
-      look('03','inset','들여쓴 선','아이콘 붙은 목록','줄 시작 맞춰 보기')
+      look('02','label','가운데 글자','두 방법 중 하나(또는)','두 묶음 관계 추측')
     ] },
     'status-dot': { list: [
       look('01','dot','점','글 옆 짧은 상태','상태 글 읽기'),
-      look('02','avatar','프로필 모서리','사람 목록의 접속 여부','이름 옆 글 찾기'),
-      look('03','check','체크 원','끝났는지만 알면 될 때','색으로 완료 추측')
+      look('02','avatar','프로필 모서리','사람 목록의 접속 여부','이름 옆 글 찾기')
     ] },
     icon: { list: [
       look('01','line','선','뜻이 널리 알려진 아이콘','글 읽기'),
@@ -128,7 +126,8 @@
       look('01','filled','채움 트랙','이름이 짧은 2~4개 화면','지금 탭 찾기'),
       look('02','icon','아이콘 위 글자','휴대폰 좁은 폭의 탭','긴 이름 읽기'),
       look('03','count','개수 붙음','탭마다 쌓인 수가 중요할 때','하나씩 눌러 보기'),
-      look('04','vertical','세로','탭이 5개 넘는 넓은 화면','가로 스크롤')
+      look('04','vertical','세로','탭이 5개 넘는 넓은 화면','가로 스크롤'),
+      look('05','scroll','옆으로 밀기','휴대폰에서 탭이 5개 넘을 때','메뉴 열어 탭 찾기')
     ] },
     // sample: options that only the gallery cards add, so the chosen shape is visible without pressing anything.
     feedback: { key: 'look', label: '모양', frame: 'stage', sample: { open: true }, list: [
@@ -170,13 +169,13 @@
     divider: ['영역의 경계', '부모의 가로 너비에 맞춰 사용', [], []],
     'status-dot': ['상태를 색과 글자로 표시', '상태 이름을 함께 유지', ['label'], []],
     button: ['행동 실행', '아이콘만 쓸 때도 label 유지. 실행할 일은 click에 연결', ['label','variant','size','state','iconName','iconOnly','type','action'], ['click','pattove:action']],
-    input: ['한 줄 값 입력', 'label과 id를 연결. 오류에는 설명과 aria-invalid를 함께 사용', ['id','value','placeholder','type','name','disabled','invalid','description'], ['input','change']],
+    input: ['한 줄 값 입력', 'label과 id를 연결. 오류에는 설명과 aria-invalid를 함께 사용. 비밀번호 보기 단추는 이름(보기·숨기기)으로 상태 제공', ['id','value','placeholder','type','name','disabled','invalid','description'], ['input','change']],
     field: ['라벨·입력·설명·오류의 연결', '라벨과 도움말의 id 관계를 함께 가져오기', ['id','label','value','state','help','name','type'], ['input','change']],
-    checkbox: ['여러 개 중 선택', '연결된 label을 조작 영역으로 유지', ['label','checked','disabled','indeterminate','name','value'], ['change']],
+    checkbox: ['여러 개 중 선택', '연결된 label을 조작 영역으로 유지. 전체 선택은 일부만 고르면 중간 상태(indeterminate)', ['label','checked','disabled','indeterminate','name','value'], ['change']],
     radio: ['같은 그룹에서 하나 선택', '같은 그룹은 name 공유, 다른 그룹은 name 분리', ['label','checked','disabled','name','value'], ['change']],
     switch: ['설정을 켜고 끄기', '동작 이름을 label로 제공', ['label','checked','disabled'], ['change']],
-    badge: ['짧은 상태 이름', '색만으로 상태를 구분하지 않음', ['label','tone'], []],
-    tabs: ['같은 영역의 내용 전환', '탭과 패널의 id 연결을 유지. 세로 탭은 위아래 방향키', ['prefix','look'], ['pattove:tabchange']],
+    badge: ['짧은 상태 이름과 쌓인 개수', '색만으로 상태를 구분하지 않음. 개수는 읽을 이름(예: 새 알림 3개)을 함께 제공', ['label','tone','count'], []],
+    tabs: ['같은 영역의 내용 전환', '탭과 패널의 id 연결을 유지. 세로 탭은 위아래 방향키. 옆으로 밀기 탭은 고른 탭이 화면 안에 보이도록 스크롤', ['prefix','look'], ['pattove:tabchange']],
     'bottom-nav': ['주요 목적지 선택', '목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공', ['variant','onCreate (React)'], ['pattove:navigate','pattove:create (HTML)']],
     feedback: ['행동의 결과와 진행률', '표본 저장 알림과 68% 진행률. 실제 저장·업로드는 프로젝트에서 연결', ['look'], []],
     card: ['제목·본문·상태·행동 조합', '단독 표본은 선택 토글, 검색 모듈에서는 상세 열기', ['title','description','tag','action','behavior','look'], ['pattove:select']],

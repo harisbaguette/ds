@@ -3,7 +3,7 @@
   "name": "pattove-main-badge-react",
   "type": "registry:item",
   "title": "메인 스타일 · 배지 · react",
-  "description": "메인 스타일 · 배지 · react. 짧은 상태 이름. badge status 상태 태그",
+  "description": "메인 스타일 · 배지 · react. 짧은 상태 이름과 쌓인 개수. badge status 상태 태그",
   "files": [
     {
       "path": "design/base.css",
@@ -51,13 +51,13 @@
       "path": "design/css/badge.css",
       "type": "registry:file",
       "target": "~/design/css/badge.css",
-      "content": ".ds .ds-badge { display:inline-flex; align-items:center; width:fit-content; padding:4px 10px; border:1px solid var(--p-line); border-radius:99px; background:var(--p-soft); color:var(--p-ink); font-size:12px; line-height:1.5; font-weight:600; }\n.ds .ds-badge[data-tone=\"success\"] { background:var(--p-success-soft); border-color:var(--p-success-line); color:var(--p-success); }\n.ds .ds-badge[data-tone=\"error\"] { background:var(--p-error-soft); border-color:var(--p-error-line); color:var(--p-error); }\n.ds .ds-badge[data-tone=\"warning\"] { background:var(--p-warning-soft); border-color:var(--p-warning-line); color:var(--p-warning); }\n/* looks: tone keeps the color, look changes the shape */\n.ds .ds-badge[data-look=\"dot\"] { gap:6px; background:var(--p-bg); }\n.ds .ds-badge[data-look=\"dot\"]::before { content:''; width:8px; height:8px; border-radius:50%; background:currentColor; }\n.ds .ds-badge[data-look=\"icon\"] { gap:4px; padding-left:8px; }\n.ds .ds-badge[data-look=\"icon\"] .ui-icon { width:14px; height:14px; stroke-width:2.4; }"
+      "content": ".ds .ds-badge { display:inline-flex; align-items:center; width:fit-content; padding:4px 10px; border:1px solid var(--p-line); border-radius:99px; background:var(--p-soft); color:var(--p-ink); font-size:12px; line-height:1.5; font-weight:600; }\n.ds .ds-badge[data-tone=\"success\"] { background:var(--p-success-soft); border-color:var(--p-success-line); color:var(--p-success); }\n.ds .ds-badge[data-tone=\"error\"] { background:var(--p-error-soft); border-color:var(--p-error-line); color:var(--p-error); }\n.ds .ds-badge[data-tone=\"warning\"] { background:var(--p-warning-soft); border-color:var(--p-warning-line); color:var(--p-warning); }\n/* looks: tone keeps the color, look changes the shape */\n.ds .ds-badge[data-look=\"icon\"] { gap:4px; padding-left:8px; }\n.ds .ds-badge[data-look=\"icon\"] .ui-icon { width:14px; height:14px; stroke-width:2.4; }\n/* count: a number pinned to the icon corner, so nobody opens the box to count what piled up */\n.ds .ds-badge[data-look=\"count\"] { position:relative; display:inline-grid; place-items:center; width:44px; height:44px; padding:0; border:0; background:transparent; color:var(--p-ink); }\n.ds .ds-badge[data-look=\"count\"] .ui-icon { width:24px; height:24px; }\n.ds .ds-badge-count { position:absolute; top:2px; right:0; display:inline-grid; place-items:center; min-width:20px; height:20px; padding:0 5px; border-radius:99px; background:var(--p-accent); color:var(--p-on-accent); box-shadow:0 0 0 2px var(--p-bg); font-size:12px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; }"
     },
     {
       "path": "design/react/badge.jsx",
       "type": "registry:file",
       "target": "~/design/react/badge.jsx",
-      "content": "import React from 'react';\nexport function Badge({ children, tone = 'neutral', look, ...props }) { return <span {...props} className=\"ds-badge\" data-tone={tone} data-look={look}>{children}</span>; }\n"
+      "content": "import React from 'react';\n// The count look pins how many new items wait on the icon (children); the number is read as \"새 알림 N개\" and hides at zero.\nexport function Badge({ children, tone = 'neutral', look, count, ...props }) {\n  if (look === 'count') return <span role=\"img\" aria-label={count > 0 ? `새 알림 ${count}개` : '새 알림 없음'} {...props} className=\"ds-badge\" data-tone={tone} data-look=\"count\">{children}{count > 0 && <span className=\"ds-badge-count\" aria-hidden=\"true\">{count > 99 ? '99+' : count}</span>}</span>;\n  return <span {...props} className=\"ds-badge\" data-tone={tone} data-look={look}>{children}</span>;\n}\n"
     },
     {
       "path": "design/examples/main/badge.jsx",
@@ -69,13 +69,13 @@
       "path": "design/manifests/main-badge-react.json",
       "type": "registry:file",
       "target": "~/design/manifests/main-badge-react.json",
-      "content": "{\n  \"item\": \"badge\",\n  \"dictionary\": null,\n  \"purpose\": \"짧은 상태 이름\",\n  \"keywords\": \"badge status 상태 태그\",\n  \"style\": \"main\",\n  \"styleRules\": \"흰 바탕과 둥근 양각, 입력 영역의 음각을 사용합니다. 주요 행동은 짙은 색, 선택은 채움과 체크, 초점은 보라색 링으로 구분합니다. 유리 효과는 떠 있는 탐색 영역에만 적용하고 본문 표면은 불투명하게 유지합니다.\",\n  \"references\": [],\n  \"environment\": \"react\",\n  \"version\": \"0.3.0\",\n  \"sourceRevision\": \"6ce6d1963af941ccea51b996a2429829b43f307bb872a9a5650226520b512042\",\n  \"sourceFiles\": [\n    \"src/system/react/badge.jsx\"\n  ],\n  \"files\": [\n    {\n      \"path\": \"~/design/base.css\",\n      \"sha256\": \"efc092f7ca5ce6dee065b44658224295d2a634cef3404de8806e3ed84e464af6\"\n    },\n    {\n      \"path\": \"~/design/styles/main/color.css\",\n      \"sha256\": \"c84e4905470c2eaa3b0fddca7af12ea484bfbe28cd8e124d2298dc3a9f94def3\"\n    },\n    {\n      \"path\": \"~/design/styles/main/typography.css\",\n      \"sha256\": \"de19cdaff97757e4ff7d360d5fbb31cd39fbbd6aa0c0967033d0469069f9e726\"\n    },\n    {\n      \"path\": \"~/design/styles/main/space.css\",\n      \"sha256\": \"978a00ce3fc62bb1f7dc388c209c96da3260207fd507e2e8aaa94b41b7add540\"\n    },\n    {\n      \"path\": \"~/design/styles/main/radius.css\",\n      \"sha256\": \"7249b73c374faf9c6d8a2fea3b5f973246b15900b0978c79804cf7f669de9a1f\"\n    },\n    {\n      \"path\": \"~/design/styles/main/shadow.css\",\n      \"sha256\": \"b440975146ef217973084abbccc5dd897bdd36fa941fb07ef3d1fec5163efc4d\"\n    },\n    {\n      \"path\": \"~/design/styles/main.md\",\n      \"sha256\": \"cab7682f7f7e4cfc38ebf03e6ff3d0f54df729b5f626d38f8dbb9f72e8ecda74\"\n    },\n    {\n      \"path\": \"~/design/css/badge.css\",\n      \"sha256\": \"70abf62b05121e99b6a36d37c772c7253331e506c406b9748f3642ffdd8c052e\"\n    },\n    {\n      \"path\": \"~/design/react/badge.jsx\",\n      \"sha256\": \"af545f7df68902fb5425ab8932bf46d3ebab1085e2ec3a2ef9832c388afe4ceb\"\n    },\n    {\n      \"path\": \"~/design/examples/main/badge.jsx\",\n      \"sha256\": \"490ea7742ab1a7c611cb32b1001a6cd79a92a8accaef38397d2329ba8b53a9d0\"\n    }\n  ],\n  \"dependencies\": [],\n  \"tokens\": [\n    \"token-color\",\n    \"token-typography\",\n    \"token-space\",\n    \"token-radius\",\n    \"token-shadow\"\n  ],\n  \"compatibility\": \"색만으로 상태를 구분하지 않음\"\n}"
+      "content": "{\n  \"item\": \"badge\",\n  \"dictionary\": null,\n  \"purpose\": \"짧은 상태 이름과 쌓인 개수\",\n  \"keywords\": \"badge status 상태 태그\",\n  \"style\": \"main\",\n  \"styleRules\": \"흰 바탕과 둥근 양각, 입력 영역의 음각을 사용합니다. 주요 행동은 짙은 색, 선택은 채움과 체크, 초점은 보라색 링으로 구분합니다. 유리 효과는 떠 있는 탐색 영역에만 적용하고 본문 표면은 불투명하게 유지합니다.\",\n  \"references\": [],\n  \"environment\": \"react\",\n  \"version\": \"0.3.0\",\n  \"sourceRevision\": \"8237b1a900aed7f685dcc33c158683dd71fcc577f370a7ba8cecfe1312e7082d\",\n  \"sourceFiles\": [\n    \"src/system/react/badge.jsx\"\n  ],\n  \"files\": [\n    {\n      \"path\": \"~/design/base.css\",\n      \"sha256\": \"efc092f7ca5ce6dee065b44658224295d2a634cef3404de8806e3ed84e464af6\"\n    },\n    {\n      \"path\": \"~/design/styles/main/color.css\",\n      \"sha256\": \"c84e4905470c2eaa3b0fddca7af12ea484bfbe28cd8e124d2298dc3a9f94def3\"\n    },\n    {\n      \"path\": \"~/design/styles/main/typography.css\",\n      \"sha256\": \"de19cdaff97757e4ff7d360d5fbb31cd39fbbd6aa0c0967033d0469069f9e726\"\n    },\n    {\n      \"path\": \"~/design/styles/main/space.css\",\n      \"sha256\": \"978a00ce3fc62bb1f7dc388c209c96da3260207fd507e2e8aaa94b41b7add540\"\n    },\n    {\n      \"path\": \"~/design/styles/main/radius.css\",\n      \"sha256\": \"7249b73c374faf9c6d8a2fea3b5f973246b15900b0978c79804cf7f669de9a1f\"\n    },\n    {\n      \"path\": \"~/design/styles/main/shadow.css\",\n      \"sha256\": \"b440975146ef217973084abbccc5dd897bdd36fa941fb07ef3d1fec5163efc4d\"\n    },\n    {\n      \"path\": \"~/design/styles/main.md\",\n      \"sha256\": \"cab7682f7f7e4cfc38ebf03e6ff3d0f54df729b5f626d38f8dbb9f72e8ecda74\"\n    },\n    {\n      \"path\": \"~/design/css/badge.css\",\n      \"sha256\": \"776e6089b554a859a598deeea59042f8b41e91a11f29e68138c73df27ecf8760\"\n    },\n    {\n      \"path\": \"~/design/react/badge.jsx\",\n      \"sha256\": \"172974894101fc63217fde350bcdcff63e608734358746cf43aabce2cdeccc6e\"\n    },\n    {\n      \"path\": \"~/design/examples/main/badge.jsx\",\n      \"sha256\": \"490ea7742ab1a7c611cb32b1001a6cd79a92a8accaef38397d2329ba8b53a9d0\"\n    }\n  ],\n  \"dependencies\": [],\n  \"tokens\": [\n    \"token-color\",\n    \"token-typography\",\n    \"token-space\",\n    \"token-radius\",\n    \"token-shadow\"\n  ],\n  \"compatibility\": \"색만으로 상태를 구분하지 않음. 개수는 읽을 이름(예: 새 알림 3개)을 함께 제공\"\n}"
     },
     {
       "path": "design/examples/main/badge-react.md",
       "type": "registry:file",
       "target": "~/design/examples/main/badge-react.md",
-      "content": "# 배지 · 메인 스타일\n\n짧은 상태 이름\n\nReact 프로젝트에서 badge.jsx의 Example을 import합니다. Next.js App Router에서도 클라이언트 경계를 포함한 이 예시를 import할 수 있습니다. 개별 react/ 부품은 children·props·콜백으로 조합합니다. React 런타임은 대상 프로젝트가 제공합니다.\n\n색만으로 상태를 구분하지 않음\n\n상태: Trial. 웹 브라우저용입니다. 인쇄·네이티브 앱은 미검증입니다. 로컬에서 수정한 소스는 갱신 전에 diff로 확인하세요.\n"
+      "content": "# 배지 · 메인 스타일\n\n짧은 상태 이름과 쌓인 개수\n\nReact 프로젝트에서 badge.jsx의 Example을 import합니다. Next.js App Router에서도 클라이언트 경계를 포함한 이 예시를 import할 수 있습니다. 개별 react/ 부품은 children·props·콜백으로 조합합니다. React 런타임은 대상 프로젝트가 제공합니다.\n\n색만으로 상태를 구분하지 않음. 개수는 읽을 이름(예: 새 알림 3개)을 함께 제공\n\n상태: Trial. 웹 브라우저용입니다. 인쇄·네이티브 앱은 미검증입니다. 로컬에서 수정한 소스는 갱신 전에 diff로 확인하세요.\n"
     }
   ],
   "registryDependencies": [
@@ -86,13 +86,13 @@
     "lifecycle": "Trial",
     "item": "badge",
     "dictionary": null,
-    "purpose": "짧은 상태 이름",
+    "purpose": "짧은 상태 이름과 쌓인 개수",
     "keywords": "badge status 상태 태그",
     "style": "main",
     "styleRules": "흰 바탕과 둥근 양각, 입력 영역의 음각을 사용합니다. 주요 행동은 짙은 색, 선택은 채움과 체크, 초점은 보라색 링으로 구분합니다. 유리 효과는 떠 있는 탐색 영역에만 적용하고 본문 표면은 불투명하게 유지합니다.",
     "references": [],
     "environment": "react",
-    "sourceRevision": "6ce6d1963af941ccea51b996a2429829b43f307bb872a9a5650226520b512042",
+    "sourceRevision": "8237b1a900aed7f685dcc33c158683dd71fcc577f370a7ba8cecfe1312e7082d",
     "sourceFiles": [
       "src/system/react/badge.jsx"
     ],
@@ -104,7 +104,7 @@
       "token-radius",
       "token-shadow"
     ],
-    "compatibility": "색만으로 상태를 구분하지 않음"
+    "compatibility": "색만으로 상태를 구분하지 않음. 개수는 읽을 이름(예: 새 알림 3개)을 함께 제공"
   },
   "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
 }

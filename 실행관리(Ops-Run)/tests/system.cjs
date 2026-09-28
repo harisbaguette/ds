@@ -103,6 +103,35 @@ const fingerprint = element => {
     check('탭 방향키, 선택, 패널 동기화', await demo.locator('[role="tab"]').nth(1).getAttribute('aria-selected') === 'true' && await demo.locator('[role="tabpanel"]:visible').textContent() === '진행 중인 컬렉션을 보고 있어요.');
     await page.keyboard.press('End');
     check('탭 End 키', await demo.locator('[role="tab"]').last().evaluate(n=>n===document.activeElement));
+    // Atom looks earn their place by a hand action they remove; press each one and check it really works.
+    await inspect(page,'main','input');
+    await page.locator('[data-variant-pick="reveal"]').click();
+    const secret = demo.locator('.ds-input-group[data-look="reveal"] input'), show = demo.locator('[data-part-action="reveal"]');
+    await secret.fill('pattove8');
+    await show.click();
+    check('비밀번호 보기는 다시 치지 않고 글자로 보여 줌', await secret.getAttribute('type') === 'text' && await secret.inputValue() === 'pattove8' && (await show.getAttribute('aria-label')).endsWith('숨기기') && await show.getAttribute('aria-pressed') === null);
+    await show.click();
+    check('숨기기를 누르면 다시 가림', await secret.getAttribute('type') === 'password' && (await show.getAttribute('aria-label')).endsWith('보기'));
+    await inspect(page,'main','checkbox');
+    await page.locator('[data-variant-pick="all"]').click();
+    const parentBox = demo.locator('[data-part="select-all"]'), kids = demo.locator('.ds-select-all input:not([data-part="select-all"])');
+    await parentBox.uncheck();
+    check('전체 선택을 끄면 자식이 모두 꺼짐', await kids.evaluateAll(n => n.length === 3 && n.every(k => !k.checked)));
+    await kids.first().check();
+    check('자식 하나만 켜면 부모는 일부 선택', await parentBox.evaluate(n => n.indeterminate && !n.checked));
+    await parentBox.click();
+    check('일부 선택에서 부모를 누르면 모두 켜짐', await kids.evaluateAll(n => n.every(k => k.checked)) && await parentBox.evaluate(n => n.checked && !n.indeterminate));
+    await inspect(page,'main','badge');
+    await page.locator('[data-variant-pick="count"]').click();
+    check('개수 배지는 읽는 이름에 개수를 담음', await demo.locator('.ds-badge[data-look="count"]').getAttribute('aria-label') === '새 알림 3개');
+    await page.setViewportSize({width:390,height:844});
+    await inspect(page,'main','tabs');
+    await page.locator('[data-variant-pick="scroll"]').click();
+    await demo.locator('[role="tab"]').first().focus();
+    await page.keyboard.press('End');
+    const inView = await demo.locator('.ds-tablist').evaluate(list => { const l = list.getBoundingClientRect(), t = list.lastElementChild.getBoundingClientRect(); return t.left >= l.left - 1 && t.right <= l.right + 1; });
+    check('옆으로 미는 탭은 End로 고른 마지막 탭이 다 보이고 페이지는 옆으로 안 밀림', inView && await demo.locator('[role="tab"]').last().getAttribute('aria-selected') === 'true' && await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+    await page.setViewportSize({width:1280,height:1000});
     for (const id of ['checkbox','radio','switch']) {
       await inspect(page,'main',id);
       const inputs = demo.locator('input');

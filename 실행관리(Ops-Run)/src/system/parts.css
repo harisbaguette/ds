@@ -60,15 +60,12 @@
 /* looks: shapes of the same rule, tokens only */
 .ds .ds-divider[data-look="label"] { border:0; height:auto; overflow:visible; text-align:center; line-height:1.5; background:linear-gradient(var(--p-line),var(--p-line)) 0 50%/100% 1px no-repeat; }
 .ds .ds-divider[data-look="label"]::after { content:attr(data-label); display:inline-block; padding:0 12px; background:var(--p-bg); color:var(--p-muted); font-size:var(--p-text-sm); }
-.ds .ds-divider[data-look="inset"] { width:calc(100% - 56px); margin-left:auto; }
 /* @part status-dot */
 .ds .ds-status { display:inline-flex; gap:var(--p-space-xs); align-items:center; font-size:var(--p-text-sm); }
 .ds .ds-status i { width:8px; height:8px; flex-shrink:0; border-radius:50%; background:var(--p-success); }
 .ds .ds-status[data-look="avatar"] { position:relative; gap:var(--p-space-sm); }
 .ds .ds-status[data-look="avatar"]::before { content:''; width:36px; height:36px; flex-shrink:0; border-radius:50%; background:var(--p-soft); }
 .ds .ds-status[data-look="avatar"] i { position:absolute; left:25px; top:calc(50% + 6px); width:12px; height:12px; box-shadow:0 0 0 2px var(--p-bg); }
-.ds .ds-status[data-look="check"] i { position:relative; width:18px; height:18px; }
-.ds .ds-status[data-look="check"] i::after { content:''; position:absolute; left:6px; top:3px; width:4px; height:8px; border:solid var(--p-on-accent); border-width:0 2px 2px 0; transform:rotate(45deg); }
 /* @part button */
 .ds .ds-button { display:inline-flex; justify-content:center; align-items:center; gap:var(--p-space-xs); min-width:48px; min-height:48px; padding:10px 20px; border:1px solid var(--p-accent); border-radius:var(--p-control-radius); background:var(--p-accent); color:var(--p-on-accent); font-size:14px; font-weight:650; line-height:1.4; box-shadow:var(--p-control-shadow); text-decoration:none; transition:background var(--p-duration),box-shadow var(--p-duration); }
 .ds .ds-button[data-variant="outline"] { border-color:var(--p-control-border); color:var(--p-ink); background:var(--p-surface); box-shadow:var(--p-raised); }
@@ -107,12 +104,9 @@
 .ds .ds-input[aria-invalid="true"] { border-color:var(--p-error); border-width:2px; padding:10px 13px; }
 .ds label.ds-field { display:grid; gap:var(--p-space-xs); min-width:0; font-size:14px; }
 /* looks: the same selector draws a bare input and the input inside a field of that look */
-.ds .ds-field[data-look="float"] .ds-input { padding-top:14px; box-shadow:none; }
-.ds .ds-field[data-look="float"] { position:relative; gap:0; }
-.ds .ds-field[data-look="float"] > label { position:absolute; z-index:1; top:0; left:12px; transform:translateY(-50%); padding:0 6px; background:var(--p-bg); color:var(--p-muted); font-size:12px; line-height:1.4; }
 .ds :is(.ds-input[data-look],.ds-field[data-look] .ds-input):disabled { background:var(--p-disabled); border-color:var(--p-line); color:var(--p-muted); box-shadow:none; }
 .ds :is(.ds-input[data-look],.ds-field[data-look] .ds-input)[aria-invalid="true"] { border-color:var(--p-error); }
-/* looks: the helper a value needs sits inside the same box — clear, unit, or − and + */
+/* looks: the helper a value needs sits inside the same box — clear, unit, − and +, or show */
 .ds .ds-input-group { display:flex; align-items:center; min-width:0; border:1px solid var(--p-control-border); border-radius:var(--p-control-radius); background:var(--p-bg); box-shadow:var(--p-inset); }
 .ds .ds-input-group:focus-within { border-color:var(--p-accent); box-shadow:0 0 0 1px var(--p-accent); }
 .ds .ds-input-group > .ds-input { flex:1 1 0; min-height:46px; border:0; border-radius:inherit; background:transparent; box-shadow:none; }
@@ -130,6 +124,8 @@
 .ds .ds-input-group:has(:disabled) { background:var(--p-disabled); border-color:var(--p-line); box-shadow:none; color:var(--p-muted); }
 .ds .ds-input-group:has(:disabled) .ds-input-tool { color:var(--p-muted); cursor:not-allowed; }
 .ds .ds-input-group:has([aria-invalid="true"]) { border-color:var(--p-error); box-shadow:0 0 0 1px var(--p-error); }
+/* reveal: the text button stays inside the box so the typed secret can be checked without retyping */
+.ds .ds-input-group[data-look="reveal"] .ds-input-tool { width:auto; min-width:44px; padding:0 12px; color:var(--p-accent); font-size:14px; font-weight:650; }
 /* @part field */
 .ds .ds-field,.ds .ds-select-field { display:grid; gap:var(--p-space-xs); min-width:0; font-size:14px; }
 .ds .ds-field > label,.ds .ds-select-field > span { font-weight:600; }
@@ -201,26 +197,29 @@
 .ds .ds-choice[data-look="segment"]:has(:checked) { z-index:1; border-color:var(--p-accent); background:var(--p-accent); color:var(--p-on-accent); font-weight:600; }
 .ds .ds-choice[data-look="segment"]:has(:checked)::before { content:'✓'; content:'✓' / ''; }
 .ds .ds-choice[data-look="segment"]:has(:focus-visible) { z-index:2; outline:3px solid var(--p-highlight); outline-offset:2px; }
-.ds .ds-choice[data-look="text"] .ds-switch { width:72px; height:32px; }
-.ds .ds-choice[data-look="text"] .ds-switch::before { width:22px; height:22px; top:2.5px; left:3px; }
-.ds .ds-choice[data-look="text"] .ds-switch:checked::before { left:44px; }
-.ds .ds-choice[data-look="text"] input.ds-switch::after,.ds .ds-choice[data-look="text"] input.ds-switch:checked::after { content:'끔'; content:'끔' / ''; position:absolute; top:50%; left:auto; right:9px; width:auto; height:auto; border:0; transform:translateY(-50%); color:var(--p-muted); font-size:13px; font-weight:700; line-height:1; }
-.ds .ds-choice[data-look="text"] input.ds-switch:checked::after { content:'켬'; content:'켬' / ''; left:10px; right:auto; color:var(--p-on-accent); }
 .ds .ds-choice[data-look]:has(:disabled) input:disabled { background:var(--p-disabled); border-color:var(--p-line); box-shadow:none; }
 .ds .ds-choice[data-look]:has(:disabled) input:disabled::after { border-color:var(--p-muted); color:var(--p-muted); }
 .ds .ds-choice[data-look]:has(:disabled) input:is([type="radio"],:indeterminate):disabled::after { background:var(--p-muted); }
 .ds .ds-choice[data-look]:has(:disabled) input.ds-switch:disabled::before { background:var(--p-muted); box-shadow:none; }
 .ds .ds-choice:is([data-look="chip"],[data-look="segment"],[data-look="card"]):has(:disabled) { border-color:var(--p-line); background:var(--p-disabled); color:var(--p-muted); box-shadow:none; }
+/* all: one parent box above its children; the children sit indented so the tree reads without words */
+.ds .ds-select-all { display:grid; gap:0; min-width:220px; margin:0; padding:0; border:0; }
+.ds .ds-select-all > legend { padding:0 0 var(--p-space-xs); font-weight:600; font-size:14px; }
+.ds .ds-select-all > .ds-choice { min-height:44px; }
+.ds .ds-select-all > .ds-choice:first-of-type { border-bottom:1px solid var(--p-line); font-weight:600; }
+.ds .ds-select-all > .ds-choice:not(:first-of-type) { padding-inline-start:var(--p-space-lg); }
 /* @part badge */
 .ds .ds-badge { display:inline-flex; align-items:center; width:fit-content; padding:4px 10px; border:1px solid var(--p-line); border-radius:99px; background:var(--p-soft); color:var(--p-ink); font-size:12px; line-height:1.5; font-weight:600; }
 .ds .ds-badge[data-tone="success"] { background:var(--p-success-soft); border-color:var(--p-success-line); color:var(--p-success); }
 .ds .ds-badge[data-tone="error"] { background:var(--p-error-soft); border-color:var(--p-error-line); color:var(--p-error); }
 .ds .ds-badge[data-tone="warning"] { background:var(--p-warning-soft); border-color:var(--p-warning-line); color:var(--p-warning); }
 /* looks: tone keeps the color, look changes the shape */
-.ds .ds-badge[data-look="dot"] { gap:6px; background:var(--p-bg); }
-.ds .ds-badge[data-look="dot"]::before { content:''; width:8px; height:8px; border-radius:50%; background:currentColor; }
 .ds .ds-badge[data-look="icon"] { gap:4px; padding-left:8px; }
 .ds .ds-badge[data-look="icon"] .ui-icon { width:14px; height:14px; stroke-width:2.4; }
+/* count: a number pinned to the icon corner, so nobody opens the box to count what piled up */
+.ds .ds-badge[data-look="count"] { position:relative; display:inline-grid; place-items:center; width:44px; height:44px; padding:0; border:0; background:transparent; color:var(--p-ink); }
+.ds .ds-badge[data-look="count"] .ui-icon { width:24px; height:24px; }
+.ds .ds-badge-count { position:absolute; top:2px; right:0; display:inline-grid; place-items:center; min-width:20px; height:20px; padding:0 5px; border-radius:99px; background:var(--p-accent); color:var(--p-on-accent); box-shadow:0 0 0 2px var(--p-bg); font-size:12px; font-weight:700; line-height:1; font-variant-numeric:tabular-nums; }
 /* @part icon */
 .ds .ds-icon { display:inline-grid; place-items:center; flex-shrink:0; }
 .ds .ds-icon[data-look="label"] { gap:4px; min-width:56px; }
@@ -250,6 +249,11 @@
 .ds .ds-tab-count { display:inline-grid; place-items:center; min-width:20px; height:20px; padding:0 6px; border-radius:99px; background:var(--p-soft); color:var(--p-ink); font-size:12px; font-weight:700; line-height:1; }
 .ds .ds-tabs[data-look="count"] .ds-tab { white-space:nowrap; padding-inline:8px; }
 .ds .ds-tab[aria-selected="true"] .ds-tab-count { background:var(--p-on-accent); color:var(--p-accent); }
+/* scroll: one row that slides sideways on a phone; the chosen tab keeps its filled pill and stays in view */
+.ds .ds-tabs[data-look="scroll"] .ds-tablist { flex-wrap:nowrap; overflow-x:auto; overscroll-behavior-x:contain; scroll-snap-type:x proximity; scroll-padding-inline:5px; scrollbar-width:none; }
+.ds .ds-tabs[data-look="scroll"] .ds-tablist::-webkit-scrollbar { display:none; }
+.ds .ds-tabs[data-look="scroll"] .ds-tab { flex:none; scroll-snap-align:start; white-space:nowrap; padding-inline:16px; }
+.ds .ds-tabs[data-look="scroll"] .ds-tab:last-child { scroll-snap-align:end; }
 /* @part bottom-nav */
 /* One markup, five shapes. Selection never rests on color alone: each shape adds a mark, a tile, a pill, a press or weight. */
 /* Floating shapes declare --ds-bottom-nav-offset so a screen frame can keep them off the edges. */

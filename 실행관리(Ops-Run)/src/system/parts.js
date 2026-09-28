@@ -30,14 +30,15 @@
     if (look === 'bar') return `<div class="ds-actions" data-look="bar">${button({ ...main, label: '3개 담기' })}</div>`;
     return button({ ...main, look });
   }
-  const inputSamples = { box: ['이름', '', '이름을 입력하세요'], clear: ['검색어', '봄의 색', '검색어 입력'], unit: ['금액', '12,000', '0'], stepper: ['수량', '1', ''] };
-  // Input looks put the helper that the value needs inside the same box: a clear button, its unit, or − and +.
+  const inputSamples = { box: ['이름', '', '이름을 입력하세요'], clear: ['검색어', '봄의 색', '검색어 입력'], unit: ['금액', '12,000', '0'], stepper: ['수량', '1', ''], reveal: ['비밀번호', '', '8자 이상'] };
+  // Input looks put the helper that the value needs inside the same box: a clear button, its unit, − and +, or a show button.
   function input({ id = uid('input'), value = '', placeholder = '이름을 입력하세요', disabled = false, invalid = false, description = '', type = 'text', name = '', look = '', label = '' } = {}) {
     type = option(type, ['text','email','search','password','tel','url','number'], 'text');
     look = lookId('input', look);
-    const group = ['clear', 'unit', 'stepper'].includes(look);
+    const group = ['clear', 'unit', 'stepper', 'reveal'].includes(look);
     if (look === 'unit') type = 'text';
     if (look === 'stepper') type = 'number';
+    if (look === 'reveal') type = 'password';
     const off = disabled ? ' disabled' : '';
     const own = look === 'unit' ? ' inputmode="numeric"' : look === 'stepper' ? ' min="0" inputmode="numeric"' : '';
     const field = `<input class="ds-input" id="${esc(id)}"${group ? '' : lookAttr('input', look)}${name ? ` name="${esc(name)}"` : ''} type="${type}" value="${esc(value)}"${placeholder ? ` placeholder="${esc(placeholder)}"` : ''}${own}${off}${invalid ? ' aria-invalid="true"' : ''}${description ? ` aria-describedby="${esc(description)}"` : ''}>`;
@@ -45,6 +46,8 @@
     if (look === 'unit') return `<span class="ds-input-group" data-look="unit">${field}<select class="ds-input-unit" aria-label="통화"${off}><option>원</option><option>달러</option></select></span>`;
     const step = (delta, text) => `<button type="button" class="ds-input-tool" data-part-action="step" data-step="${delta}" aria-label="${delta < 0 ? '하나 빼기' : '하나 더하기'}"${off}>${text}</button>`;
     if (look === 'stepper') return `<span class="ds-input-group" data-look="stepper">${step(-1, '<span aria-hidden="true">−</span>')}${field}${step(1, icon('plus'))}</span>`;
+    // The show button flips the typed secret to plain text in place, so a typo is seen instead of retyped.
+    if (look === 'reveal') return `<span class="ds-input-group" data-look="reveal">${field}<button type="button" class="ds-input-tool" data-part-action="reveal" aria-label="${esc(label || '비밀번호')} 보기"${off}>보기</button></span>`;
     return field;
   }
   function field({ id = uid('field'), label = '컬렉션 이름', value = '', placeholder, state = '', help = '', name = '', type = 'text', look = '' } = {}) {
@@ -63,13 +66,16 @@
   // body/actions accept trusted markup from other parts, not unsanitized user text.
   const cardBody = children => `<div class="ds-card-body">${children}</div>`;
   const cardActions = children => `<footer class="ds-card-actions">${children}</footer>`;
-  function choice({ kind = 'checkbox', label = '선택하기', checked = false, disabled = false, indeterminate = false, name = 'visibility', value = label, look = '' } = {}) {
+  function choice({ kind = 'checkbox', label = '선택하기', checked = false, disabled = false, indeterminate = false, name = 'visibility', value = label, look = '', part = '' } = {}) {
     kind = option(kind, ['checkbox','radio','switch'], 'checkbox');
-    return `<label class="ds-choice"${lookAttr(kind, look)}><input type="${kind === 'switch' ? 'checkbox' : kind}" value="${esc(value)}"${kind === 'switch' ? ' class="ds-switch" role="switch"' : ''}${name ? ` name="${esc(name)}"` : ''}${checked ? ' checked' : ''}${disabled ? ' disabled' : ''}${indeterminate ? ' data-indeterminate' : ''}>${esc(label)}</label>`;
+    return `<label class="ds-choice"${lookAttr(kind, look)}><input type="${kind === 'switch' ? 'checkbox' : kind}" value="${esc(value)}"${kind === 'switch' ? ' class="ds-switch" role="switch"' : ''}${name ? ` name="${esc(name)}"` : ''}${checked ? ' checked' : ''}${disabled ? ' disabled' : ''}${indeterminate ? ' data-indeterminate' : ''}${part ? ` data-part="${esc(part)}"` : ''}>${esc(label)}</label>`;
   }
   // The icon look repeats the tone as a shape, so the state reads without telling colours apart.
   const toneIcon = { success: 'check', warning: 'warning', error: 'close', neutral: 'rotate' };
-  const badge = (label = '진행 중', tone = 'neutral', look = '') => `<span class="ds-badge" data-tone="${tone}"${lookAttr('badge', look)}>${lookId('badge', look) === 'icon' ? icon(toneIcon[tone] || 'rotate') : ''}${esc(label)}</span>`;
+  // The count look pins how many new items wait on the icon, so nobody opens the place just to count.
+  const badge = (label = '진행 중', tone = 'neutral', look = '', count = 3) => lookId('badge', look) === 'count'
+    ? `<span class="ds-badge" data-tone="${tone}" data-look="count" role="img" aria-label="${Number(count) > 0 ? `새 알림 ${Number(count)}개` : '새 알림 없음'}">${icon('bell')}${Number(count) > 0 ? `<span class="ds-badge-count" aria-hidden="true">${count > 99 ? '99+' : Number(count)}</span>` : ''}</span>`
+    : `<span class="ds-badge" data-tone="${tone}"${lookAttr('badge', look)}>${lookId('badge', look) === 'icon' ? icon(toneIcon[tone] || 'rotate') : ''}${esc(label)}</span>`;
   const divider = (look = '', label = '또는') => `<hr class="ds-divider"${lookAttr('divider', look)}${look === 'label' ? ` data-label="${esc(label)}"` : ''}>`;
   const statusDot = (label = '연결됨', look = '') => `<span class="ds-status"${lookAttr('status-dot', look)}><i aria-hidden="true"></i>${esc(label)}</span>`;
   // The label look prints the icon's meaning under it; unknown names stay picture-only.
@@ -78,13 +84,15 @@
     const words = lookId('icon', look) === 'label' && iconNames[name] ? `<span class="ds-icon-name">${iconNames[name]}</span>` : '';
     return `<span class="ds-icon"${lookAttr('icon', look)}>${icon(name)}${words}</span>`;
   };
-  // Every look keeps the same tab and panel wiring; icon adds a picture, count adds how many wait behind each tab.
-  const tabLooks = ['filled','icon','count','vertical'];
+  // Every look keeps the same tab and panel wiring; icon adds a picture, count adds how many wait behind each tab, scroll lets many tabs slide sideways.
+  const tabLooks = ['filled','icon','count','vertical','scroll'];
   function tabs(prefix = uid('tabs'), look = 'filled') {
     look = option(look, tabLooks, 'filled');
     const art = look === 'icon' ? ['grid','rotate','check'] : [];
     const counts = look === 'count' ? [3, 2, 1] : [];
-    return `<div class="ds-tabs" data-look="${look}"><div class="ds-tablist" role="tablist" aria-label="컬렉션 분류"${look === 'vertical' ? ' aria-orientation="vertical"' : ''}>${['전체','진행 중','완료'].map((name, i) => `<button type="button" class="ds-tab" id="${prefix}-tab-${i}" role="tab" aria-selected="${i === 0}" aria-controls="${prefix}-panel-${i}" tabindex="${i === 0 ? 0 : -1}"${counts.length ? ` aria-label="${name} ${counts[i]}개"` : ''}>${art[i] ? icon(art[i]) : ''}${name}${counts.length ? `<span class="ds-tab-count" aria-hidden="true">${counts[i]}</span>` : ''}</button>`).join('')}</div>${['모든 컬렉션을 보고 있어요.','진행 중인 컬렉션을 보고 있어요.','완료한 컬렉션을 보고 있어요.'].map((text, i) => `<div class="ds-tabpanel" id="${prefix}-panel-${i}" role="tabpanel" aria-labelledby="${prefix}-tab-${i}" tabindex="0"${i ? ' hidden' : ''}>${text}</div>`).join('')}</div>`;
+    const names = look === 'scroll' ? ['전체','진행 중','완료','보관함','공유받음','휴지통'] : ['전체','진행 중','완료'];
+    const texts = look === 'scroll' ? ['모든 컬렉션을 보고 있어요.','진행 중인 컬렉션을 보고 있어요.','완료한 컬렉션을 보고 있어요.','보관한 컬렉션을 보고 있어요.','공유받은 컬렉션을 보고 있어요.','지운 컬렉션을 보고 있어요.'] : ['모든 컬렉션을 보고 있어요.','진행 중인 컬렉션을 보고 있어요.','완료한 컬렉션을 보고 있어요.'];
+    return `<div class="ds-tabs" data-look="${look}"><div class="ds-tablist" role="tablist" aria-label="컬렉션 분류"${look === 'vertical' ? ' aria-orientation="vertical"' : ''}>${names.map((name, i) => `<button type="button" class="ds-tab" id="${prefix}-tab-${i}" role="tab" aria-selected="${i === 0}" aria-controls="${prefix}-panel-${i}" tabindex="${i === 0 ? 0 : -1}"${counts.length ? ` aria-label="${name} ${counts[i]}개"` : ''}>${art[i] ? icon(art[i]) : ''}${name}${counts.length ? `<span class="ds-tab-count" aria-hidden="true">${counts[i]}</span>` : ''}</button>`).join('')}</div>${texts.map((text, i) => `<div class="ds-tabpanel" id="${prefix}-panel-${i}" role="tabpanel" aria-labelledby="${prefix}-tab-${i}" tabindex="0"${i ? ' hidden' : ''}>${text}</div>`).join('')}</div>`;
   }
   // Shapes with a raised center action put a create button between the second and third destination.
   const navCenter = ['float'];
@@ -153,7 +161,15 @@
   }
   function renderItem(id, prefix = uid('example'), options = {}) {
     const renderers = {
-      checkbox: () => choice({ look: options.look, label: '링크로 공유', checked: options.state !== 'unchecked', disabled: options.state === 'disabled', indeterminate: options.state === 'indeterminate' }),
+      checkbox: () => {
+        const state = { disabled: options.state === 'disabled' };
+        if (lookId('checkbox', options.look) !== 'all') return choice({ look: options.look, label: '링크로 공유', checked: options.state !== 'unchecked', indeterminate: options.state === 'indeterminate', ...state });
+        // The all look puts one parent above its children; the parent shows "some" when only part is picked.
+        const picked = options.state === 'unchecked' ? [] : options.state === 'indeterminate' ? [0] : [0, 1, 2];
+        const kids = ['댓글','좋아요','새 팔로워'].map((label, i) => choice({ label, name: prefix + '-alerts', checked: picked.includes(i), ...state })).join('');
+        const parent = choice({ label: '모두 선택', name: '', part: 'select-all', checked: picked.length === 3, indeterminate: picked.length > 0 && picked.length < 3, ...state });
+        return `<fieldset class="ds-select-all" data-look="all"><legend>받을 알림</legend>${parent}${kids}</fieldset>`;
+      },
       radio: () => `<fieldset class="ds-radio-group"><legend>공개 범위</legend>${choice({kind:'radio',look:options.look,label:'나만 보기',checked:options.state !== 'unchecked',disabled:options.state === 'disabled',name:prefix+'-visibility'})}${choice({kind:'radio',look:options.look,label:'링크로 공유',disabled:options.state === 'disabled',name:prefix+'-visibility'})}</fieldset>`,
       switch: () => choice({ kind: 'switch', look: options.look, label: '알림 받기', checked: options.state !== 'unchecked', disabled: options.state === 'disabled' }),
       'token-color': () => tokenMarks('ds-token-swatches', ['accent','high','soft','text']),

@@ -1,26 +1,12 @@
-/* Layer 1 · primitive · text. Font sizes in px.
+/* Layer 1 · primitive · text. Font sizes in px: the Tailwind v4 ramp (12-30) plus one display step (40).
    Only src/tokens/semantic/text.css may reference these. */
 :root {
-  --text-10: 10px;
-  --text-11: 11px;
   --text-12: 12px;
-  --text-13: 13px;
   --text-14: 14px;
-  --text-15: 15px;
   --text-16: 16px;
   --text-18: 18px;
   --text-20: 20px;
-  --text-22: 22px;
   --text-24: 24px;
-  --text-26: 26px;
-  --text-28: 28px;
   --text-30: 30px;
-  --text-32: 32px;
-  --text-38: 38px;
   --text-40: 40px;
-  --text-42: 42px;
-  --text-45: 45px;
-  --text-48: 48px;
-  --text-52: 52px;
-  --text-160: 160px;
 }

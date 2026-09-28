@@ -1,21 +1,15 @@
-/* Layer 2 · semantic · radius. Radius ladder on the same t-shirt names; inner/control/surface radius keep the original role names. */
+/* Layer 2 · semantic · radius. Radius ramp xs 2px .. 2xl 24px, full for pills and circle for round marks; inner/control/surface radius keep the original role names. */
 :root,
 .theme-main {
-  --p-radius-4xs: var(--radius-2);
-  --p-radius-3xs: var(--radius-4);
-  --p-radius-2xs: var(--radius-6);
-  --p-radius-xs: var(--radius-8);
-  --p-radius-xs-plus: var(--radius-10);
-  --p-radius-sm: var(--radius-12);
-  --p-radius-sm-plus: var(--radius-14);
-  --p-radius-md: var(--radius-16);
-  --p-radius-md-plus: var(--radius-20);
-  --p-radius-lg: var(--radius-24);
-  --p-radius-lg-plus: var(--radius-28);
-  --p-radius-xl: var(--radius-32);
-  --p-radius-circle: var(--radius-circle);
+  --p-radius-xs: var(--radius-2);
+  --p-radius-sm: var(--radius-4);
+  --p-radius-md: var(--radius-8);
+  --p-radius-lg: var(--radius-12);
+  --p-radius-xl: var(--radius-16);
+  --p-radius-2xl: var(--radius-24);
   --p-radius-full: var(--radius-full);
-  --p-inner-radius: var(--p-radius-sm);
-  --p-control-radius: var(--p-radius-md);
-  --p-radius: var(--p-radius-lg);
+  --p-radius-circle: var(--radius-circle);
+  --p-inner-radius: var(--p-radius-lg);
+  --p-control-radius: var(--p-radius-xl);
+  --p-radius: var(--p-radius-2xl);
 }

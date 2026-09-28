@@ -24,6 +24,23 @@ for (const a of allPrefixes) for (const b of allPrefixes) if (a !== b && b.start
 if (kinds.some(kind => !prefixes[kind] || !kindLabels[kind])) throw new Error('tokens.mjs: every kind needs a prefix and a label');
 const primitiveRead = new RegExp(`var\\((${allPrefixes.join('|')})[\\w-]*`);
 
+// Designed scales. A role is a step of one of these ramps or a use name (control, icon, focus, prose...);
+// the ramps stay short, so each has a step limit. kind = primitives in that kind file, role = roles with that prefix.
+export const scaleLimits = [
+  { kind: 'text', max: 12, why: 'Tailwind v4 text ramp plus one display step' },
+  { kind: 'space', max: 14, why: 'Atlassian space ramp, 4px grid' },
+  { kind: 'radius', max: 8, why: 'Tailwind v4 radius ramp with full and circle' },
+  { kind: 'leading', max: 6, why: 'Tailwind v4 leading set' },
+  { kind: 'tracking', max: 3, why: 'tighter, tight, wide' },
+  { kind: 'weight', max: 9, why: 'CSS keyword weights 100-900' },
+  { kind: 'container', max: 12, why: 'Tailwind v4 container scale plus reading measures' },
+  { role: /^--p-size-/, max: 12, why: 'box ramp on the 4px grid' },
+  { role: /^--p-icon-(?!stroke)/, max: 7, why: 'icon sizes' },
+  { role: /^--p-control-size-/, max: 5, why: 'control heights from the 44px touch minimum' },
+];
+// A step name outside the ramp: -plus in-between steps, and t-shirt sizes past 3xs..6xl.
+export const offRampName = name => /-plus(?:-|$)/.test(name) || /-(?:[4-9]|\d{2,})xs(?:-|$)/.test(name) || /-(?:[7-9]|\d{2,})xl(?:-|$)/.test(name);
+
 // Every token source file, in load order (primitive → semantic).
 export function tokenFiles() {
   return [...kinds.map(kind => `src/tokens/primitive/${kind}.css`), ...kinds.map(kind => `src/tokens/semantic/${kind}.css`)];
@@ -45,7 +62,7 @@ export function allowedToken(property, token, { fn = '', prev = '' } = {}) {
   if (['calc', 'min', 'max', 'clamp'].includes(fn) && (prev === '*' || prev === '/') && /^\d+$/.test(token)) return 'a count that multiplies or divides a role';
   if (fn === 'calc' && prev === '*' && token === '1%') return 'unit converter for a unitless custom property';
   if (/^-?\d*\.?\d+$/.test(token) && (counted.test(property) || (fn === 'repeat' && prev === '(') || prev === 'n')) return 'structural count or flex factor';
-  if (property === 'zoom' && token === '1') return 'identity zoom';
+  if ((property === 'zoom' || fn === 'scale') && /^\d*\.?\d+$/.test(token)) return 'preview scale factor: a ratio to its own real size (geometry)';
   return '';
 }
 const bareNumber = /(?<![\w.#-])-?\d*\.?\d+[a-z%]*/g;
@@ -157,6 +174,7 @@ export function loadTokens(root) {
           else if (!ref.startsWith('--p-')) throw new Error(`${file}: ${name} reads unknown ${ref}`);
         }
         if (/\d/.test(value.replace(/var\(--[\w-]+\)/g, ' '))) throw new Error(`${file}: ${name} writes a raw number; put it in a primitive, got ${value}`);
+        if (offRampName(name)) throw new Error(`${file}: ${name} is not a ramp step; use a step of the designed ramp, a use name, or calc(var(--p-space-unit) * N)`);
         claim(seen, name, file);
         vars[name] = value;
         roleKind[name] = kind;
@@ -172,6 +190,10 @@ export function loadTokens(root) {
     return vars;
   };
   const main = semantic('main');
+  for (const limit of scaleLimits) {
+    const steps = limit.kind ? Object.keys(primitive).filter(name => primitiveKind[name] === limit.kind) : Object.keys(main).filter(name => limit.role.test(name));
+    if (steps.length > limit.max) throw new Error(`${limit.kind ? `src/tokens/primitive/${limit.kind}.css` : `roles ${limit.role}`}: ${steps.length} steps, the scale allows ${limit.max} (${limit.why})`);
+  }
   // Kinds each kind's roles read through composites, followed to the end (the kind closure).
   const kindDeps = Object.fromEntries(kinds.map(kind => [kind, new Set()]));
   for (const [name, refs] of Object.entries(roleRefs)) for (const ref of refs) if (roleKind[ref] !== roleKind[name]) kindDeps[roleKind[name]].add(roleKind[ref]);

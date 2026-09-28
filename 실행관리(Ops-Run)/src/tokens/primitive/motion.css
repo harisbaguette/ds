@@ -4,14 +4,8 @@
   --distance-1: 1px;
   --distance-2: 2px;
   --duration-140: 140ms;
-  --duration-70: 70ms;
-  --duration-110: 110ms;
-  --duration-150: 150ms;
-  --duration-240: 240ms;
-  --duration-400: 400ms;
   --duration-800: 800ms;
   --ease-standard: cubic-bezier(.2, 0, .38, .9);
   --ease-enter: cubic-bezier(0, 0, .38, .9);
-  --ease-exit: cubic-bezier(.2, 0, 1, .9);
   --ease-linear: linear;
 }

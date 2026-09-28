@@ -1,8 +1,7 @@
-/* Layer 2 · semantic · tracking. display for large headings, tight for figures and titles, snug for fixed-size copy, wide for small caps-like labels. */
+/* Layer 2 · semantic · tracking. tighter for large headings, tight for figures and titles, wide for small label-like text. */
 :root,
 .theme-main {
-  --p-tracking-snug: var(--tracking-n035px);
-  --p-tracking-display: var(--tracking-n040em);
+  --p-tracking-tighter: var(--tracking-n040em);
   --p-tracking-tight: var(--tracking-n020em);
-  --p-tracking-wide: var(--tracking-p040px);
+  --p-tracking-wide: var(--tracking-p030em);
 }

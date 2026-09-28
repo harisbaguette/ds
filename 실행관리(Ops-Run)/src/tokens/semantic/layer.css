@@ -10,8 +10,5 @@
   --p-layer-dropdown: var(--layer-200);
   --p-layer-overlay: var(--layer-300);
   --p-layer-modal: var(--layer-400);
-  --p-layer-popover: var(--layer-500);
-  --p-layer-toast: var(--layer-600);
-  --p-layer-tooltip: var(--layer-700);
   --p-layer-skip: var(--layer-1000);
 }

@@ -1,35 +1,13 @@
-/* Layer 2 · semantic · container. Widths of columns (120-300px) and containers (over 300px), and reading measures. */
+/* Layer 2 · semantic · container. Widths of cards, panels and pages (2xs 256px .. 2xl 1280px) and reading measures. A one-off column width is written calc(var(--p-space-unit) * N). */
 :root,
 .theme-main {
   --p-measure-narrow: var(--container-ch-60);
   --p-measure: var(--container-ch-72);
-  --p-column-5xs: var(--container-120);
-  --p-column-4xs: var(--container-144);
-  --p-column-3xs: var(--container-160);
-  --p-column-2xs: var(--container-170);
-  --p-column-xs: var(--container-200);
-  --p-column-sm: var(--container-210);
-  --p-column-md: var(--container-220);
-  --p-column-lg: var(--container-236);
-  --p-column-xl: var(--container-240);
-  --p-column-2xl: var(--container-248);
-  --p-column-3xl: var(--container-250);
-  --p-column-4xl: var(--container-270);
-  --p-column-5xl: var(--container-280);
-  --p-column-6xl: var(--container-300);
-  --p-container-6xs: var(--container-324);
-  --p-container-5xs: var(--container-360);
-  --p-container-4xs: var(--container-380);
-  --p-container-3xs: var(--container-390);
-  --p-container-2xs: var(--container-400);
-  --p-container-xs: var(--container-420);
-  --p-container-sm: var(--container-480);
-  --p-container-md: var(--container-500);
-  --p-container-lg: var(--container-560);
-  --p-container-xl: var(--container-600);
-  --p-container-2xl: var(--container-820);
-  --p-container-3xl: var(--container-1080);
-  --p-container-4xl: var(--container-1200);
-  --p-container-5xl: var(--container-1320);
-  --p-container-6xl: var(--container-1520);
+  --p-container-2xs: var(--container-256);
+  --p-container-xs: var(--container-288);
+  --p-container-sm: var(--container-384);
+  --p-container-md: var(--container-512);
+  --p-container-lg: var(--container-576);
+  --p-container-xl: var(--container-1024);
+  --p-container-2xl: var(--container-1280);
 }

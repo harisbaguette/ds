@@ -1,26 +1,12 @@
-/* Layer 2 · semantic · text. Font sizes by use: micro..caption..label for small print, body for reading, title/heading/display for hierarchy, glyph for single symbols. sm/md/lg keep the original role names. */
+/* Layer 2 · semantic · text. One font size per step: sm for small print, body and md for reading, title for card and dialog titles, lg/heading for section headings, display for the page hero. sm/md/lg keep the original role names. */
 :root,
 .theme-main {
-  --p-text-micro: var(--text-10);
-  --p-text-caption: var(--text-11);
-  --p-text-label: var(--text-12);
-  --p-text-sm: var(--text-13);
+  --p-text-sm: var(--text-12);
   --p-text-body: var(--text-14);
-  --p-text-body-lg: var(--text-15);
   --p-text-md: var(--text-16);
   --p-text-title-sm: var(--text-18);
   --p-text-title: var(--text-20);
-  --p-text-title-lg: var(--text-22);
   --p-text-lg: var(--text-24);
-  --p-text-heading-sm: var(--text-26);
-  --p-text-heading: var(--text-28);
-  --p-text-heading-lg: var(--text-30);
-  --p-text-heading-xl: var(--text-32);
-  --p-text-display-sm: var(--text-38);
+  --p-text-heading: var(--text-30);
   --p-text-display: var(--text-40);
-  --p-text-display-lg: var(--text-42);
-  --p-text-display-xl: var(--text-45);
-  --p-text-glyph: var(--text-48);
-  --p-text-display-2xl: var(--text-52);
-  --p-text-glyph-xl: var(--text-160);
 }

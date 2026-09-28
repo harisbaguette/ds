@@ -3,51 +3,51 @@
   "name": "pattove-main-token-container",
   "type": "registry:item",
   "title": "메인 스타일 · 너비 토큰",
-  "description": "메인 스타일 · 너비 토큰. 열과 화면 영역의 너비. 너비 열 폭 컨테이너 읽기 폭 container measure",
+  "description": "메인 스타일 · 너비 토큰. 카드·패널·페이지의 너비. 너비 폭 컨테이너 읽기 폭 container measure",
   "files": [
     {
       "path": "design/styles/main/space.css",
       "type": "registry:file",
       "target": "~/design/styles/main/space.css",
-      "content": ".ds[data-style=\"main\"]{--p-space-4xs:2px;--p-space-3xs:4px;--p-space-2xs:6px;--p-space-xs:8px;--p-space-xs-plus:10px;--p-space-sm:12px;--p-space-sm-plus:14px;--p-space-md:16px;--p-space-md-plus:20px;--p-space-lg:24px;--p-space-lg-plus:28px;--p-space-xl:32px;--p-space-xl-plus:36px;--p-space-2xl:40px;--p-space-3xl:48px;--p-space-4xl:56px;--p-space-5xl:64px;--p-space-6xl:80px;--p-space-7xl:104px;}\n"
+      "content": ".ds[data-style=\"main\"]{--p-space-unit:4px;--p-space-3xs:2px;--p-space-2xs:4px;--p-space-xs:8px;--p-space-sm:12px;--p-space-md:16px;--p-space-lg:24px;--p-space-xl:32px;--p-space-2xl:40px;--p-space-3xl:48px;--p-space-4xl:64px;--p-space-5xl:80px;}\n"
     },
     {
       "path": "design/styles/main/size.css",
       "type": "registry:file",
       "target": "~/design/styles/main/size.css",
-      "content": ".ds[data-style=\"main\"]{--p-size-hairline:1px;--p-size-4xs:2px;--p-size-3xs:4px;--p-size-label:4.6em;--p-size-2xs:6px;--p-size-xs:8px;--p-size-xs-plus:10px;--p-size-sm:12px;--p-size-sm-plus:14px;--p-size-md:16px;--p-size-md-plus:20px;--p-size-lg:24px;--p-size-lg-plus:28px;--p-size-xl:32px;--p-size-xl-plus:36px;--p-size-2xl:40px;--p-size-3xl:48px;--p-size-4xl:56px;--p-size-5xl:64px;--p-size-6xl:80px;--p-icon-3xs:12px;--p-icon-2xs:14px;--p-icon-xs:16px;--p-icon-sm:18px;--p-icon-md:20px;--p-icon-lg:22px;--p-icon-xl:24px;--p-icon-2xl:26px;--p-icon-3xl:28px;--p-icon-4xl:32px;--p-icon-5xl:40px;--p-control-size-sm:44px;--p-control-size-sm-plus:46px;--p-control-size-md:48px;--p-control-size-md-plus:52px;--p-control-size-lg:56px;--p-control-size-xl:64px;--p-panel-h-6xs-plus:120px;--p-panel-h-5xs:128px;--p-panel-h-5xs-plus:130px;--p-panel-h-4xs:150px;--p-panel-h-4xs-plus:154px;--p-panel-h-3xs:160px;--p-panel-h-3xs-plus:164px;--p-panel-h-2xs:168px;--p-panel-h-2xs-plus:170px;--p-panel-h-xs:176px;--p-panel-h-xs-plus:180px;--p-panel-h-sm:208px;--p-panel-h-sm-plus:220px;--p-panel-h-md:240px;--p-panel-h-md-plus:256px;--p-panel-h-lg:260px;--p-panel-h-lg-plus:270px;--p-panel-h-xl:276px;--p-panel-h-xl-plus:300px;--p-panel-h-2xl:330px;--p-panel-h-2xl-plus:360px;--p-panel-h-3xl:380px;--p-panel-h-3xl-plus:400px;--p-panel-h-4xl:480px;--p-panel-h-4xl-plus:760px;--p-panel-h-5xl:780px;--p-fill-3xs:18%;--p-fill-2xs:24%;--p-fill-xs:38%;--p-fill-sm:46%;--p-fill-md:60%;--p-fill-lg:62%;--p-fill-xl:65%;--p-fill-2xl:68%;--p-fill-3xl:72%;--p-fill-4xl:76%;--p-zoom-sm:.38;--p-zoom-md:.44;--p-zoom-lg:.58;--p-zoom-xl:.76;--p-viewport-h-sm:44vh;--p-viewport-h-md:56vh;--p-viewport-w-lg:86vw;}\n"
+      "content": ".ds[data-style=\"main\"]{--p-size-hairline:1px;--p-size-2xs:4px;--p-size-xs:8px;--p-size-sm:12px;--p-size-md:16px;--p-size-lg:24px;--p-size-xl:32px;--p-size-2xl:40px;--p-size-3xl:48px;--p-icon-xs:12px;--p-icon-sm:16px;--p-icon-md:20px;--p-icon-lg:24px;--p-icon-xl:28px;--p-icon-2xl:32px;--p-icon-3xl:40px;--p-control-size-sm:44px;--p-control-size-md:48px;--p-control-size-lg:56px;--p-control-size-xl:64px;}\n"
     },
     {
       "path": "design/styles/main/container.css",
       "type": "registry:file",
       "target": "~/design/styles/main/container.css",
-      "content": ".ds[data-style=\"main\"]{--p-measure-narrow:60ch;--p-measure:72ch;--p-column-5xs:120px;--p-column-4xs:144px;--p-column-3xs:160px;--p-column-2xs:170px;--p-column-xs:200px;--p-column-sm:210px;--p-column-md:220px;--p-column-lg:236px;--p-column-xl:240px;--p-column-2xl:248px;--p-column-3xl:250px;--p-column-4xl:270px;--p-column-5xl:280px;--p-column-6xl:300px;--p-container-6xs:324px;--p-container-5xs:360px;--p-container-4xs:380px;--p-container-3xs:390px;--p-container-2xs:400px;--p-container-xs:420px;--p-container-sm:480px;--p-container-md:500px;--p-container-lg:560px;--p-container-xl:600px;--p-container-2xl:820px;--p-container-3xl:1080px;--p-container-4xl:1200px;--p-container-5xl:1320px;--p-container-6xl:1520px;}\n"
+      "content": ".ds[data-style=\"main\"]{--p-measure-narrow:60ch;--p-measure:72ch;--p-container-2xs:256px;--p-container-xs:288px;--p-container-sm:384px;--p-container-md:512px;--p-container-lg:576px;--p-container-xl:1024px;--p-container-2xl:1280px;}\n"
     },
     {
       "path": "design/styles/main/radius.css",
       "type": "registry:file",
       "target": "~/design/styles/main/radius.css",
-      "content": ".ds[data-style=\"main\"]{--p-radius-4xs:2px;--p-radius-3xs:4px;--p-radius-2xs:6px;--p-radius-xs:8px;--p-radius-xs-plus:10px;--p-radius-sm:12px;--p-radius-sm-plus:14px;--p-radius-md:16px;--p-radius-md-plus:20px;--p-radius-lg:24px;--p-radius-lg-plus:28px;--p-radius-xl:32px;--p-radius-circle:50%;--p-radius-full:999px;--p-inner-radius:var(--p-radius-sm);--p-control-radius:var(--p-radius-md);--p-radius:var(--p-radius-lg);}\n"
+      "content": ".ds[data-style=\"main\"]{--p-radius-xs:2px;--p-radius-sm:4px;--p-radius-md:8px;--p-radius-lg:12px;--p-radius-xl:16px;--p-radius-2xl:24px;--p-radius-full:999px;--p-radius-circle:50%;--p-inner-radius:var(--p-radius-lg);--p-control-radius:var(--p-radius-xl);--p-radius:var(--p-radius-2xl);}\n"
     },
     {
       "path": "design/css/token-container.css",
       "type": "registry:file",
       "target": "~/design/css/token-container.css",
-      "content": ".ds .ds-token-container { display:grid; gap:var(--p-space-2xs); justify-items:start; }\n.ds .ds-token-container i { display:block; height:var(--p-size-xs-plus); border-radius:var(--p-radius-full); background:currentColor; width:calc(var(--p-measure-narrow) / 10); }\n.ds .ds-token-container [data-token=\"measure\"] { width:calc(var(--p-measure) / 10); }\n.ds .ds-token-container [data-token=\"column\"] { width:calc(var(--p-column-3xs) / 10); }\n.ds .ds-token-container [data-token=\"container\"] { width:calc(var(--p-container-xl) / 10); }"
+      "content": ".ds .ds-token-container { display:grid; gap:var(--p-space-xs); justify-items:start; }\n.ds .ds-token-container i { display:block; height:var(--p-size-xs); border-radius:var(--p-radius-full); background:currentColor; width:calc(var(--p-measure-narrow) / 10); }\n.ds .ds-token-container [data-token=\"measure\"] { width:calc(var(--p-measure) / 10); }\n.ds .ds-token-container [data-token=\"xs\"] { width:calc(var(--p-container-xs) / 10); }\n.ds .ds-token-container [data-token=\"lg\"] { width:calc(var(--p-container-lg) / 10); }"
     },
     {
       "path": "design/html/token-container.html",
       "type": "registry:file",
       "target": "~/design/html/token-container.html",
-      "content": "<span class=\"ds-token-row ds-token-container\"><i></i><i data-token=\"measure\"></i><i data-token=\"column\"></i><i data-token=\"container\"></i></span>"
+      "content": "<span class=\"ds-token-row ds-token-container\"><i></i><i data-token=\"measure\"></i><i data-token=\"xs\"></i><i data-token=\"lg\"></i></span>"
     }
   ],
   "meta": {
     "version": "0.3.0",
     "lifecycle": "Trial",
     "item": "token-container",
-    "purpose": "열과 화면 영역의 너비",
-    "keywords": "너비 열 폭 컨테이너 읽기 폭 container measure",
+    "purpose": "카드·패널·페이지의 너비",
+    "keywords": "너비 폭 컨테이너 읽기 폭 container measure",
     "style": "main",
     "source": "src/tokens/semantic/container.css"
   },

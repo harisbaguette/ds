@@ -1,13 +1,10 @@
-/* Layer 2 · semantic · weight. Named weights; -plus steps sit halfway to the next CSS keyword weight. */
+/* Layer 2 · semantic · weight. Named weights, one per CSS keyword weight. */
 :root,
 .theme-main {
   --p-weight-light: var(--weight-300);
   --p-weight-regular: var(--weight-400);
   --p-weight-medium: var(--weight-500);
-  --p-weight-medium-plus: var(--weight-550);
   --p-weight-semibold: var(--weight-600);
-  --p-weight-semibold-plus: var(--weight-650);
   --p-weight-bold: var(--weight-700);
-  --p-weight-bold-plus: var(--weight-750);
   --p-weight-extrabold: var(--weight-800);
 }

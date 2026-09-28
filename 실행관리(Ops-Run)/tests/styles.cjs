@@ -38,6 +38,29 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
   for(const name of ['inputBoundary','focus'])check(name+' 조작 경계 대비 3:1 이상',contrast[name]>=3);
   fs.writeFileSync(path.join(out,'contrast.json'),JSON.stringify(contrast,null,2));
   check('외곽과 부품이 같은 바탕 토큰 사용',await page.evaluate(()=>getComputedStyle(document.body).getPropertyValue('--p-bg').trim()===getComputedStyle(document.querySelector('.part-demo .ds')).getPropertyValue('--p-bg').trim()));
+  // Central tokens: editing one role in src/tokens/semantic/color.css must repaint the shell and every part.
+  const partIds=await page.evaluate(()=>[...new Set([...document.querySelectorAll('a[href*="detail="]')].map(a=>(a.hash.match(/detail=([^&]+)/)||[])[1]).filter(Boolean))]);
+  check('부품 목록 확보',partIds.length>=20);
+  const linkage={};
+  for(const id of partIds){
+   await page.goto(origin+'/#/system?style=main&detail='+id);await page.locator('.part-demo').first().waitFor();
+   linkage[id]=await page.evaluate(()=>{
+    const rules=[...document.styleSheets].filter(x=>(x.href||'').includes('/src/tokens/semantic/color.css')).flatMap(x=>[...x.cssRules]).filter(r=>r.style&&r.style.getPropertyValue('--p-bg'));
+    const nodes=[...document.querySelectorAll('body, body *')],read=()=>nodes.map(n=>[getComputedStyle(n).backgroundColor,getComputedStyle(n).color]);
+    const before=read(),old=rules.map(r=>[r.style.getPropertyValue('--p-bg'),r.style.getPropertyValue('--p-ink')]);
+    rules.forEach(r=>{r.style.setProperty('--p-bg','rgb(255, 0, 170)');r.style.setProperty('--p-ink','rgb(0, 170, 255)');});
+    const after=read();rules.forEach((r,i)=>{r.style.setProperty('--p-bg',old[i][0]);r.style.setProperty('--p-ink',old[i][1]);});
+    const oldBg=before[0][0],inDemo=i=>!!nodes[i].closest('.part-demo');
+    return {rules:rules.length,shell:after[0][0]==='rgb(255, 0, 170)',
+     partBg:after.filter((c,i)=>inDemo(i)&&c[0]==='rgb(255, 0, 170)').length,partInk:after.filter((c,i)=>inDemo(i)&&c[1]==='rgb(0, 170, 255)').length,
+     stale:after.filter(c=>c[0]===oldBg).length};
+   });
+   const r=linkage[id];
+   check(id+' 바탕·글자 역할 한 줄 수정이 외곽과 부품에 함께 반영',r.rules===1&&r.shell&&r.partBg>0&&r.partInk>0);
+   check(id+' 옛 바탕색에 머문 요소 없음',r.stale===0);
+  }
+  fs.writeFileSync(path.join(out,'token-linkage.json'),JSON.stringify(linkage,null,2));
+  await page.goto(origin+'/#/system?style=main&detail=button');
   check('비활성 버튼의 그림자 제거',await page.locator('.component-page [data-state="disabled"]').evaluateAll(ns=>ns.length>0&&ns.every(n=>getComputedStyle(n).boxShadow==='none'&&n.disabled)));
   const stateButton=async s=>{await page.goto(origin+'/#/system?style=main&detail=button&option-state='+s);return page.locator('.part-demo [data-state="'+s+'"]').first();};
   check('누름과 키보드 초점은 다른 상태',await (await stateButton('pressed')).evaluate(n=>getComputedStyle(n).boxShadow.includes('inset'))&&await (await stateButton('focus')).evaluate(n=>getComputedStyle(n).outlineStyle==='solid'&&getComputedStyle(n).outlineWidth==='3px'));

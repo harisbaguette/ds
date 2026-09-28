@@ -3,6 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { Lexer } from 'marked';
 import { fileURLToPath } from 'node:url';
+import { iconSets, writeSprites, checkNames } from './icon-sets.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const out = path.join(root, 'src/data');
 const plain = tokens => tokens.map(t => t.tokens ? plain(t.tokens) : t.text ?? t.raw ?? '').join('');
@@ -49,11 +50,12 @@ for (const doc of chapters) {
   const category={id:doc.id,name:doc.name.replace(/^\d+\.\s*/,''),count:tables.reduce((n,{table})=>n+table.rows.length,0),source:doc.source};
   categories.push(category);
   for(const {table,section} of tables) {
-    const lucideColumn=table.header.findIndex(h=>text(h)==='Lucide');
+    const glyphColumn=table.header.findIndex(h=>text(h)==='그림');
     for(const row of table.rows) {
-      const [id,name,kind,usage,evidence]=row.map(text), lucide=lucideColumn<0?'':text(row[lucideColumn]);
+      const [id,name,kind,usage,evidence]=row.map(text), cell=glyphColumn<0?'':text(row[glyphColumn]);
+      const glyph=cell&&cell!=='—'?cell.split(',').map(g=>g.trim()):null;
       if(!id.startsWith(category.id+'-')||ids.has(id)||!name||!usage)throw new Error('Invalid dictionary record: '+id);
-      ids.add(id);entries.push({id,name,kind,usage,evidence,category:category.id,...(section&&{section}),...(lucide&&lucide!=='—'&&{lucide})});
+      ids.add(id);entries.push({id,name,kind,usage,evidence,category:category.id,...(section&&{section}),...(glyph&&{glyph})});
     }
   }
 }
@@ -100,6 +102,18 @@ for(const e of entries.filter(e=>e.category==='ICO')){
 const emptyGroups=iconGroups.filter(g=>!entries.some(e=>e.sub===g.id));
 if(emptyGroups.length)throw new Error('Icon groups without entries: '+emptyGroups.map(g=>g.id).join(','));
 for(const e of entries)delete e.section;
+// Icon pictures: every glyph of the installed sets is named and filed under one icon category, and every icon meaning points at real pictures.
+const {sets:glyphSets,glyphs}=iconSets(root);
+const glyphNames=JSON.parse(fs.readFileSync(path.join(root,'문서/아이콘 그림 분류.json'),'utf8').replace(/^\uFEFF/,''));
+checkNames(glyphNames,glyphs,iconGroups.map(g=>g.id));
+const glyphKeys=new Set(glyphs.map(g=>g.key));
+const badGlyph=entries.filter(e=>e.glyph?.some(g=>!glyphKeys.has(g)&&!/^emoji:\p{RGI_Emoji}$/v.test(g))).map(e=>e.id+' '+e.glyph.join(','));
+if(badGlyph.length)throw new Error('Icon entries point at pictures that are not installed: '+badGlyph.join('; '));
+const bare=entries.filter(e=>e.category==='ICO'&&e.kind==='부품'&&!e.glyph).map(e=>e.id);
+if(bare.length)throw new Error('Icon parts without a picture: '+bare.join(', '));
+writeSprites(root,glyphSets);
+// Pictures no meaning entry points at still show in the icon tab as their own kind.
+shelves.find(s=>s.codes?.includes('ICO')).kinds.push('세트 그림');
 const layerDoc=read('문서/구성요소 계층표.md');
 const table=layerDoc.tokens.find(t=>t.type==='table' && text(t.header[0])==='레벨');
 if(!table)throw new Error('Missing hierarchy table');
@@ -113,9 +127,10 @@ for(const row of table.rows) {
   components.push({id,layer:layer.id,name,examples});
 }
 for(const l of layers)l.count=components.filter(c=>c.layer===l.id).length;
-const payload={categories,groups,layers,uses,shelves,places,roleOrder,iconGroups,entries,components};
+const payload={categories,groups,layers,uses,shelves,places,roleOrder,iconGroups,entries,components,
+  glyphSets:glyphSets.map(({symbols,pkg,...s})=>s),glyphs:glyphs.map(g=>[g.key,...glyphNames[g.key]])};
 fs.writeFileSync(path.join(out,'library.js'),'/* Generated from repository Markdown by scripts/build-library.mjs. */\nwindow.Pattove=window.Pattove||{};\nwindow.Pattove.library='+JSON.stringify(payload)+';\n');
 fs.mkdirSync(path.join(root,'test-results/library'),{recursive:true});
-fs.writeFileSync(path.join(root,'test-results/library/source-audit.json'),JSON.stringify({categories:categories.length,entries:entries.length,layers:layers.length,components:components.length},null,2));
-console.log(JSON.stringify({categories:categories.length,entries:entries.length,layers:layers.length,components:components.length}));
+fs.writeFileSync(path.join(root,'test-results/library/source-audit.json'),JSON.stringify({categories:categories.length,entries:entries.length,layers:layers.length,components:components.length,glyphs:glyphs.length},null,2));
+console.log(JSON.stringify({categories:categories.length,entries:entries.length,layers:layers.length,components:components.length,glyphs:Object.fromEntries(glyphSets.map(s=>[s.id,s.count]))}));
 

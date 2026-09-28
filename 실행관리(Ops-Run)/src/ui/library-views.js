@@ -1,12 +1,19 @@
 ﻿(() => {
   const { library: data, views, previews } = window.Pattove;
   const { escape } = views, { icon } = previews;
-  const entries=new Map(data.entries.map(e=>[e.id,e]));
+  // Every installed icon picture is on the icon tab: the ones a meaning entry points at show through that entry, the rest as 세트 그림 of their own.
+  const iconShelf=data.shelves.find(s=>s.codes?.includes('ICO'))?.id;
+  const glyphSets=new Map(data.glyphSets.map(s=>[s.id,s]));
+  const glyphName=new Map(data.glyphs.map(([key,name])=>[key,name]));
+  const linked=new Set(data.entries.flatMap(e=>e.glyph||[]));
+  const dictionary=[...data.entries,...data.glyphs.filter(([key])=>!linked.has(key)).map(([key,name,sub])=>({id:key,name,kind:'세트 그림',category:'ICO',sub,shelf:iconShelf,glyph:[key]}))];
+  const entries=new Map(dictionary.map(e=>[e.id,e]));
   const components=new Map(data.components.map(e=>[e.id,e]));
   const pages=['dictionary','components'];
-  const searches=new Map([...data.entries,...data.components].map(e=>[e.id,[e.id,e.name,e.usage,e.examples,e.kind].filter(Boolean).join(' ').toLocaleLowerCase()]));
+  const searches=new Map([...dictionary,...data.components].map(e=>[e.id,[e.id,e.name,e.usage,e.examples,e.kind,...(e.glyph||[]).map(g=>g+' '+(glyphName.get(g)||''))].filter(Boolean).join(' ').toLocaleLowerCase()]));
   const registry = window.Pattove.systemRegistry;
-  const part = id => registry.index.get(id) || registry.items.find(item => item.entry === id);
+  const claimed = new Set(registry.items.map(item => item.entry).filter(Boolean));
+  const part = id => registry.index.get(id) || (claimed.has(id) && registry.items.find(item => item.entry === id));
   const implemented = e => ({ ...e, usage:e.purpose, category:e.section, kind:e.layer, implementation:true });
   // The shelves (토큰 by source code, 부품 → 블록 → 템플릿 by kind, then 아이콘 as its own library) are the header tabs. Each entry carries its shelf from the build.
   // Inside a tab the filter bar narrows by kind, role group or 분야 (one "area" facet, since the two split the categories between them),
@@ -21,12 +28,11 @@
   const roles=data.roleOrder.map(id=>data.groups.find(g=>g.id===id)).filter(Boolean)
     .map(g=>({id:g.id,name:groupName[g.id]||g.name,codes:g.codes.filter(code=>!placeOf.has(code))}));
   const roleOf=new Map(roles.flatMap(r=>r.codes.map(code=>[code,r.id])));
-  const iconShelf=data.shelves.find(s=>s.codes?.includes('ICO'))?.id;
   // A dictionary entry carries its shelf from the build; a hierarchy component (no category) lands on the shelf that claims its layer.
   const shelfOf=e=>e.category?e.shelf:data.shelves.find(s=>s.layers?.includes(e.layer))?.id;
   const itemShelf=item=>item.entry?shelfOf(entries.get(item.entry)):['Template','Page'].includes(item.layer)?'template':item.layer==='Module'?'block':'part';
   const inShelf=new Map(), bump=key=>inShelf.set(key,(inShelf.get(key)||0)+1);
-  for (const e of data.entries) { bump(e.shelf+'|'+e.category); if (e.sub) bump(e.shelf+'|ICO.'+e.sub); }
+  for (const e of dictionary) { bump(e.shelf+'|'+e.category); if (e.sub) bump(e.shelf+'|ICO.'+e.sub); }
   const short=name=>String(name).split(' — ')[0];
   // A shelf with no kinds (토큰) sorts by the family named before " — " (색, 글자, 간격 …); a family of one or a bare name reads as 기타,
   // and the hierarchy components on that shelf share one 묶음 kind.
@@ -45,6 +51,13 @@
     기준:'<rect x="18" y="14" width="16" height="16" rx="4" class="k-ink"/><rect x="40" y="14" width="16" height="16" rx="4"/><rect x="62" y="14" width="16" height="16" rx="4" class="k-fill"/><rect x="84" y="14" width="16" height="16" rx="4" class="k-soft"/><path d="M18 50h82M18 45v10M38.5 47v6M59 45v10M79.5 47v6M100 45v10"/>'
   };
   const kindSvg=kind=>'<svg viewBox="0 0 120 72" class="dict-kind-art" aria-hidden="true" data-src="self:diagram">'+(kindArt[kind]||kindArt.모듈)+'</svg>';
+  // A picture is drawn from its set's sprite (stroke or fill paint, per set); an emoji key is the character itself.
+  function glyphArt(key, cls) {
+    const at=key.indexOf(':'), set=key.slice(0,at), name=key.slice(at+1);
+    if (set==='emoji') return '<span class="'+cls+' is-emoji" aria-hidden="true">'+escape(name)+'</span>';
+    return '<svg class="'+cls+' paint-'+glyphSets.get(set).paint+'" aria-hidden="true" data-src="assets/icons/sets/'+set+'.svg"><use href="assets/icons/sets/'+set+'.svg#'+escape(name)+'"/></svg>';
+  }
+  const glyphSource=key=>{ const s=glyphSets.get(key.slice(0,key.indexOf(':'))); return s?s.name+' '+s.version+' · '+s.license:'유니코드 이모지'; };
   function sample(item, style = 'main', prefix = 'atlas') {
     const p = window.Pattove.parts;
     const body = item.id === 'button' ? p.button({label:'계속하기'}) + p.button({label:'취소',variant:'outline'}) + p.button({label:'검색',iconName:'search',iconOnly:true})
@@ -102,7 +115,7 @@
     const shelf=state.filters.shelf, found=new Set(registry.matching(state.query).map(e=>e.id));
     return {
       built:registry.items.filter(i=>itemShelf(i)===shelf&&(found.has(i.id)||(i.entry&&match(entries.get(i.entry),state.query)))),
-      plain:[...data.entries,...data.components].filter(e=>!part(e.id)&&shelfOf(e)===shelf&&match(e,state.query))
+      plain:[...dictionary,...data.components].filter(e=>!part(e.id)&&shelfOf(e)===shelf&&match(e,state.query))
     };
   }
   function currentItems(state) {
@@ -151,7 +164,7 @@
     if (e.implementation) return '<div class="dict-entry is-built"><span class="dict-thumb atlas-preview" inert aria-hidden="true">'+sample(e,state.style,'thumb-'+e.id)+'</span><button class="dict-hit" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><strong>'+escape(e.name)+'</strong></button></div>';
     // On a family-sorted shelf the family is the filter, so the tile keeps the whole name (색 — primary), not just 색.
     const kind=e.kind||'기준', label=byName(shelfOf(e))?e.name:short(e.name);
-    return '<button class="dict-entry" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(kind)+'" title="'+escape(e.name+(e.lucide?' · Lucide '+e.lucide:''))+'"><span class="dict-thumb">'+kindSvg(kind)+'</span><strong>'+escape(label)+'</strong></button>';
+    return '<button class="dict-entry" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(kind)+'" title="'+escape(e.name+(e.glyph?' · '+e.glyph.join(', '):''))+'"><span class="dict-thumb">'+(e.glyph?glyphArt(e.glyph[0],'dict-glyph'):kindSvg(kind))+'</span><strong>'+escape(label)+'</strong></button>';
   }
   const empty='<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary" data-action="clear-filters" data-focus="empty-clear">필터 지우기</button></div>';
   const more=(shown,total)=>total>shown?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+shown+' / '+total+'</span></button></div>':'';
@@ -167,9 +180,10 @@
     // A hierarchy component opened from the 토큰 shelf reads like its components-page record.
     const e=state.page==='dictionary'&&entries.get(state.detail)||components.get(state.detail);
     const dict=!!e.category, category=dict?null:data.layers.find(l=>l.id===e.layer);
-    // The dictionary detail is only the enlarged picture; the tile already carries the name.
+    // The dictionary detail is the enlarged picture; an icon also lists its picture keys to copy and the set each comes from.
     return '<header class="dialog-header"><div><span class="dialog-category">'+escape(dict?[shelves.get(shelfOf(e))?.name,e.sub?'':short(categoryById.get(e.category)?.name||''),places.get(placeOf.get(e.category))?.name,iconGroups.get(e.sub)?.name].filter(Boolean).join(' · '):category.english)+'</span><h2 id="detail-title" tabindex="-1">'+escape(e.name)+'</h2></div><button class="icon-button" data-action="close-dialog" aria-label="상세 닫기">'+icon('close')+'</button></header>'+
-      (dict?'<div class="detail-art" data-kind="'+escape(e.kind||'')+'">'+kindSvg(e.kind)+'</div>'
+      (dict&&e.glyph?'<div class="detail-art" data-kind="'+escape(e.kind)+'">'+glyphArt(e.glyph[0],'detail-glyph')+'</div><ul class="glyph-keys">'+e.glyph.map(g=>'<li>'+glyphArt(g,'glyph-mini')+'<code>'+escape(g)+'</code><span>'+escape(glyphSource(g))+'</span></li>').join('')+'</ul>'
+      :dict?'<div class="detail-art" data-kind="'+escape(e.kind||'')+'">'+kindSvg(e.kind)+'</div>'
         :'<div class="record-detail"><p class="record-kind">'+escape(category.name)+'</p><section><h3>대표 항목</h3><p>'+escape(e.examples)+'</p></section></div>');
   }
   window.Pattove.libraryUI={

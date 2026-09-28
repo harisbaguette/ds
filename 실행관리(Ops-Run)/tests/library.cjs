@@ -15,6 +15,11 @@ check('모든 항목이 토큰·부품·블록·템플릿·아이콘 중 정확�
 check('토큰 갈래가 맨 앞이고 TOK 146개를 모두 담음',data.shelves[0].id==='token'&&data.entries.filter(e=>e.shelf==='token').length===146&&data.entries.filter(e=>e.category==='TOK').every(e=>e.shelf==='token'));
 check('쓰는 곳 태그가 서비스·게임·영역 분류를 한 번씩 덮음',(()=>{const codes=data.places.flatMap(p=>p.codes),use=data.groups.filter(g=>['service','game','domain'].includes(g.id)).flatMap(g=>g.codes);return new Set(codes).size===codes.length&&codes.length===use.length&&use.every(c=>codes.includes(c));})());
 check('아이콘은 모두 카테고리 하나를 가지고, 빈 카테고리가 없음',data.iconGroups.every(g=>data.entries.some(e=>e.sub===g.id))&&data.entries.filter(e=>e.category==='ICO').every(e=>data.iconGroups.some(g=>g.id===e.sub))&&data.entries.every(e=>!e.sub||e.category==='ICO'));
+// Every installed icon-set picture is named and filed; the ones no meaning entry points at join the icon tab as 세트 그림.
+const glyphOnly=data.glyphs.filter(([key])=>!data.entries.some(e=>e.glyph?.includes(key)));
+check('설치된 아이콘 세트 그림은 모두 한국어 이름과 아이콘 카테고리 하나를 가짐',data.glyphs.length===data.glyphSets.reduce((n,s)=>n+s.count,0)&&data.glyphs.every(([key,name,sub])=>key.includes(':')&&name&&data.iconGroups.some(g=>g.id===sub))&&new Set(data.glyphs.map(g=>g[0])).size===data.glyphs.length);
+check('아이콘 부품은 모두 실제 그림 키를 가짐',data.entries.filter(e=>e.category==='ICO'&&e.kind==='부품').every(e=>e.glyph?.length>0)&&data.entries.flatMap(e=>e.glyph||[]).every(g=>g.startsWith('emoji:')||data.glyphs.some(([key])=>key===g)));
+check('아이콘 카테고리마다 세트 그림이 들어 있음',data.iconGroups.filter(g=>g.id!=='rules').every(g=>data.glyphs.some(([,,sub])=>sub===g.id)));
 check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categories.length===data.groups.flatMap(g=>g.codes).length&&new Set(data.groups.flatMap(g=>g.codes)).size===data.categories.length);
 (async()=>{
  const browser=await chromium.launch({headless:true});
@@ -73,7 +78,7 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    }
   }
   const tokenComponents=data.components.filter(c=>c.layer==='token').length;
-  check('모든 탭을 합치면 사전 전체·토큰 계층 구성요소·구현 부품이 빠짐없이 들어감',tokenComponents===30&&shelfTotal===data.entries.length+tokenComponents+await page.evaluate(()=>Pattove.systemRegistry.items.filter(i=>!i.entry).length));
+  check('모든 탭을 합치면 사전 전체·토큰 계층 구성요소·구현 부품이 빠짐없이 들어감',tokenComponents===30&&shelfTotal===data.entries.length+glyphOnly.length+tokenComponents+await page.evaluate(()=>Pattove.systemRegistry.items.filter(i=>!i.entry).length));
   // 토큰 탭 종류 필터 = 이름의 " — " 앞부분(색·글자·간격 …), 하나뿐인 갈래와 이름만 있는 항목은 기타.
   await goto('dictionary?shelf=token');
   const tokenKinds=await page.locator('#filter-bar .filter-option[data-filter^="kind:"]').evaluateAll(els=>els.map(e=>e.dataset.filter.slice(5)));
@@ -115,11 +120,13 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   await goto('dictionary?shelf=icon');
   check('아이콘 탭 필터 칸은 종류·카테고리, 카테고리는 전부',JSON.stringify(await sections())==='["종류","카테고리"]'&&await page.locator('#filter-bar .filter-option[data-filter^="icon:"]').count()===data.iconGroups.length);
   await pick('icon','navigation');
-  const navigation=data.entries.filter(e=>e.sub==='navigation').length;
-  check('아이콘 카테고리로 좁히기',await page.locator('.dict-entry').count()===Math.min(48,navigation)&&await shown()===navigation&&(await itemsOf('shelf=icon&icon=navigation')).length===navigation&&await pressed()===1);
+  const navigation=data.entries.filter(e=>e.sub==='navigation').length+glyphOnly.filter(([,,sub])=>sub==='navigation').length;
+  check('아이콘 카드는 세트 그림을 실제로 그림',await page.locator('.dict-entry .dict-glyph use').count()>0&&await page.locator('.dict-entry svg.dict-glyph').first().evaluate(async svg=>{for(let i=0;i<50;i++){const b=svg.querySelector('use').getBBox();if(b.width>0&&b.height>0)return true;await new Promise(r=>setTimeout(r,100));}return false;}));
+  const navItems=await itemsOf('shelf=icon&icon=navigation');
+  check('아이콘 카테고리로 좁히기',await page.locator('.dict-entry:not(.is-built)').count()===Math.min(48,navItems.filter(e=>!e.implementation).length)&&await shown()===navigation&&navItems.length===navigation&&await pressed()===1);
   check('쓰는 곳으로 게임 전용 부품 모으기',(await itemsOf('shelf=part&place=game')).every(e=>data.places.find(p=>p.id==='game').codes.includes(e.category)&&e.shelf==='part'));
   await goto('dictionary?category=ICO');
-  check('옛 분류 주소는 아이콘 탭에서 아이콘 전체를 보여줌',(await itemsOf('category=ICO')).length===data.entries.filter(e=>e.category==='ICO').length&&page.url().includes('shelf=icon'));
+  check('옛 분류 주소는 아이콘 탭에서 아이콘 전체를 보여줌',(await itemsOf('category=ICO')).length===data.entries.filter(e=>e.category==='ICO').length+glyphOnly.length&&page.url().includes('shelf=icon'));
   await page.locator('[data-action="load-more"]').click();
   check('대량 분류 더 보기 48개씩',await page.locator('.dict-entry:not(.is-built)').count()===96);
   check('더 보기 뒤 새 항목으로 초점',await page.locator('.dict-entry:not(.is-built)').nth(48).evaluate(e=>e===document.activeElement));
@@ -142,6 +149,15 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   check('사전 상세는 그림 크게 보기만',await page.locator('dialog .detail-art svg').isVisible()&&await page.locator('dialog .dialog-footer, dialog .record-detail').count()===0);
   await shot('06-entry-art');
   await close();
+  await goto('dictionary?shelf=icon&kind='+encodeURIComponent('세트 그림'));
+  check('아이콘 탭 종류에 세트 그림이 있고 이름 없는 그림이 없음',await shown()===glyphOnly.length&&await page.locator('.dict-entry strong').first().textContent()!=='');
+  await page.locator('button.dict-entry').first().click();
+  const glyphKey=await page.locator('dialog .glyph-keys code').first().textContent();
+  check('세트 그림 상세는 큰 그림과 복사할 그림 키·출처를 보여 줌',await page.locator('dialog .detail-art svg.detail-glyph use').count()===1&&glyphOnly.some(([key])=>key===glyphKey)&&/Lucide|Tabler|Phosphor|Material/.test(await page.locator('dialog .glyph-keys span').first().textContent()));
+  await shot('07-glyph-art');
+  await close();
+  await page.locator('#query').fill('rocket');await page.locator('#query').press('Enter');
+  check('영문 그림 이름으로도 아이콘을 찾음',await page.locator('.dict-entry .dict-glyph').count()>0);
   await goto('docs?doc=definition');await page.waitForFunction(()=>!location.hash.startsWith('#/docs'));
   check('없앤 문서 주소는 문서 화면을 열지 않음',!page.url().includes('docs')&&await page.locator('.document-body').count()===0);
   const inView=sel=>page.locator(sel).evaluate(p=>{const r=p.getBoundingClientRect();return r.width>0&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight;});

@@ -66,7 +66,7 @@
       look('02','glass','유리','사진·지도가 바닥까지 깔릴 때','가려진 내용 보러 스크롤'),
       look('03','float','떠 있는 바','만들기가 가장 잦은 앱','만들기 버튼 찾기'),
       look('04','pill','알약 강조','지금 위치를 한눈에 알아야 할 때','현재 탭 찾기'),
-      look('05','line','위쪽 표시줄','처음 쓰는 사람이 많은 앱','낯선 모양 해석')
+      look('05','line','위쪽 표시줄','처음 쓰는 사람이 많은 앱','낯선 표시 알아보기')
     ] },
     // Atoms share one key: `look` → data-look on the markup, drawn by [data-look] rules in parts.css. First entry = current shape.
     // Button colour roles (primary/outline/ghost) stay on `variant`; looks here are arrangements of actions.
@@ -77,7 +77,7 @@
       look('04','bar','엄지 자리 가득','휴대폰 긴 화면 끝의 결정','스크롤해 버튼 찾기')
     ] },
     input: { list: [
-      look('01','box','기본 칸','한 번 쓰고 끝나는 값','모양 해석'),
+      look('01','box','기본 칸','한 번 쓰고 끝나는 값','무엇인지 알아보기'),
       look('02','clear','칸 안 지우기','통째로 다시 쓰는 값','지우기 키 연타'),
       look('03','unit','숫자 + 단위 한 칸','단위가 붙는 숫자','두 칸 오가기'),
       look('04','stepper','빼기·더하기','작은 수를 바꿀 때','키보드 열기')
@@ -89,13 +89,13 @@
       look('04','row','시작~끝 한 줄','짝을 이루는 값(기간·범위)','눈이 멈추는 곳 절반')
     ] },
     checkbox: { list: [
-      look('01','square','네모','항목이 적은 동의·선택','모양 해석'),
+      look('01','square','네모','항목이 적은 동의·선택','무엇인지 알아보기'),
       look('02','card','선택 카드','설명이 붙은 선택지','작은 네모 겨누기'),
       look('03','chip','알약 칩','여러 필터를 빠르게 켤 때','세로 목록 훑기'),
       look('04','list','목록 줄','설정 화면의 여러 항목','줄과 칸 맞춰 보기')
     ] },
     radio: { list: [
-      look('01','dot','가운데 점','선택지가 3~5개','모양 해석'),
+      look('01','dot','가운데 점','선택지가 3~5개','무엇인지 알아보기'),
       look('02','card','선택 카드','설명이 붙은 선택지','작은 원 겨누기'),
       look('03','segment','나란한 버튼','2~4개 중 바로 바꿀 때','세로로 훑기'),
       look('04','list','목록 줄','설정 화면의 한 가지 고르기','줄과 칸 맞춰 보기')
@@ -138,7 +138,7 @@
       look('04','steps','마디 막대','단계가 정해진 일','몇 단계 남았는지 세기')
     ] },
     card: { key: 'look', label: '모양', frame: 'stage', list: [
-      look('01','raised','기본','글이 주인공인 카드','모양 해석'),
+      look('01','raised','기본','글이 주인공인 카드','무엇인지 알아보기'),
       look('02','row','가로형','여러 항목을 위아래로 비교','카드 사이 눈 이동'),
       look('03','media','이미지 위','사진으로 고르는 항목','제목 읽기')
     ] },
@@ -176,7 +176,7 @@
     radio: ['같은 그룹에서 하나 선택', '같은 그룹은 name 공유, 다른 그룹은 name 분리', ['label','checked','disabled','name','value'], ['change']],
     switch: ['설정을 켜고 끄기', '동작 이름을 label로 제공', ['label','checked','disabled'], ['change']],
     badge: ['짧은 상태 이름', '색만으로 상태를 구분하지 않음', ['label','tone'], []],
-    tabs: ['같은 영역의 내용 전환', '탭과 패널의 id 연결을 유지. 세로 모양은 위아래 방향키', ['prefix','look'], ['pattove:tabchange']],
+    tabs: ['같은 영역의 내용 전환', '탭과 패널의 id 연결을 유지. 세로 탭은 위아래 방향키', ['prefix','look'], ['pattove:tabchange']],
     'bottom-nav': ['주요 목적지 선택', '목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공', ['variant','onCreate (React)'], ['pattove:navigate','pattove:create (HTML)']],
     feedback: ['행동의 결과와 진행률', '표본 저장 알림과 68% 진행률. 실제 저장·업로드는 프로젝트에서 연결', ['look'], []],
     card: ['제목·본문·상태·행동 조합', '단독 표본은 선택 토글, 검색 모듈에서는 상세 열기', ['title','description','tag','action','behavior','look'], ['pattove:select']],

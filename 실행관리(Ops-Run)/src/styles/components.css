@@ -31,6 +31,8 @@
 .component-pagination a { display:inline-flex; min-height:44px; gap:8px; align-items:center; font-size:13px; }
 .component-pagination [rel=prev] .ui-icon { transform:rotate(180deg); order:-1; }.component-pagination [rel=next] { margin-left:auto; }.component-pagination .ui-icon { width:14px; }
 .variant-count { font-size:14px; font-weight:500; color:var(--p-muted); margin-left:4px; }
+.component-section>.variant-lead { margin:-10px 0 20px; font-size:14px; line-height:1.6; }
+.variant-lead b { color:var(--p-ink); font-weight:650; }
 .component-section>.variant-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:32px 24px; max-width:none; padding:0; margin:0; list-style:none; color:var(--p-ink); line-height:1.4; }
 .variant-card { position:relative; display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:'frame frame' 'pick use'; align-items:center; gap:12px 8px; min-width:0; }
 .variant-pick { grid-area:pick; display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:8px; align-items:baseline; min-height:44px; padding:0; text-align:left; color:var(--p-ink); background:none; border:0; }

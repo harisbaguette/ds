@@ -1,6 +1,6 @@
 {
   "version": "0.3.0",
-  "revision": "62478e42ed8a0b7cc6411b624ef1ef516482a521e24fe569d36df89511ec4c1b",
+  "revision": "604a55b50d4af1a188c598acc66c1f29243c2b762287751849acf60f49c7a0b1",
   "sources": [
     "src/system/parts.js",
     "src/system/parts.css",
@@ -1042,7 +1042,7 @@
             "id": "box",
             "name": "기본 칸",
             "when": "한 번 쓰고 끝나는 값",
-            "saves": "모양 해석"
+            "saves": "무엇인지 알아보기"
           },
           {
             "no": "02",
@@ -1332,7 +1332,7 @@
             "id": "square",
             "name": "네모",
             "when": "항목이 적은 동의·선택",
-            "saves": "모양 해석"
+            "saves": "무엇인지 알아보기"
           },
           {
             "no": "02",
@@ -1462,7 +1462,7 @@
             "id": "dot",
             "name": "가운데 점",
             "when": "선택지가 3~5개",
-            "saves": "모양 해석"
+            "saves": "무엇인지 알아보기"
           },
           {
             "no": "02",
@@ -1761,7 +1761,7 @@
       ],
       "behavior": true,
       "purpose": "같은 영역의 내용 전환",
-      "compatibility": "탭과 패널의 id 연결을 유지. 세로 모양은 위아래 방향키",
+      "compatibility": "탭과 패널의 id 연결을 유지. 세로 탭은 위아래 방향키",
       "inputs": [
         "prefix",
         "look"
@@ -1947,7 +1947,7 @@
             "id": "line",
             "name": "위쪽 표시줄",
             "when": "처음 쓰는 사람이 많은 앱",
-            "saves": "낯선 모양 해석"
+            "saves": "낯선 표시 알아보기"
           }
         ]
       },
@@ -2149,7 +2149,7 @@
             "id": "raised",
             "name": "기본",
             "when": "글이 주인공인 카드",
-            "saves": "모양 해석"
+            "saves": "무엇인지 알아보기"
           },
           {
             "no": "02",

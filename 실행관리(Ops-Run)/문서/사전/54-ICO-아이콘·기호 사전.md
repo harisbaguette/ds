@@ -2,7 +2,7 @@
 
 [패턴 사전 색인과 사용법](<../패턴 사전 색인과 사용법.md>)의 54번 분류 ICO다. 항목 ID·종류·근거 표기 규칙은 색인 문서의 "목록을 읽는 기준"을 따르고, 근거 칸의 출처 기호는 [레퍼런스 출처 대장](<../레퍼런스 출처 대장.md>)의 "출처 기호표"에서 원문으로 이어진다.
 
-제품 화면에서 쓰는 아이콘을 그림이 아니라 뜻으로 정리한 목록이다. 아이콘은 뜻의 폭이 넓어 부품 갈래에서 떼어 내 별도 갈래로 두었고, 카테고리는 하위 단계 없이 한 층으로 53개를 두었다. Unicode 이모지 그룹과 Font Awesome·Tabler·Lucide·Material Symbols·Phosphor·Remix·Iconoir·Flaticon·Iconscout의 카테고리를 모두 대조해, 큰 아이콘 사이트가 다루는 주제가 빠짐없이 한 곳에 들어가도록 정했다. 순서는 화면 조작(이동·편집·상태 등), 일과 도구, 사람, 생활, 세상, 문화·사회 묶음 순이다. 한 그림이 두 카테고리에 걸치면 쓰임이 더 구체적인 쪽에 둔다. 예를 들어 배터리·와이파이·블루투스는 상태 표시로 쓰여도 기기·연결에, 악기는 음악·소리에, 탈것은 교통에 둔다. 마지막 "아이콘 규칙"은 카테고리가 아니라 아이콘 전체에 공통으로 적용하는 기준과 그림 양식(선·채움·색 등)을 모은 절이며, 아이콘 탭의 카테고리 목록에는 나오지 않는다.
+제품 화면에서 쓰는 아이콘을 그림이 아니라 뜻으로 정리한 목록이다. 아이콘은 뜻의 폭이 넓어 부품 갈래에서 떼어 내 별도 갈래로 두었고, 카테고리는 하위 단계 없이 한 층으로 55개를 두었다. Unicode 이모지 그룹과 Font Awesome·Hugeicons·Tabler·Lucide·Material Symbols·Phosphor·Remix·Iconoir·Flaticon·Iconscout의 카테고리를 모두 대조해, 큰 아이콘 사이트가 다루는 주제가 빠짐없이 한 곳에 들어가도록 정했다. 순서는 화면 조작(이동·편집·상태 등), 일과 도구, 사람, 생활, 세상, 문화·사회 묶음 순이다. 그림 하나는 그려진 물체에 맞는 주 카테고리 하나에 두고, 다른 뜻으로도 흔히 쓰이면 그 뜻의 카테고리 두 곳까지 함께 보이게 한다. 예를 들어 하트는 감정·이모지가 주 카테고리이고 편집·행동(좋아요)과 의료·건강(심박)에서도 보이며, 연령 등급 표시는 상·배지·인증이 주 카테고리이고 사진·영상·재생에서도 보인다. 사전 항목은 자기 카테고리와 함께, 가리키는 그림이 사는 카테고리에서도 보인다. 두 카테고리에 걸치는 그림의 주 카테고리는 쓰임이 더 구체적인 쪽으로 정한다. 예를 들어 배터리·와이파이·블루투스는 상태 표시로 쓰여도 기기·연결에, 악기는 소리·음악에, 탈것은 교통에 둔다. 자주 헷갈리는 경계는 다음처럼 정했다. 음량·음소거·스피커·마이크·헤드폰처럼 소리에 관한 것은 모두 소리·음악에, 재생·일시정지·건너뛰기 같은 재생 조작은 사진·영상·재생에 둔다. 로그인·로그아웃·계정 전환은 사람·가족·계정에, 저장됨·동기화 중·실패 같은 상태 표시는 상태·알림에 둔다. 체크박스·라디오·스위치·슬라이더·입력 칸 같은 폼 부품과 끌기 손잡이는 화면 배치·폼 부품에, 흐림·필터·질감 같은 화면 효과는 디자인·도형·효과에, ⌘·⇧·⏎ 같은 키보드 키 기호와 QR 코드·바코드·NFC 같은 기계가 읽는 부호는 글자·숫자·기호·코드에 둔다. 결혼·장례 같은 경조사는 기념일·행사·경조사에, 젖병·유모차·기저귀 같은 육아 용품은 사람·가족·계정에 둔다. AI 기능 표시는 AI·생성에, 트로피·메달·왕관·인증 배지·연령 등급은 상·배지·인증에 둔다. 안전 표지·세탁 기호·재활용 표시처럼 정해진 기호 체계는 칸을 따로 만들지 않고 안전·치안·군사, 옷·미용, 에너지·환경처럼 쓰임이 맞는 칸에 나누어 둔다. 마지막 "아이콘 규칙"은 카테고리가 아니라 아이콘 전체에 공통으로 적용하는 기준과 그림 양식(선·채움·색 등)을 모은 절이며, 아이콘 탭의 카테고리 목록에는 나오지 않는다.
 
 그림 칸은 그 뜻을 그린 실제 아이콘이다. `세트:이름` 형식으로 적고, 세트는 Lucide(`lucide`), Tabler Icons(`tabler`), Phosphor(`phosphor`), Material Symbols(`material`) 가운데 하나다. 네 세트에 알맞은 그림이 없으면 유니코드 이모지를 `emoji:` 뒤에 적는다. 그림이 여러 개면 쉼표로 나누고 가장 알맞은 것을 앞에 둔다. "—"는 그림이 필요 없는 기준 항목이다. 빌드는 부품 항목에 그림이 없거나, 적힌 그림이 설치된 세트에 없으면 멈춘다.
 
@@ -37,14 +37,13 @@
 | ICO-67 | 전체화면 — fullscreen | 부품 | 화면 전체를 씀, 바깥으로 벌어지는 모서리 | 확장 [MK] · 대조 [ICLU] | `lucide:fullscreen` |
 | ICO-68 | 전체화면 종료 — exit fullscreen | 부품 | 원래 창 크기로 돌아옴 | 확장 [MK] · 대조 [ICLU] | `lucide:minimize` |
 | ICO-119 | 북마크 — bookmark | 부품 | 나중에 다시 보려고 표시함, 리본 책갈피 | 확장 [MK] · 대조 [ICLU] | `lucide:bookmark` |
-| ICO-141 | 로그인 — sign in | 부품 | 계정으로 들어감, 안으로 향한 화살표와 문 | 확장 [MK] · 대조 [ICLU] | `lucide:log-in` |
-| ICO-142 | 로그아웃 — sign out | 부품 | 계정에서 나감, 밖으로 향한 화살표와 문 | 확장 [MK] · 대조 [ICLU] | `lucide:log-out` |
 | ICO-279 | 대시보드 — dashboard | 부품 | 여러 지표를 한 화면에 모은 곳 | 확장 [MK] · 대조 [ICLU] | `lucide:layout-dashboard` |
 | ICO-527 | 출입구 — door open | 부품 | 다른 공간·모드로 들어가고 나가는 관문을 나타냄, 열린 문 모양 | 확인 [ICLU] | `lucide:door-open` |
 | ICO-528 | 전체 앱 — apps | 부품 | 설치된 앱을 모아 한 번에 여는 목록을 나타냄, 격자 모양 아이콘 | 확인 [ICLU] | `lucide:layout-grid` |
 | ICO-529 | 탭 전환 — tabs | 부품 | 열어 둔 여러 작업 화면을 오가며 봄을 나타냄, 위쪽 탭 모양 | 확인 [ICSET] | `tabler:tabs` |
 | ICO-08 | 닫기 — close | 부품 | 창·알림·시트를 닫음, X 모양 | 확장 [MK] · 대조 [ICLU] | `lucide:x` |
 | ICO-03 | 앞으로 — forward | 부품 | 뒤로 간 뒤 다시 앞 화면으로 감 | 확장 [MK] · 대조 [ICLU] | `lucide:forward` |
+| ICO-09 | 펼치기 — expand | 부품 | 접힌 내용을 열어 보임, 아래 꺾쇠 | 확장 [MK] · 대조 [ICLU] | `lucide:expand` |
 
 ## 편집·행동 — Actions
 
@@ -101,10 +100,8 @@
 | ICO-89 | 미리보기 — preview | 부품 | 저장 전 결과 모습을 확인함 | 확장 [MK] · 대조 [ICLU] | `lucide:eye` |
 | ICO-120 | 보이기 — visible | 부품 | 지금 드러나 있음, 눈 모양 | 확장 [MK] · 대조 [ICLU] | `lucide:eye` |
 | ICO-121 | 숨기기 — hidden | 부품 | 지금 가려져 있음, 사선이 그어진 눈 | 확장 [MK] · 대조 [ICLU] | `lucide:eye-off` |
-| ICO-458 | 끌기 손잡이 — drag handle | 부품 | 잡고 옮길 수 있는 자리, 점 여섯 개 | 확장 [MK] · 대조 [ICLU] | `lucide:grip-vertical` |
 | ICO-531 | 빼기 — minus | 부품 | 값이나 개수를 하나씩 줄임을 나타냄, 가로줄 하나 | 확인 [ICLU] | `lucide:minus` |
 | ICO-532 | 설정 슬라이더 — sliders | 부품 | 여러 항목의 값을 막대를 밀어 세밀하게 조절함을 나타냄 | 확인 [ICLU] | `lucide:sliders-vertical` |
-| ICO-535 | 매직 도구 — magic | 부품 | 자동으로 보정·생성해 주는 기능을 나타냄, 마법 지팡이 모양 | 확인 [ICLU] | `lucide:wand` |
 | ICO-85 | 취소 — cancel | 부품 | 진행 중인 일을 멈추고 되돌림 | 확장 [MK] · 대조 [ICLU] | `lucide:x` |
 | ICO-90 | 스캔 — scan | 부품 | 카메라로 종이·코드를 읽어들임 | 확장 [MK] · 대조 [ICLU] | `lucide:scan` |
 | ICO-91 | QR 코드 — qr code | 부품 | 네모 코드로 주소·값을 주고받음 | 확장 [MK] · 대조 [ICLU] | `lucide:qr-code` |
@@ -135,9 +132,6 @@
 | ICO-109 | 연결됨 — connected | 부품 | 기기·서비스와 이어져 있음 | 확장 [MK] · 대조 [ICLU] | `lucide:link-2` |
 | ICO-110 | 연결 끊김 — disconnected | 부품 | 이어져 있던 것이 끊김, 끊긴 사슬 | 확장 [MK] · 대조 [ICLU] | `lucide:link-2-off` |
 | ICO-115 | 반쪽 별 — half star | 부품 | 평점에서 0.5점을 나타냄 | 확장 [MK] · 대조 [ICLU] | `lucide:star-half` |
-| ICO-123 | 선택됨 — checked | 부품 | 네모 칸이 켜진 상태 | 확장 [MK] · 대조 [ICLU] | `lucide:square-check` |
-| ICO-124 | 일부 선택 — indeterminate | 부품 | 하위 항목 일부만 켜진 상태, 네모 안의 빼기 | 확장 [MK] · 대조 [ICLU] | `lucide:square-minus` |
-| ICO-125 | 하나 고름 — radio selected | 부품 | 동그란 칸 하나만 켜진 상태 | 확장 [MK] · 대조 [ICLU] | `lucide:dot` |
 | ICO-126 | 새 항목 — new | 부품 | 최근에 생긴 것임을 알림 | 확장 [MK] · 대조 [ICLU] | `lucide:badge-plus` |
 | ICO-127 | 초안 — draft | 부품 | 아직 내보내지 않은 작성 중 상태 | 확장 [MK] · 대조 [ICLU] | `lucide:circle-dashed` |
 | ICO-128 | 게시됨 — published | 부품 | 사람들에게 공개된 상태 | 확장 [MK] · 대조 [ICLU] | `lucide:badge-check` |
@@ -146,12 +140,9 @@
 | ICO-131 | 안 읽음 — unread | 부품 | 아직 확인하지 않음, 채운 동그라미 | 확장 [MK] · 대조 [ICLU] | `lucide:circle-dot` |
 | ICO-133 | 실시간 — live | 부품 | 지금 벌어지는 중계임을 알림 | 확장 [MK] · 대조 [ICLU] | `lucide:radio` |
 | ICO-134 | 업데이트 있음 — update available | 부품 | 새 버전으로 바꿀 수 있음 | 확장 [MK] · 대조 [ICLU] | `lucide:download` |
-| ICO-135 | 인증됨 — verified | 부품 | 신원·사실이 확인된 계정·항목, 체크가 든 배지 | 확장 [MK] · 대조 [ICLU] | `lucide:badge-check` |
 | ICO-375 | 차단 — block | 부품 | 상대·내용을 막음, 사선이 그어진 원 | 확장 [MK] · 대조 [ICLU] | `lucide:ban` |
 | ICO-383 | 긴급 — emergency | 부품 | 즉시 도움이 필요한 상황 | 확장 [MK] · 대조 [ICLU] | `lucide:siren` |
 | ICO-536 | 알림 울림 — bell ring | 부품 | 새 알림이 막 울리고 있음을 나타냄, 흔들리는 종 모양 | 확인 [ICLU] | `lucide:bell-ring` |
-| ICO-537 | 스위치 켜짐 — toggle on | 부품 | 설정이 켜진 상태를 나타냄, 오른쪽으로 밀린 스위치 | 확인 [ICLU] | `lucide:toggle-right` |
-| ICO-538 | 스위치 꺼짐 — toggle off | 부품 | 설정이 꺼진 상태를 나타냄, 왼쪽으로 밀린 스위치 | 확인 [ICLU] | `lucide:toggle-left` |
 | ICO-540 | 클라우드 끊김 — cloud off | 부품 | 온라인 저장소·인터넷과 연결이 끊어진 상태임을 나타냄 | 확인 [ICLU] | `lucide:cloud-off` |
 | ICO-541 | 위험 경고 — octagon alert | 부품 | 즉시 멈추고 확인해야 할 심각한 문제를 알림, 팔각형 표시 | 확인 [ICLU] | `lucide:octagon-alert` |
 | ICO-544 | 사용 불가 — circle slash | 부품 | 지금은 쓸 수 없는 기능임을 나타냄, 원 안의 빗금 | 확인 [ICLU] | `lucide:slash` |
@@ -160,7 +151,6 @@
 
 | ID | 항목 | 종류 | 역할·사용할 때 | 근거 | 그림 |
 |---|---|---|---|---|---|
-| ICO-09 | 펼치기 — expand | 부품 | 접힌 내용을 열어 보임, 아래 꺾쇠 | 확장 [MK] · 대조 [ICLU] | `lucide:expand` |
 | ICO-72 | 회전 — rotate | 부품 | 그림·화면을 돌림 | 확장 [MK] · 대조 [ICLU] | `lucide:rotate-cw` |
 | ICO-75 | 이동 — move | 부품 | 위치를 옮김, 네 방향 십자 화살표 | 확장 [MK] · 대조 [ICLU] | `lucide:move` |
 | ICO-442 | 위 화살표 — arrow up | 부품 | 위로 옮기거나 값이 커짐 | 확장 [MK] · 대조 [ICLU] | `lucide:arrow-up` |
@@ -179,8 +169,6 @@
 | ICO-455 | 오른 꺾쇠 — chevron right | 부품 | 오른쪽 항목으로 넘기거나 안으로 들어감 | 확장 [MK] · 대조 [ICLU] | `lucide:chevron-right` |
 | ICO-456 | 겹 꺾쇠 — double chevron | 부품 | 여러 칸을 한 번에 건너뜀 | 확장 [MK] · 대조 [ICLU] | `lucide:chevrons-down` |
 | ICO-457 | 캐럿 — caret | 부품 | 선택 상자가 열린다는 아주 작은 삼각형 | 확장 [MK] | `tabler:caret-down` |
-| ICO-459 | 순서 손잡이 — reorder handle | 부품 | 목록 순서를 바꾸는 자리, 가로줄 세 개 | 확장 [MK] · 대조 [ICLU] | `lucide:grip-horizontal` |
-| ICO-460 | 크기 손잡이 — resize handle | 부품 | 모서리를 잡아 늘이는 자리 | 확장 [MK] · 대조 [ICLU] | `lucide:move-diagonal` |
 | ICO-461 | 바깥으로 펴기 — expand arrows | 부품 | 네 방향으로 벌려 크게 봄 | 확장 [MK] · 대조 [ICLU] | `lucide:maximize` |
 | ICO-462 | 안으로 모으기 — collapse arrows | 부품 | 네 방향에서 모아 작게 봄 | 확장 [MK] · 대조 [ICLU] | `lucide:minimize` |
 | ICO-463 | 정렬 방향 표시 — sort arrow | 부품 | 표 머리에서 지금 정렬 방향을 알림 | 확장 [MK] · 대조 [ICLU] | `lucide:arrow-up-down` |
@@ -245,7 +233,7 @@
 | ICO-557 | 자간 — letter spacing | 부품 | 글자와 글자 사이 간격을 넓히거나 좁힘을 나타냄 | 확인 [ICSET] | `tabler:letter-spacing` |
 | ICO-496 | 공백 표시 — space dot | 부품 | 편집기에서 빈칸을 눈에 보이게 함 | 확장 [MK] · 대조 [ICLU] | `lucide:space` |
 
-## 글자·숫자·기호 — Letters, Numbers & Symbols
+## 글자·숫자·기호·코드 — Letters, Numbers, Symbols & Codes
 
 | ID | 항목 | 종류 | 역할·사용할 때 | 근거 | 그림 |
 |---|---|---|---|---|---|
@@ -269,7 +257,7 @@
 | ICO-492 | 세로 막대 — pipe | 부품 | 값 사이를 가르는 세로선 | 확장 [MK] · 대조 [ICLU] | `lucide:separator-vertical` |
 | ICO-494 | 물결표 — tilde | 부품 | 대략과 범위를 나타냄 | 확장 [MK] | `tabler:tilde` |
 
-## 화면 배치 — Layout & Controls
+## 화면 배치·폼 부품 — Layout & Form Controls
 
 | ID | 항목 | 종류 | 역할·사용할 때 | 근거 | 그림 |
 |---|---|---|---|---|---|
@@ -298,6 +286,17 @@
 | ICO-565 | 위 정렬 — align top | 부품 | 고른 요소들의 위쪽 끝을 나란히 맞춤을 나타냄 | 확인 [ICLU] | `lucide:align-start-vertical` |
 | ICO-566 | 아래 정렬 — align bottom | 부품 | 고른 요소들의 아래쪽 끝을 나란히 맞춤을 나타냄 | 확인 [ICLU] | `lucide:align-end-vertical` |
 | ICO-567 | 균등 배치 — space between | 부품 | 나열된 요소 사이 간격을 똑같이 벌려서 배치함을 나타냄 | 확인 [ICLU] | `lucide:align-horizontal-space-between` |
+| ICO-123 | 선택됨 — checked | 부품 | 네모 칸이 켜진 상태 | 확장 [MK] · 대조 [ICLU] | `lucide:square-check` |
+| ICO-124 | 일부 선택 — indeterminate | 부품 | 하위 항목 일부만 켜진 상태, 네모 안의 빼기 | 확장 [MK] · 대조 [ICLU] | `lucide:square-minus` |
+| ICO-125 | 하나 고름 — radio selected | 부품 | 동그란 칸 하나만 켜진 상태 | 확장 [MK] · 대조 [ICLU] | `lucide:dot` |
+| ICO-537 | 스위치 켜짐 — toggle on | 부품 | 설정이 켜진 상태를 나타냄, 오른쪽으로 밀린 스위치 | 확인 [ICLU] | `lucide:toggle-right` |
+| ICO-538 | 스위치 꺼짐 — toggle off | 부품 | 설정이 꺼진 상태를 나타냄, 왼쪽으로 밀린 스위치 | 확인 [ICLU] | `lucide:toggle-left` |
+| ICO-458 | 끌기 손잡이 — drag handle | 부품 | 잡고 옮길 수 있는 자리, 점 여섯 개 | 확장 [MK] · 대조 [ICLU] | `lucide:grip-vertical` |
+| ICO-459 | 순서 손잡이 — reorder handle | 부품 | 목록 순서를 바꾸는 자리, 가로줄 세 개 | 확장 [MK] · 대조 [ICLU] | `lucide:grip-horizontal` |
+| ICO-460 | 크기 손잡이 — resize handle | 부품 | 모서리를 잡아 늘이는 자리 | 확장 [MK] · 대조 [ICLU] | `lucide:move-diagonal` |
+| ICO-1251 | 체크박스 끔 — checkbox unchecked | 부품 | 아직 고르지 않은 체크박스를 나타냄, 속이 빈 둥근 모서리 네모 모양 | 확인 [ICSET] | `material:check_box_outline_blank` |
+| ICO-1252 | 슬라이더 — range slider | 부품 | 막대를 끌어 값을 고르는 조절 부품을 나타냄, 가로 선 위에 동그란 손잡이가 놓인 모양 | 확인 [ICSET] | `material:linear_scale` |
+| ICO-1253 | 입력 칸 — text field | 부품 | 글을 적어 넣는 입력 칸을 나타냄, 긴 네모 안 왼쪽에 글자 커서가 선 모양 | 확인 [ICSET] | `lucide:text-cursor-input` |
 
 ## 차트·도표 — Charts & Diagrams
 
@@ -368,7 +367,7 @@
 | ICO-581 | 도장 — stamp | 부품 | 승인·발급을 확정하는 표시를 나타냄, 도장 모양 | 확인 [ICLU] | `lucide:stamp` |
 | ICO-607 | 확성기 — megaphone | 부품 | 공지·홍보를 크게 알림을 나타냄, 메가폰 모양 | 확인 [ICLU] | `lucide:megaphone` |
 
-## 사진·영상 — Photo & Video
+## 사진·영상·재생 — Photo, Video & Playback
 
 | ID | 항목 | 종류 | 역할·사용할 때 | 근거 | 그림 |
 |---|---|---|---|---|---|
@@ -385,10 +384,6 @@
 | ICO-198 | 조금 앞으로 — skip forward | 부품 | 정해진 초만큼 건너뜀, 화살표 안의 숫자 | 확장 [MK] · 대조 [ICLU] | `lucide:skip-forward` |
 | ICO-199 | 조금 뒤로 — skip back | 부품 | 정해진 초만큼 되돌림 | 확장 [MK] · 대조 [ICLU] | `lucide:skip-back` |
 | ICO-201 | 한 곡 반복 — repeat one | 부품 | 지금 것만 계속 틀음 | 확장 [MK] | `lucide:repeat-1` |
-| ICO-203 | 음량 — volume | 부품 | 소리 크기 조절, 스피커와 물결 | 확장 [MK] · 대조 [ICLU] | `lucide:volume` |
-| ICO-204 | 음소거 — mute | 부품 | 소리를 끔, 사선이 그어진 스피커 | 확장 [MK] · 대조 [ICLU] | `lucide:volume-x` |
-| ICO-205 | 음량 올리기 — volume up | 부품 | 소리를 키움 | 확장 [MK] · 대조 [ICLU] | `lucide:volume-2` |
-| ICO-206 | 음량 내리기 — volume down | 부품 | 소리를 줄임 | 확장 [MK] · 대조 [ICLU] | `lucide:volume-1` |
 | ICO-207 | 자막 — captions | 부품 | 대사를 글로 보임 | 확장 [MK] · 대조 [ICLU] | `lucide:captions` |
 | ICO-208 | 화질 — quality | 부품 | 해상도 단계를 고름 | 확장 [MK] | `tabler:badge-hd` |
 | ICO-209 | 재생 속도 — playback speed | 부품 | 빠르게·느리게 트는 배속 | 확장 [MK] · 대조 [ICLU] | `lucide:gauge` |
@@ -406,11 +401,10 @@
 | ICO-594 | 조리개 — aperture | 부품 | 카메라 렌즈 조리개를 나타냄, 카메라 앱 상징으로도 씀 | 확인 [ICLU] | `lucide:aperture` |
 | ICO-595 | 초점 — focus | 부품 | 카메라가 사물에 초점을 맞추는 동작을 나타냄, 네 모서리 표시 | 확인 [ICLU] | `lucide:focus` |
 | ICO-596 | 플래시 — flash | 부품 | 촬영 시 빛을 터뜨리는 기능을 나타냄, 번개 모양 | 확인 [ICSET] | `lucide:zap` |
-| ICO-597 | 음파 — audio waveform | 부품 | 소리의 크기 변화를 굴곡진 파형으로 보여줌을 나타냄 | 확인 [ICLU] | `lucide:audio-waveform` |
 | ICO-342 | 카메라 전환 — switch camera | 부품 | 앞뒤 렌즈를 바꿈 | 확장 [MK] · 대조 [ICLU] | `lucide:switch-camera` |
 | ICO-662 | 웹캠 — webcam | 부품 | 컴퓨터에 연결해 화상 통화용 영상을 찍는 카메라를 나타냄 | 확인 [ICLU] | `lucide:webcam` |
 
-## 음악·소리 — Music & Audio
+## 소리·음악 — Sound & Music
 
 | ID | 항목 | 종류 | 역할·사용할 때 | 근거 | 그림 |
 |---|---|---|---|---|---|
@@ -429,6 +423,11 @@
 | ICO-345 | 스피커 — speaker | 부품 | 소리를 내보내는 기기 | 확장 [MK] · 대조 [ICLU] | `lucide:speaker` |
 | ICO-674 | 헤드셋 — headset | 부품 | 마이크가 달린 통화나 상담용 이어폰을 나타냄, 헤드셋 모양 | 확인 [ICLU] | `lucide:headset` |
 | ICO-1183 | 마이크 — mic vocal | 부품 | 공연·행사 사회를 나타냄, 그물망 씌운 마이크 모양 | 확인 [ICLU] | `lucide:mic-vocal` |
+| ICO-203 | 음량 — volume | 부품 | 소리 크기 조절, 스피커와 물결 | 확장 [MK] · 대조 [ICLU] | `lucide:volume` |
+| ICO-204 | 음소거 — mute | 부품 | 소리를 끔, 사선이 그어진 스피커 | 확장 [MK] · 대조 [ICLU] | `lucide:volume-x` |
+| ICO-205 | 음량 올리기 — volume up | 부품 | 소리를 키움 | 확장 [MK] · 대조 [ICLU] | `lucide:volume-2` |
+| ICO-206 | 음량 내리기 — volume down | 부품 | 소리를 줄임 | 확장 [MK] · 대조 [ICLU] | `lucide:volume-1` |
+| ICO-597 | 음파 — audio waveform | 부품 | 소리의 크기 변화를 굴곡진 파형으로 보여줌을 나타냄 | 확인 [ICLU] | `lucide:audio-waveform` |
 
 ## 소통·메시지 — Communication
 
@@ -522,7 +521,7 @@
 | ICO-354 | 밝기 — brightness | 부품 | 화면을 밝거나 어둡게 함 | 확장 [MK] · 대조 [ICLU] | `lucide:sun-dim` |
 | ICO-1070 | VR 헤드셋 — vr headset | 부품 | 가상현실 기기·모드를 나타냄, 얼굴에 쓰는 고글 형태 | 확인 [ICSET] | `lucide:rectangle-goggles` |
 
-## 개발·데이터·AI — Development, Data & AI
+## 개발·데이터 — Development & Data
 
 | ID | 항목 | 종류 | 역할·사용할 때 | 근거 | 그림 |
 |---|---|---|---|---|---|
@@ -550,8 +549,6 @@
 | ICO-407 | 질의 — query | 부품 | 저장된 값을 조건으로 찾아옴 | 확장 [MK] · 대조 [ICLU] | `lucide:database-search` |
 | ICO-408 | 스키마 — schema | 부품 | 값의 구조와 규칙 | 확장 [MK] · 대조 [ICLU] | `lucide:table-properties` |
 | ICO-409 | 캐시 — cache | 부품 | 자주 쓰는 값을 가까이 두고 빨리 꺼냄 | 확장 [MK] · 대조 [ICLU] | `lucide:database-zap` |
-| ICO-410 | 인공지능 — ai assistant | 부품 | 모델이 돕는 기능임을 알림, 반짝이는 별 | 확장 [MK] · 대조 [ICLU] | `lucide:sparkles` |
-| ICO-411 | 봇 — bot | 부품 | 사람이 아닌 자동 응답 주체 | 확장 [MK] · 대조 [ICLU] | `lucide:bot` |
 | ICO-412 | 개발 문서 — developer docs | 부품 | 쓰는 법이 적힌 안내서 | 확장 [MK] · 대조 [ICLU] | `lucide:book-open-text` |
 | ICO-413 | 라이선스 — license | 부품 | 쓸 수 있는 조건 | 확장 [MK] · 대조 [ICLU] | `lucide:creative-commons` |
 | ICO-414 | 저장소 — repository | 부품 | 코드가 모여 있는 곳 | 확장 [MK] · 대조 [ICLU] | `lucide:git-branch` |
@@ -577,7 +574,15 @@
 | ICO-390 | 버그 — bug | 부품 | 프로그램의 잘못, 벌레 모양 | 확장 [MK] · 대조 [ICLU] | `lucide:bug` |
 | ICO-385 | 클라우드 — cloud | 부품 | 인터넷 너머 서버 자원 | 확장 [MK] · 대조 [ICLU] | `lucide:cloud` |
 
-## 디자인·도형 — Design & Shapes
+## AI·생성 — AI & Generative
+
+| ID | 항목 | 종류 | 역할·사용할 때 | 근거 | 그림 |
+|---|---|---|---|---|---|
+| ICO-410 | 인공지능 — ai assistant | 부품 | 모델이 돕는 기능임을 알림, 반짝이는 별 | 확장 [MK] · 대조 [ICLU] | `lucide:sparkles` |
+| ICO-411 | 봇 — bot | 부품 | 사람이 아닌 자동 응답 주체 | 확장 [MK] · 대조 [ICLU] | `lucide:bot` |
+| ICO-535 | 매직 도구 — magic | 부품 | 자동으로 보정·생성해 주는 기능을 나타냄, 마법 지팡이 모양 | 확인 [ICLU] | `lucide:wand` |
+
+## 디자인·도형·효과 — Design, Shapes & Effects
 
 | ID | 항목 | 종류 | 역할·사용할 때 | 근거 | 그림 |
 |---|---|---|---|---|---|
@@ -651,7 +656,7 @@
 | ICO-1236 | 압축기(뚫어뻥) — plunger | 부품 | 배관 막힘 뚫기 도구를 나타냄, 고무 흡착판 뚫어뻥 | 확인 [ICSET] | `tabler:plunger` |
 | ICO-1237 | 스프링클러 — sprinkler | 부품 | 자동 살수·소화 장치를 나타냄, 물 뿌리는 스프링클러 | 확인 [ICSET] | `material:sprinkler` |
 
-## 사람·계정 — People & Accounts
+## 사람·가족·계정 — People, Family & Accounts
 
 | ID | 항목 | 종류 | 역할·사용할 때 | 근거 | 그림 |
 |---|---|---|---|---|---|
@@ -680,6 +685,8 @@
 | ICO-642 | 귀 — ear | 부품 | 청각이나 듣기와 관련된 기능을 나타냄, 귀 모양 | 확인 [ICLU] | `lucide:ear` |
 | ICO-643 | 입 — lips | 부품 | 말하기나 발음과 관련된 기능을 나타냄, 입술 모양 | 확인 [ICLU] | `lucide:mouth` |
 | ICO-1181 | 유모차 — baby carriage | 부품 | 출산·육아 관련 행사를 나타냄, 바퀴 달린 유모차 | 확인 [ICSET] | `tabler:baby-carriage` |
+| ICO-141 | 로그인 — sign in | 부품 | 계정으로 들어감, 안으로 향한 화살표와 문 | 확장 [MK] · 대조 [ICLU] | `lucide:log-in` |
+| ICO-142 | 로그아웃 — sign out | 부품 | 계정에서 나감, 밖으로 향한 화살표와 문 | 확장 [MK] · 대조 [ICLU] | `lucide:log-out` |
 
 ## 손·몸짓 — Hands & Gestures
 
@@ -739,6 +746,20 @@
 | ICO-1125 | 외계인 — alien | 부품 | 낯설거나 이질적인 반응을 나타냄, 초록빛 외계인 얼굴 | 확인 [ICSET] | `tabler:alien` |
 | ICO-1126 | 녹아내림 — melting | 부품 | 무기력하거나 지친 감정을 나타냄, 형체가 녹아내리는 얼굴 | 확인 [ICSET] | `phosphor:smiley-melting` |
 | ICO-1127 | 감탄 — wow | 부품 | 감탄하거나 감동한 반응을 나타냄, 입을 크게 벌린 얼굴 | 확인 [ICSET] | `emoji:😲` |
+
+## 상·배지·인증 — Awards, Badges & Certifications
+
+| ID | 항목 | 종류 | 역할·사용할 때 | 근거 | 그림 |
+|---|---|---|---|---|---|
+| ICO-135 | 인증됨 — verified | 부품 | 신원·사실이 확인된 계정·항목, 체크가 든 배지 | 확장 [MK] · 대조 [ICLU] | `lucide:badge-check` |
+| ICO-438 | 왕관 — crown | 부품 | 유료·최상위 등급 | 확장 [MK] · 대조 [ICLU] | `lucide:crown` |
+| ICO-439 | 트로피 — trophy | 부품 | 성취·순위 1등 | 확장 [MK] · 대조 [ICLU] | `lucide:trophy` |
+| ICO-440 | 메달 — medal | 부품 | 달성 뱃지 | 확장 [MK] · 대조 [ICLU] | `lucide:medal` |
+| ICO-1048 | 시상대 — podium | 부품 | 순위별 시상대를 나타냄, 1·2·3위로 높이가 다른 단 | 확인 [ICLU] | `lucide:podium` |
+| ICO-1171 | 상장 — award | 부품 | 수상·인증 결과를 나타냄, 도장 찍힌 상장 종이 | 확인 [ICLU] | `lucide:award` |
+| ICO-1172 | 리본 — ribbon | 부품 | 수상·기념 장식을 나타냄, 매듭 묶인 리본 모양 | 확인 [ICLU] | `lucide:ribbon` |
+| ICO-1248 | 연령 제한 — age restricted 18+ | 부품 | 성인만 이용할 수 있는 콘텐츠나 기능을 나타냄, 원 안에 18+ 숫자가 든 모양 | 확인 [ICSET] | `material:18_up_rating` |
+| ICO-1249 | 관람 등급 — content rating | 부품 | 전체·12세·15세·청소년 관람불가처럼 나이별 이용 등급을 나타냄, 둥근 딱지 안에 등급 숫자나 글자가 든 모양 | 확인 [ICSET] | `tabler:rating-12-plus`, `tabler:rating-14-plus`, `tabler:rating-16-plus` |
 
 ## 쇼핑 — Shopping
 
@@ -847,6 +868,7 @@
 | ICO-769 | 타이머 끔 — timer off | 부품 | 설정해 둔 타이머가 꺼져 있는 상태를 나타냄, 타이머 해제 | 확인 [ICLU] | `lucide:timer-off` |
 | ICO-770 | 시간 임박 — clock alert | 부품 | 정해진 시각이 얼마 남지 않았음을 알려줌을 나타냄 | 확인 [ICLU] | `lucide:clock-alert` |
 | ICO-771 | 시간 확인됨 — clock check | 부품 | 예정된 시각이 지켜졌음을 확인함, 시계 위 체크 | 확인 [ICLU] | `lucide:clock-check` |
+| ICO-1250 | 대기 번호표 — queue number ticket | 부품 | 창구나 매장에서 차례를 기다리는 순번을 나타냄, 번호가 적힌 작은 종이표 모양 | 확인 [ICSET] | `material:confirmation_number` |
 
 ## 집·가구 — Home & Household
 
@@ -1355,21 +1377,15 @@
 | ICO-1182 | 연극 가면 — theater masks | 부품 | 공연·예술 행사를 나타냄, 웃는·우는 얼굴 가면 | 확인 [ICLU] | `lucide:theater` |
 | ICO-1209 | 실패 — spool thread | 부품 | 재봉·바느질 재료를 나타냄, 실이 감긴 실패 모양 | 확인 [ICLU] | `lucide:spool` |
 
-## 기념일·행사 — Holidays & Events
+## 기념일·행사·경조사 — Holidays, Events & Ceremonies
 
 | ID | 항목 | 종류 | 역할·사용할 때 | 근거 | 그림 |
 |---|---|---|---|---|---|
-| ICO-439 | 트로피 — trophy | 부품 | 성취·순위 1등 | 확장 [MK] · 대조 [ICLU] | `lucide:trophy` |
-| ICO-440 | 메달 — medal | 부품 | 달성 뱃지 | 확장 [MK] · 대조 [ICLU] | `lucide:medal` |
-| ICO-1048 | 시상대 — podium | 부품 | 순위별 시상대를 나타냄, 1·2·3위로 높이가 다른 단 | 확인 [ICLU] | `lucide:podium` |
 | ICO-160 | 선물 — gift | 부품 | 다른 사람에게 보내는 혜택·상품 | 확장 [MK] · 대조 [ICLU] | `lucide:gift` |
 | ICO-437 | 축하 — celebration | 부품 | 목표를 이룬 순간을 알림, 폭죽 | 확장 [MK] · 대조 [ICLU] | `lucide:party-popper` |
-| ICO-438 | 왕관 — crown | 부품 | 유료·최상위 등급 | 확장 [MK] · 대조 [ICLU] | `lucide:crown` |
 | ICO-1168 | 생일 케이크 — birthday cake | 부품 | 생일 축하 행사를 나타냄, 촛불 여러 개 꽂힌 케이크 | 확인 [ICLU] | `lucide:cake` |
 | ICO-1169 | 풍선 — balloon | 부품 | 축하·파티 분위기를 나타냄, 끈 달린 둥근 풍선 | 확인 [ICLU] | `lucide:balloon` |
 | ICO-1170 | 색종이 조각 — confetti | 부품 | 축하·성공 연출을 나타냄, 흩날리는 종이 조각 | 확인 [ICSET] | `tabler:confetti` |
-| ICO-1171 | 상장 — award | 부품 | 수상·인증 결과를 나타냄, 도장 찍힌 상장 종이 | 확인 [ICLU] | `lucide:award` |
-| ICO-1172 | 리본 — ribbon | 부품 | 수상·기념 장식을 나타냄, 매듭 묶인 리본 모양 | 확인 [ICLU] | `lucide:ribbon` |
 | ICO-1173 | 입장권 — ticket | 부품 | 행사 참가·예매를 나타냄, 절취선 있는 입장권 | 확인 [ICLU] | `lucide:ticket` |
 | ICO-1174 | 크리스마스트리 — christmas tree | 부품 | 크리스마스 연휴를 나타냄, 별과 장식 단 나무 | 확인 [ICSET] | `tabler:christmas-tree` |
 | ICO-1175 | 눈사람 — snowman | 부품 | 겨울 시즌·연휴 분위기를 나타냄, 눈덩이 쌓은 눈사람 | 확인 [ICSET] | `tabler:snowman` |
@@ -1405,7 +1421,7 @@
 | ICO-1128 | 깃허브 — github | 부품 | 그 서비스로 로그인·저장소 이동함을 나타냄, 모양·색은 깃허브 규정대로 | 확인 [ICSET] | `tabler:brand-github` |
 | ICO-1129 | 깃랩 — gitlab | 부품 | 그 서비스로 로그인·저장소 이동함을 나타냄, 모양·색은 깃랩 규정대로 | 확인 [ICSET] | `tabler:brand-gitlab` |
 | ICO-1130 | 구글 — google | 부품 | 그 서비스로 로그인·검색 이동함을 나타냄, 모양·색은 구글 규정대로 | 확인 [ICSET] | `tabler:brand-google` |
-| ICO-1131 | 애플 — apple logo | 부품 | 그 서비스로 로그인·기기 연동함을 나타냄, 모양·색은 애플 규정대로 | 확인 [ICLU] | `lucide:apple` |
+| ICO-1131 | 애플 — apple logo | 부품 | 그 서비스로 로그인·기기 연동함을 나타냄, 모양·색은 애플 규정대로 | 확인 [ICSET] | `tabler:brand-apple` |
 | ICO-1132 | 안드로이드 — android | 부품 | 안드로이드 운영체제·기기임을 나타냄, 모양·색은 구글 규정대로 | 확인 [ICSET] | `tabler:brand-android` |
 | ICO-1133 | 윈도우 — windows | 부품 | 윈도우 운영체제·기기임을 나타냄, 모양·색은 마이크로소프트 규정대로 | 확인 [ICSET] | `tabler:brand-windows` |
 | ICO-1134 | 페이스북 — facebook | 부품 | 그 서비스로 로그인·공유함을 나타냄, 모양·색은 메타 규정대로 | 확인 [ICSET] | `tabler:brand-facebook` |

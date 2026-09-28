@@ -17,7 +17,7 @@ check('쓰는 곳 태그가 서비스·게임·영역 분류를 한 번씩 덮�
 check('아이콘은 모두 카테고리 하나를 가지고, 빈 카테고리가 없음',data.iconGroups.every(g=>data.entries.some(e=>e.sub===g.id))&&data.entries.filter(e=>e.category==='ICO').every(e=>e.kind==='기준'?!e.sub:data.iconGroups.some(g=>g.id===e.sub))&&data.entries.every(e=>!e.sub||e.category==='ICO'));
 // Every installed icon-set picture is named and filed; the ones no meaning entry points at join the icon tab as 세트 그림.
 const glyphOnly=data.glyphs.filter(([key])=>!data.entries.some(e=>e.glyph?.includes(key)));
-check('설치된 아이콘 세트 그림은 모두 한국어 이름과 아이콘 카테고리 하나를 가짐',data.glyphs.length===data.glyphSets.reduce((n,s)=>n+s.count,0)&&data.glyphs.every(([key,name,sub])=>key.includes(':')&&name&&data.iconGroups.some(g=>g.id===sub))&&new Set(data.glyphs.map(g=>g[0])).size===data.glyphs.length);
+check('설치된 아이콘 세트 그림은 모두 한국어 이름과 아이콘 카테고리 하나를 가짐',data.glyphs.length===data.glyphSets.reduce((n,s)=>n+s.count,0)&&data.glyphs.every(([key,name,sub,also=[]])=>key.includes(':')&&name&&[sub,...also].every(id=>data.iconGroups.some(g=>g.id===id))&&also.length<=2&&!also.includes(sub))&&new Set(data.glyphs.map(g=>g[0])).size===data.glyphs.length);
 check('아이콘 부품은 모두 실제 그림 키를 가짐',data.entries.filter(e=>e.category==='ICO'&&e.kind==='부품').every(e=>e.glyph?.length>0)&&data.entries.flatMap(e=>e.glyph||[]).every(g=>g.startsWith('emoji:')||data.glyphs.some(([key])=>key===g)));
 check('아이콘 카테고리마다 세트 그림이 들어 있음',data.iconGroups.every(g=>data.glyphs.some(([,,sub])=>sub===g.id)));
 check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categories.length===data.groups.flatMap(g=>g.codes).length&&new Set(data.groups.flatMap(g=>g.codes)).size===data.categories.length);
@@ -120,11 +120,14 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   await goto('dictionary?shelf=icon');
   check('아이콘 탭 필터 칸은 종류·카테고리, 카테고리는 전부',JSON.stringify(await sections())==='["종류","카테고리"]'&&await page.locator('#filter-bar .filter-option[data-filter^="icon:"]').count()===data.iconGroups.length);
   await pick('icon','navigation');
-  const navigation=data.entries.filter(e=>e.sub==='navigation').length+glyphOnly.filter(([,,sub])=>sub==='navigation').length;
+  // An icon shows in its home category and in the up-to-two categories it also belongs to.
+  const navigation=data.entries.filter(e=>e.sub==='navigation'||e.also?.includes('navigation')).length+glyphOnly.filter(([,,sub,also=[]])=>sub==='navigation'||also.includes('navigation')).length;
   check('아이콘 카드는 세트 그림을 실제로 그림',await page.locator('.dict-entry .dict-glyph use').count()>0&&await page.locator('.dict-entry svg.dict-glyph').first().evaluate(async svg=>{for(let i=0;i<50;i++){const b=svg.querySelector('use').getBBox();if(b.width>0&&b.height>0)return true;await new Promise(r=>setTimeout(r,100));}return false;}));
   const navItems=await itemsOf('shelf=icon&icon=navigation');
   check('아이콘 카테고리로 좁히기',await page.locator('.dict-entry:not(.is-built)').count()===Math.min(48,navItems.filter(e=>!e.implementation).length)&&await shown()===navigation&&navItems.length===navigation&&await pressed()===1);
   check('쓰는 곳으로 게임 전용 부품 모으기',(await itemsOf('shelf=part&place=game')).every(e=>data.places.find(p=>p.id==='game').codes.includes(e.category)&&e.shelf==='part'));
+  const [alsoKey,,alsoHome,[alsoCat]]=glyphOnly.find(g=>g[3]);
+  check('여러 칸에 속한 그림은 주 칸과 함께 보일 칸 모두에서 보임',(await itemsOf('shelf=icon&icon='+alsoCat)).some(e=>e.id===alsoKey)&&(await itemsOf('shelf=icon&icon='+alsoHome)).some(e=>e.id===alsoKey));
   await goto('dictionary?category=ICO');
   check('옛 분류 주소는 아이콘 탭에서 아이콘 전체를 보여줌',(await itemsOf('category=ICO')).length===data.entries.filter(e=>e.category==='ICO').length+glyphOnly.length&&page.url().includes('shelf=icon'));
   await page.locator('[data-action="load-more"]').click();

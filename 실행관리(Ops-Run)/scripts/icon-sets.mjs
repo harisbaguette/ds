@@ -46,12 +46,14 @@ export function writeSprites(root, sets) {
   }
 }
 
-// Every installed glyph needs exactly one Korean name and icon category; a package update that adds or drops pictures stops the build here.
+// Every installed glyph needs exactly one Korean name and one home icon category, plus at most two more categories it also shows in;
+// a package update that adds or drops pictures stops the build here.
 export function checkNames(names, glyphs, groupIds) {
   const keys = new Set(glyphs.map(g=>g.key));
   const unnamed = glyphs.filter(g=>!names[g.key]).map(g=>g.key);
   const stale = Object.keys(names).filter(k=>!keys.has(k));
-  const invalid = Object.entries(names).filter(([,v])=>!Array.isArray(v)||!String(v[0]||'').trim()||!groupIds.includes(v[1])).map(([k])=>k);
+  const alsoOk = (home, also=[]) => Array.isArray(also) && also.length<=2 && new Set([home,...also]).size===also.length+1 && also.every(id=>groupIds.includes(id));
+  const invalid = Object.entries(names).filter(([,v])=>!Array.isArray(v)||v.length>3||!String(v[0]||'').trim()||!groupIds.includes(v[1])||!alsoOk(v[1],v[2])).map(([k])=>k);
   const problems = [[unnamed,'installed glyphs without a name'],[stale,'named glyphs no longer installed'],[invalid,'names with an invalid category']]
     .filter(([list])=>list.length).map(([list,what])=>list.length+' '+what+': '+list.slice(0,12).join(', ')+(list.length>12?' …':''));
   if (problems.length) throw new Error('문서/아이콘 그림 분류.json is out of step with the installed icon sets.\n'+problems.join('\n'));

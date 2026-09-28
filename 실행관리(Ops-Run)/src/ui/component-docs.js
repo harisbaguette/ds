@@ -23,7 +23,7 @@
   function live(id, options, style = 'main', prefix) {
     const frame = r.index.get(id).gallery?.frame;
     const part = p.renderItem(id, prefix, r.normalizeOptions(id, options));
-    return frame ? `<div class="ds theme-${style} variant-frame" data-style="${style}" data-frame="${frame}">${screen}${part}</div>` : `<div class="ds theme-${style}" data-style="${style}">${part}</div>`;
+    return frame ? `<div class="ds theme-${style} variant-frame" data-style="${style}" data-frame="${frame}">${frame === 'phone-bottom' ? screen : ''}${part}</div>` : `<div class="ds theme-${style}" data-style="${style}">${part}</div>`;
   }
   function examples(item) {
     if (item.id === 'button') return [['채움',{variant:'primary'}],['윤곽',{variant:'outline'}],['글자',{variant:'ghost'}],['작게',{size:'sm'}],['크게',{size:'lg'}],['아이콘과 함께',{icon:'search'}],['아이콘만',{icon:'search',iconOnly:'true'}],['로딩',{state:'loading'}],['사용 불가',{state:'disabled'}]];

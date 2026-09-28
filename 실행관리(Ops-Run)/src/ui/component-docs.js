@@ -20,9 +20,12 @@
   // Options a part opens with when the address names none: the kept version, if any.
   const defaults = id => { const g = r.index.get(id)?.gallery, value = chosen(id); return g && value ? { [g.key]: value } : {}; };
   const screen = '<div class="variant-screen" aria-hidden="true"><i></i><i></i><i></i></div>';
-  function live(id, options, style = 'main', prefix) {
+  // sample: extra options only a gallery card adds (for example an already-open notice), never part of the address.
+  function live(id, options, style = 'main', prefix, sample = {}) {
     const frame = r.index.get(id).gallery?.frame;
-    const part = p.renderItem(id, prefix, r.normalizeOptions(id, options));
+    let part = p.renderItem(id, prefix, { ...r.normalizeOptions(id, options), ...sample });
+    // Phone frame: a whole screen drawn at device size, shrunk to fit the card.
+    if (frame === 'phone') part = `<div class="variant-phone">${part}</div>`;
     return frame ? `<div class="ds theme-${style} variant-frame" data-style="${style}" data-frame="${frame}">${frame === 'phone-bottom' ? screen : ''}${part}</div>` : `<div class="ds theme-${style}" data-style="${style}">${part}</div>`;
   }
   function examples(item) {
@@ -31,7 +34,7 @@
     return control ? control.values.map(([value,label])=>[label,{[control.key]:value}]) : [];
   }
   function card(item, v, current, kept) {
-    return `<li class="variant-card" data-variant-card="${v.id}"${v.id === current ? ' data-current' : ''}><button type="button" class="variant-pick" data-variant-pick="${v.id}" aria-pressed="${v.id === current}"><span class="variant-no">${v.no}</span><strong>${e(v.name)}</strong><span class="variant-tags">${e(v.tags.join(' · '))}</span></button>${live(item.id, { [item.gallery.key]: v.id }).replace('<div ', '<div inert ')}${useButton(v, v.id === kept)}</li>`;
+    return `<li class="variant-card" data-variant-card="${v.id}"${v.id === current ? ' data-current' : ''}><button type="button" class="variant-pick" data-variant-pick="${v.id}" aria-pressed="${v.id === current}"><span class="variant-no">${v.no}</span><strong>${e(v.name)}</strong><span class="variant-tags">${e(v.tags.join(' · '))}</span></button>${live(item.id, { [item.gallery.key]: v.id }, 'main', undefined, item.gallery.sample).replace('<div ', '<div inert ')}${useButton(v, v.id === kept)}</li>`;
   }
   const useButton = (v, kept) => `<button type="button" class="variant-use" data-variant-use="${v.id}" aria-pressed="${kept}" aria-label="${e(v.name)} ${kept ? '사용 중' : '이걸로 쓰기'}">${kept ? p.icon('check') + '사용 중' : '이걸로 쓰기'}</button>`;
   function gallery(item, options) {

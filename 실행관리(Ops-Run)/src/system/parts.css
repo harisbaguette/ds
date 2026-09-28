@@ -105,6 +105,42 @@
 .ds .ds-tab:hover { background:var(--ds-surface); }
 .ds .ds-tab[aria-selected="true"] { background:var(--ds-accent); color:var(--ds-on-accent); font-weight:650; box-shadow:0 2px 5px #24314526; }
 .ds .ds-tabpanel { padding:var(--ds-space-6) 4px; font-size:14px; }
+/* Looks: one tab markup, eight shapes. The chosen tab always gains a mark or a shape change, never only a color. */
+.ds .ds-tabs[data-look] .ds-tab { display:inline-flex; justify-content:center; align-items:center; gap:6px; }
+.ds .ds-tabs[data-look] .ds-tab .ui-icon { width:22px; height:22px; }
+/* 02 underline: bare row on a hairline, a thick bar under the chosen tab */
+.ds .ds-tabs[data-look="underline"] .ds-tablist { padding:0; gap:0; border:0; border-bottom:1px solid var(--ds-border); border-radius:0; background:transparent; box-shadow:none; }
+.ds .ds-tabs[data-look="underline"] .ds-tab { border-radius:0; }
+.ds .ds-tabs[data-look="underline"] .ds-tab[aria-selected="true"] { background:transparent; color:var(--ds-text); box-shadow:inset 0 -3px 0 var(--ds-accent); }
+/* 03 segmented: gray track, the chosen segment rises as a white tile */
+.ds .ds-tabs[data-look="segmented"] .ds-tablist { padding:4px; border:0; border-radius:12px; background:var(--ds-surface); box-shadow:none; }
+.ds .ds-tabs[data-look="segmented"] .ds-tab { border-radius:9px; }
+.ds .ds-tabs[data-look="segmented"] .ds-tab[aria-selected="true"] { background:var(--ds-high); color:var(--ds-text); border-color:var(--ds-border); box-shadow:var(--ds-raised); }
+/* 04 outline: separate boxes, the chosen one gets a double-weight edge */
+.ds .ds-tabs[data-look="outline"] .ds-tablist { padding:0; gap:8px; border:0; border-radius:0; background:transparent; box-shadow:none; }
+.ds .ds-tabs[data-look="outline"] .ds-tab { border-color:var(--ds-control-border); border-radius:var(--ds-control-radius); background:var(--ds-high); }
+.ds .ds-tabs[data-look="outline"] .ds-tab[aria-selected="true"] { background:var(--ds-high); color:var(--ds-text); border-color:var(--ds-text); box-shadow:inset 0 0 0 1px var(--ds-text); }
+/* 05 float: loose pills, the chosen one filled soft and ringed */
+.ds .ds-tabs[data-look="float"] .ds-tablist { padding:0; gap:8px; border:0; border-radius:0; background:transparent; box-shadow:none; }
+.ds .ds-tabs[data-look="float"] .ds-tab { flex:none; padding-inline:18px; border-radius:999px; }
+.ds .ds-tabs[data-look="float"] .ds-tab[aria-selected="true"] { background:var(--ds-soft); color:var(--ds-text); box-shadow:inset 0 0 0 1.5px var(--ds-text); }
+/* 06 icon: picture over the name, a soft capsule behind the chosen picture */
+.ds .ds-tabs[data-look="icon"] .ds-tablist { padding:0; border:0; border-bottom:1px solid var(--ds-border); border-radius:0; background:transparent; box-shadow:none; }
+.ds .ds-tabs[data-look="icon"] .ds-tab { flex-direction:column; gap:4px; min-height:64px; padding:8px; border-radius:0; font-size:12px; }
+.ds .ds-tabs[data-look="icon"] .ds-tab .ui-icon { box-sizing:content-box; padding:4px 16px; border-radius:999px; }
+.ds .ds-tabs[data-look="icon"] .ds-tab[aria-selected="true"] { background:transparent; color:var(--ds-text); box-shadow:none; }
+.ds .ds-tabs[data-look="icon"] .ds-tab[aria-selected="true"] .ui-icon { background:var(--ds-soft); stroke-width:2.2; }
+/* 07 vertical: list on the left, a side bar on the chosen row; arrows go up and down */
+.ds .ds-tabs[data-look="vertical"] { display:grid; grid-template-columns:minmax(96px,auto) minmax(0,1fr); align-items:start; }
+.ds .ds-tabs[data-look="vertical"] .ds-tablist { flex-direction:column; padding:0 8px 0 0; gap:2px; border:0; border-right:1px solid var(--ds-border); border-radius:0; background:transparent; box-shadow:none; }
+.ds .ds-tabs[data-look="vertical"] .ds-tab { justify-content:flex-start; border-radius:10px 0 0 10px; }
+.ds .ds-tabs[data-look="vertical"] .ds-tab[aria-selected="true"] { background:var(--ds-surface); color:var(--ds-text); box-shadow:inset 3px 0 0 var(--ds-accent); }
+.ds .ds-tabs[data-look="vertical"] .ds-tabpanel { padding:12px 16px; }
+/* 08 folder: file-folder tabs, the chosen one joins the panel below */
+.ds .ds-tabs[data-look="folder"] .ds-tablist { position:relative; z-index:1; padding:0 8px; gap:4px; border:0; border-radius:0; background:transparent; box-shadow:none; }
+.ds .ds-tabs[data-look="folder"] .ds-tab { margin-bottom:-1px; border-color:var(--ds-border); border-radius:12px 12px 0 0; background:var(--ds-surface); }
+.ds .ds-tabs[data-look="folder"] .ds-tab[aria-selected="true"] { background:var(--ds-high); color:var(--ds-text); border-bottom-color:var(--ds-high); box-shadow:none; }
+.ds .ds-tabs[data-look="folder"] .ds-tabpanel { padding:16px; border:1px solid var(--ds-border); border-radius:0 0 var(--ds-control-radius) var(--ds-control-radius); background:var(--ds-high); }
 /* @part bottom-nav */
 /* One markup, eleven shapes. Selection never rests on color alone: each shape adds a mark, a tile, a pill, a press or weight. */
 /* Floating shapes declare --ds-nav-inset so a screen frame can keep them off the edges. */
@@ -153,9 +189,19 @@
 .ds .ds-bottom-nav[data-variant="outline"] .ui-icon { stroke-width:1.25; }
 .ds .ds-bottom-nav[data-variant="outline"] > :is([aria-pressed="true"],[aria-current="page"]) .ui-icon { stroke-width:2; }
 .ds .ds-bottom-nav[data-variant="outline"] > :is([aria-pressed="true"],[aria-current="page"])::after { bottom:4px; width:18px; height:2px; border-radius:1px; background:var(--ds-text); }
-/* 10 curve: dark bar with an arched top, the chosen icon lifts into a light disc */
-.ds .ds-bottom-nav[data-variant="curve"] { padding:14px 6px 6px; border:0; border-radius:50% 50% 0 0 / 28px 28px 0 0; background:var(--ds-accent); }
-.ds .ds-bottom-nav[data-variant="curve"] > :is([aria-pressed="true"],[aria-current="page"]) .ui-icon { box-sizing:content-box; margin:-10px; padding:10px; transform:translateY(-20px); border-radius:50%; color:var(--ds-accent); background:var(--ds-soft); box-shadow:0 0 0 4px var(--ds-accent); }
+/* 10 curve: a floating dark bar, rounded on every corner; a groove is cut above the chosen item and its icon rides in a dark disc inside the groove.
+   The gap ring between disc and groove shows the screen behind, so the groove reads at a glance.
+   Floating off the screen edges and a side padding wider than the corner radius keep the groove clear of the corners. --i is the chosen position, --n the item count, --pad the side padding. */
+.ds .ds-bottom-nav[data-variant="curve"] { --ds-nav-inset:var(--ds-space-3); --i:0; --n:4; --pad:20px; padding:22px var(--pad) 8px; border:0; background:transparent; }
+.ds .ds-bottom-nav[data-variant="curve"]::before { content:''; position:absolute; inset:0; z-index:-1; --x:calc(var(--pad) + (100% - 2 * var(--pad)) * (2 * var(--i) + 1) / (2 * var(--n))); border-radius:20px; background:var(--ds-accent); -webkit-mask:radial-gradient(circle 29px at var(--x) 0, transparent 28px, black 29px); mask:radial-gradient(circle 29px at var(--x) 0, transparent 28px, black 29px); }
+.ds .ds-bottom-nav[data-variant="curve"]:has(> :nth-child(2):is([aria-pressed="true"],[aria-current="page"])) { --i:1; }
+.ds .ds-bottom-nav[data-variant="curve"]:has(> :nth-child(3):is([aria-pressed="true"],[aria-current="page"])) { --i:2; }
+.ds .ds-bottom-nav[data-variant="curve"]:has(> :nth-child(4):is([aria-pressed="true"],[aria-current="page"])) { --i:3; }
+.ds .ds-bottom-nav[data-variant="curve"]:has(> :nth-child(5):is([aria-pressed="true"],[aria-current="page"])) { --i:4; }
+.ds .ds-bottom-nav[data-variant="curve"]:has(> :last-child:nth-child(3)) { --n:3; }
+.ds .ds-bottom-nav[data-variant="curve"]:has(> :last-child:nth-child(5)) { --n:5; }
+.ds .ds-bottom-nav[data-variant="curve"] > :is([aria-pressed="true"],[aria-current="page"]) { justify-content:flex-end; }
+.ds .ds-bottom-nav[data-variant="curve"] > :is([aria-pressed="true"],[aria-current="page"]) .ui-icon { position:absolute; top:-22px; left:50%; translate:-50% -50%; box-sizing:content-box; padding:12px; border-radius:50%; color:var(--ds-on-accent); background:var(--ds-accent); box-shadow:0 8px 16px -8px color-mix(in oklab, var(--ds-accent) 70%, transparent); }
 /* 11 dock: floating rounded dock, chosen item is a filled tile */
 .ds .ds-bottom-nav[data-variant="dock"] { --ds-nav-inset:var(--ds-space-3); border:1px solid var(--ds-border); border-radius:24px; box-shadow:var(--ds-shadow); padding:8px; background:var(--ds-high); }
 .ds .ds-bottom-nav[data-variant="dock"] > :not(.ds-bottom-nav-create) { border-radius:17px; }
@@ -171,6 +217,46 @@
 .ds .ds-progress::-webkit-progress-bar { background:var(--ds-bg); border-radius:8px; box-shadow:var(--ds-inset); }
 .ds .ds-progress::-webkit-progress-value { background:var(--ds-success); border-radius:8px; }
 .ds .ds-progress::-moz-progress-bar { background:var(--ds-success); border-radius:8px; }
+/* Looks: the notice and the bar keep their roles; the saved notice always carries its dot and words, the bar always its number. */
+.ds .ds-feedback-example[data-look] .ds-alert { justify-self:stretch; }
+/* 02 dot: no box around the notice, a hairline bar */
+.ds .ds-feedback-example[data-look="dot"] .ds-alert { padding:0; border:0; background:transparent; box-shadow:none; }
+.ds .ds-feedback-example[data-look="dot"] .ds-progress { height:4px; border:0; border-radius:2px; background:var(--ds-border); box-shadow:none; }
+.ds .ds-feedback-example[data-look="dot"] .ds-progress::-webkit-progress-bar { background:var(--ds-border); box-shadow:none; }
+/* 03 stripe: a thick left edge on a flat notice, square bar */
+.ds .ds-feedback-example[data-look="stripe"] .ds-alert { border:0; border-left:4px solid var(--ds-success); border-radius:4px; background:var(--ds-surface); box-shadow:none; }
+.ds .ds-feedback-example[data-look="stripe"] .ds-progress { border-radius:2px; }
+.ds .ds-feedback-example[data-look="stripe"] .ds-progress::-webkit-progress-bar { border-radius:2px; }
+.ds .ds-feedback-example[data-look="stripe"] .ds-progress::-webkit-progress-value { border-radius:2px; }
+.ds .ds-feedback-example[data-look="stripe"] .ds-progress::-moz-progress-bar { border-radius:2px; }
+/* 04 toast: dark floating notice */
+.ds .ds-feedback-example[data-look="toast"] .ds-alert { border-color:var(--ds-accent); border-radius:14px; background:var(--ds-accent); color:var(--ds-on-accent); box-shadow:var(--ds-shadow); }
+/* 05 glass: see-through notice over whatever sits behind it */
+.ds .ds-feedback-example[data-look="glass"] .ds-alert { border-color:color-mix(in oklab, var(--ds-high) 70%, transparent); border-radius:18px; background:var(--ds-high); box-shadow:0 12px 28px -14px color-mix(in oklab, var(--ds-accent) 40%, transparent); }
+@supports(backdrop-filter:blur(16px)) { .ds .ds-feedback-example[data-look="glass"] .ds-alert { background:color-mix(in oklab, var(--ds-glass) 58%, transparent); backdrop-filter:blur(16px) saturate(1.4); } }
+@media(prefers-reduced-transparency:reduce) { .ds .ds-feedback-example[data-look="glass"] .ds-alert { background:var(--ds-high); backdrop-filter:none; } }
+/* 06 ring: the number sits inside a round gauge; the real progress element stays for screen readers */
+.ds .ds-feedback-example[data-look="ring"] { grid-template-columns:auto minmax(0,1fr); align-items:center; column-gap:var(--ds-space-4); }
+.ds .ds-feedback-example[data-look="ring"] > :is(.ds-button,.ds-alert) { grid-column:1/-1; }
+.ds .ds-progress-ring { position:relative; display:grid; place-items:center; width:72px; aspect-ratio:1; }
+.ds .ds-progress-ring::before { content:''; position:absolute; inset:0; border-radius:50%; background:conic-gradient(var(--ds-success) calc(var(--value) * 1%), var(--ds-border) 0); -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 9px), black calc(100% - 8px)); mask:radial-gradient(farthest-side, transparent calc(100% - 9px), black calc(100% - 8px)); }
+.ds .ds-progress-ring b { font:700 16px/1 var(--ds-display-font); letter-spacing:-.02em; }
+.ds .ds-feedback-example[data-look="ring"] .ds-progress-label { font-size:14px; font-weight:600; }
+.ds .ds-feedback-example[data-look="ring"] :is(.ds-progress-label > :last-child,.ds-progress) { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+/* 07 pill: fat rounded bar with a big number, the notice as a soft capsule */
+.ds .ds-feedback-example[data-look="pill"] .ds-alert { justify-self:start; padding:10px 18px; border:0; border-radius:999px; background:var(--ds-soft); box-shadow:none; }
+.ds .ds-feedback-example[data-look="pill"] .ds-progress-label { align-items:flex-end; }
+.ds .ds-feedback-example[data-look="pill"] .ds-progress-label > :last-child { font:700 28px/1 var(--ds-display-font); letter-spacing:-.04em; }
+.ds .ds-feedback-example[data-look="pill"] .ds-progress { height:24px; border-radius:999px; }
+.ds .ds-feedback-example[data-look="pill"] .ds-progress::-webkit-progress-bar { border-radius:999px; }
+.ds .ds-feedback-example[data-look="pill"] .ds-progress::-webkit-progress-value { border-radius:999px; }
+.ds .ds-feedback-example[data-look="pill"] .ds-progress::-moz-progress-bar { border-radius:999px; }
+/* 08 steps: the bar is cut into ten blocks, so progress reads as a count */
+.ds .ds-feedback-example[data-look="steps"] .ds-alert { border:0; border-radius:12px; background:var(--ds-soft); box-shadow:none; }
+.ds .ds-feedback-example[data-look="steps"] .ds-progress { height:14px; border:0; border-radius:0; background:var(--ds-border); box-shadow:none; -webkit-mask:repeating-linear-gradient(90deg, black 0 calc(10% - 4px), transparent 0 10%); mask:repeating-linear-gradient(90deg, black 0 calc(10% - 4px), transparent 0 10%); }
+.ds .ds-feedback-example[data-look="steps"] .ds-progress::-webkit-progress-bar { background:var(--ds-border); border-radius:0; box-shadow:none; }
+.ds .ds-feedback-example[data-look="steps"] .ds-progress::-webkit-progress-value { border-radius:0; }
+.ds .ds-feedback-example[data-look="steps"] .ds-progress::-moz-progress-bar { border-radius:0; }
 /* @part card */
 .ds .ds-card { display:flex; flex-direction:column; height:100%; background:var(--ds-surface); border:1px solid var(--ds-border); border-radius:var(--ds-radius); box-shadow:var(--ds-raised); overflow:hidden; }
 .ds .ds-card[data-selected="true"] { border-color:var(--ds-success); background:#e7f0eb; }
@@ -178,6 +264,20 @@
 .ds .ds-card h3 { font-size:20px; line-height:1.45; font-weight:650; letter-spacing:-.035em; margin-top:var(--ds-space-4); }
 .ds .ds-card p { font-size:14px; color:var(--ds-muted); margin-top:var(--ds-space-2); }
 .ds .ds-card-actions { display:flex; justify-content:flex-end; padding:var(--ds-space-4) var(--ds-space-6); }
+/* Looks: :where keeps each look as weak as the base rule, so a selected card still shows its selected state. */
+.ds .ds-card:where([data-look="line"]) { box-shadow:none; }
+.ds .ds-card:where([data-look="float"]) { border-color:transparent; background:var(--ds-high); box-shadow:0 18px 36px -16px color-mix(in oklab, var(--ds-accent) 38%, transparent); }
+.ds .ds-card:where([data-look="fill"]) { border-color:transparent; background:var(--ds-soft); box-shadow:none; }
+.ds .ds-card:where([data-look="row"]) { display:grid; grid-template-columns:88px minmax(0,1fr); align-content:start; }
+.ds .ds-card:where([data-look="row"]) .ds-card-media { height:auto; aspect-ratio:1; margin:var(--ds-space-6) 0 0 var(--ds-space-6); border-radius:16px; }
+.ds .ds-card:where([data-look="row"]) .ds-card-body { padding-left:var(--ds-space-4); }
+.ds .ds-card:where([data-look="row"]) :is(.ds-divider,.ds-card-actions) { grid-column:1/-1; }
+.ds .ds-card-media { height:96px; flex:none; background:radial-gradient(circle at 78% 34%, var(--ds-high) 0 13px, transparent 14px), linear-gradient(160deg, transparent 58%, color-mix(in oklab, var(--ds-success) 55%, var(--ds-soft)) 58%), linear-gradient(135deg, var(--ds-soft), color-mix(in oklab, var(--ds-success) 30%, var(--ds-soft))); }
+.ds .ds-card:where([data-look="glass"]) { border-color:color-mix(in oklab, var(--ds-high) 70%, transparent); background:var(--ds-high); box-shadow:0 12px 30px -14px color-mix(in oklab, var(--ds-accent) 35%, transparent); }
+@supports(backdrop-filter:blur(16px)) { .ds .ds-card:where([data-look="glass"]) { background:color-mix(in oklab, var(--ds-glass) 58%, transparent); backdrop-filter:blur(16px) saturate(1.4); } }
+@media(prefers-reduced-transparency:reduce) { .ds .ds-card:where([data-look="glass"]) { background:var(--ds-high); backdrop-filter:none; } }
+.ds .ds-card:where([data-look="neumorph"]) { border-color:transparent; background:var(--ds-surface); box-shadow:var(--ds-shadow); }
+.ds .ds-card:where([data-look="accent"]) { border-top:4px solid var(--ds-accent); }
 /* @part search-module */
 .ds .ds-search-module { container-type:inline-size; }
 .ds .ds-search-form { display:grid; grid-template-columns:minmax(0,1fr) minmax(90px,.3fr) auto; align-items:end; gap:var(--ds-space-3); }
@@ -192,10 +292,61 @@
 .ds .ds-record-detail [aria-pressed="true"] { background:var(--ds-success); border-color:var(--ds-success); }
 @media(max-width:580px) { .ds .ds-search-form { grid-template-columns:minmax(0,1fr) auto; } .ds .ds-search-form > .ds-field { grid-column:1/-1; } }
 @container(max-width:580px) { .ds .ds-search-form { grid-template-columns:minmax(0,1fr) auto; } .ds .ds-search-form > .ds-field { grid-column:1/-1; } }
+/* Looks. Labels hidden by a look stay in the page for screen readers. */
+.ds .ds-search-module[data-look="pill"] :is(.ds-field > label,.ds-select-field > span),.ds .ds-chip-group > legend,.ds .ds-chip input { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+/* 02 pill: query, status and button share one rounded bar */
+.ds .ds-search-module[data-look="pill"] .ds-search-form { grid-template-columns:minmax(0,1fr) auto auto; align-items:center; gap:4px; padding:4px 4px 4px 12px; border:1px solid var(--ds-control-border); border-radius:999px; background:var(--ds-bg); box-shadow:var(--ds-inset); }
+.ds .ds-search-module[data-look="pill"] .ds-search-form > .ds-field { grid-column:auto; }
+.ds .ds-search-module[data-look="pill"] .ds-search-form .ds-input { border:0; background:transparent; box-shadow:none; }
+.ds .ds-search-module[data-look="pill"] .ds-search-form select.ds-input { width:auto; padding-inline:12px 8px; border-left:1px solid var(--ds-border); border-radius:0; }
+.ds .ds-search-module[data-look="pill"] .ds-search-form > .ds-button { border-radius:999px; }
+@container(max-width:420px) { .ds .ds-search-module[data-look="pill"] .ds-search-form > .ds-button { gap:0; padding-inline:12px; font-size:0; } }
+/* 03 chips: status as a row of chips under the query */
+.ds .ds-search-module[data-look="chips"] .ds-search-form { grid-template-columns:minmax(0,1fr) auto; }
+.ds .ds-search-module[data-look="chips"] .ds-search-form > .ds-field { grid-column:auto; }
+.ds .ds-chip-group { grid-column:1/-1; order:3; display:flex; flex-wrap:wrap; gap:8px; min-width:0; margin:0; padding:0; border:0; }
+.ds .ds-chip { position:relative; display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:0 16px; border:1px solid var(--ds-control-border); border-radius:999px; background:var(--ds-bg); font-size:14px; cursor:pointer; }
+.ds .ds-chip:has(:checked) { border-color:var(--ds-accent); background:var(--ds-accent); color:var(--ds-on-accent); font-weight:650; }
+.ds .ds-chip:has(:checked)::before { content:'✓'; font-weight:700; }
+.ds .ds-chip:has(:focus-visible) { outline:3px solid var(--ds-focus); outline-offset:3px; }
+/* 04 list and 05 command: results as rows instead of tiles */
+.ds .ds-search-module:is([data-look="list"],[data-look="command"]) .ds-results { grid-template-columns:minmax(0,1fr); gap:0; }
+.ds .ds-search-module:is([data-look="list"],[data-look="command"]) .ds-card { flex-flow:row wrap; align-items:center; border:0; border-radius:0; background:transparent; box-shadow:none; }
+.ds .ds-search-module:is([data-look="list"],[data-look="command"]) .ds-card-body { flex:1 1 160px; padding:14px 0; }
+.ds .ds-search-module:is([data-look="list"],[data-look="command"]) .ds-card h3 { margin-top:4px; font-size:17px; }
+.ds .ds-search-module:is([data-look="list"],[data-look="command"]) .ds-divider { display:none; }
+.ds .ds-search-module:is([data-look="list"],[data-look="command"]) .ds-card-actions { padding:8px 0 8px 12px; }
+.ds .ds-search-module[data-look="list"] .ds-results { border-top:1px solid var(--ds-border); }
+.ds .ds-search-module[data-look="list"] .ds-card { border-bottom:1px solid var(--ds-border); }
+.ds .ds-search-module[data-look="command"] { padding:var(--ds-space-4); border:1px solid var(--ds-border); border-radius:20px; background:var(--ds-high); box-shadow:var(--ds-shadow); }
+.ds .ds-search-module[data-look="command"] .ds-search-form .ds-input:not(select) { min-height:56px; font-size:17px; }
+.ds .ds-search-module[data-look="command"] .ds-results { gap:4px; }
+.ds .ds-search-module[data-look="command"] .ds-card { padding-inline:14px; border-radius:12px; }
+.ds .ds-search-module[data-look="command"] [data-result]:not([hidden]) ~ [data-result] .ds-card { background:transparent; box-shadow:none; }
+.ds .ds-search-module[data-look="command"] [data-result]:not([hidden]) .ds-card { background:var(--ds-soft); box-shadow:inset 3px 0 0 var(--ds-accent); }
+/* 07 feature: the first result spans the row with a bigger title */
+.ds .ds-search-module[data-look="feature"] .ds-results > :first-child { grid-column:1/-1; }
+.ds .ds-search-module[data-look="feature"] .ds-results > :first-child h3 { font-size:26px; line-height:1.3; }
 /* @part template */
 .ds .ds-page { max-width:1080px; margin-inline:auto; }
 .ds .ds-page-header { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:var(--ds-space-8); }
 .ds .ds-page-header h2 { font-size:32px; font-weight:650; letter-spacing:-.04em; margin-top:var(--ds-space-2); }
 .ds .ds-eyebrow { font-size:var(--ds-text-sm); color:var(--ds-muted); }
 .ds .ds-page > .ds-bottom-nav { margin:var(--ds-space-8) auto 0; max-width:480px; }
+/* Looks: how the screen opens. Each look also brings its own bottom bar shape from the markup. */
+.ds .ds-page[data-look="hero"] .ds-page-header { align-items:flex-end; padding:28px 20px 20px; border-radius:var(--ds-radius); background:var(--ds-soft); }
+.ds .ds-page[data-look="hero"] .ds-page-header h2 { font-size:40px; line-height:1.1; }
+.ds .ds-page[data-look="appbar"] .ds-page-header { position:relative; justify-content:center; padding:4px 64px 16px; margin-bottom:var(--ds-space-6); border-bottom:1px solid var(--ds-border); text-align:center; }
+.ds .ds-page[data-look="appbar"] .ds-page-header h2 { margin-top:0; font-size:20px; letter-spacing:-.02em; }
+.ds .ds-page[data-look="appbar"] .ds-page-header > .ds-badge { position:absolute; right:0; top:50%; translate:0 -60%; }
+.ds .ds-page[data-look="sheet"] .ds-page-header { align-items:flex-start; margin-bottom:0; padding:24px 20px 64px; border-radius:var(--ds-radius) var(--ds-radius) 0 0; background:var(--ds-accent); color:var(--ds-on-accent); }
+.ds .ds-page[data-look="sheet"] .ds-page-header .ds-eyebrow { color:color-mix(in oklab, var(--ds-on-accent) 74%, transparent); }
+.ds .ds-page[data-look="sheet"] .ds-page-header + * { position:relative; margin-top:-32px; padding:24px 20px; border-radius:24px 24px 0 0; background:var(--ds-high); }
+.ds .ds-page[data-look="magazine"] .ds-page-header { align-items:flex-end; padding-bottom:16px; border-bottom:2px solid var(--ds-text); }
+.ds .ds-page[data-look="magazine"] .ds-page-header h2 { font:700 48px/1.05 var(--ds-display-font); letter-spacing:-.05em; }
+.ds .ds-page[data-look="dashboard"] .ds-page-header { margin-bottom:var(--ds-space-4); }
+.ds .ds-page-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:0 0 var(--ds-space-6); padding:0; list-style:none; }
+.ds .ds-page-stats li { display:grid; gap:2px; padding:12px; border:1px solid var(--ds-border); border-radius:16px; background:var(--ds-surface); }
+.ds .ds-page-stats strong { font:700 22px/1.2 var(--ds-display-font); letter-spacing:-.03em; }
+.ds .ds-page-stats span { font-size:12px; color:var(--ds-muted); }
 .ds .ds-template-slot { min-height:160px; display:grid; place-items:center; padding:var(--ds-space-6); border:1px dashed var(--ds-control-border); border-radius:var(--ds-radius); color:var(--ds-muted); font-size:14px; }

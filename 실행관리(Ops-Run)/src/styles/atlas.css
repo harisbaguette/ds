@@ -36,8 +36,9 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .dict-thumb { width:100%; height:calc(var(--p-space-unit) * 42); display:grid; place-items:center; border-radius:var(--p-radius-xl); background:var(--p-bg); overflow:hidden; }
 .dict-thumb.atlas-preview { height:calc(var(--p-space-unit) * 42); }
 .dict-thumb .atlas-sample { padding:calc(var(--p-space-unit) * 5) var(--p-space-md); }
-.dict-kind-art { width:calc(var(--p-space-unit) * 30); height:calc(var(--p-space-unit) * 18); fill:none; stroke:var(--p-control-border); stroke-width:var(--p-icon-stroke); stroke-linecap:round; stroke-linejoin:round; }
-.dict-kind-art .k-fill { fill:var(--p-soft); }.dict-kind-art .k-ink { fill:var(--p-accent); stroke:var(--p-accent); }.dict-kind-art .k-soft { fill:var(--p-highlight-soft); }
+.is-todo .dict-thumb { border:var(--p-border-width) dashed var(--p-control-border); background:none; }
+.dict-todo,.detail-todo { color:var(--p-muted); font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); }
+.is-todo strong { color:var(--p-muted); }
 /* Icon-set pictures carry no paint of their own: outline sets draw with a stroke, filled sets with a fill, both in the ink color. */
 .dict-glyph { width:var(--p-control-size-lg); height:var(--p-control-size-lg); color:var(--p-ink); }
 .paint-stroke { fill:none; stroke:currentColor; stroke-width:var(--p-icon-stroke-bold); stroke-linecap:round; stroke-linejoin:round; }
@@ -54,7 +55,6 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .dict[data-shelf='icon'] .dict-glyph { width:var(--p-icon-lg); height:var(--p-icon-lg); }
 .dict[data-shelf='icon'] .is-emoji { font-size:var(--p-text-title); }
 .dict[data-shelf='icon'] .dict-entry strong { min-height:calc(var(--p-text-sm) * 3); padding:0; text-align:center; font-weight:var(--p-weight-medium); }
-.dict[data-shelf='icon'] .dict-kind-art { width:100%; height:var(--p-control-size-lg); }
 .dict[data-shelf='template'] .dict-entries { grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--p-container-xs)),1fr)); }
 .dict[data-shelf='template'] .is-built .dict-thumb { height:auto; min-height:calc(var(--p-space-unit) * 105); }
 .dict[data-shelf='template'] .variant-frame { grid-area:auto; width:100%; border:0; }
@@ -107,7 +107,7 @@ body { background:var(--p-bg); color:var(--p-ink); }
 @media(max-width:760px) {
   .dict-entries { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .dict-grid { gap:var(--p-space-sm); }
-  .dict-thumb,.dict-thumb.atlas-preview { height:calc(var(--p-space-unit) * 30); }.dict-kind-art { width:calc(var(--p-space-unit) * 24); height:calc(var(--p-space-unit) * 14); }.dict-glyph { width:var(--p-control-size-sm); height:var(--p-control-size-sm); }
+  .dict-thumb,.dict-thumb.atlas-preview { height:calc(var(--p-space-unit) * 30); }.dict-glyph { width:var(--p-control-size-sm); height:var(--p-control-size-sm); }
   .dict-entry.is-built { grid-column:span 2; }.dict-entry.is-built .dict-thumb { height:calc(var(--p-space-unit) * 42); }
   .dict[data-shelf='template'] .dict-entry.is-built, .dict[data-shelf='block'] .dict-entry.is-built { grid-column:auto; }
   .dict[data-shelf='icon'] .dict-entries { grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--p-space-xs); }

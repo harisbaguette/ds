@@ -148,8 +148,9 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   check('사전 전체 검색',await page.locator('.dict-entry').count()>0);
   await shot('05-search');
   await goto('dictionary?code=VIS');
-  await page.locator('button.dict-entry').first().click();
-  check('사전 상세는 그림 크게 보기만',await page.locator('dialog .detail-art svg').isVisible()&&await page.locator('dialog .dialog-footer, dialog .record-detail').count()===0);
+  check('견본 없는 항목은 가짜 그림 대신 미구현 표시',await page.locator('button.dict-entry.is-todo').count()>0&&await page.locator('button.dict-entry.is-todo svg').count()===0&&(await page.locator('button.dict-entry.is-todo .dict-todo').first().textContent())==='미구현');
+  await page.locator('button.dict-entry.is-todo').first().click();
+  check('미구현 항목 상세도 미구현이라고 말함',/미구현/.test(await page.locator('dialog .detail-art.is-todo').textContent())&&await page.locator('dialog .detail-art svg, dialog .dialog-footer, dialog .record-detail').count()===0);
   await shot('06-entry-art');
   await close();
   await goto('dictionary?shelf=icon&kind='+encodeURIComponent('세트 그림'));

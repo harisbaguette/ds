@@ -16,7 +16,9 @@
 .record-detail section p { font-size: var(--p-text-md); line-height: var(--p-leading-loose); overflow-wrap: anywhere; }
 /* Dictionary detail = the tile picture, enlarged. */
 .detail-art { display: grid; place-items: center; min-height: min(100vh * 7 / 12, var(--p-space-unit) * 120); margin: 0 var(--p-space-lg) var(--p-space-lg); border-radius: var(--p-radius-xl); background: var(--p-bg); }
-.detail-art .dict-kind-art { width: min(100%, var(--p-container-lg)); height: auto; aspect-ratio: var(--p-aspect-landscape); stroke-width: var(--p-icon-stroke-thin); }
+.detail-art.is-todo { align-content: center; gap: var(--p-space-xs); border: var(--p-border-width) dashed var(--p-control-border); background: none; }
+.detail-art.is-todo .detail-todo { font-size: var(--p-text-title); }
+.detail-art.is-todo p { margin: 0; color: var(--p-muted); }
 .detail-glyph { width: min(100% * 3 / 5, var(--p-space-unit) * 50); height: auto; aspect-ratio: var(--p-aspect-square); color: var(--p-ink); }
 .detail-glyph.is-emoji { font-size: calc(var(--p-space-unit) * 40); width: auto; }
 /* Each picture key under the enlarged icon, with the set, version and license it comes from. */

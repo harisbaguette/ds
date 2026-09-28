@@ -37,7 +37,6 @@
   const cleared = filters => Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, Array.isArray(value) ? [] : value]));
   function toggleFilter(key, id) {
     const filters = { ...state.filters, [key]: state.filters[key]?.includes(id) ? state.filters[key].filter(x => x !== id) : [...(state.filters[key] || []), id] };
-    if (key === 'code' && !filters.code.includes('ICO')) filters.icon = [];
     navigate({ filters, limit: 48 }, { replace: true });
   }
   const firstFilter = () => $('#filter-bar summary, #filter-bar [data-focus]')?.focus({ preventScroll: true });

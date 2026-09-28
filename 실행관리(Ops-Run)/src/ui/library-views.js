@@ -2,11 +2,13 @@
   const { library: data, views, previews } = window.Pattove;
   const { escape } = views, { icon } = previews;
   // Every installed icon picture is on the icon tab: the ones a meaning entry points at show through that entry, the rest as 세트 그림 of their own.
+  // An icon lives in one home category (sub) and may also show in up to two more (also), the way Font Awesome and Lucide list one icon under several categories.
   const iconShelf=data.shelves.find(s=>s.codes?.includes('ICO'))?.id;
   const glyphSets=new Map(data.glyphSets.map(s=>[s.id,s]));
   const glyphName=new Map(data.glyphs.map(([key,name])=>[key,name]));
   const linked=new Set(data.entries.flatMap(e=>e.glyph||[]));
-  const dictionary=[...data.entries,...data.glyphs.filter(([key])=>!linked.has(key)).map(([key,name,sub])=>({id:key,name,kind:'세트 그림',category:'ICO',sub,shelf:iconShelf,glyph:[key]}))];
+  const dictionary=[...data.entries,...data.glyphs.filter(([key])=>!linked.has(key)).map(([key,name,sub,also])=>({id:key,name,kind:'세트 그림',category:'ICO',sub,...(also&&{also}),shelf:iconShelf,glyph:[key]}))];
+  const iconCats=e=>e.sub?[e.sub,...(e.also||[])]:[];
   const entries=new Map(dictionary.map(e=>[e.id,e]));
   const components=new Map(data.components.map(e=>[e.id,e]));
   const pages=['dictionary','components'];
@@ -32,7 +34,7 @@
   const shelfOf=e=>e.category?e.shelf:data.shelves.find(s=>s.layers?.includes(e.layer))?.id;
   const itemShelf=item=>item.entry?shelfOf(entries.get(item.entry)):['Template','Page'].includes(item.layer)?'template':item.layer==='Module'?'block':'part';
   const inShelf=new Map(), bump=key=>inShelf.set(key,(inShelf.get(key)||0)+1);
-  for (const e of dictionary) { bump(e.shelf+'|'+e.category); if (e.sub) bump(e.shelf+'|ICO.'+e.sub); }
+  for (const e of dictionary) { bump(e.shelf+'|'+e.category); for (const sub of iconCats(e)) bump(e.shelf+'|ICO.'+sub); }
   const short=name=>String(name).split(' — ')[0];
   // A shelf with no kinds (토큰) sorts by the family named before " — " (색, 글자, 간격 …); a family of one or a bare name reads as 기타,
   // and the hierarchy components on that shelf share one 묶음 kind.
@@ -100,7 +102,7 @@
   const passes=(f,e,skip)=>(skip==='kind'||!f.kind.length||f.kind.includes(kindOf(e)))
     &&(skip==='area'||!(f.role.length||f.place.length)||f.role.includes(roleOf.get(e.category))||f.place.includes(placeOf.get(e.category)))
     &&(skip==='code'||!f.code.length||f.code.includes(e.category))
-    &&(skip==='icon'||!f.icon.length||e.category!=='ICO'||f.icon.includes(e.sub));
+    &&(skip==='icon'||!f.icon.length||e.category!=='ICO'||iconCats(e).some(sub=>f.icon.includes(sub)));
 
   // Header tabs = the shelves, then 스타일. A built part opens on the system page under its own shelf (token-* under 토큰). A search stays across tabs.
   function navigation(state) {
@@ -133,8 +135,8 @@
     }
     const {built,plain}=shelfItems(state);
     const pool=[...built.filter(i=>i.entry).map(i=>entries.get(i.entry)),...plain];
-    const tallyBy=(skip,key)=>{ const m=new Map(); for (const e of pool) if (passes(f,e,skip)) { const k=key(e); if (k) m.set(k,(m.get(k)||0)+1); } return m; };
-    const kinds=tallyBy('kind',kindOf), area=tallyBy('area',e=>e.category), codes=tallyBy('code',e=>e.category), icons=tallyBy('icon',e=>e.category==='ICO'&&e.sub);
+    const tallyBy=(skip,key)=>{ const m=new Map(); for (const e of pool) if (passes(f,e,skip)) for (const k of [key(e)].flat()) if (k) m.set(k,(m.get(k)||0)+1); return m; };
+    const kinds=tallyBy('kind',kindOf), area=tallyBy('area',e=>e.category), codes=tallyBy('code',e=>e.category), icons=tallyBy('icon',e=>e.category==='ICO'&&iconCats(e));
     const sum=cs=>cs.reduce((n,c)=>n+(area.get(c)||0),0);
     const here=code=>inShelf.has(f.shelf+'|'+code);
     const option=(key,id,name,count)=>({key,id,name,count,pressed:f[key].includes(id)});

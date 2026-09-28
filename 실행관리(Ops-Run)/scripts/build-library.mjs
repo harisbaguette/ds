@@ -113,6 +113,11 @@ const badGlyph=entries.filter(e=>e.glyph?.some(g=>!glyphKeys.has(g)&&!/^emoji:\p
 if(badGlyph.length)throw new Error('Icon entries point at pictures that are not installed: '+badGlyph.join('; '));
 const bare=entries.filter(e=>e.category==='ICO'&&e.kind==='부품'&&!e.glyph).map(e=>e.id);
 if(bare.length)throw new Error('Icon parts without a picture: '+bare.join(', '));
+// A meaning also shows in every category its pictures live in, so it is found both where its meaning and where its drawing belongs.
+for(const e of entries.filter(e=>e.sub&&e.glyph)){
+  const also=[...new Set(e.glyph.flatMap(g=>glyphNames[g]?[glyphNames[g][1],...(glyphNames[g][2]||[])]:[]))].filter(id=>id!==e.sub);
+  if(also.length)e.also=also;
+}
 writeSprites(root,glyphSets);
 // Pictures no meaning entry points at still show in the icon tab as their own kind.
 shelves.find(s=>s.codes?.includes('ICO')).kinds.push('세트 그림');

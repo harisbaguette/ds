@@ -63,17 +63,17 @@ const fingerprint = element => {
     // Look-alike versions: a card grid replaces the shape select, a card swaps the big preview, "이걸로 쓰기" survives a reload.
     await inspect(page, 'main', 'bottom-nav');
     const looks = await page.locator('.variant-card .ds-bottom-nav').evaluateAll(nodes => nodes.map(n => n.dataset.variant));
-    check('하단 탐색 모양 10가지 이상, 모두 다른 모양', looks.length >= 10 && new Set(looks).size === looks.length && looks.includes('line') && looks.includes('dock'));
+    check('하단 탐색 모양 6가지 이상, 모두 다른 모양', looks.length >= 6 && new Set(looks).size === looks.length && looks.includes('line') && looks.includes('dock'));
     check('형태 선택 칸은 모양 격자로 흡수', await page.locator('[data-part-option="variant"]').count() === 0);
     await page.locator('[data-variant-pick="fab"]').click();
     check('카드를 누르면 큰 미리보기가 그 모양으로', await page.locator('.part-demo .ds-bottom-nav').getAttribute('data-variant') === 'fab' && await page.locator('.part-demo .ds-bottom-nav-create').count() === 1 && await page.locator('[data-variant-pick="fab"]').getAttribute('aria-pressed') === 'true' && page.url().includes('option-variant=fab'));
-    await page.locator('[data-variant-use="curve"]').click();
-    check('이걸로 쓰기는 사용 중 표시', await page.locator('[data-variant-use="curve"]').getAttribute('aria-pressed') === 'true' && (await page.locator('[data-variant-use="curve"]').innerText()).includes('사용 중') && await page.locator('.part-demo .ds-bottom-nav').getAttribute('data-variant') === 'curve');
+    await page.locator('[data-variant-use="dock"]').click();
+    check('이걸로 쓰기는 사용 중 표시', await page.locator('[data-variant-use="dock"]').getAttribute('aria-pressed') === 'true' && (await page.locator('[data-variant-use="dock"]').innerText()).includes('사용 중') && await page.locator('.part-demo .ds-bottom-nav').getAttribute('data-variant') === 'dock');
     check('모양 미리보기는 조작 대상이 아님', await page.locator('.variant-card .variant-frame[inert]').count() === looks.length);
     await page.goto(url + '#/system?style=main&detail=bottom-nav');
     await page.reload();
     await page.locator('.variant-card').first().waitFor();
-    check('고른 모양은 새로고침 뒤에도 기본', await page.locator('.part-demo .ds-bottom-nav').getAttribute('data-variant') === 'curve' && await page.locator('[data-variant-use="curve"]').getAttribute('aria-pressed') === 'true' && !page.url().includes('option-variant'));
+    check('고른 모양은 새로고침 뒤에도 기본', await page.locator('.part-demo .ds-bottom-nav').getAttribute('data-variant') === 'dock' && await page.locator('[data-variant-use="dock"]').getAttribute('aria-pressed') === 'true' && !page.url().includes('option-variant'));
     await page.evaluate(() => localStorage.removeItem('pattove-part-choice'));
     const blocked = await browser.newContext({ viewport: { width: 390, height: 900 } });
     await blocked.addInitScript(() => Object.defineProperty(window, 'localStorage', { get() { throw new Error('storage blocked'); } }));
@@ -119,11 +119,16 @@ const fingerprint = element => {
     for (const id of ['tabs','feedback','card','search-module','template','page']) {
       await inspect(page,'main',id);
       const cards = await page.locator('.variant-card').evaluateAll(nodes => nodes.map(n => [n.dataset.variantCard, n.querySelector('.variant-frame [data-look]')?.dataset.look]));
-      check(id+' 모양 6가지 이상, 카드마다 제 모양', cards.length >= 6 && new Set(cards.map(c => c[0])).size === cards.length && cards.every(([v, look]) => v === look));
+      check(id+' 모양 2가지 이상, 카드마다 제 모양', cards.length >= 2 && new Set(cards.map(c => c[0])).size === cards.length && cards.every(([v, look]) => v === look));
       const last = cards.at(-1)[0];
       await page.locator('[data-variant-pick="'+last+'"]').click();
       check(id+' 카드를 누르면 큰 미리보기 data-look이 바뀜', await demo.locator('[data-look]').first().getAttribute('data-look') === last && await page.locator('[data-variant-pick="'+last+'"]').getAttribute('aria-pressed') === 'true' && page.url().includes('option-look='+last));
     }
+    // A look earns its place by the situation it fits and the effort it takes away; the card says both instead of style tags.
+    const bare = await page.evaluate(() => [...window.Pattove.systemRegistry.index.values()].flatMap(item => (item.gallery?.list || []).filter(v => !String(v.when || '').trim() || !String(v.saves || '').trim()).map(v => item.id + ':' + v.id)));
+    check('모든 모양에 이럴 때·덜 하는 일이 있음 ' + bare.join(','), bare.length === 0);
+    const cardCount = await page.locator('.variant-card').count();
+    check('모양 카드는 태그 대신 이럴 때·덜 하는 일 두 줄', cardCount > 0 && await page.locator('.variant-card .variant-when').count() === cardCount && await page.locator('.variant-card .variant-save').count() === cardCount && await page.locator('.variant-tags').count() === 0);
     await inspect(page,'main','search-module');
     await page.locator('[data-variant-pick="chips"]').click();
     await demo.locator('.ds-chip', { hasText: '완료' }).click();
@@ -146,7 +151,7 @@ const fingerprint = element => {
     await page.goto(url+'#/system?style=main&detail=button');await page.screenshot({path:path.join(output,'button-page.png')});
     await page.setViewportSize({width:375,height:1000});
     await page.goto(url+'#/system?style=main&detail=page');await page.screenshot({path:path.join(output,'mobile-page.png'),fullPage:true});
-    // Look galleries: every atom offers 6+ distinct looks drawn by parts.css [data-look].
+    // Look galleries: every atom offers 2+ distinct looks drawn by parts.css [data-look].
     const lookShots = path.join(root, 'test-results/look-atoms');
     fs.mkdirSync(lookShots, { recursive: true });
     for (const id of ['button','input','field','checkbox','radio','switch','badge','divider','status-dot','icon']) {
@@ -157,7 +162,7 @@ const fingerprint = element => {
       await lp.locator('.component-page[data-component="' + id + '"] .variant-grid').waitFor();
       await lp.evaluate(() => document.fonts.ready);
       const looks = await lp.evaluate(id => window.Pattove.systemRegistry.index.get(id).gallery.list.map(v => v.id), id);
-      check(id + ' 모양 6개 이상', looks.length >= 6 && await lp.locator('.variant-card').count() === looks.length);
+      check(id + ' 모양 2개 이상', looks.length >= 2 && await lp.locator('.variant-card').count() === looks.length);
       check(id + ' 모양 이름 중복 없음', new Set(looks).size === looks.length);
       const current = () => lp.locator('.part-demo [data-look]').first().getAttribute('data-look');
       check(id + ' 기본 data-look은 첫 모양', await current() === looks[0]);

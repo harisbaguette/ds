@@ -11,8 +11,6 @@
   --ds-input-error: var(--p-error);
   --ds-input-space-2: var(--p-space-xs);
   --ds-input-surface: var(--p-surface);
-  --ds-input-radius: var(--p-radius);
-  --ds-input-soft: var(--p-soft);
-  --ds-input-high: var(--p-high);
-  --ds-input-on-accent: var(--p-on-accent);
+  --ds-input-accent: var(--p-accent);
+  --ds-input-font: var(--p-font);
 }

@@ -1,10 +1,7 @@
 /* Layer 3 · component · divider. Only this part's rules read these names; values are var(--p-*) only. */
 .ds {
   --ds-divider-border: var(--p-line);
-  --ds-divider-control-border: var(--p-control-border);
   --ds-divider-bg: var(--p-bg);
   --ds-divider-muted: var(--p-muted);
   --ds-divider-text-sm: var(--p-text-sm);
-  --ds-divider-accent: var(--p-accent);
-  --ds-divider-surface: var(--p-surface);
 }

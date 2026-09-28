@@ -12,8 +12,5 @@
   --ds-badge-warning-soft: var(--p-warning-soft);
   --ds-badge-warning-line: var(--p-warning-line);
   --ds-badge-warning: var(--p-warning);
-  --ds-badge-accent: var(--p-accent);
-  --ds-badge-on-accent: var(--p-on-accent);
   --ds-badge-bg: var(--p-bg);
-  --ds-badge-raised: var(--p-raised);
 }

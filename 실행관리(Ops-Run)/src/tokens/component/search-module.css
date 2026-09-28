@@ -17,7 +17,6 @@
   --ds-search-module-accent: var(--p-accent);
   --ds-search-module-on-accent: var(--p-on-accent);
   --ds-search-module-focus: var(--p-highlight);
-  --ds-search-module-high: var(--p-high);
-  --ds-search-module-shadow: var(--p-shadow);
   --ds-search-module-soft: var(--p-soft);
+  --ds-search-module-text: var(--p-ink);
 }

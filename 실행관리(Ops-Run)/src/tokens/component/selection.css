@@ -16,9 +16,4 @@
   --ds-selection-high: var(--p-high);
   --ds-selection-space-2: var(--p-space-xs);
   --ds-selection-focus: var(--p-highlight);
-  --ds-selection-surface: var(--p-surface);
-  --ds-selection-raised: var(--p-raised);
-  --ds-selection-text: var(--p-ink);
-  --ds-selection-success: var(--p-success);
-  --ds-selection-soft: var(--p-soft);
 }

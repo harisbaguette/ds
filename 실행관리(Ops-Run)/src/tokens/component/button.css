@@ -19,9 +19,5 @@
   --ds-button-focus: var(--p-highlight);
   --ds-button-border: var(--p-line);
   --ds-button-muted: var(--p-muted);
-  --ds-button-soft: var(--p-soft);
-  --ds-button-success: var(--p-success);
-  --ds-button-radius: var(--p-radius);
-  --ds-button-shadow: var(--p-shadow);
   --ds-button-space-3: var(--p-space-sm);
 }

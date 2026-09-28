@@ -7,8 +7,4 @@
   --ds-field-success: var(--p-success);
   --ds-field-focus: var(--p-highlight);
   --ds-field-space-3: var(--p-space-sm);
-  --ds-field-space-4: var(--p-space-md);
-  --ds-field-border: var(--p-line);
-  --ds-field-radius: var(--p-radius);
-  --ds-field-surface: var(--p-surface);
 }

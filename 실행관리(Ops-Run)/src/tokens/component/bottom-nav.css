@@ -13,7 +13,4 @@
   --ds-bottom-nav-space-3: var(--p-space-sm);
   --ds-bottom-nav-shadow: var(--p-shadow);
   --ds-bottom-nav-soft: var(--p-soft);
-  --ds-bottom-nav-radius: var(--p-radius);
-  --ds-bottom-nav-inset: var(--p-inset);
-  --ds-bottom-nav-success: var(--p-success);
 }

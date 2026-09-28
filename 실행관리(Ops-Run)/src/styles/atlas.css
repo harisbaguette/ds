@@ -57,22 +57,15 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .style-card { position:relative; min-width:0; display:flex; flex-direction:column; gap:var(--p-space-sm); padding:var(--p-space-sm) var(--p-space-sm) var(--p-space-md); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-2xl); background:var(--p-high); transition:border-color var(--p-duration),box-shadow var(--p-duration); }
 .style-card:hover { border-color:var(--p-control-border); box-shadow:var(--p-raised); }
 .style-card.is-active { border-color:var(--p-accent); box-shadow:0 0 0 var(--p-border-width) var(--p-accent); }
-/* 견본은 휴대폰 첫 화면 비율(9:18). 내용이 아래로 넘치면 떠 있는 탐색 막대 뒤로 잘린다. */
-.style-sample { position:relative; aspect-ratio:var(--p-aspect-portrait); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-2xl); background:var(--p-bg); overflow:hidden; pointer-events:none; }
-.style-phone-screen { display:flex; flex-direction:column; gap:var(--p-space-sm); padding:var(--p-space-lg) var(--p-space-md) 0; }
-.style-sample .ds-page-header { margin:0 0 var(--p-space-3xs); }
-.style-sample .ds-page-header h2 { font-size:var(--p-text-lg); margin-top:var(--p-space-3xs); }
-.style-sample .ds-eyebrow { font-size:var(--p-text-sm); }
+/* 견본은 휴대폰 첫 화면을 실제 기기 폭(384px)으로 그린 뒤 카드 안쪽 폭에 맞춰 통째로 줄인다(부품 화면의 휴대폰 틀과 같은 방식).
+   부품은 제 크기 그대로 두고, 견본만을 위해 글자·높이를 따로 줄이지 않는다 — 따로 줄이면 부품끼리 비율이 어긋난다. */
+.style-sample { --style-sample-zoom:.68; position:relative; width:var(--p-container-sm); aspect-ratio:var(--p-aspect-portrait); zoom:var(--style-sample-zoom); border:calc(var(--p-border-width) / var(--style-sample-zoom)) solid var(--p-line); border-radius:calc(var(--p-radius-2xl) / var(--style-sample-zoom)); background:var(--p-bg); overflow:hidden; pointer-events:none; }
+.style-phone-screen { display:flex; flex-direction:column; gap:var(--p-space-md); padding:var(--p-space-xl) var(--p-space-md) 0; }
+.style-sample .ds-page-header { margin:0; }
 .style-sample .ds-card { height:auto; flex-shrink:0; }
-.style-sample .ds-card-body { padding:var(--p-space-md) var(--p-space-md) var(--p-space-sm); }
-.style-sample .ds-card h3 { font-size:var(--p-text-md); margin-top:var(--p-space-xs); }
-.style-sample .ds-card p { font-size:var(--p-text-sm); margin-top:var(--p-space-2xs); }
-.style-sample .ds-card-actions { padding:var(--p-space-xs) var(--p-space-md); }
-.style-sample .ds-bottom-nav { position:absolute; left:var(--p-space-sm); right:var(--p-space-sm); bottom:var(--p-space-sm); }
-.style-sample .ds-bottom-nav > button { min-height:var(--p-control-size-md); gap:var(--p-space-2xs); font-size:var(--p-text-sm); }
-/* The part rule (.ds …) sets 44px items; five of them plus the create button overflow this narrow sample. */
-.style-sample.ds .ds-bottom-nav > :not(.ds-bottom-nav-create) { min-width:var(--p-size-2xl); }
-.style-sample .ds-bottom-nav .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); }
+/* 떠 있는 탐색 막대는 휴대폰 아래 끝에 붙고, 그 위 목록은 막대 뒤로 흐려지며 사라진다. */
+.style-sample .ds-bottom-nav { position:absolute; z-index:var(--p-layer-raised); left:var(--ds-bottom-nav-offset,0); right:var(--ds-bottom-nav-offset,0); bottom:var(--ds-bottom-nav-offset,0); margin:0; }
+.style-sample::after { content:''; position:absolute; inset:auto 0 0; height:calc(var(--p-space-unit) * 38); background:var(--p-gradient-fade-up); pointer-events:none; }
 .style-choose { display:flex; flex-direction:column; align-items:flex-start; gap:var(--p-space-2xs); padding:0 var(--p-space-xs); text-align:left; color:var(--p-ink); background:none; border:0; }
 .style-choose strong { font-size:var(--p-text-md); font-weight:var(--p-weight-semibold); }
 .style-choose::after { content:''; position:absolute; inset:0; border-radius:var(--p-radius-2xl); }

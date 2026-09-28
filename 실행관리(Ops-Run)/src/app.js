@@ -16,21 +16,16 @@
   let suggestions = [];
   let suggestionIndex = -1;
   let mainRenderKey = '';
-  let filterBarHTML = '';
-  // The filter area remembers, per tab, which sections are folded and what each section search holds.
-  let filterScope = '';
-  let sectionOpen = {};
-  let facetSearch = {};
-  let filtersOpen = false;
   history.scrollRestoration = 'manual';
   const dialog = $('#detail-dialog');
+  // Search is used rarely, so it lives in one modal opened from the top bar's search button (or /).
+  const searchDialog = $('#search-dialog');
 
   // In-page anchors clear the persistent style/search header at every viewport size.
   function updateChromeOffset() {
     const bar = $('.app-top');
     const shown = bar.getClientRects().length && getComputedStyle(bar).position === 'sticky';
     document.documentElement.style.setProperty('--chrome-bottom', `${shown ? Math.ceil(bar.getBoundingClientRect().height + 16) : 16}px`);
-    $('#query').placeholder = phone.matches ? '검색' : $('#query').dataset.placeholder || '구성요소 검색';
   }
   const list = value => [...new Set(String(value || '').split(',').filter(Boolean))];
   function readFilters(page, params) {
@@ -38,46 +33,7 @@
     return isCollection() ? library.readFilters(page, params) : {};
   }
   const cleared = filters => Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, Array.isArray(value) ? [] : value]));
-  function toggleFilter(key, id) {
-    const filters = { ...state.filters, [key]: state.filters[key]?.includes(id) ? state.filters[key].filter(x => x !== id) : [...(state.filters[key] || []), id] };
-    navigate({ filters, limit: 48 }, { replace: true });
-  }
-  const firstFilter = () => $('#filter-bar summary, #filter-bar [data-focus]')?.focus({ preventScroll: true });
   const phone = matchMedia('(max-width: 760px)');
-  const searchKey = input => input.closest('[data-section]')?.dataset.section || 'part';
-  function searchPanel(input) {
-    const term = input.value.trim().toLocaleLowerCase();
-    facetSearch[searchKey(input)] = input.value;
-    input.parentElement.querySelectorAll('[data-facet-name]').forEach(option => { option.hidden = !!term && !option.dataset.facetName.includes(term); });
-  }
-  function renderFilterBar() {
-    const html = state.page === 'patterns' ? views.patternFilters(state) : isCollection() ? library.filters(state) : '';
-    const bar = $('#filter-bar');
-    const scope = state.page + '|' + (state.filters.shelf || ''), sameTab = scope === filterScope;
-    if (!sameTab) { filterScope = scope; sectionOpen = {}; facetSearch = {}; filtersOpen = false; }
-    if (html !== filterBarHTML) {
-      filterBarHTML = html;
-      bar.innerHTML = html;
-      bar.querySelectorAll('details[data-section]').forEach(d => {
-        const key = d.dataset.section;
-        if (sameTab && key in sectionOpen) d.open = sectionOpen[key];
-        sectionOpen[key] = d.open;
-      });
-      bar.querySelectorAll('[data-facet-search]').forEach(input => { if (facetSearch[searchKey(input)]) { input.value = facetSearch[searchKey(input)]; searchPanel(input); } });
-    }
-    const picked = [...bar.querySelectorAll('[data-filter][aria-pressed="true"]')];
-    $('#filter-toggle').hidden = !html;
-    $('#filter-toggle').innerHTML = '필터' + (picked.length ? ' <span class="filter-section-num">'+picked.length+'</span>' : '');
-    $('#active-filters').hidden = !picked.length;
-    $('#active-filters').innerHTML = picked.map(button=>'<button type="button" class="filter-chip" data-filter="'+views.escape(button.dataset.filter)+'" data-focus="chip-'+views.escape(button.dataset.filter)+'" aria-label="'+views.escape(button.textContent.trim())+' 필터 해제">'+views.escape(button.textContent.trim())+previews.icon('close')+'</button>').join('') + (picked.length ? '<button type="button" class="filter-clear" data-action="clear-filters" data-focus="active-clear">모두 지우기</button>' : '');
-    setFilters(filtersOpen && !!html);
-  }
-  function setFilters(open, returnFocus = false) {
-    filtersOpen = open;
-    $('#filter-bar').hidden = !open;
-    $('#filter-toggle').setAttribute('aria-expanded', String(open));
-    if (returnFocus) $('#filter-toggle').focus({preventScroll:true});
-  }
   function rememberLocation(focus = document.activeElement?.dataset.focus) {
     history.replaceState({...history.state,pattoveScroll:[scrollX,scrollY],pattoveFocus:focus},'',location.href);
   }
@@ -158,17 +114,30 @@
     $('#query').setAttribute('aria-expanded', 'true');
     $('#query').removeAttribute('aria-activedescendant');
   }
+  function openSearch() {
+    setMenu(false, false);
+    if (!searchDialog.open) searchDialog.showModal();
+    $('#query').value = state.query;
+    $('#search-clear').hidden = !state.query;
+    $('#query').select();
+    showSuggestions();
+  }
+  function closeSearch() {
+    hideSuggestions();
+    if (searchDialog.open) searchDialog.close();
+  }
   // Detail search returns to its category's results; the query stays in the address.
   function submitSearch() {
     const query = $('#query').value.trim();
-    hideSuggestions();
+    closeSearch();
     setMenu(false, false);
     if (['styles','system'].includes(state.page)) {
       rememberLocation();
       const shelf = state.page === 'system' ? library.shelfFor(state).id : library.searchAll(query)[0]?.shelf || 'part';
       history.pushState({}, '', '#/dictionary?shelf='+shelf + (query ? '&q=' + encodeURIComponent(query) : '')); renderRoute();
     }
-    else navigate({ query, detail: null, section: '', limit: 48 }, { replace: true });
+    // Like its suggestions, a search covers the whole tab, so the left rail's pick is dropped.
+    else navigate({ query, filters: cleared(state.filters), detail: null, section: '', limit: 48 }, { replace: true });
     $('#main').focus({ preventScroll: true });
   }
   // Phones use a navigation-only drawer. Closing by hand returns focus to the menu button.
@@ -182,17 +151,15 @@
     if (open) ($('#secondary-nav [aria-current]') || $('#secondary-nav a'))?.focus();
     else if (returnFocus) $('#menu-toggle').focus();
   }
+  // A picked suggestion opens its detail; closing the detail returns focus to the search button.
   function openSuggestion(id) {
+    const entry = suggestions.find(e=>e.id===id);
+    closeSearch();
     setMenu(false, false);
-    if (state.page === 'styles') {
-      const entry = suggestions.find(e=>e.id===id);
-      navigate({page:'dictionary',filters:library.readFilters('dictionary',new URLSearchParams({shelf:entry.shelf})),detail:id},{overlay:true,opener:'search-query'});
-      lastOpener='search-query';
-      return;
-    }
-    if (isCollection()) { navigate({ detail: id }, { overlay: true, opener: 'search-query' }); lastOpener = 'search-query'; return; }
-    navigate({ detail: id }, { overlay: true, opener: 'search-query' });
-    lastOpener = 'search-query';
+    $('#search-open').focus({ preventScroll: true });
+    if (state.page === 'styles') navigate({page:'dictionary',filters:library.readFilters('dictionary',new URLSearchParams({shelf:entry.shelf})),detail:id},{overlay:true,opener:'search-open'});
+    else navigate({ detail: id }, { overlay: true, opener: 'search-open' });
+    lastOpener = 'search-open';
   }
   function render(previousDetail = state.detail, focus = document.activeElement?.dataset.focus) {
     document.body.dataset.page = state.page;
@@ -212,13 +179,17 @@
     $('#header-context').innerHTML = views.header(state);
     if (state.page === 'styles') $('#style-context').setAttribute('aria-current','page');
     else $('#style-context').removeAttribute('aria-current');
-    renderFilterBar();
     $('#catalog-toolbar').hidden = state.page === 'styles';
-    $('#query').placeholder = ['dictionary','system'].includes(state.page) ? library.shelfFor(state).name+' 검색' : ['styles','components'].includes(state.page) ? '구성요소 검색' : '패턴 검색';
-    $('#query').dataset.placeholder = $('#query').placeholder;
-    $('#query').setAttribute('aria-label', $('#query').placeholder);
-    if (document.activeElement !== $('#query')) $('#query').value = state.query;
-    $('#search-clear').hidden = !$('#query').value;
+    // The one active query shows as a chip beside the title; pressing it clears the search.
+    const chip = $('#query-chip');
+    chip.hidden = !state.query || state.page === 'system';
+    chip.innerHTML = state.query ? `‘${views.escape(state.query)}’ 검색${previews.icon('close')}` : '';
+    chip.setAttribute('aria-label', `검색어 ${state.query} 지우기`);
+    const searchLabel = ['dictionary','system'].includes(state.page) ? library.shelfFor(state).name+' 검색' : ['styles','components'].includes(state.page) ? '구성요소 검색' : '패턴 검색';
+    $('#query').placeholder = searchLabel;
+    $('#query').setAttribute('aria-label', searchLabel);
+    $('#search-open').setAttribute('aria-label', searchLabel);
+    $('#search-open').title = searchLabel + ' (/)';
     const nextMainKey = JSON.stringify([state.page, state.style, state.filters, state.query, state.limit, state.page==='system'?[state.detail,state.options]:null]);
     if (mainRenderKey !== nextMainKey) {
       $('#content').innerHTML = state.page === 'styles' ? views.styleGrid(state) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
@@ -274,7 +245,7 @@
     $('#announcer').textContent = state.page === 'styles' ? `${views.styleName(state.style)} 전체 미리보기` : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개`;
   }
   document.addEventListener('click', event => {
-    if (!event.target.closest('.search-area')) hideSuggestions();
+    if (!event.target.closest('.search-area, #search-open')) hideSuggestions();
     const target = event.target.closest('button, a');
     if (!target || target.disabled) return;
     const data = target.dataset;
@@ -298,19 +269,13 @@
       history.pushState(related ? {pattoveOverlay:true,origin:history.state.origin,depth:(history.state.depth||1)+1} : {}, '', target.getAttribute('href'));
       renderRoute();
     } else if (data.suggestOpen) openSuggestion(data.suggestOpen);
-    else if (data.filter) {
-      toggleFilter(...data.filter.split(/:(.*)/s, 2));
-      if (!document.activeElement?.closest('button,input,summary')) $('#filter-toggle').focus({preventScroll:true});
-    }
     else if (data.libraryEntry) navigate({ detail: data.libraryEntry }, { overlay: true, opener: data.focus });
     else if (data.open) navigate({ detail: data.open, style: data.style || state.style }, { overlay: true, opener: data.focus });
-    else if (data.action === 'clear-filters') {
-      // Clearing removes the clicked control, so return focus to a remaining filter control.
-      const inMenu = target.closest('#filter-bar, #active-filters');
-      navigate({ filters: cleared(state.filters), query: '', limit: 48 }, { replace: true });
-      if (inMenu) { if (filtersOpen) firstFilter(); else $('#filter-toggle').focus({preventScroll:true}); }
-      else $('#main').focus({ preventScroll: true });
-    } else if (data.action === 'clear-query') navigate({ query: '', limit: 48 }, { replace: true });
+    else if (data.action === 'clear-filters' || data.action === 'clear-query') {
+      // Clearing removes the clicked control, so focus moves to the content.
+      navigate({ filters: data.action === 'clear-filters' ? cleared(state.filters) : state.filters, query: '', limit: 48 }, { replace: true });
+      $('#main').focus({ preventScroll: true });
+    }
     else if (data.action === 'load-more') {
       const firstNew = library.currentItems(state).filter(e=>!e.implementation)[state.limit]?.id;
       navigate({ limit: state.limit + 48 }, { replace: true });
@@ -342,27 +307,22 @@
       system.updateInspector(state);
     }
   });
-  document.addEventListener('input', event => { if (event.target.matches('[data-facet-search]')) searchPanel(event.target); });
-  document.addEventListener('toggle', event => {
-    if (event.target.matches?.('#filter-bar details[data-section]')) sectionOpen[event.target.dataset.section] = event.target.open;
-  }, true);
   $('#menu-toggle').addEventListener('click', () => setMenu(true));
-  $('#filter-toggle').addEventListener('click', () => setFilters(!filtersOpen));
+  $('#search-open').addEventListener('click', openSearch);
   $('#menu-backdrop').addEventListener('click', () => setMenu(false));
   phone.addEventListener('change', () => setMenu(false, false));
   $('#search-clear').addEventListener('click', () => {
     $('#query').value = '';
     $('#search-clear').hidden = true;
     $('#query').focus();
-    if (state.query) navigate({ query: '', limit: 48 }, { replace: true });
+    hideSuggestions();
   });
   $('#search-form').addEventListener('submit', event => { event.preventDefault(); submitSearch(); });
   $('#query').addEventListener('input', () => { $('#search-clear').hidden = !$('#query').value; showSuggestions(); });
   $('#query').addEventListener('focus', showSuggestions);
   $('.search-area').addEventListener('focusout', () => setTimeout(() => { if (!$('.search-area').contains(document.activeElement)) hideSuggestions(); }, 0));
   $('#query').addEventListener('keydown', event => {
-    // Esc first folds the suggestions; with none showing it falls through and closes the phone menu.
-    if (event.key === 'Escape') { if (!$('#search-popover').hidden) { event.preventDefault(); event.stopPropagation(); hideSuggestions(); } return; }
+    if (event.key === 'Escape') return;
     if (event.key === 'Enter' && suggestionIndex >= 0 && !$('#search-popover').hidden) {
       event.preventDefault(); openSuggestion(suggestions[suggestionIndex].id); return;
     }
@@ -378,10 +338,8 @@
   document.addEventListener('keydown', event => {
     if (event.key === '/' && !dialog.open && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest('input,textarea,select,[contenteditable="true"]')) {
       event.preventDefault();
-      setMenu(false, false);
-      $('#query').focus();
+      openSearch();
     } else if (event.key === 'Escape' && document.documentElement.classList.contains('menu-open')) { event.preventDefault(); setMenu(false); }
-    else if (event.key === 'Escape' && filtersOpen && !dialog.open) { event.preventDefault(); setFilters(false, true); }
     else if (event.key === 'Tab' && document.documentElement.classList.contains('menu-open')) {
       const nodes = [...$('#app-menu').querySelectorAll('a,button,input,summary')].filter(e=>!e.disabled&&e.checkVisibility());
       const first=nodes[0],last=nodes.at(-1);
@@ -402,6 +360,12 @@
     }
   });
   dialog.addEventListener('cancel', event => { event.preventDefault(); closeDetail(); });
+  searchDialog.addEventListener('close', hideSuggestions);
+  searchDialog.addEventListener('click', event => {
+    if (event.target !== searchDialog) return;
+    const r = $('#search-dialog > .search-area').getBoundingClientRect();
+    if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) closeSearch();
+  });
   dialog.addEventListener('click', event => {
     if (event.target !== dialog) return;
     const r = dialog.getBoundingClientRect();

@@ -18,12 +18,10 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
       await page.locator('[data-focus="tab-token"]').click();
       check(name+' 토큰 탭 목록과 상세의 색 토큰 그림이 같음',await page.locator('[data-focus="tab-token"][aria-current="page"]').count()===1&&await page.locator('.atlas-sample[data-kind="token-color"] .ds-token-swatches i').count()===4);
       await page.locator('[data-focus="tab-part"]').click();
-      await page.locator('#filter-toggle').click();
-      const code=page.locator('#filter-bar details[data-section="code"]');if(!await code.evaluate(d=>d.open))await code.locator('summary').click();
-      await page.locator('#filter-bar .filter-option[data-filter="code:INP"]').click();check(name+' 탭→세부 분류 칸→항목으로 탐색',await page.locator('.dict-entry.is-built').count()>=1);
+      await page.locator('[data-focus="nav-part-fields"]').click();await page.waitForURL(/group=fields/);check(name+' 탭→왼쪽 분류→항목으로 탐색',await page.locator('.dict-entry.is-built').count()>=1);
       await page.locator('[data-library-entry="field"]').click();check(name+' 사전에서 부품 그림으로 연결, 설치 칸 없음',await page.locator('.component-page .part-demo input').count()>=1&&await page.locator('.install-panel,[data-system-download]').count()===0);
       await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
-      await page.locator('[data-focus="tab-token"]').click();await page.locator('#query').fill('TOK-01');await page.locator('#query').press('Enter');
+      await page.locator('[data-focus="tab-token"]').click();await page.locator('#search-open').click();await page.locator('#query').fill('TOK-01');await page.locator('#query').press('Enter');
       check(name+' 원문 ID로 같은 구현 조회',await page.locator('[data-library-entry="token-color"]').count()===1);
       for(const width of [320,375,768,1440]){
         await page.setViewportSize({width,height:1080});

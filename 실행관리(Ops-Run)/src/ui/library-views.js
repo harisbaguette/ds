@@ -18,8 +18,8 @@
   const part = id => registry.index.get(id) || (claimed.has(id) && registry.items.find(item => item.entry === id));
   const implemented = e => ({ ...e, usage:e.purpose, category:e.section, kind:e.layer, implementation:true });
   // The shelves (토큰 by source code, 부품 → 블록 → 템플릿 by kind, then 아이콘 as its own library) are the header tabs. Each entry carries its shelf from the build.
-  // Inside a tab the filter bar narrows by kind, role group or 분야 (one "area" facet, since the two split the categories between them),
-  // source category and, in the icon tab, icon category: OR inside a facet, AND across facets.
+  // Inside a tab the left rail narrows by one facet (group, kind, source category or icon category); an address may still carry
+  // role group or 분야 (one "area" facet, since the two split the categories between them): OR inside a facet, AND across facets.
   const categoryById=new Map(data.categories.map(c=>[c.id,c]));
   const shelves=new Map(data.shelves.map(s=>[s.id,s]));
   const places=new Map(data.places.map(p=>[p.id,p]));
@@ -108,12 +108,11 @@
     if (state.page==='dictionary') params.set('shelf',f.shelf);
     for (const [key,value] of Object.entries(f)) if (Array.isArray(value)&&value.length) params.set(key,value.join(','));
   }
-  // skip leaves one facet out, so each option counts what it would show if pressed.
-  const passes=(f,e,skip)=>(!f.group?.length||f.group.some(id=>partGroups.find(g=>g.id===id)?.items.includes(e.id)))
-    &&(skip==='kind'||!f.kind.length||f.kind.includes(kindOf(e)))
-    &&(skip==='area'||!(f.role.length||f.place.length)||f.role.includes(roleOf.get(e.category))||f.place.includes(placeOf.get(e.category)))
-    &&(skip==='code'||!f.code.length||f.code.includes(e.category))
-    &&(skip==='icon'||!f.icon.length||e.category!=='ICO'||iconCats(e).some(sub=>f.icon.includes(sub)));
+  const passes=(f,e)=>(!f.group?.length||f.group.some(id=>partGroups.find(g=>g.id===id)?.items.includes(e.id)))
+    &&(!f.kind.length||f.kind.includes(kindOf(e)))
+    &&(!(f.role.length||f.place.length)||f.role.includes(roleOf.get(e.category))||f.place.includes(placeOf.get(e.category)))
+    &&(!f.code.length||f.code.includes(e.category))
+    &&(!f.icon.length||e.category!=='ICO'||iconCats(e).some(sub=>f.icon.includes(sub)));
 
   const activeShelf=state=>state.page==='system'?itemShelf(registry.index.get(state.detail)):state.page==='dictionary'?state.filters.shelf:null;
   const querySuffix=state=>state.query&&['dictionary','system'].includes(state.page)?'&q='+encodeURIComponent(state.query):'';
@@ -136,8 +135,8 @@
       :data.categories.filter(c=>inShelf.has(id+'|'+c.id)).map(c=>({key:'code',id:c.id,name:short(c.name)}));
     const selected=o=>built?o.key==='group'?partGroups.find(g=>g.id===o.id).items.includes(built.id):o.key==='kind'?built.browse.kind===o.id:o.key==='code'&&built.browse.code===o.id:f[o.key]?.includes(o.id);
     const all='<a class="nav-all" href="#/dictionary?shelf='+id+q+'" data-focus="nav-all"'+(!options.some(selected)?' aria-current="page"':'')+'>전체 보기</a>';
-    return '<div class="nav-subnav" role="group" aria-label="'+s.name+' 분류">'+views.facetSearch('분류',options.length>20)+all+'<div class="nav-subnav-scroll">'+options.map(o=>
-      '<a class="nav-subcategory" href="#/dictionary?'+new URLSearchParams({shelf:id,[o.key]:o.id})+q+'" data-focus="nav-'+id+'-'+escape(o.id)+'" data-facet-name="'+escape(o.name.toLocaleLowerCase())+'" title="'+escape(o.name)+'"'+(selected(o)?' aria-current="true"':'')+'><span>'+escape(o.name)+'</span></a>'
+    return '<div class="nav-subnav" role="group" aria-label="'+s.name+' 분류">'+all+'<div class="nav-subnav-scroll">'+options.map(o=>
+      '<a class="nav-subcategory" href="#/dictionary?'+new URLSearchParams({shelf:id,[o.key]:o.id})+q+'" data-focus="nav-'+id+'-'+escape(o.id)+'" title="'+escape(o.name)+'"'+(selected(o)?' aria-current="true"':'')+'><span>'+escape(o.name)+'</span></a>'
     ).join('')+'</div></div>';
   }
   function shelfItems(state) {
@@ -152,32 +151,6 @@
     if (state.page==='components') return data.components.filter(e=>(!f.layer.length||f.layer.includes(e.layer))&&match(e,state.query));
     const {built,plain}=shelfItems(state);
     return [...built.filter(i=>passes(f,browseEntry(i))).map(i=>({...implemented(i),...browseEntry(i),implementation:true})), ...plain.filter(e=>passes(f,e))];
-  }
-  function filters(state) {
-    const f=state.filters;
-    if (state.page==='components') {
-      const options=data.layers.map(l=>({key:'layer',id:l.id,name:l.name,pressed:f.layer.includes(l.id),count:data.components.filter(e=>e.layer===l.id&&match(e,state.query)).length}));
-      return views.filterBar([{key:'layer',label:'계층',options}]);
-    }
-    const {built,plain}=shelfItems(state);
-    const pool=[...built.map(browseEntry),...plain];
-    const tallyBy=(skip,key)=>{ const m=new Map(); for (const e of pool) if (passes(f,e,skip)) for (const k of [key(e)].flat()) if (k) m.set(k,(m.get(k)||0)+1); return m; };
-    const kinds=tallyBy('kind',kindOf), area=tallyBy('area',e=>e.category), codes=tallyBy('code',e=>e.category), icons=tallyBy('icon',e=>e.category==='ICO'&&iconCats(e));
-    const sum=cs=>cs.reduce((n,c)=>n+(area.get(c)||0),0);
-    const here=code=>inShelf.has(f.shelf+'|'+code);
-    const option=(key,id,name,count)=>({key,id,name,count,pressed:f[key].includes(id)});
-    const shelf=shelves.get(f.shelf);
-    // A kind named like its tab (부품 inside 부품) reads as 낱개 부품, so the panel never repeats the tab.
-    const kindOptions=shelfKinds.get(shelf.id).length>1?shelfKinds.get(shelf.id).map(k=>option('kind',k,k===shelf.name?'낱개 '+k:k,kinds.get(k)||0)):[];
-    const roleOptions=roles.filter(r=>r.codes.some(here)).map(r=>option('role',r.id,r.name,sum(r.codes)));
-    const placeOptions=data.places.filter(p=>p.codes.some(here)).map(p=>option('place',p.id,p.name,sum(p.codes)));
-    const iconOptions=data.iconGroups.filter(g=>inShelf.has(f.shelf+'|ICO.'+g.id)).map(g=>option('icon',g.id,g.name,icons.get(g.id)||0));
-    const codeOptions=data.categories.filter(c=>here(c.id)).map(c=>option('code',c.id,short(c.name),codes.get(c.id)||0));
-    // Sections read top to bottom from broad to fine. The icon tab holds one source category, so it shows its own categories instead of 쓰임·분야·세부 분류.
-    const groups=(f.shelf===iconShelf?[{key:'kind',label:'종류',options:kindOptions},{key:'icon',label:'카테고리',options:iconOptions}]
-      :[{key:'kind',label:'종류',options:kindOptions},{key:'role',label:'쓰임',options:roleOptions},
-        {key:'place',label:'분야',options:placeOptions},{key:'code',label:'세부 분류',options:codeOptions}]).filter(g=>g.options.length);
-    return views.filterBar(groups);
   }
   function suggestions(state,query) {
     // Suggestions jump anywhere in the current tab, so picked filters do not narrow them.
@@ -197,9 +170,9 @@
     const kind=e.kind||'기준', label=byName(shelfOf(e))?e.name:short(e.name);
     return '<button class="dict-entry is-todo" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(kind)+'" title="'+escape(e.name)+'"><span class="dict-thumb">'+todoArt('dict-todo')+'</span><strong>'+escape(label)+'</strong></button>';
   }
-  const empty='<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary" data-action="clear-filters" data-focus="empty-clear">필터 지우기</button></div>';
+  const empty='<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary" data-action="clear-filters" data-focus="empty-clear">전체 보기</button></div>';
   const more=(shown,total)=>total>shown?'<div class="load-more"><button class="secondary" data-action="load-more" data-focus="load-more">더 보기 <span>'+shown+' / '+total+'</span></button></div>':'';
-  // The tabs and the filter bar say where you are; main carries only pictures.
+  // The tabs and the left rail say where you are; main carries only pictures.
   function collection(state) {
     const items=currentItems(state);
     if (!items.length) return '<section aria-labelledby="page-title">'+empty+'</section>';
@@ -218,7 +191,7 @@
         :'<div class="record-detail"><p class="record-kind">'+escape(category.name)+'</p><section><h3>대표 항목</h3><p>'+escape(e.examples)+'</p></section></div>');
   }
   window.Pattove.libraryUI={
-    pages,navigation,subnavigation,filters,readFilters,writeFilters,collection,detail,currentItems,suggestions,searchAll,
+    pages,navigation,subnavigation,readFilters,writeFilters,collection,detail,currentItems,suggestions,searchAll,
     validDetail:(page,id)=>components.has(id)||(page==='dictionary'&&(entries.has(id)||registry.index.has(id))),
     suggestionGroup:(page,e)=>page==='dictionary'?(e.implementation?'구현 · '+e.layer:'미구현 · '+shelves.get(shelfOf(e))?.name+' · '+(e.sub?iconGroups.get(e.sub).name:e.category?short(categoryById.get(e.category)?.name||''):kindOf(e))):data.layers.find(l=>l.id===e.layer).name,
     sample,itemShelf,

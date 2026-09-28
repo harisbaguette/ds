@@ -36,25 +36,20 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   await shot('01-styles');
   // The count is not printed on screen any more; the screen-reader announcement still carries it.
   const shown=async()=>Number((await page.locator('#announcer').textContent()).replace(/[^0-9]/g,''));
-  // The side menu holds navigation; folding filters live above the content.
+  // The side menu is the only way to narrow a tab; there is no separate filter panel.
   const menuSide=async()=>await page.locator('#app-menu').isVisible()&&await page.evaluate(()=>Math.round(document.querySelector('main').getBoundingClientRect().left)===Math.round(document.querySelector('#app-menu').getBoundingClientRect().right));
-  const option=(key,id)=>page.locator('#filter-bar .filter-option[data-filter="'+key+':'+id+'"]');
-  const section=key=>page.locator('#filter-bar details.filter-section[data-section="'+key+'"]');
-  const openSection=async key=>{if(!await page.locator('#filter-bar').isVisible())await page.locator('#filter-toggle').click();if(!await section(key).evaluate(d=>d.open))await section(key).locator('summary').click();};
-  const pick=async(key,id)=>{await openSection(key);await option(key,id).click();};
-  const pressed=()=>page.locator('#filter-bar .filter-option[aria-pressed="true"]').count();
-  const sections=()=>page.locator('#filter-bar .filter-section > summary > span:first-child').allTextContents();
+  const noFilterUI=async()=>await page.locator('#filter-bar, #filter-toggle, #active-filters, .facet-search, [data-filter]').count()===0;
+  // Each left-rail row is an address: [key, value] of its one narrowing.
+  const railPicks=()=>page.locator('#secondary-nav .nav-subcategory').evaluateAll(els=>els.map(a=>[...new URLSearchParams(a.getAttribute('href').split('?')[1])].find(([k])=>k!=='shelf')));
   await goto('components');
-  check('구성요소의 본문 필터에 계층 칸',await page.locator('#app-menu').evaluate(e=>e.hidden)&&await page.locator('main #filter-bar').count()===1&&JSON.stringify(await sections())==='["계층"]'&&await page.locator('#filter-bar .filter-option[data-filter^="layer:"]').count()===data.layers.length&&await shown()===data.components.length);
+  check('구성요소 화면에 필터 칸 없이 전부 보임',await page.locator('#app-menu').evaluate(e=>e.hidden)&&await noFilterUI()&&await shown()===data.components.length);
   await shot('02-components');
   for(const layer of data.layers){
-   await pick('layer',layer.id);
-   check(layer.english+' 계층을 고르면 그 계층만',await pressed()===1&&await page.locator('.entry-tile').count()===Math.min(48,layer.count)&&await shown()===layer.count);
+   await goto('components?layer='+layer.id);
+   check(layer.english+' 계층 주소는 그 계층만',await page.locator('.entry-tile').count()===Math.min(48,layer.count)&&await shown()===layer.count);
    await page.locator('.entry-tile').first().click();
    check(layer.english+' 상세에 대표 항목 표시',await page.locator('.record-detail section p').count()===1);
    await close();
-   await pick('layer',layer.id);
-   check(layer.english+' 계층을 다시 끄면 전부',await pressed()===0&&await shown()===data.components.length);
   }
   await page.locator('[data-focus="tab-part"]').click();
   check('사전 첫 화면은 부품 탭 격자',await menuSide()&&await page.locator('[data-focus^="tab-"]').count()===data.shelves.length&&await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1&&await page.locator('.dict-entry').count()>0);
@@ -66,65 +61,42 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    await goto('dictionary?shelf='+shelf.id);
    const total=await shown();shelfTotal+=total;
    check(shelf.id+' 탭 항목 수 일치',total===(await itemsOf('shelf='+shelf.id)).length);
-   // The icon tab narrows by its own categories; the other tabs by source category.
-   const key=shelf.codes?.includes('ICO')?'icon':'code';
-   const codes=await page.locator('#filter-bar .filter-option[data-filter^="'+key+':"]').evaluateAll(els=>els.map(e=>e.dataset.filter.split(':')[1]));
-   const counts=[];for(const code of codes)counts.push((await itemsOf('shelf='+shelf.id+'&'+key+'='+code)).length);
-   check(shelf.id+' 분류 칸은 이 탭에 있는 분류만',codes.length>0&&counts.every(n=>n>0));
-   for(const [i,code] of codes.entries()){
-    await goto('dictionary?shelf='+shelf.id+'&'+key+'='+code);
-    const items=await itemsOf('shelf='+shelf.id+'&'+key+'='+code);
+   // Each tab's left rail narrows by its own facet (부품 by group, 아이콘 by icon category, 토큰·템플릿 by kind, 블록 by source category).
+   const picks=await railPicks();
+   const counts=[];for(const [key,code] of picks)counts.push((await itemsOf('shelf='+shelf.id+'&'+key+'='+encodeURIComponent(code))).length);
+   check(shelf.id+' 왼쪽 분류는 이 탭에 있는 분류만',picks.length>0&&counts.every(n=>n>0));
+   for(const [i,[key,code]] of picks.entries()){
+    await goto('dictionary?shelf='+shelf.id+'&'+key+'='+encodeURIComponent(code));
+    const items=await itemsOf('shelf='+shelf.id+'&'+key+'='+encodeURIComponent(code));
     check(shelf.id+'.'+code+' 분류 항목 수 일치',items.length===counts[i]&&await shown()===counts[i]&&await page.locator('.dict-entry:not(.is-built)').count()===Math.min(48,items.filter(e=>!e.implementation).length));
    }
   }
   const tokenComponents=data.components.filter(c=>c.layer==='token').length;
   check('모든 탭을 합치면 사전 전체·토큰 계층 구성요소·구현 부품이 빠짐없이 들어감',tokenComponents===30&&shelfTotal===data.entries.length+glyphOnly.length+tokenComponents+await page.evaluate(()=>Pattove.systemRegistry.items.filter(i=>!i.entry).length));
-  // 토큰 탭 종류 필터 = 이름의 " — " 앞부분(색·글자·간격 …), 하나뿐인 갈래와 이름만 있는 항목은 기타.
+  // 토큰 탭 왼쪽 분류 = 이름의 " — " 앞부분(색·글자·간격 …), 하나뿐인 갈래와 이름만 있는 항목은 기타.
   await goto('dictionary?shelf=token');
-  const tokenKinds=await page.locator('#filter-bar .filter-option[data-filter^="kind:"]').evaluateAll(els=>els.map(e=>e.dataset.filter.slice(5)));
+  const tokenKinds=(await railPicks()).filter(([k])=>k==='kind').map(([,v])=>v);
   const colorCount=data.entries.filter(e=>e.category==='TOK'&&e.name.startsWith('색 — ')).length;
-  check('토큰 탭 종류 필터는 이름 앞부분으로 나뉨',['색','글자','간격','움직임','기타','토큰 묶음'].every(k=>tokenKinds.includes(k))&&(await itemsOf('shelf=token&kind=색')).length===colorCount&&(await itemsOf('shelf=token&kind=토큰 묶음')).length===tokenComponents);
+  check('토큰 탭 왼쪽 분류는 이름 앞부분으로 나뉨',['색','글자','간격','움직임','기타','토큰 묶음'].every(k=>tokenKinds.includes(k))&&(await itemsOf('shelf=token&kind=색')).length===colorCount&&(await itemsOf('shelf=token&kind=토큰 묶음')).length===tokenComponents);
   check('토큰 탭 종류 칸 개수를 합치면 탭 전체',(await Promise.all(tokenKinds.map(k=>itemsOf('shelf=token&kind='+encodeURIComponent(k))))).reduce((n,l)=>n+l.length,0)===(await itemsOf('shelf=token')).length);
-  // 어지러움 기준: 결과 개수 글자 없음, 필터 칸 제목은 탭과 겹치지 않음.
+  // 어지러움 기준: 결과 개수 글자 없음, 왼쪽 분류와 겹치는 필터 칸·분류 찾기 칸 없음.
   for(const route of [...data.shelves.map(s=>'dictionary?shelf='+s.id),'components','patterns']){
    await goto(route);
-   const tab=(await page.locator('#primary-nav [aria-current="page"]').allTextContents()).join('').trim();
-   check(route+' 개수 글자 없고 필터 칸 제목은 탭 이름과 겹치지 않음',await page.locator('.filter-count').count()===0&&(await sections()).every(t=>t.trim().length>0&&t.trim()!==tab));
+   check(route+' 개수 글자·필터 칸·분류 찾기 칸 없음',await page.locator('.filter-count').count()===0&&await noFilterUI());
   }
   await goto('dictionary?shelf=part');
-  const kindNames=await page.locator('#filter-bar .filter-option[data-filter^="kind:"]').allTextContents();
-  check('부품 탭 필터 칸은 종류·쓰임·분야·세부 분류, 종류 안에서 낱개 부품',JSON.stringify(await sections())==='["종류","쓰임","분야","세부 분류"]'&&kindNames.includes('낱개 부품')&&!kindNames.includes('부품'));
-  await openSection('role');
-  const whole=await shown(),role=page.locator('#filter-bar .filter-option[data-filter^="role:"]:not([disabled])');
-  const firstKey=(await role.first().getAttribute('data-filter')).slice(5),secondKey=(await role.nth(1).getAttribute('data-filter')).slice(5);
-  await option('role',firstKey).click();const one=await shown();
-  check('쓰임 한 줄 누르면 바로 줄고 칸 제목에 1, 칸은 열린 채, 모두 지우기가 생김',one<whole&&await pressed()===1&&await section('role').evaluate(d=>d.open)&&(await section('role').locator('.filter-section-num').textContent()).includes('1')&&await page.locator('#active-filters .filter-clear').count()===1);
-  await option('role',secondKey).click();const two=await shown();
-  check('여러 개를 함께 켜면 합쳐서 보여줌',two>one&&two<=whole&&await pressed()===2);
-  await page.reload();
-  check('고른 값과 개수 새로고침 유지',await shown()===two&&await pressed()===2);
-  await page.locator('#active-filters [data-action="clear-filters"]').click();
-  check('모두 지우기로 전부 복귀, 모두 지우기도 사라짐',await shown()===whole&&await pressed()===0&&await page.locator('#active-filters .filter-clear').count()===0);
-  await openSection('role');
-  await option('role',firstKey).focus();await page.keyboard.press('Space');
-  check('키보드 스페이스로 켜기',await shown()===one&&await pressed()===1);
-  await page.keyboard.press('Space');
-  check('스페이스로 다시 끄기, 초점은 그 줄에 남음',await shown()===whole&&await page.evaluate(()=>document.activeElement.matches('.filter-option')));
-  await openSection('code');
-  const codeSearch=section('code').locator('.facet-search');
-  check('긴 세부 분류만 칸 안 검색이 있음',await codeSearch.count()===1&&await page.locator('#filter-bar .facet-search').count()===1);
-  await codeSearch.fill('입력');
-  const codeRows=page.locator('#filter-bar .filter-option[data-filter^="code:"]'),codeShown=page.locator('#filter-bar .filter-option[data-filter^="code:"]:not([hidden])');
-  check('세부 분류 안에서 찾기',await codeShown.count()>=1&&await codeShown.count()<await codeRows.count());
+  const whole=await shown(),role=data.roleOrder[0];
+  await goto('dictionary?shelf=part&role='+role);
+  check('예전 쓰임 주소도 그대로 좁혀 보여줌',await shown()<=whole&&await shown()===(await itemsOf('shelf=part&role='+role)).length);
   check('아이콘 표시 부품은 부품 탭, 개별 아이콘은 아이콘 탭',(await itemsOf('shelf=part&code=ICO')).every(e=>e.id==='icon')&&(await itemsOf('shelf=icon')).every(e=>!e.implementation));
   await goto('dictionary?shelf=icon');
-  check('아이콘 탭 필터 칸은 종류·카테고리, 카테고리는 전부',JSON.stringify(await sections())==='["종류","카테고리"]'&&await page.locator('#filter-bar .filter-option[data-filter^="icon:"]').count()===data.iconGroups.length);
-  await pick('icon','navigation');
+  check('아이콘 탭 왼쪽 분류는 카테고리 전부, 분류 찾기 칸 없음',(await railPicks()).filter(([k])=>k==='icon').length===data.iconGroups.length&&await page.locator('#app-menu input').count()===0);
+  await page.locator('[data-focus="nav-icon-navigation"]').click();await page.waitForURL(/icon=navigation/);
   // An icon shows in its home category and in the up-to-two categories it also belongs to.
   const navigation=data.entries.filter(e=>e.sub==='navigation'||e.also?.includes('navigation')).length+glyphOnly.filter(([,,sub,also=[]])=>sub==='navigation'||also.includes('navigation')).length;
   check('아이콘은 아직 그리지 않았으니 카드마다 빌린 그림 대신 미구현 표시',await page.locator('.dict-entry').count()>0&&await page.locator('.dict-entry:not(.is-todo), .dict-entry svg').count()===0);
   const navItems=await itemsOf('shelf=icon&icon=navigation');
-  check('아이콘 카테고리로 좁히기',await page.locator('.dict-entry:not(.is-built)').count()===Math.min(48,navItems.filter(e=>!e.implementation).length)&&await shown()===navigation&&navItems.length===navigation&&await pressed()===1);
+  check('아이콘 카테고리로 좁히기',await page.locator('.dict-entry:not(.is-built)').count()===Math.min(48,navItems.filter(e=>!e.implementation).length)&&await shown()===navigation&&navItems.length===navigation&&await page.locator('[data-focus="nav-icon-navigation"][aria-current="true"]').count()===1);
   check('쓰는 곳으로 게임 전용 부품 모으기',(await itemsOf('shelf=part&place=game')).every(e=>data.places.find(p=>p.id==='game').codes.includes(e.category)&&e.shelf==='part'));
   const [alsoKey,,alsoHome,[alsoCat]]=glyphOnly.find(g=>g[3]);
   check('여러 칸에 속한 그림은 주 칸과 함께 보일 칸 모두에서 보임',(await itemsOf('shelf=icon&icon='+alsoCat)).some(e=>e.id===alsoKey)&&(await itemsOf('shelf=icon&icon='+alsoHome)).some(e=>e.id===alsoKey));
@@ -137,14 +109,14 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   check('표시한 범위 새로고침 유지',await page.locator('.dict-entry:not(.is-built)').count()===96);
   // Suggestions stay inside the current tab, and TOK-01 lives in the token tab.
   await goto('dictionary?shelf=token');
-  await page.locator('#query').fill('TOK-01');
+  await page.locator('#search-open').click();await page.locator('#query').fill('TOK-01');
   check('ID 검색 제안',await page.locator('.search-suggestion').count()===1);
   await page.locator('#query').press('ArrowDown');await page.locator('#query').press('Enter');
   check('구현된 사전 항목의 검색 제안은 실제 부품 상세로 연결',await page.locator('#detail-title').textContent()===await page.evaluate(()=>Pattove.systemRegistry.items.find(i=>i.entry==='TOK-01').name));
   await shot('04-entry');
   await page.goBack();
   check('부품 상세에서 뒤로 가면 사전으로 복귀',await page.locator('.dict').count()===1);
-  await page.locator('#query').fill('색');await page.locator('#query').press('Enter');
+  await page.locator('#search-open').click();await page.locator('#query').fill('색');await page.locator('#query').press('Enter');
   check('사전 전체 검색',await page.locator('.dict-entry').count()>0);
   await shot('05-search');
   await goto('dictionary?code=VIS');
@@ -160,7 +132,7 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   check('세트 그림 상세는 미구현을 먼저 말하고, 빌린 그림은 참고로 키·출처와 함께 보여 줌',/미구현/.test(await page.locator('dialog .detail-art.is-todo').textContent())&&await page.locator('dialog .detail-art svg').count()===0&&/빌려 온/.test(await page.locator('dialog .glyph-ref h3').textContent())&&glyphOnly.some(([key])=>key===glyphKey)&&/Lucide|Tabler|Phosphor|Material/.test(await page.locator('dialog .glyph-keys span').first().textContent()));
   await shot('07-glyph-art');
   await close();
-  await page.locator('#query').fill('rocket');await page.locator('#query').press('Enter');
+  await page.locator('#search-open').click();await page.locator('#query').fill('rocket');await page.locator('#query').press('Enter');
   check('영문 그림 이름으로도 아이콘을 찾음',await page.locator('.dict-entry.is-todo').count()>0);
   await goto('docs?doc=definition');await page.waitForFunction(()=>!location.hash.startsWith('#/docs'));
   check('없앤 문서 주소는 문서 화면을 열지 않음',!page.url().includes('docs')&&await page.locator('.document-body').count()===0);
@@ -177,11 +149,9 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    if(width<=760){
     await goto('dictionary?shelf=part');
     await openMenu();
-    check(width+' 모바일 메뉴는 이동 링크만 표시',await inView('#app-menu')&&await page.locator('#app-menu #filter-bar').count()===0);
+    check(width+' 모바일 메뉴는 이동 링크만 표시',await inView('#app-menu')&&await page.locator('#app-menu input, #app-menu #filter-bar').count()===0);
     await page.keyboard.press('Escape');
     check(width+' Esc로 메뉴 서랍 닫기',!await page.evaluate(()=>document.documentElement.classList.contains('menu-open')));
-    await pick('code','NAV');
-    check(width+' 본문에서 필터를 별도로 선택',await option('code','NAV').getAttribute('aria-pressed')==='true');
     await goto('system?detail=button');await page.evaluate(()=>document.fonts.ready);
     await openMenu();
     check(width+' 부품 상세에서도 소속 분류가 서랍 안에 보임',await inView('#app-menu')&&await inView('#secondary-nav [aria-current="true"]'));

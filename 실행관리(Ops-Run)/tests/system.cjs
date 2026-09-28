@@ -47,11 +47,12 @@ const fingerprint = element => {
     await inspect(page, 'main', 'button');
     check('크기와 상태는 버튼의 변형', await page.locator('[data-part-option="size"]').count() === 1 && await page.locator('[data-part-option="state"]').count() === 1);
     await page.screenshot({ path: path.join(output, 'button.png') });
+    await page.locator('#search-open').click();
     await page.locator('#query').fill('버튼');
     await page.locator('#query').press('Enter');
     await page.waitForURL(/dictionary/);
     await page.reload();
-    check('검색 결과와 검색어가 새로고침해도 유지', await page.locator('[data-library-entry="button"]').count() === 1 && await page.locator('#query').inputValue() === '버튼');
+    check('검색 결과와 검색어가 새로고침해도 유지', await page.locator('[data-library-entry="button"]').count() === 1 && (await page.locator('#query-chip').innerText()).includes('버튼'));
     await page.locator('[data-library-entry="button"]').click();
     await page.locator('[data-part-option="variant"]').selectOption('outline');
     await page.locator('[data-part-option="size"]').selectOption('lg');

@@ -22,25 +22,6 @@
     const current = document.querySelector('.nav-subcategory[aria-current="true"]')?.textContent;
     return `<h1 id="page-title" class="collection-title">${escape(current || shelf?.name || ({styles:'전체 미리보기',patterns:'패턴',components:'구성요소'})[state.page])}</h1>`;
   }
-  // Content filters: folding sections of plain rows. A row switches at once (no apply step) and shows a check while on;
-  // nothing picked shows everything. At first only the sections holding a pick are open (the first one when nothing is picked).
-  // groups: [{key, label, options}]; an option is {id, name, count, pressed}.
-  // A long list gets its own search box; it hides the rows whose name does not match.
-  const facetSearch = (label, many) => many ? `<input type="search" class="facet-search" data-facet-search placeholder="${escape(label)} 찾기" aria-label="${escape(label)} 찾기" autocomplete="off">` : '';
-  const row = (key, o) => `<button type="button" class="filter-option" aria-pressed="${!!o.pressed}" data-filter="${key}:${escape(o.id)}" data-focus="opt-${key}-${escape(o.id)}" data-facet-name="${escape(o.name.toLocaleLowerCase())}"${!o.pressed && o.count === 0 ? ' disabled' : ''}><span>${escape(o.name)}</span>${icon('check')}</button>`;
-  function section(g, open) {
-    const on = g.options.filter(o => o.pressed).length;
-    return `<details class="filter-section" data-section="${g.key}"${open ? ' open' : ''}><summary data-focus="section-${g.key}"><span>${escape(g.label)}</span>${on ? `<span class="filter-section-num"><span class="sr-only">켠 조건 </span>${on}</span>` : ''}${icon('chevron-down')}</summary>
-      <div class="filter-rows" role="group" aria-label="${escape(g.label)}">${facetSearch(g.label, g.options.length > 20)}${g.options.map(o => row(g.key, o)).join('')}</div></details>`;
-  }
-  function filterBar(groups) {
-    const on = groups.some(g => g.options.some(o => o.pressed));
-    return groups.map((g, i) => section(g, on ? g.options.some(o => o.pressed) : i === 0)).join('');
-  }
-  function patternFilters(state) {
-    const options = catalog.categories.filter(c => c.id !== 'all').map(c => ({ id: c.id, name: c.name, pressed: state.filters.category.includes(c.id) }));
-    return filterBar([{ key: 'category', label: '목적', options }]);
-  }
   function card(pattern, style) {
     const key = `${pattern.id}-${style}`;
     return `<article class="pattern-card" data-pattern="${pattern.id}">
@@ -52,7 +33,7 @@
   function patterns(state, results) {
     const style = styles.find(s => s.id === state.style);
     return `<section aria-labelledby="page-title">
-      ${results.length ? `<div class="pattern-grid">${results.map(p => card(p, state.style)).join('')}</div>` : `<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>검색 결과가 없어요</h2><button class="secondary" data-action="clear-filters">필터 지우기</button></div>`}
+      ${results.length ? `<div class="pattern-grid">${results.map(p => card(p, state.style)).join('')}</div>` : `<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>검색 결과가 없어요</h2><button class="secondary" data-action="clear-filters">전체 보기</button></div>`}
       ${style ? `<details class="style-notes"><summary>${escape(style.name)}의 특징·참고 이미지 ${icon('chevron-down')}</summary>${styleReferences(style)}</details>` : ''}
     </section>`;
   }
@@ -83,5 +64,5 @@
       ${tile('card','카드',p.card({title:'봄의 색',description:'연한 초록과 따뜻한 노랑',action:'열기'}))}
     </section>`;
   }
-  window.Pattove.views = { escape, styleName, styleReferences, header, filterBar, facetSearch, patternFilters, patterns, detail, styleGrid };
+  window.Pattove.views = { escape, styleName, styleReferences, header, patterns, detail, styleGrid };
 })();

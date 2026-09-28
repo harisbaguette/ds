@@ -1,0 +1,15 @@
+/* Layer 1 · primitive · breakpoint. Viewport and container widths in px. @media/@container cannot read var(); the build checks every query px against this list.
+   Only src/tokens/semantic/breakpoint.css may reference these. */
+:root {
+  --bp-130: 130px;
+  --bp-210: 210px;
+  --bp-290: 290px;
+  --bp-360: 360px;
+  --bp-420: 420px;
+  --bp-440: 440px;
+  --bp-580: 580px;
+  --bp-760: 760px;
+  --bp-1100: 1100px;
+  --bp-1200: 1200px;
+  --bp-1250: 1250px;
+}

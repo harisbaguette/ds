@@ -1,0 +1,12 @@
+/* Layer 2 · semantic · opacity. State layers follow Material 3 (hover .08, focus/pressed .10, dragged .16, disabled .38). */
+:root,
+.theme-main {
+  --p-opacity-hover: var(--opacity-8);
+  --p-opacity-focus: var(--opacity-10);
+  --p-opacity-pressed: var(--opacity-10);
+  --p-opacity-dragged: var(--opacity-16);
+  --p-opacity-disabled: var(--opacity-38);
+  --p-opacity-faint: var(--opacity-35);
+  --p-opacity-dim: var(--opacity-65);
+  --p-opacity-full: var(--opacity-100);
+}

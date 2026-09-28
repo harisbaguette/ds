@@ -1,6 +1,23 @@
-/* Layer 1 · primitive · radius. Only src/tokens/semantic/radius.css may reference these. */
+/* Layer 1 · primitive · radius. Corner radii in px, plus pill and circle.
+   Only src/tokens/semantic/radius.css may reference these. */
 :root {
+  --radius-2: 2px;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-10: 10px;
   --radius-12: 12px;
+  --radius-14: 14px;
   --radius-16: 16px;
+  --radius-18: 18px;
+  --radius-20: 20px;
+  --radius-22: 22px;
   --radius-24: 24px;
+  --radius-26: 26px;
+  --radius-28: 28px;
+  --radius-30: 30px;
+  --radius-32: 32px;
+  --radius-52: 52px;
+  --radius-full: 999px;
+  --radius-circle: 50%;
 }

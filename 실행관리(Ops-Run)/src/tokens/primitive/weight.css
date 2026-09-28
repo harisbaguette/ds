@@ -1,0 +1,13 @@
+/* Layer 1 · primitive · weight. Variable-font weights.
+   Only src/tokens/semantic/weight.css may reference these. */
+:root {
+  --weight-300: 300;
+  --weight-400: 400;
+  --weight-500: 500;
+  --weight-550: 550;
+  --weight-600: 600;
+  --weight-650: 650;
+  --weight-700: 700;
+  --weight-750: 750;
+  --weight-800: 800;
+}

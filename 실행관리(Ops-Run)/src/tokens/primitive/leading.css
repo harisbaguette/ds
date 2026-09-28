@@ -1,0 +1,15 @@
+/* Layer 1 · primitive · leading. Unitless line heights (x100 in the name).
+   Only src/tokens/semantic/leading.css may reference these. */
+:root {
+  --leading-100: 1;
+  --leading-105: 1.05;
+  --leading-110: 1.1;
+  --leading-120: 1.2;
+  --leading-130: 1.3;
+  --leading-140: 1.4;
+  --leading-145: 1.45;
+  --leading-150: 1.5;
+  --leading-160: 1.6;
+  --leading-170: 1.7;
+  --leading-180: 1.8;
+}

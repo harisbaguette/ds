@@ -1,0 +1,20 @@
+/* Layer 2 · semantic · breakpoint. Viewport (bp) and container widths; write the px value in the query, the build matches it here. */
+:root,
+.theme-main {
+
+  /* viewport, max-width */
+  --p-bp-xs: var(--bp-360);
+  --p-bp-sm: var(--bp-440);
+  --p-bp-md: var(--bp-580);
+  --p-bp-lg: var(--bp-760);
+  --p-bp-xl: var(--bp-1100);
+  --p-bp-2xl: var(--bp-1200);
+  --p-bp-3xl: var(--bp-1250);
+
+  /* container, max-width */
+  --p-container-xs: var(--bp-130);
+  --p-container-sm: var(--bp-210);
+  --p-container-md: var(--bp-290);
+  --p-container-lg: var(--bp-420);
+  --p-container-xl: var(--bp-580);
+}

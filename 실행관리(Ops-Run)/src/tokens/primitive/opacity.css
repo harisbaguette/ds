@@ -1,0 +1,11 @@
+/* Layer 1 · primitive · opacity. Alpha values (x100 in the name).
+   Only src/tokens/semantic/opacity.css may reference these. */
+:root {
+  --opacity-8: .08;
+  --opacity-10: .1;
+  --opacity-16: .16;
+  --opacity-35: .35;
+  --opacity-38: .38;
+  --opacity-65: .65;
+  --opacity-100: 1;
+}

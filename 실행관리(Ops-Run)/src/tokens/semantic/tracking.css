@@ -1,0 +1,14 @@
+/* Layer 2 · semantic · tracking. Tracking: 01..05 are em steps (tightest first); fixed-* are px for one fixed size; wide opens small caps-like labels. */
+:root,
+.theme-main {
+  --p-tracking-01: var(--tracking-n050em);
+  --p-tracking-02: var(--tracking-n040em);
+  --p-tracking-03: var(--tracking-n035em);
+  --p-tracking-04: var(--tracking-n030em);
+  --p-tracking-05: var(--tracking-n020em);
+  --p-tracking-fixed-01: var(--tracking-n200px);
+  --p-tracking-fixed-02: var(--tracking-n050px);
+  --p-tracking-fixed-03: var(--tracking-n035px);
+  --p-tracking-fixed-04: var(--tracking-n020px);
+  --p-tracking-wide: var(--tracking-p040px);
+}

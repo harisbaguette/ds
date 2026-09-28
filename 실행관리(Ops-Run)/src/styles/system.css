@@ -1,17 +1,17 @@
-.system-inspector { padding: 0 28px 24px; }
-.inspector-options { display: flex; flex-wrap: wrap; gap: 16px; padding-bottom: 20px; }
+.system-inspector { padding: 0 var(--p-space-14) var(--p-space-12); }
+.inspector-options { display: flex; flex-wrap: wrap; gap: var(--p-space-08); padding-bottom: var(--p-space-10); }
 .inspector-options:empty { display: none; }
-.inspector-options label { display: grid; gap: 6px; font-size: 12px; }
-.inspector-options select { min-height: 44px; max-width: 100%; border: 1px solid var(--p-line); border-radius: 8px; padding: 8px 12px; background: var(--p-high); font-size: 13px; }
-.part-demo { border-radius: 12px; overflow: hidden; border: 1px solid var(--p-line); }
-.part-demo > .ds { padding: 32px; min-height: 160px; }
-.part-demo > .ds-demo-note { padding-inline: 20px; font-size: 12px; }
+.inspector-options label { display: grid; gap: var(--p-space-03); font-size: var(--p-text-03); }
+.inspector-options select { min-height: var(--p-control-h-sm); max-width: 100%; border: var(--p-border-width) solid var(--p-line); border-radius: var(--p-radius-04); padding: var(--p-space-04) var(--p-space-06); background: var(--p-high); font-size: var(--p-text-04); }
+.part-demo { border-radius: var(--p-radius-06); overflow: hidden; border: var(--p-border-width) solid var(--p-line); }
+.part-demo > .ds { padding: var(--p-space-16); min-height: var(--p-size-43); }
+.part-demo > .ds-demo-note { padding-inline: var(--p-space-10); font-size: var(--p-text-03); }
 .part-demo > .ds-demo-note:empty { display: none; }
-.part-dependencies .ui-icon { width: 13px; height: 13px; }
-.part-dependencies { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-bottom: 20px; font-size: 12px; }
-.part-dependencies > span { margin-right: 8px; color: var(--p-muted); }
-.part-dependencies button { display: inline-flex; gap: 8px; align-items: center; padding: 8px 12px; border: 1px solid var(--p-line); border-radius: 8px; background: var(--p-high); font-size: 12px; }
+.part-dependencies .ui-icon { width: var(--p-icon-3xs); height: var(--p-icon-3xs); }
+.part-dependencies { display: flex; flex-wrap: wrap; align-items: center; gap: var(--p-space-04); padding-bottom: var(--p-space-10); font-size: var(--p-text-03); }
+.part-dependencies > span { margin-right: var(--p-space-04); color: var(--p-muted); }
+.part-dependencies button { display: inline-flex; gap: var(--p-space-04); align-items: center; padding: var(--p-space-04) var(--p-space-06); border: var(--p-border-width) solid var(--p-line); border-radius: var(--p-radius-04); background: var(--p-high); font-size: var(--p-text-03); }
 @media (max-width: 760px) {
-  .system-inspector { padding-inline: 16px; }
-  .part-demo > .ds { padding: 20px 16px; }
+  .system-inspector { padding-inline: var(--p-space-08); }
+  .part-demo > .ds { padding: var(--p-space-10) var(--p-space-08); }
 }

@@ -1,6 +1,27 @@
-/* Layer 2 · semantic · radius. Values are var(--radius-*) only. */
+/* Layer 2 · semantic · radius. Radius scale 01 upward; the three original role names stay. */
 :root,
 .theme-main {
+  --p-radius-01: var(--radius-2);
+  --p-radius-02: var(--radius-4);
+  --p-radius-03: var(--radius-6);
+  --p-radius-04: var(--radius-8);
+  --p-radius-05: var(--radius-10);
+  --p-radius-06: var(--radius-12);
+  --p-radius-07: var(--radius-14);
+  --p-radius-08: var(--radius-16);
+  --p-radius-09: var(--radius-18);
+  --p-radius-10: var(--radius-20);
+  --p-radius-11: var(--radius-22);
+  --p-radius-12: var(--radius-24);
+  --p-radius-13: var(--radius-26);
+  --p-radius-14: var(--radius-28);
+  --p-radius-15: var(--radius-30);
+  --p-radius-16: var(--radius-32);
+  --p-radius-17: var(--radius-52);
+  --p-radius-full: var(--radius-full);
+  --p-radius-circle: var(--radius-circle);
+
+  /* original role names */
   --p-radius: var(--radius-24);
   --p-control-radius: var(--radius-16);
   --p-inner-radius: var(--radius-12);

@@ -1,0 +1,7 @@
+/* Layer 1 · primitive · border. Stroke widths and focus offsets in px.
+   Only src/tokens/semantic/border.css may reference these. */
+:root {
+  --border-1: 1px;
+  --border-2: 2px;
+  --border-3: 3px;
+}

@@ -1,0 +1,17 @@
+/* Layer 2 · semantic · layer. Layers from back to front; a part never picks its own z-index number. */
+:root,
+.theme-main {
+  --p-layer-below: var(--layer-n1);
+  --p-layer-base: var(--layer-0);
+  --p-layer-raised: var(--layer-1);
+  --p-layer-lifted: var(--layer-2);
+  --p-layer-sticky: var(--layer-100);
+  --p-layer-fixed: var(--layer-110);
+  --p-layer-dropdown: var(--layer-200);
+  --p-layer-overlay: var(--layer-300);
+  --p-layer-modal: var(--layer-400);
+  --p-layer-popover: var(--layer-500);
+  --p-layer-toast: var(--layer-600);
+  --p-layer-tooltip: var(--layer-700);
+  --p-layer-skip: var(--layer-1000);
+}

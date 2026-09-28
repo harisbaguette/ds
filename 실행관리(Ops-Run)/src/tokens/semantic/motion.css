@@ -1,5 +1,15 @@
-/* Layer 2 · semantic · motion. Values are var(--duration-*) only. */
+/* Layer 2 · semantic · motion. --p-duration keeps its original name; the rest follow Carbon. */
 :root,
 .theme-main {
   --p-duration: var(--duration-140);
+  --p-duration-instant: var(--duration-70);
+  --p-duration-fast: var(--duration-110);
+  --p-duration-normal: var(--duration-150);
+  --p-duration-slow: var(--duration-240);
+  --p-duration-slower: var(--duration-400);
+  --p-duration-spin: var(--duration-800);
+  --p-ease-standard: var(--ease-standard);
+  --p-ease-enter: var(--ease-enter);
+  --p-ease-exit: var(--ease-exit);
+  --p-ease-linear: var(--ease-linear);
 }

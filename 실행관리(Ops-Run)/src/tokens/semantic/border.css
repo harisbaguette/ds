@@ -1,0 +1,10 @@
+/* Layer 2 · semantic · border. Border widths and the focus ring (3px ring, 3px gap by default). */
+:root,
+.theme-main {
+  --p-border-width: var(--border-1);
+  --p-border-width-strong: var(--border-2);
+  --p-border-width-focus: var(--border-3);
+  --p-focus-offset: var(--border-3);
+  --p-focus-offset-tight: var(--border-2);
+  --p-focus-offset-hairline: var(--border-1);
+}

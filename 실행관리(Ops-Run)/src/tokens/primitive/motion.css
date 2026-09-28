@@ -1,4 +1,15 @@
-/* Layer 1 · primitive · motion. Only src/tokens/semantic/motion.css may reference these. */
+/* Layer 1 · primitive · motion. Durations (Carbon 70/110/150/240/400 plus the original 140) and easing curves.
+   Only src/tokens/semantic/motion.css may reference these. */
 :root {
+  --duration-70: 70ms;
+  --duration-110: 110ms;
   --duration-140: 140ms;
+  --duration-150: 150ms;
+  --duration-240: 240ms;
+  --duration-400: 400ms;
+  --duration-800: 800ms;
+  --ease-standard: cubic-bezier(.2, 0, .38, .9);
+  --ease-enter: cubic-bezier(0, 0, .38, .9);
+  --ease-exit: cubic-bezier(.2, 0, 1, .9);
+  --ease-linear: linear;
 }

@@ -1,0 +1,17 @@
+/* Layer 1 · primitive · layer. Stacking order (Primer: sticky 100 ... popover 500). n = negative.
+   Only src/tokens/semantic/layer.css may reference these. */
+:root {
+  --layer-n1: -1;
+  --layer-0: 0;
+  --layer-1: 1;
+  --layer-2: 2;
+  --layer-100: 100;
+  --layer-110: 110;
+  --layer-200: 200;
+  --layer-300: 300;
+  --layer-400: 400;
+  --layer-500: 500;
+  --layer-600: 600;
+  --layer-700: 700;
+  --layer-1000: 1000;
+}

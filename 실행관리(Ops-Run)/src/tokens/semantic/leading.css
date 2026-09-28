@@ -1,0 +1,15 @@
+/* Layer 2 · semantic · leading. Line-height scale: 01 tightest upward. */
+:root,
+.theme-main {
+  --p-leading-01: var(--leading-100);
+  --p-leading-02: var(--leading-105);
+  --p-leading-03: var(--leading-110);
+  --p-leading-04: var(--leading-120);
+  --p-leading-05: var(--leading-130);
+  --p-leading-06: var(--leading-140);
+  --p-leading-07: var(--leading-145);
+  --p-leading-08: var(--leading-150);
+  --p-leading-09: var(--leading-160);
+  --p-leading-10: var(--leading-170);
+  --p-leading-11: var(--leading-180);
+}

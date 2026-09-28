@@ -1,0 +1,31 @@
+/* Layer 2 · semantic · text. Type scale: ordinal steps 01 (smallest) upward; sm/md/lg keep the original role names. */
+:root,
+.theme-main {
+  --p-text-01: var(--text-10);
+  --p-text-02: var(--text-11);
+  --p-text-03: var(--text-12);
+  --p-text-04: var(--text-13);
+  --p-text-05: var(--text-14);
+  --p-text-06: var(--text-15);
+  --p-text-07: var(--text-16);
+  --p-text-08: var(--text-18);
+  --p-text-09: var(--text-20);
+  --p-text-10: var(--text-22);
+  --p-text-11: var(--text-24);
+  --p-text-12: var(--text-26);
+  --p-text-13: var(--text-28);
+  --p-text-14: var(--text-30);
+  --p-text-15: var(--text-32);
+  --p-text-16: var(--text-38);
+  --p-text-17: var(--text-40);
+  --p-text-18: var(--text-42);
+  --p-text-19: var(--text-45);
+  --p-text-20: var(--text-48);
+  --p-text-21: var(--text-52);
+  --p-text-22: var(--text-160);
+
+  /* original role names */
+  --p-text-sm: var(--text-13);
+  --p-text-md: var(--text-16);
+  --p-text-lg: var(--text-24);
+}

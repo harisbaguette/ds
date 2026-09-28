@@ -5,21 +5,28 @@
   let instance = 0;
   const uid = kind => `pattove-${kind}-${++instance}`;
   const option = (value, allowed, fallback) => allowed.includes(value) ? value : fallback;
-  function button({ label = '계속하기', variant = 'primary', size = 'md', state = '', iconName = '', iconOnly = false, action = 'press', type = 'button' } = {}) {
+  // Shape of an atom from the registry gallery. No look given → no attribute → the part's base shape.
+  const lookAttr = (id, look) => {
+    if (!look) return '';
+    const list = window.Pattove.systemRegistry?.index.get(id)?.gallery?.list || [];
+    return ` data-look="${esc(list.some(v => v.id === look) ? look : list[0]?.id || look)}"`;
+  };
+  function button({ label = '계속하기', variant = 'primary', size = 'md', state = '', iconName = '', iconOnly = false, action = 'press', type = 'button', look = '' } = {}) {
     variant = option(variant, ['primary','outline','ghost'], 'primary');
     size = option(size, ['sm','md','lg'], 'md');
     state = option(state, ['','hover','pressed','focus','disabled','loading'], '');
     type = option(type, ['button','submit','reset'], 'button');
     const disabled = state === 'disabled' || state === 'loading';
-    return `<button type="${type}" class="ds-button" data-variant="${variant}" data-size="${size}"${state ? ` data-state="${state}"` : ''}${disabled ? ' disabled' : ''}${state === 'loading' ? ' aria-busy="true"' : ''}${iconOnly ? ` aria-label="${esc(label)}" data-icon-only` : ''}${action ? ` data-part-action="${esc(action)}"` : ''}${action === 'select-card' ? ' aria-pressed="false"' : ''}>${state === 'loading' ? '<span class="ds-spinner" aria-hidden="true"></span>' : iconName ? icon(iconName) : ''}${iconOnly ? '' : esc(label)}</button>`;
+    if (look === 'cta' && !iconOnly) iconName ||= 'arrow';
+    return `<button type="${type}" class="ds-button" data-variant="${variant}" data-size="${size}"${lookAttr('button', look)}${state ? ` data-state="${state}"` : ''}${disabled ? ' disabled' : ''}${state === 'loading' ? ' aria-busy="true"' : ''}${iconOnly ? ` aria-label="${esc(label)}" data-icon-only` : ''}${action ? ` data-part-action="${esc(action)}"` : ''}${action === 'select-card' ? ' aria-pressed="false"' : ''}>${state === 'loading' ? '<span class="ds-spinner" aria-hidden="true"></span>' : iconName ? icon(iconName) : ''}${iconOnly ? '' : esc(label)}</button>`;
   }
-  function input({ id = uid('input'), value = '', placeholder = '이름을 입력하세요', disabled = false, invalid = false, description = '', type = 'text', name = '' } = {}) {
+  function input({ id = uid('input'), value = '', placeholder = '이름을 입력하세요', disabled = false, invalid = false, description = '', type = 'text', name = '', look = '' } = {}) {
     type = option(type, ['text','email','search','password','tel','url','number'], 'text');
-    return `<input class="ds-input" id="${esc(id)}"${name ? ` name="${esc(name)}"` : ''} type="${type}" value="${esc(value)}" placeholder="${esc(placeholder)}"${disabled ? ' disabled' : ''}${invalid ? ' aria-invalid="true"' : ''}${description ? ` aria-describedby="${esc(description)}"` : ''}>`;
+    return `<input class="ds-input" id="${esc(id)}"${lookAttr('input', look)}${name ? ` name="${esc(name)}"` : ''} type="${type}" value="${esc(value)}" placeholder="${esc(placeholder)}"${disabled ? ' disabled' : ''}${invalid ? ' aria-invalid="true"' : ''}${description ? ` aria-describedby="${esc(description)}"` : ''}>`;
   }
-  function field({ id = uid('field'), label = '컬렉션 이름', value = '', placeholder, state = '', help = '', name = '', type = 'text' } = {}) {
+  function field({ id = uid('field'), label = '컬렉션 이름', value = '', placeholder, state = '', help = '', name = '', type = 'text', look = '' } = {}) {
     state = option(state, ['','focus','disabled','error','success'], '');
-    return `<div class="ds-field"${state ? ` data-state="${state}"` : ''}>${fieldLabel(id,label)}${input({ id, value, placeholder, disabled: state === 'disabled', invalid: state === 'error', description: help ? id + '-help' : '', name, type })}${help ? fieldDescription(id + '-help',help) : ''}</div>`;
+    return `<div class="ds-field"${lookAttr('field', look)}${state ? ` data-state="${state}"` : ''}>${fieldLabel(id,label)}${input({ id, value, placeholder, disabled: state === 'disabled', invalid: state === 'error', description: help ? id + '-help' : '', name, type })}${help ? fieldDescription(id + '-help',help) : ''}</div>`;
   }
   const fieldLabel = (id, label) => `<label for="${esc(id)}">${esc(label)}</label>`;
   const fieldDescription = (id, text) => `<p class="ds-help" id="${esc(id)}">${esc(text)}</p>`;
@@ -28,13 +35,14 @@
   // body/actions accept trusted markup from other parts, not unsanitized user text.
   const cardBody = children => `<div class="ds-card-body">${children}</div>`;
   const cardActions = children => `<footer class="ds-card-actions">${children}</footer>`;
-  function choice({ kind = 'checkbox', label = '선택하기', checked = false, disabled = false, indeterminate = false, name = 'visibility', value = label } = {}) {
+  function choice({ kind = 'checkbox', label = '선택하기', checked = false, disabled = false, indeterminate = false, name = 'visibility', value = label, look = '' } = {}) {
     kind = option(kind, ['checkbox','radio','switch'], 'checkbox');
-    return `<label class="ds-choice"><input type="${kind === 'switch' ? 'checkbox' : kind}" value="${esc(value)}"${kind === 'switch' ? ' class="ds-switch" role="switch"' : ''}${name ? ` name="${esc(name)}"` : ''}${checked ? ' checked' : ''}${disabled ? ' disabled' : ''}${indeterminate ? ' data-indeterminate' : ''}>${esc(label)}</label>`;
+    return `<label class="ds-choice"${lookAttr(kind, look)}><input type="${kind === 'switch' ? 'checkbox' : kind}" value="${esc(value)}"${kind === 'switch' ? ' class="ds-switch" role="switch"' : ''}${name ? ` name="${esc(name)}"` : ''}${checked ? ' checked' : ''}${disabled ? ' disabled' : ''}${indeterminate ? ' data-indeterminate' : ''}>${esc(label)}</label>`;
   }
-  const badge = (label = '진행 중', tone = 'neutral') => `<span class="ds-badge" data-tone="${tone}">${esc(label)}</span>`;
-  const divider = () => '<hr class="ds-divider">';
-  const statusDot = (label = '연결됨') => `<span class="ds-status"><i aria-hidden="true"></i>${esc(label)}</span>`;
+  const badge = (label = '진행 중', tone = 'neutral', look = '') => `<span class="ds-badge" data-tone="${tone}"${lookAttr('badge', look)}>${esc(label)}</span>`;
+  const divider = (look = '', label = '또는') => `<hr class="ds-divider"${lookAttr('divider', look)}${look === 'label' ? ` data-label="${esc(label)}"` : ''}>`;
+  const statusDot = (label = '연결됨', look = '') => `<span class="ds-status"${lookAttr('status-dot', look)}><i aria-hidden="true"></i>${esc(label)}</span>`;
+  const iconMark = (name = 'search', look = '') => `<span class="ds-icon"${lookAttr('icon', look)}>${icon(name)}</span>`;
   function tabs(prefix = uid('tabs')) {
     return `<div class="ds-tabs"><div class="ds-tablist" role="tablist" aria-label="컬렉션 분류">${['전체','진행 중','완료'].map((name, i) => `<button type="button" class="ds-tab" id="${prefix}-tab-${i}" role="tab" aria-selected="${i === 0}" aria-controls="${prefix}-panel-${i}" tabindex="${i === 0 ? 0 : -1}">${name}</button>`).join('')}</div>${['모든 컬렉션을 보고 있어요.','진행 중인 컬렉션을 보고 있어요.','완료한 컬렉션을 보고 있어요.'].map((text, i) => `<div class="ds-tabpanel" id="${prefix}-panel-${i}" role="tabpanel" aria-labelledby="${prefix}-tab-${i}" tabindex="0"${i ? ' hidden' : ''}>${text}</div>`).join('')}</div>`;
   }
@@ -71,20 +79,20 @@
   }
   function renderItem(id, prefix = uid('example'), options = {}) {
     const renderers = {
-      checkbox: () => choice({ label: '링크로 공유', checked: options.state !== 'unchecked', disabled: options.state === 'disabled', indeterminate: options.state === 'indeterminate' }),
-      radio: () => `<fieldset class="ds-radio-group"><legend>공개 범위</legend>${choice({kind:'radio',label:'나만 보기',checked:options.state !== 'unchecked',disabled:options.state === 'disabled',name:prefix+'-visibility'})}${choice({kind:'radio',label:'링크로 공유',disabled:options.state === 'disabled',name:prefix+'-visibility'})}</fieldset>`,
-      switch: () => choice({ kind: 'switch', label: '알림 받기', checked: options.state !== 'unchecked', disabled: options.state === 'disabled' }),
+      checkbox: () => choice({ look: options.look, label: '링크로 공유', checked: options.state !== 'unchecked', disabled: options.state === 'disabled', indeterminate: options.state === 'indeterminate' }),
+      radio: () => `<fieldset class="ds-radio-group"><legend>공개 범위</legend>${choice({kind:'radio',look:options.look,label:'나만 보기',checked:options.state !== 'unchecked',disabled:options.state === 'disabled',name:prefix+'-visibility'})}${choice({kind:'radio',look:options.look,label:'링크로 공유',disabled:options.state === 'disabled',name:prefix+'-visibility'})}</fieldset>`,
+      switch: () => choice({ kind: 'switch', look: options.look, label: '알림 받기', checked: options.state !== 'unchecked', disabled: options.state === 'disabled' }),
       tokens: () => '<div class="ds-token-example"><span class="ds-token-swatches">'+['accent','high','soft','text'].map(t=>'<i data-token="'+t+'"></i>').join('')+'</span><strong class="ds-token-type">Aa 가나</strong></div>',
-      icon: () => icon(options.icon || 'search'), divider, 'status-dot': statusDot,
-      button: () => button({ variant: options.variant, size: options.size, state: options.state, iconName: options.icon || (options.iconOnly === 'true' ? 'search' : ''), iconOnly: options.iconOnly === 'true' }),
-      input: () => `<label class="ds-field" for="${prefix}-input">이름${input({ id: prefix + '-input', disabled: options.state === 'disabled', type: options.type || 'text' })}</label>`,
-      field: () => field({ id: prefix + '-field', state: options.state, value: options.state === 'success' ? '봄의 기록' : '', help: options.state === 'error' ? '이름을 입력해 주세요.' : options.state === 'success' ? '사용할 수 있는 이름이에요.' : '나중에 바꿀 수 있어요.' }),
-      badge: () => badge(({success:'완료',warning:'확인 필요',error:'실패'})[options.tone] || '진행 중', options.tone || 'neutral'),
+      icon: () => iconMark(options.icon || 'search', options.look), divider: () => divider(options.look), 'status-dot': () => statusDot('연결됨', options.look),
+      button: () => button({ look: options.look, variant: options.variant, size: options.size, state: options.state, iconName: options.icon || (options.iconOnly === 'true' ? 'search' : ''), iconOnly: options.iconOnly === 'true' }),
+      input: () => `<label class="ds-field" for="${prefix}-input"><span>이름</span>${input({ id: prefix + '-input', look: options.look, disabled: options.state === 'disabled', type: options.type || 'text' })}</label>`,
+      field: () => field({ id: prefix + '-field', look: options.look, state: options.state, value: options.state === 'success' ? '봄의 기록' : '', help: options.state === 'error' ? '이름을 입력해 주세요.' : options.state === 'success' ? '사용할 수 있는 이름이에요.' : '나중에 바꿀 수 있어요.' }),
+      badge: () => badge(({success:'완료',warning:'확인 필요',error:'실패'})[options.tone] || '진행 중', options.tone || 'neutral', options.look),
       tabs: () => tabs(prefix), 'bottom-nav': () => navigation(options.variant), feedback, card,
       'search-module': () => searchModule(prefix), template, page: () => page(prefix)
     };
     if (!renderers[id]) throw new RangeError('알 수 없는 부품: ' + id);
     return renderers[id]();
   }
-  window.Pattove.parts = { esc, icon, navCenter, button, input, field, fieldLabel, fieldDescription, cardTitle, cardDescription, cardBody, cardActions, choice, badge, divider, statusDot, tabs, navigation, feedback, card, searchModule, template, page, renderItem };
+  window.Pattove.parts = { esc, icon, navCenter, button, input, field, fieldLabel, fieldDescription, cardTitle, cardDescription, cardBody, cardActions, choice, badge, divider, statusDot, iconMark, tabs, navigation, feedback, card, searchModule, template, page, renderItem };
 })();

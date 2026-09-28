@@ -52,8 +52,71 @@
       look('07','gradient','그라데이션',['진함','고급','대비']), look('08','outline','윤곽 아이콘',['얇음','단정','여백']),
       look('09','line','위쪽 표시줄',['익숙함','명확','평평함']), look('10','curve','곡선 진한 바',['곡선','몰입','개성']),
       look('11','dock','독',['떠 있음','고급','입체감'])
+    ] },
+    // Atoms share one key: `look` → data-look on the markup, drawn by [data-look] rules in parts.css. First entry = current shape.
+    button: { list: [
+      look('01','fill','채움',['기본','또렷함','단단함']), look('02','soft','부드러운 채움',['차분함','연함','보조']),
+      look('03','line','굵은 윤곽',['가벼움','선명','평평함']), look('04','text','밑줄 글자',['최소','링크','조용함']),
+      look('05','pill','알약',['둥긂','친근함','모바일']), look('06','gradient','그라데이션',['진함','고급','대비']),
+      look('07','3d','눌리는 입체',['손맛','놀이','턱']), look('08','neumorph','뉴모피즘',['부드러움','입체감','촉감']),
+      look('09','glass','유리',['투명','겹침','가벼움']), look('10','cta','화살표 원',['행동 유도','방향','강조'])
+    ] },
+    input: { list: [
+      look('01','box','테두리 상자',['기본','익숙함','단정']), look('02','underline','밑줄',['최소','여백','가벼움']),
+      look('03','filled','채운 칸',['머티리얼','면','또렷함']), look('04','pill','알약',['검색','둥긂','모바일']),
+      look('05','float','테두리 라벨',['공간 절약','정돈','라벨']), look('06','neumorph','오목 뉴모피즘',['부드러움','눌림','촉감']),
+      look('07','glass','유리',['투명','떠 있음','가벼움']), look('08','sharp','각진 굵은 선',['대담함','각','개성'])
+    ] },
+    field: { list: [
+      look('01','stack','위 라벨',['기본','읽기 쉬움','세로']), look('02','inline','옆 라벨',['가로','조밀','설정']),
+      look('03','float','테두리 라벨',['공간 절약','정돈','라벨']), look('04','underline','밑줄',['최소','여백','가벼움']),
+      look('05','filled','안쪽 라벨',['머티리얼','면','조밀']), look('06','card','카드 묶음',['묶음','구획','또렷함']),
+      look('07','pill','알약',['둥긂','친근함','모바일']), look('08','neumorph','뉴모피즘',['부드러움','눌림','촉감'])
+    ] },
+    checkbox: { list: [
+      look('01','square','네모',['기본','익숙함','단정']), look('02','round','동그라미',['둥긂','친근함','할 일']),
+      look('03','outline','윤곽 체크',['가벼움','선','조용함']), look('04','card','선택 카드',['넓은 칸','또렷함','묶음']),
+      look('05','chip','알약 칩',['필터','조밀','모바일']), look('06','list','목록 줄',['설정','오른쪽','정돈']),
+      look('07','neumorph','뉴모피즘',['부드러움','입체감','촉감'])
+    ] },
+    radio: { list: [
+      look('01','dot','가운데 점',['기본','익숙함','단정']), look('02','check','체크 원',['확정','또렷함','둥긂']),
+      look('03','outline','윤곽 점',['가벼움','선','고전']), look('04','card','선택 카드',['넓은 칸','또렷함','묶음']),
+      look('05','segment','나란한 버튼',['전환','조밀','가로']), look('06','list','목록 줄',['설정','오른쪽','정돈']),
+      look('07','neumorph','뉴모피즘',['부드러움','입체감','촉감'])
+    ] },
+    switch: { list: [
+      look('01','track','기본 트랙',['기본','단정','익숙함']), look('02','ios','큰 초록',['모바일','또렷함','켜짐']),
+      look('03','slim','가는 트랙',['머티리얼','가벼움','손잡이']), look('04','text','켬·끔 글자',['명확','글자','안내']),
+      look('05','square','네모',['각','단단함','개성']), look('06','outline','커지는 손잡이',['윤곽','변화','또렷함']),
+      look('07','neumorph','뉴모피즘',['부드러움','입체감','촉감']), look('08','list','설정 줄',['설정','오른쪽','정돈'])
+    ] },
+    badge: { list: [
+      look('01','soft','연한 면',['기본','차분함','둥긂']), look('02','outline','윤곽',['가벼움','선','조용함']),
+      look('03','solid','진한 면',['강조','대비','또렷함']), look('04','dot','점 붙음',['상태','작음','정돈']),
+      look('05','square','네모',['각','표','단단함']), look('06','tag','꼬리표',['분류','물건','개성']),
+      look('07','raised','떠 있는',['입체감','가벼움','부드러움'])
+    ] },
+    divider: { list: [
+      look('01','solid','실선',['기본','단정','얇음']), look('02','dashed','파선',['임시','가벼움','구획']),
+      look('03','dotted','점선',['부드러움','리듬','가벼움']), look('04','label','가운데 글자',['또는','나눔','안내']),
+      look('05','inset','들여쓴 선',['목록','정렬','조용함']), look('06','bar','짧은 막대',['강조','제목','중심']),
+      look('07','fade','흐려지는 선',['부드러움','여운','고급']), look('08','thick','두꺼운 띠',['구역','모바일','또렷함'])
+    ] },
+    'status-dot': { list: [
+      look('01','dot','점',['기본','작음','단정']), look('02','ring','후광',['또렷함','부드러움','주목']),
+      look('03','pulse','맥박',['실시간','움직임','주목']), look('04','badge','배지형',['묶음','또렷함','면']),
+      look('05','avatar','프로필 모서리',['사람','접속','익숙함']), look('06','bar','세로 막대',['목록','정렬','조용함']),
+      look('07','check','체크 원',['완료','확정','또렷함'])
+    ] },
+    icon: { list: [
+      look('01','line','선',['기본','가벼움','단정']), look('02','bold','굵은 선',['또렷함','작은 크기','강조']),
+      look('03','duotone','두 톤',['깊이','부드러움','면']), look('04','filled','채움',['선택됨','단단함','강조']),
+      look('05','circle','동그라미 받침',['둥긂','친근함','면']), look('06','square','진한 네모 받침',['앱','강조','대비']),
+      look('07','ring','윤곽 원',['가벼움','선','단정']), look('08','raised','떠 있는 받침',['입체감','부드러움','촉감'])
     ] }
   };
+  for (const g of Object.values(galleries)) if (!g.key) Object.assign(g, { key: 'look', label: '모양', frame: 'stage' });
   for (const [id, g] of Object.entries(galleries)) {
     let c = controls[id]?.find(c => c.key === g.key);
     if (!c) (controls[id] ||= []).push(c = control(g.key, g.label, []));
@@ -82,8 +145,8 @@
   for (const item of items) {
     const [purpose, compatibility, inputs, events] = contracts[item.id];
     Object.assign(item, { purpose, compatibility, inputs, events, controls: controls[item.id] || [], gallery: galleries[item.id] || null,
-      css: ['checkbox','radio','switch'].includes(item.id) ? ['selection'] : ['page','icon'].includes(item.id) ? [] : [item.id],
-      source: 'src/system/parts.js', reactSource: ['tokens','icon'].includes(item.id) ? null : 'src/system/react/'+item.id+'.jsx', styles: window.Pattove.catalog.styles.filter(s => s.id !== 'base').map(s => s.id),
+      css: ['checkbox','radio','switch'].includes(item.id) ? ['selection'] : item.id === 'page' ? [] : [item.id],
+      source: 'src/system/parts.js', reactSource: item.id === 'tokens' ? null : 'src/system/react/'+item.id+'.jsx', styles: window.Pattove.catalog.styles.filter(s => s.id !== 'base').map(s => s.id),
       minInlineSize: ({ 'bottom-nav': 224, 'search-module': 240, template: 240, page: 240, card: 200, input: 160, field: 160, tabs: 240, feedback: 224 })[item.id] || 160,
       support: { html: 'implemented', react: 'implemented', native: 'not-implemented', print: 'not-verified' },
       verification: { suite: 'tests/system-audit.cjs', evidence: 'test-results/system-audit/results.json' }

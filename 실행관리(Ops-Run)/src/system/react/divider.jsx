@@ -1,2 +1,2 @@
 import React from 'react';
-export function Divider(props) { return <hr {...props} className="ds-divider" />; }
+export function Divider({ look, label = '또는', ...props }) { return <hr {...props} className="ds-divider" data-look={look} data-label={look === 'label' ? label : undefined} />; }

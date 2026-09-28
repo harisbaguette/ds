@@ -31,8 +31,6 @@
 .component-pagination a { display:inline-flex; min-height:var(--p-control-size-sm); gap:var(--p-space-xs); align-items:center; font-size:var(--p-text-sm); }
 .component-pagination [rel=prev] .ui-icon { transform:rotate(180deg); order:-1; }.component-pagination [rel=next] { margin-left:auto; }.component-pagination .ui-icon { width:var(--p-icon-sm); }
 .variant-count { font-size:var(--p-text-body); font-weight:var(--p-weight-medium); color:var(--p-muted); margin-left:var(--p-space-2xs); }
-.component-section>.variant-lead { margin:calc(var(--p-space-xs) * -1) 0 calc(var(--p-space-unit) * 5); font-size:var(--p-text-body); line-height:var(--p-leading-relaxed); }
-.variant-lead b { color:var(--p-ink); font-weight:var(--p-weight-semibold); }
 .component-section>.variant-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(var(--p-container-xs),1fr)); gap:var(--p-space-xl) var(--p-space-lg); max-width:none; padding:0; margin:0; list-style:none; color:var(--p-ink); line-height:var(--p-leading-snug); }
 .variant-card { position:relative; display:grid; grid-template-columns:minmax(0,1fr) auto; grid-template-areas:'frame frame' 'pick use'; align-items:center; gap:var(--p-space-sm) var(--p-space-xs); min-width:0; }
 .variant-pick { grid-area:pick; display:grid; grid-template-columns:auto minmax(0,1fr); column-gap:var(--p-space-xs); align-items:baseline; min-height:var(--p-control-size-sm); padding:0; text-align:left; color:var(--p-ink); background:none; border:0; }

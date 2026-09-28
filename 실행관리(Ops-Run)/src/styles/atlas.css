@@ -52,9 +52,7 @@ body { background:var(--p-bg); color:var(--p-ink); }
 /* 스타일 화면: 디자인 스타일 견본 카드 격자. 카드 전체가 하나의 선택 버튼이다. */
 .style-gallery { max-width:var(--p-container-2xl); margin:auto; }
 .style-grid { display:grid; gap:calc(var(--p-space-unit) * 5); grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--p-container-2xs)),var(--p-container-xs))); }
-.style-lead { max-width:var(--p-measure-narrow); margin:0 0 calc(var(--p-space-unit) * 5); font-size:var(--p-text-body); line-height:var(--p-leading-relaxed); color:var(--p-muted); }
-.style-lead b { color:var(--p-ink); font-weight:var(--p-weight-semibold); }
-.style-card { position:relative; min-width:0; display:flex; flex-direction:column; gap:var(--p-space-sm); padding:var(--p-space-sm) var(--p-space-sm) var(--p-space-md); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-2xl); background:var(--p-high); transition:border-color var(--p-duration),box-shadow var(--p-duration); }
+.style-card { position:relative; min-width:0; display:flex; flex-direction:column; gap:var(--p-space-xs); padding:var(--p-space-sm) var(--p-space-sm) var(--p-space-xs); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-2xl); background:var(--p-high); transition:border-color var(--p-duration),box-shadow var(--p-duration); }
 .style-card:hover { border-color:var(--p-control-border); box-shadow:var(--p-raised); }
 .style-card.is-active { border-color:var(--p-accent); box-shadow:0 0 0 var(--p-border-width) var(--p-accent); }
 /* 견본은 휴대폰 첫 화면을 실제 기기 폭(384px)으로 그린 뒤 카드 안쪽 폭에 맞춰 통째로 줄인다(부품 화면의 휴대폰 틀과 같은 방식).
@@ -66,11 +64,11 @@ body { background:var(--p-bg); color:var(--p-ink); }
 /* 떠 있는 탐색 막대는 휴대폰 아래 끝에 붙고, 그 위 목록은 막대 뒤로 흐려지며 사라진다. */
 .style-sample .ds-bottom-nav { position:absolute; z-index:var(--p-layer-raised); left:var(--ds-bottom-nav-offset,0); right:var(--ds-bottom-nav-offset,0); bottom:var(--ds-bottom-nav-offset,0); margin:0; }
 .style-sample::after { content:''; position:absolute; inset:auto 0 0; height:calc(var(--p-space-unit) * 38); background:var(--p-gradient-fade-up); pointer-events:none; }
-.style-choose { display:flex; flex-direction:column; align-items:flex-start; gap:var(--p-space-2xs); padding:0 var(--p-space-xs); text-align:left; color:var(--p-ink); background:none; border:0; }
+.style-choose { display:flex; align-items:center; justify-content:space-between; gap:var(--p-space-xs); padding:0 var(--p-space-xs); text-align:left; color:var(--p-ink); background:none; border:0; }
 .style-choose strong { font-size:var(--p-text-md); font-weight:var(--p-weight-semibold); }
 .style-choose::after { content:''; position:absolute; inset:0; border-radius:var(--p-radius-2xl); }
 .style-choose:focus-visible { outline:none; }.style-choose:focus-visible::after { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
-.style-badge { display:inline-flex; align-items:center; gap:var(--p-space-2xs); margin-top:var(--p-space-xs); padding:var(--p-space-2xs) var(--p-space-xs); border-radius:var(--p-radius-full); background:var(--p-accent); color:var(--p-on-accent); font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); }
+.style-badge { display:inline-flex; align-items:center; gap:var(--p-space-2xs); padding:var(--p-space-3xs) var(--p-space-xs); border-radius:var(--p-radius-full); background:var(--p-accent); color:var(--p-on-accent); font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); }
 .style-badge .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); }
 @media(max-width:760px) { .style-grid { gap:var(--p-space-sm); justify-content:center; } }
 @media(max-width:760px) {

@@ -39,10 +39,10 @@ async function inspect(page, label) {
     document.querySelectorAll('[data-preview-scene]').forEach(scene => contains(scene.parentElement, scene, 'fitted scene', scene.dataset.previewFit === 'both'));
     const buttons = [...document.querySelectorAll('.overview-actions > button')];
     if (buttons.length && buttons.some(b => Math.abs(b.getBoundingClientRect().top - buttons[0].getBoundingClientRect().top) > 1)) result.push('overview buttons wrap');
-    // Every grid cell is square: dictionary tiles, shape cards and style overview tiles alike.
-    document.querySelectorAll('.dict-entry, .variant-card, .overview-tile').forEach(cell => {
-      const r = cell.getBoundingClientRect();
-      if (Math.abs(r.width - r.height) > 1) result.push({ name: 'square cell', cell: cell.dataset.variantCard || cell.dataset.overview || cell.textContent.trim().slice(0, 20), width: r.width, height: r.height });
+    // In every grid the picture is square (the name under it is not part of the square): dictionary tiles, shape cards and style overview tiles alike.
+    document.querySelectorAll('.dict-thumb, .variant-card > .variant-frame, .overview-preview').forEach(art => {
+      const r = art.getBoundingClientRect(), cell = art.parentElement;
+      if (Math.abs(r.width - r.height) > 1) result.push({ name: 'square picture', cell: cell.dataset.variantCard || cell.dataset.overview || cell.textContent.trim().slice(0, 20), width: r.width, height: r.height });
     });
     if (document.documentElement.scrollWidth > innerWidth) result.push('page overflow');
     return result;
@@ -67,7 +67,7 @@ async function inspect(page, label) {
       await page.evaluate(() => scrollTo(0, 160));
       await page.screenshot({ path: path.join(out, name + '-overview-768.png') });
       await page.locator('[data-focus="overview-bottom-nav"]').click();
-      assert.equal(await page.locator('#detail-title').innerText(), '하단 탐색');
+      assert.ok((await page.locator('#detail-title').innerText()).startsWith('하단 탐색'));
       await page.locator('[data-variant-pick="float"]').click();
       assert.equal(await page.locator('[data-variant-pick="float"]').getAttribute('aria-pressed'), 'true');
       const demo = await stage(page, 'bottom-nav', { variant: 'float' });

@@ -16,14 +16,14 @@
 .component-pagination [rel=prev] .ui-icon { transform:rotate(180deg); order:-1; }.component-pagination [rel=next] { margin-left:auto; }.component-pagination .ui-icon { width:var(--p-icon-sm); }
 .component-page>.variant-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(var(--p-container-xs),1fr)); gap:var(--p-space-xl) var(--p-space-lg); padding:0; margin:0; list-style:none; color:var(--p-ink); line-height:var(--p-leading-snug); }
 /* A shape card is its picture and its name; the whole card is the button that makes it the one in use. */
-.variant-card { position:relative; display:grid; aspect-ratio:1; grid-template-rows:minmax(0,1fr) auto; grid-template-areas:'frame' 'pick'; gap:var(--p-space-sm); min-width:0; }
+.variant-card { position:relative; display:grid; grid-template-rows:auto auto; align-content:start; grid-template-areas:'frame' 'pick'; gap:var(--p-space-sm); min-width:0; }
 .variant-pick { grid-area:pick; display:flex; align-items:center; justify-content:space-between; gap:var(--p-space-xs); min-height:var(--p-control-size-sm); padding:0 var(--p-space-2xs); text-align:left; color:var(--p-ink); background:none; border:0; }
 .variant-pick::after { content:''; position:absolute; inset:calc(var(--p-space-xs) * -1); border-radius:var(--p-radius-2xl); }
 .variant-pick:focus-visible { outline:none; }.variant-pick:focus-visible::after { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:0; }
 .variant-pick strong { font-size:var(--p-text-md); font-weight:var(--p-weight-semibold); }
 .variant-kept { display:inline-flex; align-items:center; gap:var(--p-space-2xs); padding:var(--p-space-3xs) var(--p-space-sm); border-radius:var(--p-radius-full); background:var(--p-accent); color:var(--p-on-accent); font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); white-space:nowrap; }
-/* The card is square, so the picture takes the height the name leaves, whatever frame it uses. */
-.variant-grid .variant-card>.variant-frame[data-frame] { height:auto; min-height:0; }
+/* The picture is square whatever frame it uses; the name sits under it. */
+.variant-grid .variant-card>.variant-frame[data-frame] { width:100%; aspect-ratio:1; height:auto; min-height:0; }
 .variant-kept .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); }
 /* Phone-bottom frame: the part sits on the screen's bottom edge, rounded like the device corners */
 .variant-frame { grid-area:frame; position:relative; height:calc(var(--p-space-unit) * 44); overflow:hidden; border:var(--p-border-width) solid var(--p-line); border-top:0; border-radius:0 0 calc(var(--p-radius-xl) * 2) calc(var(--p-radius-xl) * 2); background:var(--p-bg); }

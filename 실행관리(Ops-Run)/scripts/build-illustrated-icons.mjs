@@ -38,14 +38,20 @@ for (const batch of manifest.batches) {
     }
     const col = index % batch.columns, row = Math.floor(index / batch.columns);
     const x = Math.round(col * grid.width / batch.columns), y = Math.round(row * grid.height / batch.rows);
-    const region = { left: grid.left + x, top: grid.top + y, width: Math.round((col + 1) * grid.width / batch.columns) - x, height: Math.round((row + 1) * grid.height / batch.rows) - y };
+    const region = item.crop ? {...item.crop} : { left: grid.left + x, top: grid.top + y, width: Math.round((col + 1) * grid.width / batch.columns) - x, height: Math.round((row + 1) * grid.height / batch.rows) - y };
     region.left += item.offset?.x || 0;
     region.top += item.offset?.y || 0;
     if (region.left < 0 || region.top < 0 || region.left + region.width > width || region.top + region.height > height) throw new Error('Icon crop exceeds source: ' + item.name);
-    const tile = sharp(source).extract(region).resize(512, 512, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 0 } });
-    const png = await tile.clone().png().toFile(path.join(dir, item.name + '.png'));
-    const webp = await tile.clone().webp({ quality: 88, effort: 6 }).toFile(path.join(dir, item.name + '.webp'));
-    const thumb = await sharp(source).extract(region).resize(192, 192, { fit: 'contain', background: { r: 255, g: 255, b: 255, alpha: 0 } }).webp({ quality: 85, effort: 6 }).toFile(path.join(dir, item.name + '-192.webp'));
+    const background={r:255,g:255,b:255,alpha:0};
+    let tile = sharp(source).extract(region).resize(batch.normalized?384:512, batch.normalized?384:512, { fit: 'contain', background });
+    if(batch.normalized)tile=tile.extend({top:64,bottom:64,left:64,right:64,background});
+    const buffer=await tile.png().toBuffer();
+    await fs.writeFile(paths[0],buffer);
+    const png={size:buffer.length};
+    const [webp,thumb]=await Promise.all([
+      sharp(buffer).webp({quality:88,effort:4}).toFile(paths[1]),
+      sharp(buffer).resize(192,192).webp({quality:85,effort:4}).toFile(paths[2])
+    ]);
     pngBytes += png.size; webpBytes += thumb.size;
     generated++; nextCache[item.name] = batchHash;
     console.log(`${item.name}: PNG ${png.size} B · WebP ${webp.size} B · thumbnail ${thumb.size} B`);

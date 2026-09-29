@@ -135,6 +135,13 @@ for(const batch of illustrated.batches) for(const item of batch.icons){
   for(const file of [art.src,art.thumb,art.png])if(!fs.existsSync(path.join(root,file)))throw new Error('Missing illustrated asset: '+file+'; run npm run build:icons');
   entry.art=art;
 }
+// Only dictionary entries that cite exactly the same reference glyphs may share a picture.
+for(const [id,target] of Object.entries(illustrated.aliases||{})){
+  const entry=entries.find(e=>e.id===id&&e.category==='ICO');
+  const original=entries.find(e=>e.id===target&&e.category==='ICO');
+  if(!entry||!original?.art||entry.art||entry.glyph.join('|')!==original.glyph.join('|'))throw new Error('Invalid illustrated alias: '+id+' -> '+target);
+  entry.art={...original.art,sharedWith:target};
+}
 // Pictures no meaning entry points at still show in the icon tab as their own kind.
 shelves.find(s=>s.codes?.includes('ICO')).kinds.push('세트 그림');
 const layerDoc=read('문서/구성요소 계층표.md');

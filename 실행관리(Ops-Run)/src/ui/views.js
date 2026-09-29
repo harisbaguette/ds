@@ -19,7 +19,7 @@
     const shelf = ['dictionary','system'].includes(state.page) ? window.Pattove.libraryUI.shelfFor(state)?.id : null;
     if (!['token','part','block','template'].includes(shelf)) return '';
     const current = previewStyle(state);
-    return `<div class="preview-style" role="group" aria-label="미리보기 스타일"><span class="preview-style-label" aria-hidden="true">미리보기</span>${styles.map(s => `<button type="button" class="preview-style-option" data-preview-style="${escape(s.id)}" data-focus="preview-style-${escape(s.id)}" aria-pressed="${s.id === current}" title="${escape(s.description)}">${escape(s.name)}${styles.length > 1 && s.id === state.style ? '<small>사용 중</small>' : ''}</button>`).join('')}</div>`;
+    return `<label class="preview-style"><span class="preview-style-label">미리보기</span><span class="preview-style-field"><select data-preview-select data-focus="preview-style">${styles.map(s => `<option value="${escape(s.id)}"${s.id === current ? ' selected' : ''}>${escape(s.name)}${styles.length > 1 && s.id === state.style ? ' (사용 중)' : ''}</option>`).join('')}</select>${icon('chevron-down')}</span></label>`;
   }
   function header(state) {
     return headline(state) + stylePicker(state);

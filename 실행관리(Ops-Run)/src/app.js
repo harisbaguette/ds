@@ -261,12 +261,6 @@
       $('#detail-title')?.focus({ preventScroll: true });
       $('#announcer').textContent = `${views.styleName(state.style)} 적용함`;
     }
-    else if (data.previewStyle && validStyle(data.previewStyle)) {
-      state.preview = data.previewStyle === state.style ? null : data.previewStyle;
-      try { state.preview ? sessionStorage.setItem(previewKey, state.preview) : sessionStorage.removeItem(previewKey); } catch {}
-      render();
-      $('#announcer').textContent = `${views.styleName(data.previewStyle)}로 미리보기`;
-    }
     else if (data.action === 'back-to-list' && history.state?.pattoveOverlay && new URLSearchParams(history.state.origin?.split('?')[1]).get('shelf') === library.shelfFor(state).id) {
       event.preventDefault(); rememberLocation(); history.go(-(history.state.depth || 1));
     } else if (target.matches('a[href^="#/"]')) {
@@ -328,6 +322,15 @@
     const input = event.target.querySelector('input'), to = Number.parseInt(input.value, 10);
     if (!to) { input.focus(); return; }
     navigate({ pageNo: Math.min(Math.max(to, 1), library.pageCount(state)) }, { replace: true });
+  });
+  // Picking a style in the 미리보기 dropdown redraws only the specimens; the site keeps the style it wears.
+  document.addEventListener('change', event => {
+    const pick = event.target.closest('[data-preview-select]')?.value;
+    if (!validStyle(pick)) return;
+    state.preview = pick === state.style ? null : pick;
+    try { state.preview ? sessionStorage.setItem(previewKey, state.preview) : sessionStorage.removeItem(previewKey); } catch {}
+    render();
+    $('#announcer').textContent = `${views.styleName(pick)}로 미리보기`;
   });
   $('#search-form').addEventListener('submit', event => { event.preventDefault(); submitSearch(); });
   $('#query').addEventListener('input', () => { $('#search-clear').hidden = !$('#query').value; showSuggestions(); });

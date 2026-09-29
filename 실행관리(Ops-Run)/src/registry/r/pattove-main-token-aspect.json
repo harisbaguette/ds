@@ -33,7 +33,7 @@
       "path": "design/css/token-aspect.css",
       "type": "registry:file",
       "target": "~/design/css/token-aspect.css",
-      "content": ".ds .ds-token-aspect { align-items:end; }\r\n.ds .ds-token-aspect i { height:var(--p-control-size-sm); border:var(--p-border-width-strong) solid currentColor; border-radius:var(--p-radius-sm); aspect-ratio:var(--p-aspect-square); }\r\n.ds .ds-token-aspect [data-token=\"landscape\"] { aspect-ratio:var(--p-aspect-landscape); }\r\n.ds .ds-token-aspect [data-token=\"portrait\"] { aspect-ratio:var(--p-aspect-portrait); }"
+      "content": ".ds .ds-token-aspect { align-items:end; }\n.ds .ds-token-aspect i { height:var(--p-control-size-sm); border:var(--p-border-width-strong) solid currentColor; border-radius:var(--p-radius-sm); aspect-ratio:var(--p-aspect-square); }\n.ds .ds-token-aspect [data-token=\"landscape\"] { aspect-ratio:var(--p-aspect-landscape); }\n.ds .ds-token-aspect [data-token=\"portrait\"] { aspect-ratio:var(--p-aspect-portrait); }"
     },
     {
       "path": "design/html/token-aspect.html",
@@ -43,7 +43,7 @@
     }
   ],
   "meta": {
-    "version": "0.3.0",
+    "version": "0.4.0",
     "lifecycle": "Trial",
     "item": "token-aspect",
     "purpose": "그림·표본의 가로세로 비율",

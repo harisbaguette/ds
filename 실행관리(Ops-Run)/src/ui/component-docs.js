@@ -51,7 +51,7 @@
     const term = window.Pattove.library.entries.find(x => x.id === item.entry)?.term, alias = item.english || term?.match(/\(([^)]+)\)\s*$/)?.[1];
     const body = g
       ? `<ul class="variant-grid" id="component-variants" role="list" aria-label="표현 방식">${g.list.map(v => card(item, v, options[g.key], state.style)).join('')}</ul>`
-      : `<div class="part-demo" id="component-preview">${live(item.id, options, state.style, 'component-live')}<p class="ds-demo-note" role="status"></p></div>`;
+      : `<div class="part-demo" id="component-preview"${item.browse.fit ? ' data-wide="true"' : ''}>${live(item.id, options, state.style, 'component-live')}<p class="ds-demo-note" role="status"></p></div>`;
     return `<article class="component-page" data-component="${item.id}" aria-labelledby="detail-title"><header class="component-heading"><h2 id="detail-title" tabindex="-1">${e(item.name)}${alias ? ` (${e(alias)})` : ''}</h2></header>${body}</article>`;
   }
   window.Pattove.componentDocs = { page, url, live, refresh, chosen, choose, defaults };

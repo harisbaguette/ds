@@ -132,22 +132,22 @@
 .ds .ds-token-breakpoint [data-token="xl"] { width:calc(var(--p-bp-xl) / 10); }
 /* @part divider */
 .ds .ds-divider { border:0; border-top:var(--p-border-width) solid var(--p-line); margin:0; width:100%; }
-/* looks: shapes of the same rule, tokens only */
-.ds .ds-divider[data-look="label"] { border:0; height:auto; overflow:visible; text-align:center; line-height:var(--p-leading-normal); background:var(--p-gradient-rule) 0 50%/100% var(--p-border-width) no-repeat; }
-.ds .ds-divider[data-look="label"]::after { content:attr(data-label); display:inline-block; padding:0 var(--p-space-sm); background:var(--p-bg); color:var(--p-muted); font-size:var(--p-text-sm); }
+/* @part text-divider */
+.ds .ds-text-divider { width:100%; height:auto; margin:0; overflow:visible; border:0; text-align:center; line-height:var(--p-leading-normal); background:var(--p-gradient-rule) 0 50%/100% var(--p-border-width) no-repeat; }
+.ds .ds-text-divider::after { content:attr(data-label); display:inline-block; padding:0 var(--p-space-sm); background:var(--p-bg); color:var(--p-muted); font-size:var(--p-text-sm); }
 /* @part status-dot */
 .ds .ds-status { display:inline-flex; gap:var(--p-space-xs); align-items:center; font-size:var(--p-text-sm); }
 .ds .ds-status i { width:var(--p-size-xs); height:var(--p-size-xs); flex-shrink:0; border-radius:var(--p-radius-circle); background:var(--p-success); }
-.ds .ds-status[data-look="avatar"] { position:relative; gap:var(--p-space-sm); }
-.ds .ds-status[data-look="avatar"]::before { content:''; width:calc(var(--p-space-unit) * 9); height:calc(var(--p-space-unit) * 9); flex-shrink:0; border-radius:var(--p-radius-circle); background:var(--p-soft); }
-.ds .ds-status[data-look="avatar"] i { position:absolute; left:var(--p-space-lg); top:calc(50% + var(--p-space-xs)); width:var(--p-size-sm); height:var(--p-size-sm); box-shadow:0 0 0 var(--p-border-width-strong) var(--p-bg); }
+/* @part avatar */
+/* The presence dot sits on the lower right edge, ringed in the background colour so it reads on any photo. */
+.ds .ds-avatar { position:relative; display:inline-grid; place-items:center; width:var(--p-control-size-md); height:var(--p-control-size-md); flex-shrink:0; border-radius:var(--p-radius-circle); background:var(--p-soft); color:var(--p-ink); font-size:var(--p-text-md); font-weight:var(--p-weight-bold); }
+.ds .ds-avatar > i { position:absolute; right:0; bottom:0; width:var(--p-size-sm); height:var(--p-size-sm); border-radius:var(--p-radius-circle); background:var(--p-success); box-shadow:0 0 0 var(--p-border-width-strong) var(--p-bg); }
 /* @part button */
 .ds .ds-button { display:inline-flex; justify-content:center; align-items:center; gap:var(--p-space-xs); min-width:var(--p-control-size-md); min-height:var(--p-control-size-md); padding:var(--p-space-xs) calc(var(--p-space-unit) * 5); border:var(--p-border-width) solid var(--p-accent); border-radius:var(--p-control-radius); background:var(--p-accent); color:var(--p-on-accent); font-size:var(--p-text-body); font-weight:var(--p-weight-semibold); line-height:var(--p-leading-snug); box-shadow:var(--p-control-shadow); text-decoration:none; transition:background var(--p-duration),box-shadow var(--p-duration); }
 .ds .ds-button[data-variant="outline"] { border-color:var(--p-control-border); color:var(--p-ink); background:var(--p-surface); box-shadow:var(--p-raised); }
 .ds .ds-button[data-variant="ghost"] { color:var(--p-ink); background:transparent; border-color:transparent; box-shadow:none; }
 .ds .ds-button[data-size="sm"] { min-height:var(--p-control-size-sm); min-width:var(--p-control-size-sm); padding:var(--p-space-xs) var(--p-space-md); font-size:var(--p-text-sm); }
 .ds .ds-button[data-size="lg"] { min-height:var(--p-control-size-lg); min-width:var(--p-control-size-lg); padding:var(--p-space-md) var(--p-space-lg); font-size:var(--p-text-md); }
-.ds .ds-button[data-icon-only] { padding:var(--p-space-xs); }
 .ds .ds-button:not(:disabled):is(:hover,[data-state="hover"]) { background:var(--p-accent-shaded); }
 .ds .ds-button[data-variant="outline"]:not(:disabled):is(:hover,[data-state="hover"]) { background:var(--p-high); }
 .ds .ds-button[data-variant="ghost"]:not(:disabled):is(:hover,[data-state="hover"]) { background:var(--p-disabled); }
@@ -159,29 +159,48 @@
 .ds .ds-spinner { width:var(--p-size-md); height:var(--p-size-md); flex-shrink:0; border:var(--p-border-width-strong) solid currentColor; border-right-color:transparent; border-radius:var(--p-radius-circle); animation:ds-spin var(--p-duration-spin) var(--p-ease-linear) infinite; }
 @keyframes ds-spin { to { transform:rotate(360deg); } }
 @media(prefers-reduced-motion:reduce) { .ds .ds-spinner { border-style:var(--p-stroke-dotted); } }
-/* looks: primary colors change per look, pill/cta change shape for every variant; disabled keeps the base state */
-/* looks: arrangements of actions; colour roles stay on data-variant */
-.ds .ds-actions { display:flex; flex-wrap:wrap; align-items:center; gap:var(--p-space-xs); min-width:0; }
+/* looks: 채움(primary) · 윤곽(outline) · 글자(ghost) are the data-variant colour roles above */
 .ds .ds-button-count { display:inline-grid; place-items:center; min-width:var(--p-size-lg); height:var(--p-size-lg); padding:0 var(--p-space-xs); border-radius:var(--p-radius-full); background:var(--p-accent); color:var(--p-on-accent); font-size:var(--p-text-sm); font-weight:var(--p-weight-bold); line-height:var(--p-leading-none); }
 .ds .ds-button[data-variant="primary"] .ds-button-count { background:var(--p-on-accent); color:var(--p-accent); }
-.ds .ds-actions[data-look="hero"] { flex-wrap:nowrap; gap:0; }
-.ds .ds-actions[data-look="hero"] > .ds-button:first-child { flex:1 0 auto; margin-right:var(--p-space-xs); padding-inline:var(--p-space-md); white-space:nowrap; }
-.ds .ds-actions[data-look="hero"] > .ds-button[data-icon-only] { flex:none; width:var(--p-control-size-sm); min-width:var(--p-control-size-sm); padding:0; }
-.ds .ds-actions[data-look="hero"] > .ds-button[data-icon-only] { color:var(--p-ink); }
-.ds .ds-actions[data-look="pair"] { justify-content:flex-end; }
-.ds .ds-actions[data-look="pair"] > .ds-button { flex:0 1 auto; }
-.ds .ds-actions[data-look="bar"] { width:100%; padding:var(--p-space-sm); border-top:var(--p-border-width) solid var(--p-line); background:var(--p-bg); }
-.ds .ds-actions[data-look="bar"] > .ds-button { flex:1; min-height:var(--p-control-size-md); }
+/* @part icon-button */
+.ds .ds-button[data-icon-only] { padding:var(--p-space-xs); }
+/* @part action-row */
+/* One wide main action; the other actions shrink to quiet icon buttons. */
+.ds .ds-action-row { display:flex; align-items:center; min-width:0; }
+.ds .ds-action-row > .ds-button:first-child { flex:1 0 auto; margin-right:var(--p-space-xs); padding-inline:var(--p-space-md); white-space:nowrap; }
+.ds .ds-action-row > .ds-button[data-icon-only] { flex:none; width:var(--p-control-size-sm); min-width:var(--p-control-size-sm); padding:0; color:var(--p-ink); }
+/* @part confirm-row */
+.ds .ds-confirm-row { display:flex; flex-wrap:wrap; justify-content:flex-end; align-items:center; gap:var(--p-space-xs); min-width:0; }
+.ds .ds-confirm-row > .ds-button { flex:0 1 auto; }
+/* @part action-bar */
+.ds .ds-action-bar { display:flex; width:100%; padding:var(--p-space-sm); border-top:var(--p-border-width) solid var(--p-line); background:var(--p-bg); }
+.ds .ds-action-bar > .ds-button { flex:1; }
+/* @part segmented-button */
+/* Side-by-side options; the chosen one is filled and carries a check, never colour alone. */
+.ds .ds-segmented { display:flex; flex-wrap:wrap; min-width:0; margin:0; padding:0; border:0; }
+.ds .ds-segmented > legend { position:absolute; width:var(--p-size-hairline); height:var(--p-size-hairline); overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.ds .ds-segment { position:relative; display:inline-flex; align-items:center; gap:var(--p-space-xs); min-height:var(--p-control-size-sm); padding:var(--p-space-xs) var(--p-space-md); border:var(--p-border-width) solid var(--p-control-border); background:var(--p-bg); font-size:var(--p-text-body); cursor:pointer; }
+.ds .ds-segment + .ds-segment { margin-left:calc(var(--p-border-width) * -1); }
+.ds .ds-segment:first-of-type { border-radius:var(--p-radius-lg) 0 0 var(--p-radius-lg); }
+.ds .ds-segment:last-of-type { border-radius:0 var(--p-radius-lg) var(--p-radius-lg) 0; }
+.ds .ds-segment input { position:absolute; inset:0; width:100%; height:100%; margin:0; opacity:0; cursor:inherit; }
+.ds .ds-segment:has(:checked) { z-index:var(--p-layer-raised); border-color:var(--p-accent); background:var(--p-accent); color:var(--p-on-accent); font-weight:var(--p-weight-semibold); }
+.ds .ds-segment:has(:checked)::before { content:'✓'; content:'✓' / ''; }
+.ds .ds-segment:has(:focus-visible) { z-index:var(--p-layer-lifted); outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset-tight); }
+.ds .ds-segment:has(:disabled) { border-color:var(--p-line); background:var(--p-disabled); color:var(--p-muted); cursor:not-allowed; }
 /* @part input */
 .ds .ds-input { display:block; width:100%; min-width:0; min-height:var(--p-control-size-md); padding:var(--p-space-sm) var(--p-space-md); border:var(--p-border-width) solid var(--p-control-border); border-radius:var(--p-control-radius); background:var(--p-bg); box-shadow:var(--p-inset); color:var(--p-ink); font-size:var(--p-text-body); line-height:var(--p-leading-normal); }
 .ds .ds-input::placeholder { color:var(--p-muted); opacity:var(--p-opacity-full); }
 .ds .ds-input:disabled { opacity:var(--p-opacity-full); box-shadow:none; color:var(--p-muted); background:var(--p-disabled); border-color:var(--p-line); cursor:not-allowed; }
 .ds .ds-input[aria-invalid="true"] { border-color:var(--p-error); border-width:var(--p-border-width-strong); padding:var(--p-space-xs) var(--p-space-sm); }
 .ds label.ds-field { display:grid; gap:var(--p-space-xs); min-width:0; font-size:var(--p-text-body); }
-/* looks: the same selector draws a bare input and the input inside a field of that look */
-.ds :is(.ds-input[data-look],.ds-field[data-look] .ds-input):disabled { background:var(--p-disabled); border-color:var(--p-line); color:var(--p-muted); box-shadow:none; }
-.ds :is(.ds-input[data-look],.ds-field[data-look] .ds-input)[aria-invalid="true"] { border-color:var(--p-error); }
-/* looks: the helper a value needs sits inside the same box — clear, unit, − and +, or show */
+/* looks: 윤곽(box) is the base box; 채움(filled) keeps only a bottom rule on a tinted surface (Material 3 filled text field) */
+.ds .ds-input[data-look="filled"] { border-width:0 0 var(--p-border-width-strong); border-radius:var(--p-control-radius) var(--p-control-radius) 0 0; background:var(--p-surface); box-shadow:none; }
+.ds .ds-input[data-look="filled"][aria-invalid="true"] { padding:var(--p-space-sm) var(--p-space-md); }
+.ds .ds-input[data-look]:disabled { background:var(--p-disabled); border-color:var(--p-line); color:var(--p-muted); box-shadow:none; }
+.ds .ds-input[data-look][aria-invalid="true"] { border-color:var(--p-error); }
+/* @part input-group */
+/* The helper a value needs sits inside the same box as the value. */
 .ds .ds-input-group { display:flex; align-items:center; min-width:0; border:var(--p-border-width) solid var(--p-control-border); border-radius:var(--p-control-radius); background:var(--p-bg); box-shadow:var(--p-inset); }
 .ds .ds-input-group:focus-within { border-color:var(--p-accent); box-shadow:0 0 0 var(--p-border-width) var(--p-accent); }
 .ds .ds-input-group > .ds-input { flex:1 1 0; min-height:var(--p-control-size-md); border:0; border-radius:inherit; background:transparent; box-shadow:none; }
@@ -189,18 +208,22 @@
 .ds .ds-input-tool { display:grid; place-items:center; flex:none; width:var(--p-control-size-sm); height:var(--p-control-size-sm); padding:0; border:0; border-radius:calc(var(--p-control-radius) - var(--p-radius-xs)); background:transparent; color:var(--p-ink); font:var(--p-weight-medium) var(--p-text-lg)/var(--p-leading-none) var(--p-font); cursor:pointer; }
 .ds .ds-input-tool:hover:not(:disabled) { background:var(--p-surface); }
 .ds .ds-input-tool:focus-visible { outline-offset:calc(var(--p-focus-offset) * -1); }
-.ds .ds-input-group[data-look="clear"] > .ds-input:placeholder-shown + .ds-input-tool { visibility:hidden; }
-.ds .ds-input-group[data-look="unit"] > .ds-input { text-align:right; font-variant-numeric:tabular-nums; }
-.ds .ds-input-unit { flex:none; align-self:stretch; min-height:var(--p-control-size-sm); padding:0 var(--p-space-sm); border:0; border-left:var(--p-border-width) solid var(--p-line); border-radius:0 var(--p-control-radius) var(--p-control-radius) 0; background:transparent; color:var(--p-ink); font:inherit; font-weight:var(--p-weight-semibold); }
-.ds .ds-input-unit:focus-visible { outline-offset:calc(var(--p-focus-offset) * -1); }
-.ds .ds-input-group[data-look="stepper"] { width:fit-content; }
-.ds .ds-input-group[data-look="stepper"] > .ds-input { flex:0 0 var(--p-control-size-xl); padding-inline:var(--p-space-2xs); text-align:center; font-variant-numeric:tabular-nums; -moz-appearance:textfield; appearance:textfield; }
-.ds .ds-input-group[data-look="stepper"] > .ds-input::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
 .ds .ds-input-group:has(:disabled) { background:var(--p-disabled); border-color:var(--p-line); box-shadow:none; color:var(--p-muted); }
 .ds .ds-input-group:has(:disabled) .ds-input-tool { color:var(--p-muted); cursor:not-allowed; }
 .ds .ds-input-group:has([aria-invalid="true"]) { border-color:var(--p-error); box-shadow:0 0 0 var(--p-border-width) var(--p-error); }
-/* reveal: the text button stays inside the box so the typed secret can be checked without retyping */
-.ds .ds-input-group[data-look="reveal"] .ds-input-tool { width:auto; min-width:var(--p-control-size-sm); padding:0 var(--p-space-sm); color:var(--p-accent); font-size:var(--p-text-body); font-weight:var(--p-weight-semibold); }
+/* @part clear-input */
+.ds .ds-clear-input > .ds-input:placeholder-shown + .ds-input-tool { visibility:hidden; }
+/* @part unit-input */
+.ds .ds-unit-input > .ds-input { text-align:right; font-variant-numeric:tabular-nums; }
+.ds .ds-input-unit { flex:none; align-self:stretch; min-height:var(--p-control-size-sm); padding:0 var(--p-space-sm); border:0; border-left:var(--p-border-width) solid var(--p-line); border-radius:0 var(--p-control-radius) var(--p-control-radius) 0; background:transparent; color:var(--p-ink); font:inherit; font-weight:var(--p-weight-semibold); }
+.ds .ds-input-unit:focus-visible { outline-offset:calc(var(--p-focus-offset) * -1); }
+/* @part stepper */
+.ds .ds-stepper { width:fit-content; }
+.ds .ds-stepper > .ds-input { flex:0 0 var(--p-control-size-xl); padding-inline:var(--p-space-2xs); text-align:center; font-variant-numeric:tabular-nums; -moz-appearance:textfield; appearance:textfield; }
+.ds .ds-stepper > .ds-input::-webkit-inner-spin-button { -webkit-appearance:none; margin:0; }
+/* @part password-input */
+/* the text button stays inside the box so the typed secret can be checked without retyping */
+.ds .ds-password-input .ds-input-tool { width:auto; min-width:var(--p-control-size-sm); padding:0 var(--p-space-sm); color:var(--p-accent); font-size:var(--p-text-body); font-weight:var(--p-weight-semibold); }
 /* @part field */
 .ds .ds-field,.ds .ds-select-field { display:grid; gap:var(--p-space-xs); min-width:0; font-size:var(--p-text-body); }
 .ds .ds-field > label,.ds .ds-select-field > span { font-weight:var(--p-weight-semibold); }
@@ -211,15 +234,25 @@
 .ds .ds-field[data-state="success"] .ds-help::before { content:'✓'; margin-right:var(--p-space-2xs); }
 .ds .ds-field[data-state="success"] .ds-input { border-color:var(--p-success); }
 .ds .ds-field[data-state="focus"] .ds-input { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
-/* looks: layout of label, input and help; input shapes come from the input part */
-.ds .ds-field[data-look="inline"] { grid-template-columns:calc(var(--p-space-unit) * 24) minmax(0,1fr); align-items:center; column-gap:var(--p-space-sm); }
-.ds .ds-field[data-look="inline"] > .ds-help { grid-column:2; }
-.ds .ds-field[data-look][data-state="success"] .ds-input { border-color:var(--p-success); }
-.ds .ds-field[data-look="row"] .ds-input-group > .ds-input { text-align:center; }
+/* @part date-range */
+.ds .ds-date-range .ds-input-group > .ds-input { text-align:center; }
 .ds .ds-input-join { flex:none; color:var(--p-muted); }
-.ds .ds-field[data-state="success"] .ds-input-group { border-color:var(--p-success); }
-.ds .ds-field[data-state="focus"] .ds-input-group { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
-.ds .ds-field[data-state="focus"] .ds-input-group .ds-input { outline:0; }
+.ds .ds-date-range[data-state="success"] .ds-input-group { border-color:var(--p-success); }
+.ds .ds-date-range[data-state="focus"] .ds-input-group { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
+.ds .ds-date-range[data-state="focus"] .ds-input-group .ds-input { outline:0; }
+/* @part inline-form */
+/* Label on the left, value on the right: short settings take half the height. */
+.ds .ds-inline-form { display:grid; gap:var(--p-space-sm); min-width:0; }
+.ds .ds-inline-form > .ds-field { grid-template-columns:calc(var(--p-space-unit) * 24) minmax(0,1fr); align-items:center; column-gap:var(--p-space-sm); }
+.ds .ds-inline-form > .ds-field > .ds-help { grid-column:2; }
+/* @part search-bar */
+/* Query, status and button share one rounded bar. Labels hidden here stay in the page for screen readers. */
+.ds .ds-search-bar { display:grid; grid-template-columns:minmax(0,1fr) auto auto; align-items:center; gap:var(--p-space-2xs); padding:var(--p-space-2xs) var(--p-space-2xs) var(--p-space-2xs) var(--p-space-sm); border:var(--p-border-width) solid var(--p-control-border); border-radius:var(--p-radius-full); background:var(--p-bg); box-shadow:var(--p-inset); }
+.ds .ds-search-bar :is(.ds-field > label,.ds-select-field > span) { position:absolute; width:var(--p-size-hairline); height:var(--p-size-hairline); overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.ds .ds-search-bar .ds-input { border:0; background:transparent; box-shadow:none; }
+.ds .ds-search-bar select.ds-input { width:auto; padding-inline:var(--p-space-sm) var(--p-space-xs); border-left:var(--p-border-width) solid var(--p-line); border-radius:0; }
+.ds .ds-search-bar > .ds-button { border-radius:var(--p-radius-full); }
+@container(max-width:420px) { .ds .ds-search-bar > .ds-button { gap:0; padding-inline:var(--p-space-sm); font-size:0; } }
 /* @part selection */
 .ds .ds-choices { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--p-space-unit) * 42),1fr)); gap:var(--p-space-lg); }
 .ds .ds-choices fieldset,.ds .ds-radio-group { border:0; padding:0; min-width:0; }
@@ -248,36 +281,38 @@
   .ds .ds-switch:checked { background:Highlight; }
   .ds .ds-switch:checked::before { background:HighlightText; }
 }
-/* looks: checkbox, radio and switch share the label hook .ds-choice[data-look]; checked keeps a mark or a moved thumb, never color alone */
-.ds .ds-choice[data-look="card"] { min-width:calc(var(--p-space-unit) * 50); min-height:var(--p-control-size-lg); padding:var(--p-space-sm) var(--p-space-md); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-control-radius); background:var(--p-bg); }
-.ds .ds-choice[data-look="card"]:has(:checked) { border-color:var(--p-accent); box-shadow:inset 0 0 0 var(--p-border-width) var(--p-accent); background:var(--p-high); font-weight:var(--p-weight-semibold); }
-.ds .ds-radio-group:has(> .ds-choice[data-look="card"]) .ds-choice + .ds-choice { margin-top:var(--p-space-xs); }
-.ds .ds-choice[data-look="chip"] { gap:var(--p-space-xs); min-height:var(--p-control-size-sm); padding:var(--p-space-xs) var(--p-space-md); border:var(--p-border-width) solid var(--p-control-border); border-radius:var(--p-radius-full); background:var(--p-bg); }
-.ds .ds-choice[data-look="chip"] input { width:0; height:var(--p-size-md); border:0; background:transparent; box-shadow:none; }
-.ds .ds-choice[data-look="chip"]:has(:focus-visible) { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
-.ds .ds-choice[data-look="chip"]:has(:checked) { padding-left:var(--p-space-sm); border-color:var(--p-accent); background:var(--p-accent); color:var(--p-on-accent); }
-.ds .ds-choice[data-look="chip"] input:checked { width:var(--p-size-md); background:transparent; }
-.ds .ds-choice[data-look="chip"] input[type="checkbox"]:checked::after { left:calc(50% - var(--p-size-2xs)); top:var(--p-border-width); border-color:var(--p-on-accent); }
-.ds .ds-choice[data-look="list"] { width:100%; flex-direction:row-reverse; justify-content:space-between; min-height:var(--p-control-size-md); padding:var(--p-space-sm) var(--p-space-2xs); border-block:var(--p-border-width) solid var(--p-line); }
-/* A settings list spans its container, so the whole row is the tap target. */
-.ds .ds-radio-group:has(> .ds-choice[data-look="list"]) { width:100%; }
-.ds .ds-radio-group:has(> .ds-choice[data-look="list"]) .ds-choice + .ds-choice { border-top:0; }
-.ds .ds-radio-group:has(> .ds-choice[data-look="segment"]) { display:flex; flex-wrap:wrap; }
-.ds .ds-radio-group:has(> .ds-choice[data-look="segment"]) > legend { width:100%; }
-.ds .ds-choice[data-look="segment"] { position:relative; gap:var(--p-space-xs); min-height:var(--p-control-size-sm); margin:0; padding:var(--p-space-xs) var(--p-space-md); border:var(--p-border-width) solid var(--p-control-border); background:var(--p-bg); }
-.ds .ds-choice[data-look="segment"] + .ds-choice[data-look="segment"] { margin-left:calc(var(--p-border-width) * -1); }
-.ds .ds-choice[data-look="segment"]:first-of-type { border-radius:var(--p-radius-lg) 0 0 var(--p-radius-lg); }
-.ds .ds-choice[data-look="segment"]:last-of-type { border-radius:0 var(--p-radius-lg) var(--p-radius-lg) 0; }
-.ds .ds-choice[data-look="segment"] input { position:absolute; inset:0; width:100%; height:100%; opacity:0; }
-.ds .ds-choice[data-look="segment"]:has(:checked) { z-index:var(--p-layer-raised); border-color:var(--p-accent); background:var(--p-accent); color:var(--p-on-accent); font-weight:var(--p-weight-semibold); }
-.ds .ds-choice[data-look="segment"]:has(:checked)::before { content:'✓'; content:'✓' / ''; }
-.ds .ds-choice[data-look="segment"]:has(:focus-visible) { z-index:var(--p-layer-lifted); outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset-tight); }
-.ds .ds-choice[data-look]:has(:disabled) input:disabled { background:var(--p-disabled); border-color:var(--p-line); box-shadow:none; }
-.ds .ds-choice[data-look]:has(:disabled) input:disabled::after { border-color:var(--p-muted); color:var(--p-muted); }
-.ds .ds-choice[data-look]:has(:disabled) input:is([type="radio"],:indeterminate):disabled::after { background:var(--p-muted); }
-.ds .ds-choice[data-look]:has(:disabled) input.ds-switch:disabled::before { background:var(--p-muted); box-shadow:none; }
-.ds .ds-choice:is([data-look="chip"],[data-look="segment"],[data-look="card"]):has(:disabled) { border-color:var(--p-line); background:var(--p-disabled); color:var(--p-muted); box-shadow:none; }
-/* all: one parent box above its children; the children sit indented so the tree reads without words */
+/* @part choice-card */
+/* The whole card is the tap area; the chosen card gains a thicker edge as well as the checked box. */
+.ds .ds-choice-card { min-width:calc(var(--p-space-unit) * 50); padding:var(--p-space-sm) var(--p-space-md); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-control-radius); background:var(--p-bg); }
+.ds .ds-choice-card:has(:checked) { border-color:var(--p-accent); box-shadow:inset 0 0 0 var(--p-border-width) var(--p-accent); background:var(--p-high); }
+.ds .ds-choice-card:has(:disabled) { border-color:var(--p-line); background:var(--p-disabled); color:var(--p-muted); box-shadow:none; }
+.ds .ds-choice-text { display:grid; gap:var(--p-space-3xs); }
+.ds .ds-choice-text strong { font-weight:var(--p-weight-semibold); }
+.ds .ds-choice-text small { font-size:var(--p-text-sm); color:var(--p-muted); }
+.ds .ds-radio-group > .ds-choice-card + .ds-choice-card { margin-top:var(--p-space-xs); }
+/* @part filter-chip */
+/* The box is hidden; the chosen chip fills and shows a check, never colour alone. */
+.ds .ds-chip { position:relative; display:inline-flex; align-items:center; gap:var(--p-space-xs); min-height:var(--p-control-size-sm); padding:0 var(--p-space-md); border:var(--p-border-width) solid var(--p-control-border); border-radius:var(--p-radius-full); background:var(--p-bg); font-size:var(--p-text-body); cursor:pointer; }
+.ds .ds-chip input { position:absolute; width:var(--p-size-hairline); height:var(--p-size-hairline); overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.ds .ds-chip:has(:checked) { border-color:var(--p-accent); background:var(--p-accent); color:var(--p-on-accent); font-weight:var(--p-weight-semibold); }
+.ds .ds-chip:has(:checked)::before { content:'✓'; font-weight:var(--p-weight-bold); }
+.ds .ds-chip:has(:focus-visible) { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
+.ds .ds-chip:has(:disabled) { border-color:var(--p-line); background:var(--p-disabled); color:var(--p-muted); cursor:not-allowed; }
+/* @part filter-chip-row */
+.ds .ds-chip-group { display:flex; flex-wrap:wrap; gap:var(--p-space-xs); min-width:0; margin:0; padding:0; border:0; }
+.ds .ds-chip-group > legend { position:absolute; width:var(--p-size-hairline); height:var(--p-size-hairline); overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+/* Inside a search form the chips take their own row under the query. */
+.ds .ds-search-form:has(> .ds-chip-group) { grid-template-columns:minmax(0,1fr) auto; }
+.ds .ds-search-form:has(> .ds-chip-group) > .ds-field { grid-column:auto; }
+.ds .ds-search-form > .ds-chip-group { grid-column:1/-1; order:3; }
+/* @part choice-list */
+/* A settings list spans its container, so the whole row is the tap target: name on the left, control on the right. */
+.ds .ds-choice-list { width:100%; min-width:0; margin:0; padding:0; border:0; }
+.ds .ds-choice-list > legend { padding:0 0 var(--p-space-xs); font-size:var(--p-text-body); font-weight:var(--p-weight-semibold); }
+.ds .ds-choice-list > .ds-choice { width:100%; flex-direction:row-reverse; justify-content:space-between; padding:var(--p-space-sm) var(--p-space-2xs); border-block:var(--p-border-width) solid var(--p-line); }
+.ds .ds-choice-list > .ds-choice + .ds-choice { border-top:0; }
+/* @part select-all-list */
+/* one parent box above its children; the children sit indented so the tree reads without words */
 .ds .ds-select-all { display:grid; gap:0; min-width:calc(var(--p-space-unit) * 55); margin:0; padding:0; border:0; }
 .ds .ds-select-all > legend { padding:0 0 var(--p-space-xs); font-weight:var(--p-weight-semibold); font-size:var(--p-text-body); }
 .ds .ds-select-all > .ds-choice { min-height:var(--p-control-size-sm); }
@@ -288,16 +323,18 @@
 .ds .ds-badge[data-tone="success"] { background:var(--p-success-soft); border-color:var(--p-success-line); color:var(--p-success); }
 .ds .ds-badge[data-tone="error"] { background:var(--p-error-soft); border-color:var(--p-error-line); color:var(--p-error); }
 .ds .ds-badge[data-tone="warning"] { background:var(--p-warning-soft); border-color:var(--p-warning-line); color:var(--p-warning); }
-/* looks: tone keeps the color, look changes the shape */
+/* looks: tone keeps the color, look changes the surface */
 .ds .ds-badge[data-look="icon"] { gap:var(--p-space-2xs); padding-left:var(--p-space-xs); }
 .ds .ds-badge[data-look="icon"] .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); stroke-width:var(--p-icon-stroke-heavy); }
-/* count: a number pinned to the icon corner, so nobody opens the box to count what piled up */
-.ds .ds-badge[data-look="count"] { position:relative; display:inline-grid; place-items:center; width:var(--p-control-size-sm); height:var(--p-control-size-sm); padding:0; border:0; background:transparent; color:var(--p-ink); }
-.ds .ds-badge[data-look="count"] .ui-icon { width:var(--p-icon-lg); height:var(--p-icon-lg); }
+/* @part count-badge */
+/* a number pinned to the icon corner, so nobody opens the box to count what piled up */
+.ds .ds-count-badge { position:relative; display:inline-grid; place-items:center; width:var(--p-control-size-sm); height:var(--p-control-size-sm); flex-shrink:0; color:var(--p-ink); }
+.ds .ds-count-badge .ui-icon { width:var(--p-icon-lg); height:var(--p-icon-lg); }
 .ds .ds-badge-count { position:absolute; top:var(--p-space-3xs); right:0; display:inline-grid; place-items:center; min-width:calc(var(--p-space-unit) * 5); height:calc(var(--p-space-unit) * 5); padding:0 var(--p-space-2xs); border-radius:var(--p-radius-full); background:var(--p-accent); color:var(--p-on-accent); box-shadow:0 0 0 var(--p-border-width-strong) var(--p-bg); font-size:var(--p-text-sm); font-weight:var(--p-weight-bold); line-height:var(--p-leading-none); font-variant-numeric:tabular-nums; }
 /* @part icon */
 .ds .ds-icon { display:inline-grid; place-items:center; flex-shrink:0; }
-.ds .ds-icon[data-look="label"] { gap:var(--p-space-2xs); min-width:var(--p-control-size-lg); }
+/* @part icon-label */
+.ds .ds-icon-label { display:inline-grid; place-items:center; gap:var(--p-space-2xs); min-width:var(--p-control-size-lg); }
 .ds .ds-icon-name { font-size:var(--p-text-sm); line-height:var(--p-leading-snug); color:var(--p-ink); }
 /* @part tabs */
 .ds .ds-tablist { display:flex; padding:var(--p-space-2xs); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-xl); gap:var(--p-space-2xs); background:var(--p-bg); box-shadow:var(--p-inset); }
@@ -358,37 +395,36 @@
 .ds .ds-bottom-nav[data-variant="pill"] > :not([aria-pressed="true"],[aria-current="page"]) > span { position:absolute; width:var(--p-size-hairline); height:var(--p-size-hairline); overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .ds .ds-bottom-nav[data-variant="pill"] > :is([aria-pressed="true"],[aria-current="page"]) { flex:1.8; padding:var(--p-space-xs) var(--p-space-md); background:var(--p-soft); font-size:var(--p-text-sm); }
 @media(prefers-reduced-transparency:reduce) { .ds .ds-bottom-nav[data-variant="glass"] { background:var(--p-high); backdrop-filter:none; } }
-/* @part feedback */
-.ds .ds-feedback-example { display:grid; gap:var(--p-space-md); }
-.ds .ds-feedback-example > .ds-button { justify-self:start; }
+/* @part notice */
 .ds .ds-alert { padding:var(--p-space-md); border:var(--p-border-width) solid var(--p-success); border-radius:var(--p-control-radius); background:var(--p-high); box-shadow:var(--p-raised); }
+/* @part toast */
+/* the notice carries its own undo, so no confirm step is needed */
+.ds .ds-toast { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--p-space-xs); padding:var(--p-space-xs) var(--p-space-md); border:var(--p-border-width) solid var(--p-accent); border-radius:var(--p-radius-xl); background:var(--p-accent); color:var(--p-on-accent); box-shadow:var(--p-shadow); }
+.ds .ds-toast .ds-status i { background:var(--p-on-accent); }
+.ds .ds-alert-undo { min-height:var(--p-control-size-sm); padding:0 var(--p-space-sm); border:0; border-radius:var(--p-radius-md); background:transparent; color:inherit; font:inherit; font-size:var(--p-text-body); font-weight:var(--p-weight-bold); text-decoration:underline; text-underline-offset:var(--p-underline-offset); cursor:pointer; }
+.ds .ds-alert-undo:hover { background:var(--p-current-tint); }
+.ds .ds-alert-undo:focus-visible { outline-color:currentColor; outline-offset:calc(var(--p-focus-offset) * -1); }
+/* @part progress-bar */
+.ds .ds-progress-block { display:grid; gap:var(--p-space-xs); min-width:0; }
 .ds .ds-progress-label { display:flex; justify-content:space-between; gap:var(--p-space-xs); font-size:var(--p-text-sm); }
 .ds .ds-progress { display:block; appearance:none; width:100%; height:var(--p-size-sm); border:var(--p-border-width) solid var(--p-control-border); border-radius:var(--p-radius-md); background:var(--p-bg); color:var(--p-success); box-shadow:var(--p-inset); overflow:hidden; }
 .ds .ds-progress::-webkit-progress-bar { background:var(--p-bg); border-radius:var(--p-radius-md); box-shadow:var(--p-inset); }
 .ds .ds-progress::-webkit-progress-value { background:var(--p-success); border-radius:var(--p-radius-md); }
 .ds .ds-progress::-moz-progress-bar { background:var(--p-success); border-radius:var(--p-radius-md); }
-/* Looks: the notice and the bar keep their roles; the saved notice always carries its dot and words, the bar always its number. */
-.ds .ds-feedback-example[data-look] .ds-alert { justify-self:stretch; }
-/* toast: the notice carries its own undo, so no confirm step is needed */
-.ds .ds-feedback-example[data-look="toast"] .ds-alert { border-color:var(--p-accent); border-radius:var(--p-radius-xl); background:var(--p-accent); color:var(--p-on-accent); box-shadow:var(--p-shadow); }
-/* 06 ring: the number sits inside a round gauge; the real progress element stays for screen readers */
-.ds .ds-feedback-example[data-look="ring"] { grid-template-columns:auto minmax(0,1fr); align-items:center; column-gap:var(--p-space-md); }
-.ds .ds-feedback-example[data-look="ring"] > :is(.ds-button,.ds-alert) { grid-column:1/-1; }
+/* @part progress-ring */
+/* the number sits inside a round gauge; the real progress element stays for screen readers */
+.ds .ds-progress-ring-block { grid-template-columns:auto minmax(0,1fr); align-items:center; column-gap:var(--p-space-md); }
 .ds .ds-progress-ring { position:relative; display:grid; place-items:center; width:calc(var(--p-space-unit) * 18); aspect-ratio:var(--p-aspect-square); }
 .ds .ds-progress-ring::before { content:''; position:absolute; inset:0; border-radius:var(--p-radius-circle); background:conic-gradient(var(--p-success) calc(var(--value) * 1%), var(--p-line) 0); -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - var(--p-size-xs) - var(--p-border-width)), black calc(100% - var(--p-size-xs))); mask:radial-gradient(farthest-side, transparent calc(100% - var(--p-size-xs) - var(--p-border-width)), black calc(100% - var(--p-size-xs))); }
 .ds .ds-progress-ring b { font:var(--p-type-figure); letter-spacing:var(--p-tracking-tight); }
-.ds .ds-feedback-example[data-look="ring"] .ds-progress-label { font-size:var(--p-text-body); font-weight:var(--p-weight-semibold); }
-.ds .ds-feedback-example[data-look="ring"] :is(.ds-progress-label > :last-child,.ds-progress) { position:absolute; width:var(--p-size-hairline); height:var(--p-size-hairline); overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
-/* 08 steps: the bar is cut into ten blocks, so progress reads as a count */
-.ds .ds-feedback-example[data-look="steps"] .ds-progress { height:var(--p-size-md); border:0; border-radius:0; background:var(--p-line); box-shadow:none; -webkit-mask:repeating-linear-gradient(90deg, black 0 calc(100% / 10 - var(--p-space-2xs)), transparent 0 calc(100% / 10)); mask:repeating-linear-gradient(90deg, black 0 calc(100% / 10 - var(--p-space-2xs)), transparent 0 calc(100% / 10)); }
-.ds .ds-feedback-example[data-look="steps"] .ds-progress::-webkit-progress-bar { background:var(--p-line); border-radius:0; box-shadow:none; }
-.ds .ds-feedback-example[data-look="steps"] .ds-progress::-webkit-progress-value { border-radius:0; }
-.ds .ds-feedback-example[data-look="steps"] .ds-progress::-moz-progress-bar { border-radius:0; }
-.ds .ds-feedback-example[data-look="toast"] .ds-alert { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--p-space-xs); padding-block:var(--p-space-xs); }
-.ds .ds-feedback-example[data-look="toast"] .ds-status i { background:var(--p-on-accent); }
-.ds .ds-alert-undo { min-height:var(--p-control-size-sm); padding:0 var(--p-space-sm); border:0; border-radius:var(--p-radius-md); background:transparent; color:inherit; font:inherit; font-size:var(--p-text-body); font-weight:var(--p-weight-bold); text-decoration:underline; text-underline-offset:var(--p-underline-offset); cursor:pointer; }
-.ds .ds-alert-undo:hover { background:var(--p-current-tint); }
-.ds .ds-alert-undo:focus-visible { outline-color:currentColor; outline-offset:calc(var(--p-focus-offset) * -1); }
+.ds .ds-progress-ring-block .ds-progress-label { font-size:var(--p-text-body); font-weight:var(--p-weight-semibold); }
+.ds .ds-progress-ring-block :is(.ds-progress-label > :last-child,.ds-progress) { position:absolute; width:var(--p-size-hairline); height:var(--p-size-hairline); overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+/* @part step-bar */
+/* the bar is cut into one block per step (--steps), so progress reads as a count */
+.ds .ds-step-bar .ds-progress { height:var(--p-size-md); border:0; border-radius:0; background:var(--p-line); box-shadow:none; -webkit-mask:repeating-linear-gradient(90deg, black 0 calc(100% / var(--steps) - var(--p-space-2xs)), transparent 0 calc(100% / var(--steps))); mask:repeating-linear-gradient(90deg, black 0 calc(100% / var(--steps) - var(--p-space-2xs)), transparent 0 calc(100% / var(--steps))); }
+.ds .ds-step-bar .ds-progress::-webkit-progress-bar { background:var(--p-line); border-radius:0; box-shadow:none; }
+.ds .ds-step-bar .ds-progress::-webkit-progress-value { border-radius:0; }
+.ds .ds-step-bar .ds-progress::-moz-progress-bar { border-radius:0; }
 /* @part card */
 .ds .ds-card { display:flex; flex-direction:column; height:100%; background:var(--p-surface); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius); box-shadow:var(--p-raised); overflow:hidden; }
 .ds .ds-card[data-selected="true"] { border-color:var(--p-success); background:var(--p-selected-surface); }
@@ -396,67 +432,57 @@
 .ds .ds-card h3 { font-size:var(--p-text-title); line-height:var(--p-leading-snug); font-weight:var(--p-weight-semibold); letter-spacing:var(--p-tracking-tighter); margin-top:var(--p-space-md); }
 .ds .ds-card p { font-size:var(--p-text-body); color:var(--p-muted); margin-top:var(--p-space-xs); }
 .ds .ds-card-actions { display:flex; justify-content:flex-end; padding:var(--p-space-md) var(--p-space-lg); }
-/* Looks: :where keeps each look as weak as the base rule, so a selected card still shows its selected state. */
-.ds .ds-card:where([data-look="row"]) { display:grid; grid-template-columns:calc(var(--p-space-unit) * 22) minmax(0,1fr); align-content:start; }
-.ds .ds-card:where([data-look="row"]) .ds-card-media { height:auto; aspect-ratio:var(--p-aspect-square); margin:var(--p-space-lg) 0 0 var(--p-space-lg); border-radius:var(--p-radius-xl); }
-.ds .ds-card:where([data-look="row"]) .ds-card-body { padding-left:var(--p-space-md); }
-.ds .ds-card:where([data-look="row"]) :is(.ds-divider,.ds-card-actions) { grid-column:1/-1; }
+/* Looks (Material 3 elevated · filled · outlined): :where keeps each look as weak as the base rule, so a selected card still shows its selected state. */
+.ds .ds-card:where([data-look="filled"]) { border-color:transparent; background:var(--p-tile); box-shadow:none; }
+.ds .ds-card:where([data-look="outlined"]) { background:var(--p-bg); box-shadow:none; }
+/* @part card-media */
 .ds .ds-card-media { height:calc(var(--p-space-unit) * 24); flex:none; position:relative; background:var(--p-soft); }
 .ds .ds-card-media:empty::after { content:''; position:absolute; inset:50% auto auto 50%; width:calc(var(--p-space-unit) * 7); height:calc(var(--p-space-unit) * 7); translate:-50% -50%; background:var(--p-muted); opacity:var(--p-opacity-placeholder); -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2.5'/%3E%3Ccircle cx='8.5' cy='10' r='1.5'/%3E%3Cpath d='m21 15-4.5-4.5L7 19'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2.5'/%3E%3Ccircle cx='8.5' cy='10' r='1.5'/%3E%3Cpath d='m21 15-4.5-4.5L7 19'/%3E%3C/svg%3E") center/contain no-repeat; }
-/* @part search-module */
-.ds .ds-search-module { container-type:inline-size; }
-.ds .ds-search-form { display:grid; grid-template-columns:minmax(0,1fr) minmax(calc(var(--p-space-unit) * 22),.3fr) auto; align-items:end; gap:var(--p-space-sm); }
+/* @part list-card */
+/* picture well on the left, words on the right; the divider and actions run under both */
+.ds .ds-list-card { display:grid; grid-template-columns:calc(var(--p-space-unit) * 22) minmax(0,1fr); align-content:start; }
+.ds .ds-list-card .ds-card-media { display:grid; place-items:center; height:auto; aspect-ratio:var(--p-aspect-square); margin:var(--p-space-lg) 0 0 var(--p-space-lg); border-radius:var(--p-radius-xl); color:var(--p-ink); font-size:var(--p-text-title); font-weight:var(--p-weight-bold); }
+.ds .ds-list-card .ds-card-body { padding-left:var(--p-space-md); }
+.ds .ds-list-card :is(.ds-divider,.ds-card-actions) { grid-column:1/-1; }
+/* @part results */
 .ds .ds-result-count { font-size:var(--p-text-sm); color:var(--p-muted); margin-block:var(--p-space-lg) var(--p-space-md); }
 .ds .ds-results { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--p-space-unit) * 52),1fr)); gap:var(--p-space-lg); }
+/* @part result-list */
+/* results as rows instead of tiles */
+.ds .ds-result-list { grid-template-columns:minmax(0,1fr); gap:0; border-top:var(--p-border-width) solid var(--p-line); }
+.ds .ds-result-list .ds-card { flex-flow:row wrap; align-items:center; border:0; border-bottom:var(--p-border-width) solid var(--p-line); border-radius:0; background:transparent; box-shadow:none; }
+.ds .ds-result-list .ds-card-body { flex:1 1 calc(var(--p-space-unit) * 40); padding:var(--p-space-md) 0; }
+.ds .ds-result-list .ds-card h3 { margin-top:var(--p-space-2xs); font-size:var(--p-text-md); }
+.ds .ds-result-list .ds-divider { display:none; }
+.ds .ds-result-list .ds-card-actions { padding:var(--p-space-xs) 0 var(--p-space-xs) var(--p-space-sm); }
+/* @part featured-results */
+/* the first result spans the row with a picture and a bigger title */
+.ds .ds-result-feature > :first-child { grid-column:1/-1; }
+.ds .ds-result-feature > :first-child h3 { font-size:var(--p-text-lg); line-height:var(--p-leading-snug); }
+/* @part people-picker */
+/* one field that narrows while typing; every result is a face row tapped as a whole */
+.ds .ds-people-list { grid-template-columns:minmax(0,1fr); gap:0; border-top:var(--p-border-width) solid var(--p-line); }
+.ds .ds-people-list .ds-card { position:relative; display:grid; grid-template-columns:var(--p-control-size-sm) minmax(0,1fr) auto; align-items:center; gap:var(--p-space-sm); padding:var(--p-space-xs) var(--p-space-2xs); border:0; border-bottom:var(--p-border-width) solid var(--p-line); border-radius:0; background:transparent; box-shadow:none; }
+.ds .ds-people-list .ds-card-media { width:var(--p-control-size-sm); height:var(--p-control-size-sm); margin:0; aspect-ratio:auto; border-radius:var(--p-radius-circle); font-size:var(--p-text-body); }
+.ds .ds-people-list .ds-card-body { display:flex; flex-wrap:wrap; align-items:center; gap:var(--p-space-3xs) var(--p-space-xs); padding:0; min-width:0; }
+.ds .ds-people-list .ds-card h3 { order:-1; margin:0; font-size:var(--p-text-md); }
+.ds .ds-people-list .ds-card p { flex-basis:100%; margin:0; font-size:var(--p-text-sm); }
+.ds .ds-people-list .ds-card .ds-divider { display:none; }
+.ds .ds-people-list .ds-card-actions { grid-column:auto; padding:0; }
+.ds .ds-people-list .ds-card-actions .ds-button::after { content:''; position:absolute; inset:0; }
+/* @part empty-state */
 .ds .ds-empty { padding:var(--p-space-xl); text-align:center; border:var(--p-border-width) var(--p-stroke-dashed) var(--p-control-border); border-radius:var(--p-radius); }
 .ds .ds-empty .ds-button { margin-top:var(--p-space-md); }
-.ds .ds-record-detail { padding:var(--p-space-lg); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius); background:var(--p-surface); }
-.ds .ds-record-detail h3 { font-size:var(--p-text-lg); font-weight:var(--p-weight-semibold); }
-.ds .ds-record-detail p { margin-top:var(--p-space-sm); color:var(--p-muted); }
-.ds .ds-record-detail > div { display:flex; flex-wrap:wrap; gap:var(--p-space-sm); margin-top:var(--p-space-lg); }
-.ds .ds-record-detail [aria-pressed="true"] { background:var(--p-success); border-color:var(--p-success); }
+/* @part search-form */
+.ds .ds-search-module { container-type:inline-size; }
+.ds .ds-search-form { display:grid; grid-template-columns:minmax(0,1fr) minmax(calc(var(--p-space-unit) * 22),.3fr) auto; align-items:end; gap:var(--p-space-sm); }
 @media(max-width:580px) { .ds .ds-search-form { grid-template-columns:minmax(0,1fr) auto; } .ds .ds-search-form > .ds-field { grid-column:1/-1; } }
 @container(max-width:580px) { .ds .ds-search-form { grid-template-columns:minmax(0,1fr) auto; } .ds .ds-search-form > .ds-field { grid-column:1/-1; } }
-/* Looks. Labels hidden by a look stay in the page for screen readers. */
-.ds .ds-search-module[data-look="pill"] :is(.ds-field > label,.ds-select-field > span),.ds .ds-chip-group > legend,.ds .ds-chip input { position:absolute; width:var(--p-size-hairline); height:var(--p-size-hairline); overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
-/* 02 pill: query, status and button share one rounded bar */
-.ds .ds-search-module[data-look="pill"] .ds-search-form { grid-template-columns:minmax(0,1fr) auto auto; align-items:center; gap:var(--p-space-2xs); padding:var(--p-space-2xs) var(--p-space-2xs) var(--p-space-2xs) var(--p-space-sm); border:var(--p-border-width) solid var(--p-control-border); border-radius:var(--p-radius-full); background:var(--p-bg); box-shadow:var(--p-inset); }
-.ds .ds-search-module[data-look="pill"] .ds-search-form > .ds-field { grid-column:auto; }
-.ds .ds-search-module[data-look="pill"] .ds-search-form .ds-input { border:0; background:transparent; box-shadow:none; }
-.ds .ds-search-module[data-look="pill"] .ds-search-form select.ds-input { width:auto; padding-inline:var(--p-space-sm) var(--p-space-xs); border-left:var(--p-border-width) solid var(--p-line); border-radius:0; }
-.ds .ds-search-module[data-look="pill"] .ds-search-form > .ds-button { border-radius:var(--p-radius-full); }
-@container(max-width:420px) { .ds .ds-search-module[data-look="pill"] .ds-search-form > .ds-button { gap:0; padding-inline:var(--p-space-sm); font-size:0; } }
-/* 03 chips: status as a row of chips under the query */
-.ds .ds-search-module[data-look="chips"] .ds-search-form { grid-template-columns:minmax(0,1fr) auto; }
-.ds .ds-search-module[data-look="chips"] .ds-search-form > .ds-field { grid-column:auto; }
-.ds .ds-chip-group { grid-column:1/-1; order:3; display:flex; flex-wrap:wrap; gap:var(--p-space-xs); min-width:0; margin:0; padding:0; border:0; }
-.ds .ds-chip { position:relative; display:inline-flex; align-items:center; gap:var(--p-space-xs); min-height:var(--p-control-size-sm); padding:0 var(--p-space-md); border:var(--p-border-width) solid var(--p-control-border); border-radius:var(--p-radius-full); background:var(--p-bg); font-size:var(--p-text-body); cursor:pointer; }
-.ds .ds-chip:has(:checked) { border-color:var(--p-accent); background:var(--p-accent); color:var(--p-on-accent); font-weight:var(--p-weight-semibold); }
-.ds .ds-chip:has(:checked)::before { content:'✓'; font-weight:var(--p-weight-bold); }
-.ds .ds-chip:has(:focus-visible) { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
-/* list: results as rows instead of tiles */
-.ds .ds-search-module[data-look="list"] .ds-results { grid-template-columns:minmax(0,1fr); gap:0; }
-.ds .ds-search-module[data-look="list"] .ds-card { flex-flow:row wrap; align-items:center; border:0; border-radius:0; background:transparent; box-shadow:none; }
-.ds .ds-search-module[data-look="list"] .ds-card-body { flex:1 1 calc(var(--p-space-unit) * 40); padding:var(--p-space-md) 0; }
-.ds .ds-search-module[data-look="list"] .ds-card h3 { margin-top:var(--p-space-2xs); font-size:var(--p-text-md); }
-.ds .ds-search-module[data-look="list"] .ds-divider { display:none; }
-.ds .ds-search-module[data-look="list"] .ds-card-actions { padding:var(--p-space-xs) 0 var(--p-space-xs) var(--p-space-sm); }
-.ds .ds-search-module[data-look="list"] .ds-results { border-top:var(--p-border-width) solid var(--p-line); }
-.ds .ds-search-module[data-look="list"] .ds-card { border-bottom:var(--p-border-width) solid var(--p-line); }
-/* 07 feature: the first result spans the row with a bigger title */
-.ds .ds-search-module[data-look="feature"] .ds-results > :first-child { grid-column:1/-1; }
-.ds .ds-search-module[data-look="feature"] .ds-results > :first-child h3 { font-size:var(--p-text-lg); line-height:var(--p-leading-snug); }
-/* picker: one field that narrows while typing; every result is a face row tapped as a whole */
-.ds .ds-search-module[data-look="picker"] .ds-search-form { grid-template-columns:minmax(0,1fr); }
-.ds .ds-search-module[data-look="picker"] .ds-results { grid-template-columns:minmax(0,1fr); gap:0; border-top:var(--p-border-width) solid var(--p-line); }
-.ds .ds-search-module[data-look="picker"] .ds-card { position:relative; display:grid; grid-template-columns:var(--p-control-size-sm) minmax(0,1fr) auto; align-items:center; gap:var(--p-space-sm); padding:var(--p-space-xs) var(--p-space-2xs); border:0; border-bottom:var(--p-border-width) solid var(--p-line); border-radius:0; background:transparent; box-shadow:none; }
-.ds .ds-search-module[data-look="picker"] .ds-card-media { display:grid; place-items:center; flex:none; width:var(--p-control-size-sm); height:var(--p-control-size-sm); margin:0; aspect-ratio:auto; border-radius:var(--p-radius-circle); background:var(--p-soft); color:var(--p-ink); font-weight:var(--p-weight-bold); }
-.ds .ds-search-module[data-look="picker"] .ds-card-body { display:flex; flex-wrap:wrap; align-items:center; gap:var(--p-space-3xs) var(--p-space-xs); padding:0; min-width:0; }
-.ds .ds-search-module[data-look="picker"] .ds-card h3 { order:-1; margin:0; font-size:var(--p-text-md); }
-.ds .ds-search-module[data-look="picker"] .ds-card p { flex-basis:100%; margin:0; font-size:var(--p-text-sm); }
-.ds .ds-search-module[data-look="picker"] .ds-card .ds-divider { display:none; }
-.ds .ds-search-module[data-look="picker"] .ds-card-actions { grid-column:auto; padding:0; }
-.ds .ds-search-module[data-look="picker"] .ds-card-actions .ds-button::after { content:''; position:absolute; inset:0; }
+/* @part stat-row */
+.ds .ds-page-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--p-space-xs); margin:0 0 var(--p-space-lg); padding:0; list-style:none; }
+.ds .ds-page-stats li { display:grid; gap:var(--p-space-3xs); padding:var(--p-space-sm); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-xl); background:var(--p-surface); }
+.ds .ds-page-stats strong { font:var(--p-type-stat); letter-spacing:var(--p-tracking-tight); }
+.ds .ds-page-stats span { font-size:var(--p-text-sm); color:var(--p-muted); }
 /* @part template */
 .ds .ds-page { max-width:var(--p-container-xl); margin-inline:auto; }
 .ds .ds-page-header { display:flex; justify-content:space-between; align-items:center; gap:var(--p-space-md); margin-bottom:var(--p-space-xl); }
@@ -473,8 +499,11 @@
 .ds .ds-page[data-look="sheet"] .ds-page-header .ds-eyebrow { color:var(--p-on-accent-muted); }
 .ds .ds-page[data-look="sheet"] .ds-page-header + * { position:relative; margin-top:calc(var(--p-space-xl) * -1); padding:var(--p-space-lg) calc(var(--p-space-unit) * 5); border-radius:var(--p-radius-2xl) var(--p-radius-2xl) 0 0; background:var(--p-high); }
 .ds .ds-page[data-look="dashboard"] .ds-page-header { margin-bottom:var(--p-space-md); }
-.ds .ds-page-stats { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--p-space-xs); margin:0 0 var(--p-space-lg); padding:0; list-style:none; }
-.ds .ds-page-stats li { display:grid; gap:var(--p-space-3xs); padding:var(--p-space-sm); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-xl); background:var(--p-surface); }
-.ds .ds-page-stats strong { font:var(--p-type-stat); letter-spacing:var(--p-tracking-tight); }
-.ds .ds-page-stats span { font-size:var(--p-text-sm); color:var(--p-muted); }
 .ds .ds-template-slot { min-height:calc(var(--p-space-unit) * 40); display:grid; place-items:center; padding:var(--p-space-lg); border:var(--p-border-width) var(--p-stroke-dashed) var(--p-control-border); border-radius:var(--p-radius); color:var(--p-muted); font-size:var(--p-text-body); }
+/* @part page */
+/* the record detail that a result opens, with its way back and its main action */
+.ds .ds-record-detail { padding:var(--p-space-lg); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius); background:var(--p-surface); }
+.ds .ds-record-detail h3 { font-size:var(--p-text-lg); font-weight:var(--p-weight-semibold); }
+.ds .ds-record-detail p { margin-top:var(--p-space-sm); color:var(--p-muted); }
+.ds .ds-record-detail > div { display:flex; flex-wrap:wrap; gap:var(--p-space-sm); margin-top:var(--p-space-lg); }
+.ds .ds-record-detail [aria-pressed="true"] { background:var(--p-success); border-color:var(--p-success); }

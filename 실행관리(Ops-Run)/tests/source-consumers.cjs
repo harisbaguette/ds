@@ -28,26 +28,27 @@ function install(names, folder) {
   const fixture = fs.mkdtempSync(path.join(out,'run-'));
   const html = path.join(fixture,'html'), react = path.join(fixture,'react'), svg = path.join(fixture,'svg');
   install(['pattove-main-page-html','pattove-main-tabs-html','pattove-main-field-html'],html);
-  install(['pattove-main-page-react','pattove-main-tabs-react','pattove-main-checkbox-react','pattove-main-input-react','pattove-main-badge-react'],react);
+  install(['pattove-main-page-react','pattove-main-tabs-react','pattove-main-checkbox-react','pattove-main-select-all-list-react','pattove-main-password-input-react','pattove-main-count-badge-react'],react);
   install(['pattove-icon-search-html'],svg);
   check('SVG 하나에는 폰트·프레임워크·다른 아이콘이 설치되지 않음',fs.readdirSync(path.join(svg,'design')).join(',')==='icons' && fs.readdirSync(path.join(svg,'design/icons')).join(',')==='search.svg');
   check('HTML과 React 소비자가 별도 components.json 없이 설치됨',!fs.existsSync(path.join(html,'components.json'))&&!fs.existsSync(path.join(react,'components.json')));
   const reactFiles = fs.readdirSync(path.join(react,'design/react'));
-  check('React 페이지 설치 시 실제 하위 컴포넌트 소스 포함', ['page.jsx','search-module.jsx','field.jsx','input.jsx','button.jsx','card.jsx'].every(file=>reactFiles.includes(file)));
+  check('React 페이지 설치 시 실제 하위 부품·블록 소스 포함', ['page.jsx','template.jsx','search-form.jsx','search-bar.jsx','filter-chip-row.jsx','result-grid.jsx','result-list.jsx','empty-state.jsx','field.jsx','input.jsx','button.jsx','card.jsx'].every(file=>reactFiles.includes(file)) && !reactFiles.includes('search-module.jsx'));
   const demo = `'use client';
 import React,{useState} from 'react';
 import Example from '../design/examples/main/page.jsx';
 import { CollectionPage } from '../design/react/page.jsx';
 import { Tabs } from '../design/react/tabs.jsx';
-import { Checkbox, CheckboxAll } from '../design/react/checkbox.jsx';
-import { PasswordInput } from '../design/react/input.jsx';
-import { Badge } from '../design/react/badge.jsx';
+import { Checkbox } from '../design/react/checkbox.jsx';
+import { SelectAllList } from '../design/react/select-all-list.jsx';
+import { PasswordInput } from '../design/react/password-input.jsx';
+import { CountBadge } from '../design/react/count-badge.jsx';
 import { Field } from '../design/react/field.jsx';
 import { Button } from '../design/react/button.jsx';
-import '../design/css/tabs.css';import '../design/css/selection.css';import '../design/css/input.css';import '../design/css/badge.css';
+import '../design/css/tabs.css';import '../design/css/selection.css';import '../design/css/select-all-list.css';import '../design/css/input.css';import '../design/css/input-group.css';import '../design/css/password-input.css';import '../design/css/count-badge.css';
 const many=['전체','진행 중','완료','보관함','공유받음','휴지통'].map((label,i)=>({value:'t'+i,label,content:label}));
-function Alerts(){const [picked,setPicked]=useState([]);return <CheckboxAll items={[{value:'c',label:'댓글'},{value:'l',label:'좋아요'},{value:'f',label:'새 팔로워'}]} value={picked} onChange={setPicked}/>;}
-export default function Page(){const [saved,setSaved]=useState(0);return <><Example/><section className="ds" data-style="main" style={{padding:32}}><h2>다른 콘텐츠로 재사용</h2><CollectionPage title="도서 목록" records={[{id:'book-1',title:'긴 한글 제목이 들어가는 책과 오래도록 기억하고 싶은 문장들',description:'디자인과 편집',tag:'진행 중'},{id:'book-2',title:'그림으로 설명하기',description:'시각 언어',tag:'완료'}]} onSave={async(record)=>{if(record.id==='book-2'){if(!window.bookSaveAttempt){window.bookSaveAttempt=1;throw Error('저장 실패');}await new Promise(resolve=>{window.finishBookSave=resolve;});}setSaved(n=>n+1);}}/><output aria-label="저장 횟수">{saved}</output><Tabs label="첫 번째 탭"/><Tabs label="두 번째 탭"/><form aria-label="다른 폼"><Field label="배송 이름" error="이름을 다시 확인해 주세요."/><Checkbox name="consent">동의하기</Checkbox><Button type="submit">신청하기</Button></form><PasswordInput aria-label="비밀번호" defaultValue="pattove8"/><Alerts/><Badge look="count" count={3}>알림</Badge><Badge look="count" count={0}>알림</Badge><div style={{maxWidth:240}}><Tabs label="많은 탭" look="scroll" items={many} defaultValue="t5"/></div></section></>;}
+function Alerts(){const [picked,setPicked]=useState([]);return <SelectAllList items={[{value:'c',label:'댓글'},{value:'l',label:'좋아요'},{value:'f',label:'새 팔로워'}]} value={picked} onChange={setPicked}/>;}
+export default function Page(){const [saved,setSaved]=useState(0);return <><Example/><section className="ds" data-style="main" style={{padding:32}}><h2>다른 콘텐츠로 재사용</h2><CollectionPage title="도서 목록" records={[{id:'book-1',title:'긴 한글 제목이 들어가는 책과 오래도록 기억하고 싶은 문장들',description:'디자인과 편집',tag:'진행 중'},{id:'book-2',title:'그림으로 설명하기',description:'시각 언어',tag:'완료'}]} onSave={async(record)=>{if(record.id==='book-2'){if(!window.bookSaveAttempt){window.bookSaveAttempt=1;throw Error('저장 실패');}await new Promise(resolve=>{window.finishBookSave=resolve;});}setSaved(n=>n+1);}}/><output aria-label="저장 횟수">{saved}</output><Tabs label="첫 번째 탭"/><Tabs label="두 번째 탭"/><form aria-label="다른 폼"><Field label="배송 이름" error="이름을 다시 확인해 주세요."/><Checkbox name="consent">동의하기</Checkbox><Button type="submit">신청하기</Button></form><PasswordInput aria-label="비밀번호" defaultValue="pattove8"/><Alerts/><CountBadge count={3}>알림</CountBadge><CountBadge count={0}>알림</CountBadge><div style={{maxWidth:240}}><Tabs label="많은 탭" look="scroll" items={many} defaultValue="t5"/></div></section></>;}
 `;
   write(path.join(react,'package.json'),JSON.stringify({name:'pattove-consumer-proof',private:true,scripts:{dev:'next dev'}}));
   write(path.join(react,'app/page.jsx'),demo);
@@ -78,7 +79,9 @@ export default function Page(){const [saved,setSaved]=useState(0);return <><Exam
     let ready=false;for(let i=0;i<80;i++){try{const response=await fetch('http://127.0.0.1:4184');if(response.ok){ready=true;break;}}catch{} await new Promise(r=>setTimeout(r,500));}
     assert.ok(ready,'Next.js 서버 기동');
     await page.goto('http://127.0.0.1:4184');await page.evaluate(()=>document.fonts.ready);
-    await page.getByRole('tablist',{name:'많은 탭'}).waitFor();const topAfterLoad=await page.evaluate(()=>scrollY);
+    await page.getByRole('tablist',{name:'많은 탭'}).waitFor();
+    // Server HTML shows before React attaches its handlers; a press before that would submit the form natively.
+    await page.waitForFunction(()=>{const form=document.querySelector('main form');return !!form&&Object.keys(form).some(key=>key.startsWith('__reactProps'));});const topAfterLoad=await page.evaluate(()=>scrollY);
     const example=page.locator('main').first();
     await example.getByRole('textbox',{name:'컬렉션 검색'}).fill('없는 결과');await example.getByRole('button',{name:'검색',exact:true}).click();
     check('설치한 React 예시의 빈 결과·복구',await example.locator('.ds-empty').isVisible());await example.getByRole('button',{name:'전체 보기',exact:true}).click();

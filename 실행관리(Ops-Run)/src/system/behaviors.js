@@ -22,29 +22,34 @@ window.Pattove.mountParts = function mountParts(root) {
     tabs.dispatchEvent(new CustomEvent('pattove:tabchange', { bubbles: true, detail: { label: tab.textContent.trim(), panel: tab.getAttribute('aria-controls') } }));
   }
   function filter(form) {
+    // A search block on its own has no results to narrow; inside a search module it filters them.
     const module = form.closest('.ds-search-module');
+    if (!module) return;
     const query = form.elements.query.value.trim().toLocaleLowerCase();
-    // The picker look has no status menu, so it always searches every status.
+    // The people picker has no status menu, so it always searches every status.
     const status = form.elements.status?.value ?? 'all';
     let count = 0;
     module.querySelectorAll('[data-result]').forEach(item => {
       const match = query.split(/\s+/).every(term => item.dataset.result.toLocaleLowerCase().includes(term)) && (status === 'all' || item.dataset.resultStatus === status);
       item.hidden = !match; if (match) count++;
     });
-    module.querySelector('.ds-result-count').textContent = count + '개의 컬렉션';
-    module.querySelector('.ds-empty').hidden = count > 0;
-    module.querySelector('.ds-demo-note').textContent = '';
+    const counter = module.querySelector('.ds-result-count');
+    if (counter) counter.textContent = count + (counter.dataset.unit || '개의 컬렉션');
+    const empty = module.querySelector('.ds-empty');
+    if (empty) empty.hidden = count > 0;
+    const note = module.querySelector('.ds-demo-note');
+    if (note) note.textContent = '';
   }
   root.addEventListener('submit', event => {
     if (!event.target.matches('[data-part-search]')) return;
     event.preventDefault(); filter(event.target);
   });
-  // The picker look filters as the person types; the other looks wait for the search button.
+  // The people picker filters as the person types; the search forms wait for the search button.
   root.addEventListener('input', event => {
     if (event.target.matches('[data-part-search][data-live] [name="query"]')) filter(event.target.form);
   });
   root.addEventListener('change', event => {
-    // The status filter is a select, or a radio chip group in the chips look.
+    // The status filter is a select, or a filter-chip row of radios with the same name.
     if (event.target.matches('[data-part-search] [name="status"]')) filter(event.target.form);
     // Select-all: the parent sets every child, and each child sets the parent to all, some, or none.
     const group = event.target.closest('.ds-select-all');
@@ -64,6 +69,7 @@ window.Pattove.mountParts = function mountParts(root) {
     const action = button.dataset.partAction;
     if (['open-record', 'close-record', 'save-record'].includes(action)) {
       const module = button.closest('.ds-search-module');
+      if (!module?.querySelector('.ds-record-detail')) return;
       const detail = module.querySelector('.ds-record-detail');
       if (action === 'save-record') {
         button.setAttribute('aria-pressed', String(button.getAttribute('aria-pressed') !== 'true'));
@@ -106,13 +112,9 @@ window.Pattove.mountParts = function mountParts(root) {
       input.value = String(Math.max(Number(input.min || 0), (Number(input.value) || 0) + Number(button.dataset.step)));
       input.dispatchEvent(new Event('input', { bubbles: true }));
     } else if (action === 'undo') {
-      // Undo closes the notice and hands focus back to the action that raised it.
-      const example = button.closest('.ds-feedback-example');
-      example.querySelector('[data-part-feedback]').hidden = true;
-      example.querySelector('[data-part-action="notify"]')?.focus();
+      // Undo closes the toast; the project reverses the action it reported.
       button.dispatchEvent(new CustomEvent('pattove:undo', { bubbles: true }));
-    } else if (action === 'notify') {
-      button.closest('.ds-feedback-example').querySelector('[data-part-feedback]').hidden = false;
+      button.closest('[data-part-feedback]').hidden = true;
     } else if (action === 'nav') {
       const items = [...button.closest('nav').querySelectorAll(':scope > [data-part-action="nav"]')];
       items.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
@@ -127,7 +129,9 @@ window.Pattove.mountParts = function mountParts(root) {
       button.lastChild.textContent = selected ? '선택됨' : '선택하기';
       card.dispatchEvent(new CustomEvent('pattove:select', { bubbles: true, detail: { selected, title: card.querySelector('h3').textContent } }));
     } else if (action === 'reset-search') {
-      const form = button.closest('.ds-search-module').querySelector('form');
+      // An empty state on its own has nothing to reset.
+      const form = button.closest('.ds-search-module')?.querySelector('form');
+      if (!form) return;
       form.reset(); filter(form); form.elements.query.focus();
     } else if (action === 'press') {
       button.dispatchEvent(new CustomEvent('pattove:action', { bubbles: true, detail: { label: button.getAttribute('aria-label') || button.textContent.trim() } }));

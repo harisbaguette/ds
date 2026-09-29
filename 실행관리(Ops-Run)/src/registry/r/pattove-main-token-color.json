@@ -39,7 +39,7 @@
       "path": "design/css/token-color.css",
       "type": "registry:file",
       "target": "~/design/css/token-color.css",
-      "content": ".ds .ds-token-swatches { gap:var(--p-space-xs); }\r\n.ds .ds-token-swatches i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); border:var(--p-border-width) solid var(--p-line); background:var(--p-accent); }\r\n.ds .ds-token-swatches [data-token=\"high\"] { background:var(--p-high); }\r\n.ds .ds-token-swatches [data-token=\"soft\"] { background:var(--p-soft); }\r\n.ds .ds-token-swatches [data-token=\"text\"] { background:var(--p-ink); }"
+      "content": ".ds .ds-token-swatches { gap:var(--p-space-xs); }\n.ds .ds-token-swatches i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); border:var(--p-border-width) solid var(--p-line); background:var(--p-accent); }\n.ds .ds-token-swatches [data-token=\"high\"] { background:var(--p-high); }\n.ds .ds-token-swatches [data-token=\"soft\"] { background:var(--p-soft); }\n.ds .ds-token-swatches [data-token=\"text\"] { background:var(--p-ink); }"
     },
     {
       "path": "design/html/token-color.html",
@@ -49,7 +49,7 @@
     }
   ],
   "meta": {
-    "version": "0.3.0",
+    "version": "0.4.0",
     "lifecycle": "Trial",
     "item": "token-color",
     "dictionary": "TOK-01",

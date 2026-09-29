@@ -39,7 +39,7 @@
       "path": "design/css/token-blur.css",
       "type": "registry:file",
       "target": "~/design/css/token-blur.css",
-      "content": ".ds .ds-token-blur { padding:var(--p-space-xs); }\r\n.ds .ds-token-blur i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); background:var(--p-accent); filter:var(--p-blur-sm); }\r\n.ds .ds-token-blur [data-token=\"md\"] { filter:var(--p-blur-md); }"
+      "content": ".ds .ds-token-blur { padding:var(--p-space-xs); }\n.ds .ds-token-blur i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); background:var(--p-accent); filter:var(--p-blur-sm); }\n.ds .ds-token-blur [data-token=\"md\"] { filter:var(--p-blur-md); }"
     },
     {
       "path": "design/html/token-blur.html",
@@ -49,7 +49,7 @@
     }
   ],
   "meta": {
-    "version": "0.3.0",
+    "version": "0.4.0",
     "lifecycle": "Trial",
     "item": "token-blur",
     "purpose": "유리 표면과 배경 흐림",

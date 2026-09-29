@@ -33,7 +33,7 @@
       "path": "design/css/token-breakpoint.css",
       "type": "registry:file",
       "target": "~/design/css/token-breakpoint.css",
-      "content": ".ds .ds-token-breakpoint { display:grid; gap:var(--p-space-xs); justify-items:start; }\r\n.ds .ds-token-breakpoint i { display:block; height:var(--p-size-xs); border-radius:var(--p-radius-full); background:currentColor; width:calc(var(--p-bp-xs) / 10); }\r\n.ds .ds-token-breakpoint [data-token=\"md\"] { width:calc(var(--p-bp-md) / 10); }\r\n.ds .ds-token-breakpoint [data-token=\"lg\"] { width:calc(var(--p-bp-lg) / 10); }\r\n.ds .ds-token-breakpoint [data-token=\"xl\"] { width:calc(var(--p-bp-xl) / 10); }"
+      "content": ".ds .ds-token-breakpoint { display:grid; gap:var(--p-space-xs); justify-items:start; }\n.ds .ds-token-breakpoint i { display:block; height:var(--p-size-xs); border-radius:var(--p-radius-full); background:currentColor; width:calc(var(--p-bp-xs) / 10); }\n.ds .ds-token-breakpoint [data-token=\"md\"] { width:calc(var(--p-bp-md) / 10); }\n.ds .ds-token-breakpoint [data-token=\"lg\"] { width:calc(var(--p-bp-lg) / 10); }\n.ds .ds-token-breakpoint [data-token=\"xl\"] { width:calc(var(--p-bp-xl) / 10); }"
     },
     {
       "path": "design/html/token-breakpoint.html",
@@ -43,7 +43,7 @@
     }
   ],
   "meta": {
-    "version": "0.3.0",
+    "version": "0.4.0",
     "lifecycle": "Trial",
     "item": "token-breakpoint",
     "purpose": "화면 폭과 영역 폭의 분기 기준",

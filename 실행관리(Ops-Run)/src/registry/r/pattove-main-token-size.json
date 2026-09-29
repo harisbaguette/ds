@@ -21,7 +21,7 @@
       "path": "design/css/token-size.css",
       "type": "registry:file",
       "target": "~/design/css/token-size.css",
-      "content": ".ds .ds-token-size { align-items:end; }\r\n.ds .ds-token-size i { width:var(--p-icon-sm); height:var(--p-icon-sm); border-radius:var(--p-radius-sm); background:currentColor; }\r\n.ds .ds-token-size [data-token=\"icon-md\"] { width:var(--p-icon-md); height:var(--p-icon-md); }\r\n.ds .ds-token-size [data-token=\"icon-lg\"] { width:var(--p-icon-lg); height:var(--p-icon-lg); }\r\n.ds .ds-token-size [data-token=\"control\"] { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); }"
+      "content": ".ds .ds-token-size { align-items:end; }\n.ds .ds-token-size i { width:var(--p-icon-sm); height:var(--p-icon-sm); border-radius:var(--p-radius-sm); background:currentColor; }\n.ds .ds-token-size [data-token=\"icon-md\"] { width:var(--p-icon-md); height:var(--p-icon-md); }\n.ds .ds-token-size [data-token=\"icon-lg\"] { width:var(--p-icon-lg); height:var(--p-icon-lg); }\n.ds .ds-token-size [data-token=\"control\"] { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-inner-radius); }"
     },
     {
       "path": "design/html/token-size.html",
@@ -31,7 +31,7 @@
     }
   ],
   "meta": {
-    "version": "0.3.0",
+    "version": "0.4.0",
     "lifecycle": "Trial",
     "item": "token-size",
     "purpose": "상자·아이콘·조작 요소의 크기",

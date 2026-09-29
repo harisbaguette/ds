@@ -39,7 +39,7 @@
       "path": "design/css/token-motion.css",
       "type": "registry:file",
       "target": "~/design/css/token-motion.css",
-      "content": ".ds .ds-token-motion { position:relative; display:block; width:calc(var(--p-space-unit) * 40); height:var(--p-size-lg); border:var(--p-border-width-strong) solid currentColor; border-radius:var(--p-radius-lg); }\r\n.ds .ds-token-motion i { position:absolute; top:var(--p-space-3xs); left:var(--p-space-3xs); width:var(--p-size-md); height:var(--p-size-md); border-radius:var(--p-radius-circle); background:currentColor; transition:transform var(--p-duration) var(--p-ease-standard); }\r\n.ds .ds-token-motion:hover i { transform:translateX(calc(var(--p-space-unit) * 40 - var(--p-size-lg))); }"
+      "content": ".ds .ds-token-motion { position:relative; display:block; width:calc(var(--p-space-unit) * 40); height:var(--p-size-lg); border:var(--p-border-width-strong) solid currentColor; border-radius:var(--p-radius-lg); }\n.ds .ds-token-motion i { position:absolute; top:var(--p-space-3xs); left:var(--p-space-3xs); width:var(--p-size-md); height:var(--p-size-md); border-radius:var(--p-radius-circle); background:currentColor; transition:transform var(--p-duration) var(--p-ease-standard); }\n.ds .ds-token-motion:hover i { transform:translateX(calc(var(--p-space-unit) * 40 - var(--p-size-lg))); }"
     },
     {
       "path": "design/html/token-motion.html",
@@ -49,7 +49,7 @@
     }
   ],
   "meta": {
-    "version": "0.3.0",
+    "version": "0.4.0",
     "lifecycle": "Trial",
     "item": "token-motion",
     "dictionary": "TOK-113",

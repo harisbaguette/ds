@@ -33,7 +33,7 @@
       "path": "design/css/token-text.css",
       "type": "registry:file",
       "target": "~/design/css/token-text.css",
-      "content": ".ds .ds-token-text { align-items:baseline; font-family:var(--p-font); }\r\n.ds .ds-token-text [data-token=\"sm\"] { font-size:var(--p-text-sm); }\r\n.ds .ds-token-text [data-token=\"body\"] { font-size:var(--p-text-body); }\r\n.ds .ds-token-text [data-token=\"title\"] { font-size:var(--p-text-title); }\r\n.ds .ds-token-text [data-token=\"heading\"] { font-size:var(--p-text-heading); }\r\n.ds .ds-token-text [data-token=\"display\"] { font-size:var(--p-text-display); }"
+      "content": ".ds .ds-token-text { align-items:baseline; font-family:var(--p-font); }\n.ds .ds-token-text [data-token=\"sm\"] { font-size:var(--p-text-sm); }\n.ds .ds-token-text [data-token=\"body\"] { font-size:var(--p-text-body); }\n.ds .ds-token-text [data-token=\"title\"] { font-size:var(--p-text-title); }\n.ds .ds-token-text [data-token=\"heading\"] { font-size:var(--p-text-heading); }\n.ds .ds-token-text [data-token=\"display\"] { font-size:var(--p-text-display); }"
     },
     {
       "path": "design/html/token-text.html",
@@ -43,7 +43,7 @@
     }
   ],
   "meta": {
-    "version": "0.3.0",
+    "version": "0.4.0",
     "lifecycle": "Trial",
     "item": "token-text",
     "purpose": "글자 크기 단계",

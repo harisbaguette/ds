@@ -27,9 +27,40 @@ function emit(name, title, files, meta = {}, dependencies = []) {
 let fontCSS = '';
 for (const [name, font] of Object.entries(fonts)) fontCSS += `/* ${font.license.replace(/\*\//g,'* /')} */\n@font-face{font-family:${name};font-style:normal;font-weight:100 900;font-display:swap;src:url(data:font/woff2;base64,${font.data}) format('woff2')}\n`;
 emit('pattove-fonts', 'Pretendard · Outfit 및 라이선스', [file('fonts.css', fontCSS)]);
-const componentNames = { button:'Button', input:'Input', field:'Field', checkbox:'Checkbox', radio:'Radio', switch:'Switch', badge:'Badge', divider:'Divider', 'status-dot':'StatusDot', card:'Card', tabs:'Tabs', 'bottom-nav':'BottomNav', feedback:'Feedback', 'search-module':'SearchModule', template:'Template', page:'CollectionPage' };
+// The names each item's React file exports for its example. Items whose example also uses another part's file list it in exampleUses.
+const componentNames = {
+  button:'Button', 'icon-button':'IconButton', 'action-row':'ActionRow', 'confirm-row':'ConfirmRow', 'action-bar':'ActionBar', 'segmented-button':'SegmentedButton',
+  input:'Input', 'clear-input':'ClearInput', 'unit-input':'UnitInput', stepper:'Stepper', 'password-input':'PasswordInput', field:'Field', 'date-range':'DateRange', 'inline-form':'InlineForm', 'search-bar':'SearchBar', 'search-form':'SearchForm',
+  checkbox:'Checkbox', radio:'Radio', switch:'Switch', 'check-card':'CheckCard', 'radio-card':'RadioCard', 'filter-chip':'FilterChip', 'filter-chip-row':'FilterChipRow', 'check-list':'CheckList', 'radio-list':'RadioList', 'switch-list':'SwitchList', 'select-all-list':'SelectAllList',
+  badge:'Badge', 'count-badge':'CountBadge', divider:'Divider', 'text-divider':'TextDivider', 'status-dot':'StatusDot', avatar:'Avatar', 'icon-label':'IconLabel',
+  notice:'Notice', toast:'Toast', 'progress-bar':'ProgressBar', 'progress-ring':'ProgressRing', 'step-bar':'StepBar',
+  card:'Card, CardBody, CardTitle, CardDescription, CardActions', 'list-card':'ListCard, CardBody, CardTitle, CardDescription, CardActions', 'media-card':'MediaCard, CardBody, CardTitle, CardDescription, CardActions',
+  'result-grid':'ResultGrid', 'result-list':'ResultList', 'featured-results':'FeaturedResults', 'people-picker':'PeoplePicker', 'empty-state':'EmptyState', 'stat-row':'StatRow',
+  tabs:'Tabs', 'bottom-nav':'BottomNav', template:'Template', page:'CollectionPage'
+};
+const exampleUses = { card:['button'], 'list-card':['button'], 'media-card':['button'] };
+const records = '[{id:"spring",title:"봄의 색",description:"연한 초록과 따뜻한 노랑",tag:"진행 중"},{id:"weekend",title:"주말의 기록",description:"산책하며 모은 장면들",tag:"완료"}]';
+const svg = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" className="ui-icon" width="20" height="20" aria-hidden="true"><path d="${d}" /></svg>`;
+const bell = svg('M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20h4');
+const cardInside = '<CardBody><CardTitle>브랜드 리뉴얼</CardTitle><CardDescription>색과 서체, 첫인상을 모아 둔 컬렉션</CardDescription></CardBody><CardActions><Button onClick={() => alert("선택했어요.")} variant="outline">선택하기</Button></CardActions>';
 const jsxExamples = {
-  button:'<Button onClick={() => alert("실행했어요.")}>계속하기</Button>', input:'<label>이름<Input name="name" placeholder="이름을 입력하세요" /></label>', field:'<Field label="컬렉션 이름" name="name" help="나중에 바꿀 수 있어요." />', checkbox:'<Checkbox name="share" defaultChecked>링크로 공유</Checkbox>', radio:'<fieldset><legend>공개 범위</legend><Radio name="visibility" value="private" defaultChecked>나만 보기</Radio><Radio name="visibility" value="shared">링크로 공유</Radio></fieldset>', switch:'<Switch name="notification" defaultChecked>알림 받기</Switch>', badge:'<Badge>진행 중</Badge>', divider:'<Divider />', 'status-dot':'<StatusDot />', tabs:'<Tabs />', 'bottom-nav':'<BottomNav current="#home" items={[{href:"#home",label:"홈"},{href:"#search",label:"탐색"},{href:"#saved",label:"저장"}]} />', feedback:'<Feedback />', card:'<Card><CardBody><CardTitle>브랜드 리뉴얼</CardTitle><CardDescription>색과 서체, 첫인상을 모아 둔 컬렉션</CardDescription></CardBody><CardActions><Button onClick={() => alert("선택했어요.")} variant="outline">선택하기</Button></CardActions></Card>', 'search-module':'<SearchModule />', template:'<Template title="나의 기록" count="1개"><p>본문이나 다른 모듈을 이 자리에 넣습니다.</p></Template>', page:'<CollectionPage />'
+  button:'<Button onClick={() => alert("실행했어요.")}>계속하기</Button>', 'icon-button':`<IconButton label="검색" onClick={() => alert("검색해요.")}>${svg('m20 20-4-4M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14z')}</IconButton>`,
+  'action-row':`<ActionRow label="보내기" count={3} onClick={() => alert("보냈어요.")} actions={[{label:"보관",icon:${svg('M7 4h10v16l-5-4-5 4z')}}]} />`,
+  'confirm-row':'<ConfirmRow onConfirm={() => alert("삭제했어요.")} onCancel={() => alert("취소했어요.")} />', 'action-bar':'<ActionBar label="3개 담기" onClick={() => alert("담았어요.")} />',
+  'segmented-button':'<SegmentedButton />',
+  input:'<label>이름<Input name="name" placeholder="이름을 입력하세요" /></label>', 'clear-input':'<label>검색어<ClearInput defaultValue="봄의 색" /></label>', 'unit-input':'<label>금액<UnitInput defaultValue="12,000" /></label>', stepper:'<label>수량<Stepper /></label>', 'password-input':'<label>비밀번호<PasswordInput placeholder="8자 이상" /></label>',
+  field:'<Field label="컬렉션 이름" name="name" help="나중에 바꿀 수 있어요." />', 'date-range':'<DateRange startProps={{defaultValue:"9월 1일"}} endProps={{defaultValue:"9월 30일"}} />', 'inline-form':'<InlineForm fields={[{label:"표시 이름",defaultValue:"하나"},{label:"지역",defaultValue:"서울"}]} />',
+  'search-bar':'<SearchBar onSearch={value => alert(value.query)} />', 'search-form':'<SearchForm onSearch={value => alert(value.query)} />',
+  checkbox:'<Checkbox name="share" defaultChecked>링크로 공유</Checkbox>', radio:'<fieldset><legend>공개 범위</legend><Radio name="visibility" value="private" defaultChecked>나만 보기</Radio><Radio name="visibility" value="shared">링크로 공유</Radio></fieldset>', switch:'<Switch name="notification" defaultChecked>알림 받기</Switch>',
+  'check-card':'<CheckCard name="share" description="링크를 받은 사람만 볼 수 있어요" defaultChecked>링크로 공유</CheckCard>', 'radio-card':'<fieldset className="ds-radio-group"><legend>공개 범위</legend><RadioCard name="visibility" value="private" description="나만 열어 볼 수 있어요" defaultChecked>나만 보기</RadioCard><RadioCard name="visibility" value="shared" description="링크를 받은 사람도 볼 수 있어요">링크로 공유</RadioCard></fieldset>',
+  'filter-chip':'<FilterChip name="topic" value="design" defaultChecked>디자인</FilterChip>', 'filter-chip-row':'<FilterChipRow name="example-status" />',
+  'check-list':'<CheckList legend="받을 알림" items={[{value:"c",label:"댓글"},{value:"l",label:"좋아요"}]} value={["c"]} onChange={next => alert(next.join())} />', 'radio-list':'<RadioList legend="공개 범위" items={[{value:"me",label:"나만 보기"},{value:"link",label:"링크로 공유"}]} value="me" onValueChange={alert} />', 'switch-list':'<SwitchList legend="알림" items={[{name:"push",label:"알림 받기",checked:true},{name:"sound",label:"소리",checked:false}]} onChange={(name, on) => alert(name + " " + on)} />', 'select-all-list':'<SelectAllList items={[{value:"c",label:"댓글"},{value:"l",label:"좋아요"}]} value={["c"]} onChange={next => alert(next.join())} />',
+  badge:'<Badge>진행 중</Badge>', 'count-badge':`<CountBadge count={3}>${bell}</CountBadge>`, divider:'<Divider />', 'text-divider':'<TextDivider>또는</TextDivider>', 'status-dot':'<StatusDot />', avatar:'<Avatar name="김하나" />', 'icon-label':`<IconLabel icon={${bell}}>알림</IconLabel>`,
+  notice:'<Notice>변경사항을 저장했어요.</Notice>', toast:'<Toast onUndo={() => alert("되돌렸어요.")}>메일을 보관함으로 옮겼어요.</Toast>', 'progress-bar':'<ProgressBar value={68} />', 'progress-ring':'<ProgressRing value={68} />', 'step-bar':'<StepBar step={3} steps={5} label="가입 단계" />',
+  card:`<Card>${cardInside}</Card>`, 'list-card':`<ListCard initial="봄">${cardInside}</ListCard>`, 'media-card':`<MediaCard>${cardInside}</MediaCard>`,
+  'result-grid':`<ResultGrid records={${records}} onAction={item => alert(item.title)} />`, 'result-list':`<ResultList records={${records}} onAction={item => alert(item.title)} />`, 'featured-results':`<FeaturedResults records={${records}} onAction={item => alert(item.title)} />`,
+  'people-picker':'<PeoplePicker people={[{id:"a",title:"김하나",description:"디자인팀",tag:"접속 중"},{id:"b",title:"이도윤",description:"개발팀",tag:"자리 비움"}]} onPick={person => alert(person.title)} />', 'empty-state':'<EmptyState onAction={() => alert("전체를 보여 줘요.")} />', 'stat-row':'<StatRow items={[["전체","3개"],["진행 중","2개"],["완료","1개"]]} />',
+  tabs:'<Tabs />', 'bottom-nav':'<BottomNav current="#home" items={[{href:"#home",label:"홈"},{href:"#search",label:"탐색"},{href:"#saved",label:"저장"}]} />', template:'<Template title="나의 기록" count="1개"><p>본문이나 다른 블록을 이 자리에 넣습니다.</p></Template>', page:'<CollectionPage />'
 };
 const allReact = new Map();
 for (const [id] of Object.entries(componentNames)) allReact.set(id, read(`src/system/react/${id}.jsx`));
@@ -57,7 +88,7 @@ for (const style of catalog.styles.filter(s => s.id !== 'base')) {
   }
   for (const item of registry.items.filter(i => !standalone(i.id))) for (const environment of ['html','react']) {
     const closure = environment === 'html' ? [...registry.dependencies(item.id).map(i => i.id), item.id].filter(id => !standalone(id)) : [...reactClosure(item.id)];
-    if (environment === 'react' && item.id === 'card') closure.push('button');
+    if (environment === 'react') for (const id of exampleUses[item.id] || []) for (const dep of reactClosure(id)) if (!closure.includes(dep)) closure.push(dep);
     const blocks = [...new Set(closure.flatMap(id => registry.index.get(id).css))];
     const themeKinds = kinds.filter(kind => [sharedKinds, ...blocks.map(block => kindsIn(css[block], block))].some(list => list.includes(kind)));
     const files = [file('base.css', baseCSS), ...themeKinds.map(theme), ...(style.specification ? [file(`styles/${style.id}.md`, read(style.specification))] : []), ...blocks.map(block => file(`css/${block}.css`, partCSS(block)))];
@@ -75,7 +106,7 @@ for (const style of catalog.styles.filter(s => s.id !== 'base')) {
       example = file(`examples/${style.id}/${item.id}.html`, `<!doctype html>\n<html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${item.name} · ${style.name}</title>\n${styleImports.map(p => `<link rel="stylesheet" href="${p}">`).join('\n')}<style>body{margin:0;padding:clamp(16px,4vw,48px)}main{max-width:1080px;margin:auto}</style>\n<body class="ds" data-style="${style.id}"><main>${markup}</main>${interactive ? '<script src="../../html/behaviors.js"></script>' : ''}</body></html>\n`);
     } else {
       for (const id of closure) files.push(file(`react/${id}.jsx`, allReact.get(id)));
-      const imports = item.id === 'card' ? "import { Card, CardBody, CardTitle, CardDescription, CardActions } from '../../react/card.jsx';\nimport { Button } from '../../react/button.jsx';" : `import { ${componentNames[item.id]} } from '../../react/${item.id}.jsx';`;
+      const imports = [item.id, ...(exampleUses[item.id] || [])].map(id => `import { ${componentNames[id]} } from '../../react/${id}.jsx';`).join('\n');
       example = file(`examples/${style.id}/${item.id}.jsx`, `'use client';\nimport React from 'react';\n${imports}\n${styleImports.map(p => `import '${p}';`).join('\n')}\nexport default function Example(){return <main className="ds" data-style="${style.id}" style={{padding:32}}>${jsxExamples[item.id]}</main>;}\n`);
     }
     files.push(example);

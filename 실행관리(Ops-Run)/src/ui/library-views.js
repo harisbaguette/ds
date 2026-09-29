@@ -36,12 +36,12 @@
   const browseSections=['buttons','fields','selection','navigation','composition','feedback','primitives','foundations','page'];
   // These groups contain working specimens. The shelf itself still includes the complete dictionary.
   const partGroups=[
-    {id:'buttons',name:'버튼',items:['button']},
-    {id:'fields',name:'입력',items:['input','field']},
-    {id:'selection',name:'선택',items:['checkbox','radio','switch']},
+    {id:'buttons',name:'버튼',items:['button','icon-button','segmented-button']},
+    {id:'fields',name:'입력',items:['input','clear-input','unit-input','stepper','password-input','field','date-range','search-bar']},
+    {id:'selection',name:'선택',items:['checkbox','radio','switch','check-card','radio-card','filter-chip']},
     {id:'navigation',name:'탐색',items:['tabs','bottom-nav']},
-    {id:'display',name:'표시',items:['icon','divider','status-dot','badge','card']},
-    {id:'feedback',name:'피드백',items:['feedback']}
+    {id:'display',name:'표시',items:['icon','icon-label','divider','text-divider','status-dot','avatar','badge','count-badge','card','list-card','media-card']},
+    {id:'feedback',name:'피드백',items:['notice','toast','progress-bar','progress-ring','step-bar']}
   ];
   const builtInShelf=shelf=>registry.items.filter(i=>itemShelf(i)===shelf).sort((a,b)=>browseSections.indexOf(a.section)-browseSections.indexOf(b.section));
   // Implementations own their browsing metadata; a missing dictionary link never changes their category.
@@ -76,7 +76,7 @@
       : item.id === 'icon' ? ['search','arrow','bookmark','grid','close','check','folder','bell'].map(p.icon).join('')
       : item.id === 'input' ? '<label class="ds-field">이름'+p.input({id:prefix,placeholder:'이름을 입력하세요'})+'</label>'
       : p.renderItem(item.id, prefix);
-    const fitted=['bottom-nav','card','search-module'].includes(item.id);
+    const fitted=['bottom-nav','card','list-card','media-card'].includes(item.id)||!!item.browse?.fit;
     return '<div class="atlas-sample ds theme-'+style+'" data-style="'+style+'" data-kind="'+item.id+'"'+(fitted?' data-preview-scene data-preview-fit="both"':'')+'>'+body+'</div>';
   }
   const match=(entry,query)=>query.trim().toLocaleLowerCase().split(/\s+/).every(term=>searches.get(entry.id).includes(term));

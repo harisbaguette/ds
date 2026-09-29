@@ -45,7 +45,7 @@
       "path": "design/css/token-layer.css",
       "type": "registry:file",
       "target": "~/design/css/token-layer.css",
-      "content": ".ds .ds-token-layer { gap:0; }\r\n.ds .ds-token-layer i { position:relative; width:var(--p-control-size-sm); height:var(--p-control-size-sm); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-inner-radius); background:var(--p-high); z-index:var(--p-layer-base); }\r\n.ds .ds-token-layer i + i { margin-left:calc(var(--p-space-md) * -1); }\r\n.ds .ds-token-layer [data-token=\"lifted\"] { background:var(--p-accent); z-index:var(--p-layer-lifted); }\r\n.ds .ds-token-layer [data-token=\"raised\"] { background:var(--p-soft); z-index:var(--p-layer-raised); }"
+      "content": ".ds .ds-token-layer { gap:0; }\n.ds .ds-token-layer i { position:relative; width:var(--p-control-size-sm); height:var(--p-control-size-sm); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-inner-radius); background:var(--p-high); z-index:var(--p-layer-base); }\n.ds .ds-token-layer i + i { margin-left:calc(var(--p-space-md) * -1); }\n.ds .ds-token-layer [data-token=\"lifted\"] { background:var(--p-accent); z-index:var(--p-layer-lifted); }\n.ds .ds-token-layer [data-token=\"raised\"] { background:var(--p-soft); z-index:var(--p-layer-raised); }"
     },
     {
       "path": "design/html/token-layer.html",
@@ -55,7 +55,7 @@
     }
   ],
   "meta": {
-    "version": "0.3.0",
+    "version": "0.4.0",
     "lifecycle": "Trial",
     "item": "token-layer",
     "purpose": "겹치는 층의 앞뒤 순서",

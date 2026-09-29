@@ -1,6 +1,6 @@
 /* Representative implementations for validating the system structure, not the full dictionary. */
 (() => {
-  const version = '0.3.0';
+  const version = '0.4.0';
   const sections = [
     { id: 'all', name: '전체 보기', group: '' },
     { id: 'foundations', name: '색·글꼴·간격', group: '기초' },
@@ -10,11 +10,70 @@
     { id: 'selection', name: '선택', group: '부품' },
     { id: 'navigation', name: '탐색', group: '부품' },
     { id: 'feedback', name: '상태·피드백', group: '부품' },
-    { id: 'composition', name: '카드·검색 모듈', group: '조합' },
+    { id: 'composition', name: '카드·검색 결과', group: '조합' },
     { id: 'page', name: '화면 예시', group: '조합' }
   ];
   // Token deps name the token kinds a part's own CSS reads (checked at build against the --p-* roles the part's CSS blocks read).
   const T = (...kinds) => kinds.map(kind => 'token-' + kind);
+  // How things are split (Material 3 · shadcn/ui):
+  //   look  = same structure, same job, only the surface differs → one entry in that part's gallery.
+  //   part  = a different structure or job → its own item on the 부품 shelf.
+  //   block = several parts placed together → an item on the 블록 shelf.
+  // Items whose markup carries data-part-action or data-indeterminate, so behaviors.js travels with them.
+  const interactive = ['button','icon-button','tabs','bottom-nav','clear-input','stepper','password-input','toast','card','list-card','media-card','action-row','confirm-row','action-bar','check-list','select-all-list','search-bar','filter-chip-row','result-grid','result-list','featured-results'];
+  // Parts with no width of their own (bars and rules) are shown across the whole stage, like blocks.
+  const wide = ['text-divider','search-bar','progress-bar','step-bar'];
+  const part = (id, name, section, layer, code, keywords, deps, extra = {}) => ({ id, browse: { shelf: 'part', kind: '부품', code, ...(wide.includes(id) ? { fit: true } : {}) }, name, section, layer, keywords, deps, ...extra });
+  const block = (id, name, section, code, keywords, deps, extra = {}) => ({ id, browse: { shelf: 'block', kind: '모듈', code, fit: true }, name, section, layer: 'Module', keywords, deps, ...extra });
+  // English name shown beside the title: the term the named design systems use for this structure.
+  const english = {
+    'icon': 'Icon',
+    'icon-label': 'Label',
+    'divider': 'Divider',
+    'text-divider': 'Divider with title',
+    'status-dot': 'Status light',
+    'avatar': 'Avatar',
+    'icon-button': 'Icon button',
+    'segmented-button': 'Segmented button',
+    'input': 'Text field',
+    'clear-input': 'Text field with clear button',
+    'unit-input': 'Prefix / suffix',
+    'stepper': 'Stepper',
+    'password-input': 'Password input',
+    'field': 'Text input',
+    'date-range': 'Date range input',
+    'search-bar': 'Search field',
+    'checkbox': 'Checkbox',
+    'radio': 'Radio button',
+    'switch': 'Switch',
+    'check-card': 'Multi-select tile',
+    'radio-card': 'Single-select tile',
+    'filter-chip': 'Filter chip',
+    'count-badge': 'Counter badge',
+    'bottom-nav': 'Tab bar',
+    'notice': 'Inline notification',
+    'toast': 'Snackbar',
+    'progress-bar': 'Progress bar',
+    'progress-ring': 'Circular progress indicator',
+    'step-bar': 'Step indicator',
+    'list-card': 'Horizontal card',
+    'media-card': 'Card with cover',
+    'button': 'Button',
+    'badge': 'Badge',
+    'tabs': 'Tabs',
+    'card': 'Card',
+    'action-row': 'Button group',
+    'confirm-row': 'Confirm / dismiss buttons',
+    'action-bar': 'Fixed bottom CTA',
+    'inline-form': 'Side label',
+    'check-list': 'Checkbox group',
+    'select-all-list': 'Check all',
+    'radio-list': 'Radio group',
+    'switch-list': 'Switch in a list row',
+    'filter-chip-row': 'Filter chips',
+    'result-grid': 'Feed',
+    'people-picker': 'User picker'
+  };
   const items = [
     { id: 'token-color', browse: { shelf: 'token', kind: '색', code: 'TOK' }, name: '색 토큰', section: 'foundations', layer: 'Token', keywords: '색 색상 컬러 배경 글자색 강조 color', deps: [], entry: 'TOK-01' },
     { id: 'token-gradient', browse: { shelf: 'token', kind: '그러데이션', code: 'TOK' }, name: '그러데이션 토큰', section: 'foundations', layer: 'Token', keywords: '그러데이션 그라디언트 배경 번짐 gradient', deps: T('color') },
@@ -36,140 +95,140 @@
     { id: 'token-motion', browse: { shelf: 'token', kind: '움직임', code: 'TOK' }, name: '움직임 토큰', section: 'foundations', layer: 'Token', keywords: '움직임 시간 전환 애니메이션 가속 motion duration easing', deps: [], entry: 'TOK-113' },
     { id: 'token-layer', browse: { shelf: 'token', kind: '층', code: 'TOK' }, name: '쌓임 순서 토큰', section: 'foundations', layer: 'Token', keywords: '쌓임 순서 겹침 z-index layer', deps: [] },
     { id: 'token-breakpoint', browse: { shelf: 'token', kind: '브레이크포인트', code: 'TOK' }, name: '화면 폭 기준 토큰', section: 'foundations', layer: 'Token', keywords: '화면 폭 기준 반응형 분기 breakpoint media query', deps: [] },
-    { id: 'icon', browse: { shelf: 'part', kind: '부품', code: 'ICO' }, name: '아이콘 표시', section: 'primitives', layer: 'Primitive', keywords: '검색 닫기 화살표 svg icon', deps: T('color','text','leading','space','size') },
-    { id: 'divider', browse: { shelf: 'part', kind: '부품', code: 'LAY' }, name: '구분선', section: 'primitives', layer: 'Primitive', keywords: '선 분리 경계 divider separator', deps: T('color','gradient','text','leading','space','border') },
-    { id: 'status-dot', browse: { shelf: 'part', kind: '부품', code: 'STA' }, name: '상태 점', section: 'primitives', layer: 'Primitive', keywords: '상태 온라인 성공 status dot', deps: T('color','text','space','size','radius','border') },
-    { id: 'button', browse: { shelf: 'part', kind: '부품', code: 'ACT' }, name: '버튼', section: 'buttons', layer: 'Atom', keywords: 'button 행동 실행 크기 상태 hover focus disabled loading', deps: ['icon', ...T('color','text','weight','leading','space','size','radius','border','stroke','shadow','opacity','motion')], entry: 'ACT-01' },
-    { id: 'input', browse: { shelf: 'part', kind: '부품', code: 'INP' }, name: '입력창', section: 'fields', layer: 'Atom', keywords: 'input text email 입력 텍스트', deps: T('color','typography','text','weight','leading','space','size','radius','border','shadow','opacity') },
-    { id: 'field', browse: { shelf: 'part', kind: '부품', code: 'INP' }, name: '입력 필드', section: 'fields', layer: 'Molecule', keywords: 'label 오류 검증 validation error 폼 라벨 설명', deps: ['input', ...T('color','text','weight','leading','space','size','radius','border')], entry: 'INP-47' },
-    ...['checkbox','radio','switch'].map((id, i) => ({ id, browse: { shelf: 'part', kind: '부품', code: 'INP' }, name: ['체크박스','라디오','스위치'][i], section: 'selection', layer: 'Atom', keywords: 'checkbox radio switch toggle 선택 체크박스 토글', deps: T('color','text','weight','space','size','radius','border','shadow','opacity','motion','layer'), behavior: true })),
-    { id: 'badge', browse: { shelf: 'part', kind: '부품', code: 'STA' }, name: '배지', section: 'feedback', layer: 'Atom', keywords: 'badge status 상태 태그', deps: T('color','text','weight','leading','space','size','radius','border','stroke') },
-    { id: 'tabs', browse: { shelf: 'part', kind: '부품', code: 'NAV' }, name: '탭', section: 'navigation', layer: 'Molecule', keywords: 'tabs 메뉴 전환 탐색', deps: T('color','text','weight','leading','space','size','radius','border','stroke','shadow'), entry: 'NAV-06' },
-    { id: 'bottom-nav', browse: { shelf: 'part', kind: '부품', code: 'NAV' }, name: '하단 탐색', section: 'navigation', layer: 'Molecule', keywords: 'navigation bottom tab bar 모바일 하단 메뉴', deps: ['icon', ...T('color','text','weight','space','size','radius','border','stroke','shadow','blur','layer')], entry: 'NAV-05' },
-    { id: 'feedback', browse: { shelf: 'part', kind: '부품', code: 'STA' }, name: '알림·진행률', section: 'feedback', layer: 'Molecule', keywords: 'toast alert progress 알림 저장 완료 진행률', deps: ['button', 'status-dot', ...T('color','typography','text','weight','leading','tracking','space','size','radius','border','shadow','aspect')], entry: 'STA-03' },
-    { id: 'card', browse: { shelf: 'part', kind: '부품', code: 'LAY' }, name: '카드', section: 'composition', layer: 'Molecule', keywords: 'card 카드 제목 본문 행동', deps: ['button', 'badge', 'divider', ...T('color','text','weight','leading','tracking','space','radius','border','shadow','opacity','aspect')] },
-    { id: 'search-module', browse: { shelf: 'block', kind: '모듈', code: 'DAT' }, name: '검색 모듈', section: 'composition', layer: 'Module', keywords: 'search filter 검색 필터 목록 결과 빈 상태', deps: ['field', 'button', 'card', ...T('color','text','weight','leading','space','size','radius','border','stroke','shadow','breakpoint')], entry: 'DAT-01', behavior: true },
-    { id: 'template', browse: { shelf: 'template', kind: '구성', code: 'LAY' }, name: '목록 레이아웃', section: 'page', layer: 'Template', keywords: 'template layout 틀 레이아웃 배치 슬롯', deps: ['badge', 'bottom-nav', ...T('color','typography','text','weight','leading','tracking','space','container','radius','border','stroke')] },
-    { id: 'page', browse: { shelf: 'template', kind: '구성', code: 'LAY' }, name: '컬렉션 화면', section: 'page', layer: 'Page', keywords: 'page layout template 레이아웃 템플릿 화면 흐름', deps: ['template', 'search-module'], behavior: true }
-  ].map(item => ({ ...item, version, lifecycle: 'Trial', environments: ['HTML','React'], behavior: item.behavior || ['button', 'tabs', 'bottom-nav', 'feedback'].includes(item.id) }));
+    // 부품: one thing with one job. Looks, if any, only change its surface.
+    part('icon', '아이콘', 'primitives', 'Primitive', 'ICO', '검색 닫기 화살표 svg icon', []),
+    part('icon-label', '레이블', 'primitives', 'Primitive', 'ATM','아이콘 이름 라벨 글자 icon label caption', ['icon', ...T('color','text','leading','space','size')]),
+    part('divider', '구분선', 'primitives', 'Primitive', 'LAY', '선 분리 경계 divider separator', T('color','border')),
+    part('text-divider', '제목이 있는 구분선', 'primitives', 'Primitive', 'LAY', '또는 가운데 글자 구분선 or divider label', T('color','gradient','text','leading','space','border')),
+    part('status-dot', '상태 표시등', 'primitives', 'Primitive', 'STA', '상태 온라인 성공 status dot', T('color','text','space','size','radius')),
+    part('avatar', '아바타', 'primitives', 'Atom', 'SOC', '프로필 사진 아바타 접속 온라인 avatar presence', T('color','text','weight','size','radius','border'), { entry: 'SOC-01' }),
+    part('button', '버튼', 'buttons', 'Atom', 'ACT', 'button 행동 실행 크기 상태 채움 윤곽 글자 hover focus disabled loading', ['icon', ...T('color','text','weight','leading','space','size','radius','border','stroke','shadow','opacity','motion')], { entry: 'ACT-01' }),
+    part('icon-button', '아이콘 버튼', 'buttons', 'Atom', 'ATM', '아이콘 버튼 그림 버튼 icon button', ['button', ...T('space')], { entry: 'ATM-08' }),
+    part('segmented-button', '세그먼트 버튼', 'buttons', 'Molecule', 'NAV', '세그먼트 나란한 버튼 분할 선택 segmented button control', T('color','text','weight','space','size','radius','border','layer'), { entry: 'NAV-07' }),
+    part('input', '텍스트 필드', 'fields', 'Atom', 'INP', 'input text email 입력 텍스트 윤곽 채움 outlined filled', T('color','text','leading','space','size','radius','border','shadow','opacity')),
+    part('clear-input', '지우기 버튼이 있는 텍스트 필드', 'fields', 'Molecule', 'INP', '지우기 삭제 입력 clear text field', ['input', 'icon', ...T('color','typography','text','weight','leading','size','radius','border','shadow')], { entry: 'INP-92' }),
+    part('unit-input', '접두사·접미사가 있는 텍스트 필드', 'fields', 'Molecule', 'INP', '단위 금액 통화 숫자 입력 suffix unit', ['input', ...T('color','typography','text','weight','leading','space','size','radius','border','shadow')], { entry: 'INP-34' }),
+    part('stepper', '스텝퍼', 'fields', 'Molecule', 'INP', '수량 빼기 더하기 숫자 증감 stepper', ['input', 'icon', ...T('color','typography','text','weight','leading','space','size','radius','border','shadow')], { entry: 'INP-10' }),
+    part('password-input', '비밀번호 입력', 'fields', 'Molecule', 'INP', '비밀번호 보기 숨기기 password reveal', ['input', ...T('color','typography','text','weight','leading','space','size','radius','border','shadow')], { entry: 'INP-15' }),
+    part('field', '텍스트 입력 필드', 'fields', 'Molecule', 'INP', 'label 오류 검증 validation error 폼 라벨 설명', ['input', ...T('color','text','weight','leading','space','size','radius','border')], { entry: 'INP-47' }),
+    part('date-range', '범위 입력 필드', 'fields', 'Molecule', 'INP', '기간 시작 끝 범위 날짜 date range', ['field', ...T('color','typography','text','weight','leading','size','radius','border','shadow')], { entry: 'INP-11' }),
+    part('search-bar', '검색 필드', 'fields', 'Molecule', 'ATM', '검색창 알약 검색 막대 search bar', ['field', 'button', ...T('color','space','size','radius','border','shadow','breakpoint')], { entry: 'ATM-89' }),
+    ...['checkbox','radio','switch'].map((id, i) => part(id, ['체크박스','라디오 버튼','스위치'][i], 'selection', 'Atom', 'INP', 'checkbox radio switch toggle 선택 체크박스 토글', T('color','text','weight','space','size','radius','border','shadow','opacity','motion'), { behavior: true })),
+    part('check-card', '다중 선택 타일', 'selection', 'Atom', 'INP', '선택 카드 체크박스 카드 설명 checkbox card', ['checkbox', ...T('color','text','weight','space','radius','border')], { entry: 'INP-77' }),
+    part('radio-card', '단일 선택 타일', 'selection', 'Atom', 'INP', '선택 카드 라디오 카드 설명 radio card', ['radio', ...T('color','text','weight','space','radius','border')], { entry: 'INP-78' }),
+    part('filter-chip', '필터 칩', 'selection', 'Atom', 'ACT', '필터 칩 알약 선택 chip filter', T('color','text','weight','space','size','radius','border'), { entry: 'ACT-36' }),
+    part('badge', '배지', 'feedback', 'Atom', 'STA', 'badge status 상태 태그 연한 면 아이콘', ['icon', ...T('color','text','weight','leading','space','size','radius','border','stroke')], { entry: 'STA-01' }),
+    part('count-badge', '카운터 배지', 'feedback', 'Atom', 'NAV', '개수 숫자 알림 배지 count badge', ['icon', ...T('color','text','weight','leading','space','size','radius','border')], { entry: 'NAV-25' }),
+    part('tabs', '탭', 'navigation', 'Molecule', 'NAV', 'tabs 메뉴 전환 탐색', T('color','text','weight','leading','space','size','radius','border','stroke','shadow'), { entry: 'NAV-06' }),
+    part('bottom-nav', '탭바', 'navigation', 'Molecule', 'NAV', 'navigation bottom tab bar 모바일 하단 메뉴', ['icon', ...T('color','text','weight','space','size','radius','border','stroke','shadow','blur','layer')], { entry: 'NAV-05' }),
+    part('notice', '인라인 알림', 'feedback', 'Atom', 'STA', '알림 안내 저장 완료 alert banner notice', ['status-dot', ...T('color','space','radius','border','shadow')], { entry: 'STA-02' }),
+    part('toast', '스낵바', 'feedback', 'Molecule', 'STA', '토스트 스낵바 되돌리기 toast snackbar undo', ['status-dot', ...T('color','text','weight','space','size','radius','border','shadow')], { entry: 'STA-03' }),
+    part('progress-bar', '진행 과정 막대', 'feedback', 'Atom', 'STA', '진행률 막대 업로드 progress bar', T('color','text','space','size','radius','border','shadow')),
+    part('progress-ring', '원형 진행 과정 표시기', 'feedback', 'Atom', 'STA', '원형 진행률 고리 progress ring circle', ['progress-bar', ...T('color','typography','text','weight','leading','tracking','space','size','radius','border','aspect')], { entry: 'STA-49' }),
+    part('step-bar', '단계 표시기', 'feedback', 'Atom', 'ATM', '단계 마디 진행 막대 steps progress', ['progress-bar', ...T('color','space','size')], { entry: 'ATM-123' }),
+    part('card', '카드', 'composition', 'Molecule', 'LAY', 'card 카드 제목 본문 행동 띄움 면 윤곽 elevated filled outlined', ['button', 'badge', 'divider', ...T('color','text','weight','leading','tracking','space','radius','border','shadow')], { entry: 'LAY-15' }),
+    part('list-card', '가로형 카드', 'composition', 'Molecule', 'LAY', '가로형 카드 목록 카드 썸네일 list card', ['card', ...T('color','text','weight','space','radius','opacity','aspect')]),
+    part('media-card', '커버가 있는 카드', 'composition', 'Molecule', 'LAY', '이미지 카드 사진 미디어 media card', ['card', ...T('color','space','opacity')]),
+    // 블록: several parts placed together.
+    block('action-row', '버튼 그룹', 'buttons', 'ACT', '행동 줄 주 버튼 아이콘 버튼 묶음 button group', ['button', 'icon-button', ...T('color','space','size')], { entry: 'ACT-03' }),
+    block('confirm-row', '확인·취소 버튼', 'buttons', 'ACT', '확인 취소 삭제 결정 한 줄 confirm cancel', ['button', ...T('space')]),
+    block('action-bar', '하단 고정 버튼', 'buttons', 'ACT', '하단 고정 버튼 엄지 자리 sticky bottom cta', ['button', ...T('color','space','border')], { entry: 'ACT-49' }),
+    block('inline-form', '옆 라벨', 'fields', 'INP', '옆 라벨 양식 설정 값 여러 줄 inline form', ['field', ...T('space')], { entry: 'INP-67' }),
+    block('check-list', '체크박스 그룹', 'selection', 'ATM', '체크 목록 여러 항목 설정 checklist', ['checkbox', ...T('color','text','weight','space','border')], { entry: 'ATM-153' }),
+    block('select-all-list', '전체 선택', 'selection', 'INP', '전체 선택 모두 선택 일부 선택 select all', ['checkbox', ...T('color','text','weight','space','size','border')]),
+    block('radio-list', '라디오 그룹', 'selection', 'INP', '라디오 목록 하나 고르기 설정 radio list', ['radio', ...T('color','text','weight','space','border')]),
+    block('switch-list', '목록 행의 스위치', 'selection', 'ATM', '스위치 목록 켜기 끄기 설정 switch list', ['switch', ...T('color','text','weight','space','border')], { entry: 'ATM-203' }),
+    block('search-form', '검색 양식', 'composition', 'DAT', '검색 입력 상태 필터 검색 단추 search form', ['field', 'button', ...T('space','breakpoint')], { entry: 'DAT-01', behavior: true }),
+    block('filter-chip-row', '필터 칩', 'composition', 'ATM', '필터 칩 줄 상태 거르기 chips', ['filter-chip', ...T('space','size')], { entry: 'ATM-120' }),
+    block('result-grid', '피드', 'composition', 'LAY', '결과 격자 카드 목록 grid results', ['card', ...T('color','text','space')], { entry: 'LAY-49' }),
+    block('result-list', '결과 목록', 'composition', 'LAY', '결과 목록 행 이름 비교 list results', ['card', ...T('color','text','space','border')], { entry: 'LAY-27' }),
+    block('featured-results', '큰 첫 결과', 'composition', 'LAY', '추천 대표 첫 결과 featured', ['card', 'media-card', ...T('color','text','leading','space')], { entry: 'LAY-12' }),
+    block('people-picker', '사용자 선택', 'composition', 'INP', '사람 고르기 얼굴 목록 검색 people picker', ['field', 'list-card', 'empty-state', ...T('color','text','space','size','radius','border')], { entry: 'INP-69', behavior: true }),
+    block('empty-state', '빈 상태', 'composition', 'STA', '빈 상태 결과 없음 전체 보기 empty state', ['button', ...T('color','space','radius','border','stroke')], { entry: 'STA-06', behavior: true }),
+    block('stat-row', '요약 숫자 줄', 'composition', 'DAT', '요약 숫자 개수 지표 stat', T('color','typography','text','weight','leading','tracking','space','radius','border'), { entry: 'DAT-16' }),
+    { id: 'template', browse: { shelf: 'template', kind: '구성', code: 'LAY' }, name: '목록 레이아웃', section: 'page', layer: 'Template', keywords: 'template layout 틀 레이아웃 배치 슬롯', deps: ['badge', 'bottom-nav', 'stat-row', ...T('color','text','weight','leading','tracking','space','container','radius','border','stroke')] },
+    { id: 'page', browse: { shelf: 'template', kind: '구성', code: 'LAY' }, name: '컬렉션 화면', section: 'page', layer: 'Page', keywords: 'page layout template 레이아웃 템플릿 화면 흐름 검색 결과', deps: ['template', 'search-form', 'search-bar', 'filter-chip-row', 'result-grid', 'result-list', 'empty-state', ...T('color','text','weight','space','radius','border')], behavior: true }
+  ].map(item => ({ ...item, english: english[item.id], version, lifecycle: 'Trial', environments: ['HTML','React'], behavior: item.behavior || interactive.includes(item.id) }));
   const control = (key, label, values) => ({ key, label, values });
   const choiceStates = [['checked','선택됨'],['unchecked','선택 안 됨'],['disabled','사용 불가']];
+  const plainStates = [['','기본'],['disabled','사용 불가']];
+  const buttonStates = [['','기본'],['hover','Hover'],['pressed','Pressed'],['focus','Focus'],['disabled','Disabled'],['loading','Loading']];
+  const sizes = [['md','Medium · 48'],['sm','Small · 44'],['lg','Large · 56']];
   const controls = {
-    button: [control('variant','표현',[['primary','채움'],['outline','윤곽'],['ghost','글자']]), control('size','크기',[['md','Medium · 48'],['sm','Small · 44'],['lg','Large · 56']]), control('state','상태',[['','기본'],['hover','Hover'],['pressed','Pressed'],['focus','Focus'],['disabled','Disabled'],['loading','Loading']]), control('icon','아이콘',[['','없음'],['search','검색'],['arrow','화살표']]), control('iconOnly','내용',[['false','글자 함께'],['true','아이콘만']])],
+    button: [control('size','크기',sizes), control('state','상태',buttonStates), control('icon','아이콘',[['','없음'],['search','검색'],['arrow','화살표']])],
+    'icon-button': [control('size','크기',sizes), control('state','상태',buttonStates), control('icon','아이콘',[['search','검색'],['bookmark','보관'],['edit','수정']])],
     icon: [control('icon','아이콘',Object.keys(window.Pattove.iconMarkup).map(name => [name,name]))],
-    input: [control('state','상태',[['','기본'],['disabled','사용 불가']]), control('type','입력 종류',[['text','텍스트'],['email','이메일'],['search','검색'],['password','비밀번호']])],
+    'icon-label': [control('icon','아이콘',[['search','검색'],['bell','알림'],['bookmark','보관'],['upload','올리기']])],
+    input: [control('state','상태',plainStates), control('type','입력 종류',[['text','텍스트'],['email','이메일'],['search','검색'],['password','비밀번호']])],
+    'clear-input': [control('state','상태',plainStates)], 'unit-input': [control('state','상태',plainStates)],
+    stepper: [control('state','상태',plainStates)], 'password-input': [control('state','상태',plainStates)],
     field: [control('state','상태',[['','기본'],['focus','초점'],['error','오류'],['success','완료'],['disabled','사용 불가']])],
+    'date-range': [control('state','상태',[['','기본'],['focus','초점'],['error','오류'],['success','완료'],['disabled','사용 불가']])],
     checkbox: [control('state','상태',[...choiceStates,['indeterminate','일부 선택']])],
     radio: [control('state','상태',choiceStates)], switch: [control('state','상태',choiceStates)],
+    'check-card': [control('state','상태',choiceStates)], 'radio-card': [control('state','상태',choiceStates)], 'filter-chip': [control('state','상태',choiceStates)],
+    'segmented-button': [control('state','상태',plainStates)],
+    'check-list': [control('state','상태',plainStates)], 'radio-list': [control('state','상태',plainStates)], 'switch-list': [control('state','상태',plainStates)],
+    'select-all-list': [control('state','상태',[['checked','모두 선택'],['indeterminate','일부 선택'],['unchecked','선택 안 됨'],['disabled','사용 불가']])],
     badge: [control('tone','상태',[['neutral','진행 중'],['success','완료'],['warning','확인 필요'],['error','실패']])],
+    'count-badge': [control('count','개수',[['3','3개'],['120','99개 넘음'],['0','없음']])],
   };
-  // Look-alike versions of one part. Every look is a different structure for a different situation:
+  // Looks of one part: the same structure doing the same job, only the surface changes.
   // `when` = the situation it fits, `saves` = the effort it takes away from the person using it.
   const look = (no, id, name, when, saves) => ({ no, id, name, when, saves });
-  // Template and page share the screen arrangements; the page fills each with a matching search look.
+  // Template and page share the screen arrangements; the page fills each with matching search blocks.
   const pageLooks = [
     look('01','stack','기본 쌓기','처음 만드는 목록 화면','배치 고민'),
-    look('02','hero','큰 머리글','검색이 첫 할 일인 화면','검색창 찾기'),
-    look('03','appbar','가운데 앱 바','목록을 한 화면에 더 보고 싶을 때','더 보려고 스크롤'),
-    look('04','sheet','겹친 시트','필터를 자주 바꿀 때','드롭다운 열기'),
-    look('05','dashboard','대시보드형','개수부터 파악할 때','탭마다 세어 보기')
+    look('02','hero','큰 제목 (Large title)','검색이 첫 할 일인 화면','검색창 찾기'),
+    look('03','appbar','가운데 정렬 앱 바 (Center aligned)','목록을 한 화면에 더 보고 싶을 때','더 보려고 스크롤'),
+    look('04','sheet','모달 바텀 시트 (Modal bottom sheet)','필터를 자주 바꿀 때','드롭다운 열기'),
+    look('05','dashboard','대시보드 (Dashboard)','개수부터 파악할 때','탭마다 세어 보기')
+  ];
+  // Filled · outlined · text, as in Material 3 common buttons and shadcn/ui button variants. First entry = current shape.
+  const buttonLooks = [
+    look('01','primary','채운 버튼 (Filled)','화면의 주 행동','무엇을 누를지 고르기'),
+    look('02','outline','윤곽선 버튼 (Outlined)','주 행동 옆의 보조 행동','주 행동과 헷갈리기'),
+    look('03','ghost','텍스트 버튼 (Text)','덜 중요한 행동·취소','눈이 여러 번 멈추기')
   ];
   const galleries = {
     'bottom-nav': { key: 'variant', label: '모양', default: 'line', frame: 'phone-bottom', list: [
-      look('01','minimal','미니멀','내용이 주인공인 읽기 앱','메뉴가 눈을 뺏는 일'),
-      look('02','glass','유리','사진·지도가 바닥까지 깔릴 때','가려진 내용 보러 스크롤'),
-      look('03','float','떠 있는 바','만들기가 가장 잦은 앱','만들기 버튼 찾기'),
-      look('04','pill','알약 강조','지금 위치를 한눈에 알아야 할 때','현재 탭 찾기'),
+      look('01','minimal','내비게이션 바 (Navigation bar)','내용이 주인공인 읽기 앱','메뉴가 눈을 뺏는 일'),
+      look('02','glass','Liquid Glass 탭 막대','사진·지도가 바닥까지 깔릴 때','가려진 내용 보러 스크롤'),
+      look('03','float','FAB이 있는 하단 앱 바 (Bottom app bar)','만들기가 가장 잦은 앱','만들기 버튼 찾기'),
+      look('04','pill','활성 표시기 (Active indicator)','지금 위치를 한눈에 알아야 할 때','현재 탭 찾기'),
       look('05','line','위쪽 표시줄','처음 쓰는 사람이 많은 앱','낯선 표시 알아보기')
     ] },
-    // Atoms share one key: `look` → data-look on the markup, drawn by [data-look] rules in parts.css. First entry = current shape.
-    // Button colour roles (primary/outline/ghost) stay on `variant`; looks here are arrangements of actions.
-    button: { list: [
-      look('01','fill','하나','할 일이 하나뿐인 화면','무엇을 누를지 고르기'),
-      look('02','hero','주 행동 + 아이콘','행동이 4개 이상 나란할 때','어느 걸 누를지 고민'),
-      look('03','pair','확인·취소 한 줄','되돌리기 어려운 결정 직전','잘못 누르기'),
-      look('04','bar','엄지 자리 가득','휴대폰 긴 화면 끝의 결정','스크롤해 버튼 찾기')
-    ] },
+    button: { key: 'variant', list: buttonLooks },
+    'icon-button': { key: 'variant', list: buttonLooks },
+    // Outlined · filled text fields (Material 3). The input keeps one structure; only the box surface changes.
     input: { list: [
-      look('01','box','기본 칸','한 번 쓰고 끝나는 값','무엇인지 알아보기'),
-      look('02','clear','칸 안 지우기','통째로 다시 쓰는 값','지우기 키 연타'),
-      look('03','unit','숫자 + 단위 한 칸','단위가 붙는 숫자','두 칸 오가기'),
-      look('04','stepper','빼기·더하기','작은 수를 바꿀 때','키보드 열기'),
-      look('05','reveal','보기 단추','가려진 비밀번호를 칠 때','틀렸는지 몰라 다시 치기')
-    ] },
-    field: { list: [
-      look('01','stack','위 라벨','처음 보는 양식','라벨 찾기'),
-      look('02','inline','옆 라벨','짧은 설정 값이 여러 줄','세로 스크롤'),
-      look('03','row','시작~끝 한 줄','짝을 이루는 값(기간·범위)','눈이 멈추는 곳 절반')
-    ] },
-    checkbox: { list: [
-      look('01','square','네모','항목이 적은 동의·선택','무엇인지 알아보기'),
-      look('02','card','선택 카드','설명이 붙은 선택지','작은 네모 겨누기'),
-      look('03','chip','알약 칩','여러 필터를 빠르게 켤 때','세로 목록 훑기'),
-      look('04','list','목록 줄','설정 화면의 여러 항목','줄과 칸 맞춰 보기'),
-      look('05','all','전체 선택','같은 종류 항목이 여러 개일 때','하나씩 누르기')
-    ] },
-    radio: { list: [
-      look('01','dot','가운데 점','선택지가 3~5개','무엇인지 알아보기'),
-      look('02','card','선택 카드','설명이 붙은 선택지','작은 원 겨누기'),
-      look('03','segment','나란한 버튼','2~4개 중 바로 바꿀 때','세로로 훑기'),
-      look('04','list','목록 줄','설정 화면의 한 가지 고르기','줄과 칸 맞춰 보기')
-    ] },
-    switch: { list: [
-      look('01','track','기본 트랙','바로 적용되는 켜기·끄기','저장 버튼 찾기'),
-      look('02','list','설정 줄','설정 항목이 여러 개','줄과 칸 맞춰 보기')
+      look('01','box','윤곽선 텍스트 필드 (Outlined)','여러 칸이 모인 양식','칸 경계 찾기'),
+      look('02','filled','채운 텍스트 필드 (Filled)','칸이 적고 여백이 넓은 화면','빈칸 알아보기')
     ] },
     badge: { list: [
-      look('01','soft','연한 면','목록 옆 짧은 상태','상태 글 읽기'),
-      look('02','icon','아이콘 붙음','색을 구분하기 어려운 사람도 볼 때','색으로 뜻 해석'),
-      look('03','count','개수 붙음','아이콘 뒤에 새 항목이 쌓일 때','열어서 세기')
+      look('01','soft','Tint 배지','목록 옆 짧은 상태','상태 글 읽기'),
+      look('02','icon','아이콘이 있는 배지 (With icon)','색을 구분하기 어려운 사람도 볼 때','색으로 뜻 해석')
     ] },
-    divider: { list: [
-      look('01','solid','실선','내용 묶음 사이','어디서 끊기는지 찾기'),
-      look('02','label','가운데 글자','두 방법 중 하나(또는)','두 묶음 관계 추측')
+    tabs: { list: [
+      look('01','filled','버튼형 탭 (Contained)','이름이 짧은 2~4개 화면','지금 탭 찾기'),
+      look('02','icon','아이콘 탭 (Tabs with icons)','휴대폰 좁은 폭의 탭','긴 이름 읽기'),
+      look('03','count','배지가 있는 탭 (With badge)','탭마다 쌓인 수가 중요할 때','하나씩 눌러 보기'),
+      look('04','vertical','수직 탭 (Vertical)','탭이 5개 넘는 넓은 화면','가로 스크롤'),
+      look('05','scroll','스크롤 가능한 탭 (Scrollable tabs)','휴대폰에서 탭이 5개 넘을 때','메뉴 열어 탭 찾기')
     ] },
-    'status-dot': { list: [
-      look('01','dot','점','글 옆 짧은 상태','상태 글 읽기'),
-      look('02','avatar','프로필 모서리','사람 목록의 접속 여부','이름 옆 글 찾기')
+    // Elevated · filled · outlined cards (Material 3).
+    card: { list: [
+      look('01','raised','Elevated 카드','글이 주인공인 카드','무엇인지 알아보기'),
+      look('02','filled','Filled 카드','카드가 여러 장 모인 목록','카드 경계 찾기'),
+      look('03','outlined','Outlined 카드','그림자가 많은 화면 위','겹친 그림자 읽기')
     ] },
-    icon: { list: [
-      look('01','line','선','뜻이 널리 알려진 아이콘','글 읽기'),
-      look('02','label','아이콘 + 이름','처음 보는 아이콘','뜻 추측')
-    ] },
-    tabs: { key: 'look', label: '모양', frame: 'stage', list: [
-      look('01','filled','채움 트랙','이름이 짧은 2~4개 화면','지금 탭 찾기'),
-      look('02','icon','아이콘 위 글자','휴대폰 좁은 폭의 탭','긴 이름 읽기'),
-      look('03','count','개수 붙음','탭마다 쌓인 수가 중요할 때','하나씩 눌러 보기'),
-      look('04','vertical','세로','탭이 5개 넘는 넓은 화면','가로 스크롤'),
-      look('05','scroll','옆으로 밀기','휴대폰에서 탭이 5개 넘을 때','메뉴 열어 탭 찾기')
-    ] },
-    // sample: options that only the gallery cards add, so the chosen shape is visible without pressing anything.
-    feedback: { key: 'look', label: '모양', frame: 'stage', sample: { open: true }, list: [
-      look('01','card','떠 있는 카드','결과를 읽고 넘어갈 때','알림 찾기'),
-      look('02','toast','되돌리기 붙음','되돌릴 수 있는 행동 직후','확인 창 한 번 더'),
-      look('03','ring','진행 고리','남은 양이 중요할 때','막대 길이 가늠'),
-      look('04','steps','마디 막대','단계가 정해진 일','몇 단계 남았는지 세기')
-    ] },
-    card: { key: 'look', label: '모양', frame: 'stage', list: [
-      look('01','raised','기본','글이 주인공인 카드','무엇인지 알아보기'),
-      look('02','row','가로형','여러 항목을 위아래로 비교','카드 사이 눈 이동'),
-      look('03','media','이미지 위','사진으로 고르는 항목','제목 읽기')
-    ] },
-    'search-module': { key: 'look', label: '모양', frame: 'stage', list: [
-      look('01','grid','카드 격자','훑어보며 고를 때','한 줄씩 읽기'),
-      look('02','pill','알약 검색창','검색어 하나로 찾을 때','필터 칸 채우기'),
-      look('03','chips','필터 칩 줄','몇 가지 상태로 자주 거를 때','드롭다운 열기'),
-      look('04','list','목록형','이름으로 빠르게 비교할 때','카드 사이 눈 이동'),
-      look('05','picker','검색 + 얼굴 목록','사람·항목이 많아 고를 때','드롭다운 스크롤'),
-      look('06','feature','큰 첫 결과','추천 하나를 앞세울 때','무엇부터 볼지 고민')
-    ] },
-    template: { key: 'look', label: '모양', frame: 'phone', list: pageLooks },
-    page: { key: 'look', label: '모양', frame: 'phone', list: pageLooks }
+    template: { frame: 'phone', list: pageLooks },
+    page: { frame: 'phone', list: pageLooks }
   };
-  for (const g of Object.values(galleries)) if (!g.key) Object.assign(g, { key: 'look', label: '모양', frame: 'stage' });
+  for (const g of Object.values(galleries)) Object.assign(g, { key: g.key || 'look', label: g.label || '모양', frame: g.frame || 'stage' });
   for (const [id, g] of Object.entries(galleries)) {
     let c = controls[id]?.find(c => c.key === g.key);
-    if (!c) (controls[id] ||= []).push(c = control(g.key, g.label, []));
+    if (!c) (controls[id] ||= []).unshift(c = control(g.key, g.label, []));
     Object.assign(c, { values: g.list.map(v => [v.id, v.name]), default: g.default ?? g.list[0].id });
   }
   const contracts = {
@@ -194,29 +253,77 @@
     'token-layer': ['겹치는 층의 앞뒤 순서', 'z-index는 var(--p-layer-*)로만 참조', [], []],
     'token-breakpoint': ['화면 폭과 영역 폭의 분기 기준', '@media·@container는 var()를 못 읽으므로 px를 쓰되 이 목록의 값만 사용(빌드가 검사)', [], []],
     icon: ['한 개의 그림 기호', '아이콘만 있는 행동에는 접근 가능한 이름을 제공', ['icon'], []],
+    'icon-label': ['그림 기호와 그 이름', '처음 보는 아이콘은 이름을 함께 보여 줌. 이름은 아이콘 아래 한 줄', ['icon','label'], []],
     divider: ['영역의 경계', '부모의 가로 너비에 맞춰 사용', [], []],
+    'text-divider': ['두 방법 사이의 경계와 그 관계', '가운데 글자는 짧게(또는·그리고). 부모의 가로 너비에 맞춰 사용', ['label'], []],
     'status-dot': ['상태를 색과 글자로 표시', '상태 이름을 함께 유지', ['label'], []],
-    button: ['행동 실행', '아이콘만 쓸 때도 label 유지. 실행할 일은 click에 연결', ['label','variant','size','state','iconName','iconOnly','type','action'], ['click','pattove:action']],
-    input: ['한 줄 값 입력', 'label과 id를 연결. 오류에는 설명과 aria-invalid를 함께 사용. 비밀번호 보기 단추는 이름(보기·숨기기)으로 상태 제공', ['id','value','placeholder','type','name','disabled','invalid','description'], ['input','change']],
+    avatar: ['사람의 얼굴 자리와 접속 여부', '읽는 이름에 사람 이름과 접속 상태를 함께 제공. 사진이 없으면 이름 첫 글자', ['name','online'], []],
+    button: ['행동 실행', '글자가 있는 버튼. 실행할 일은 click에 연결. 한 화면의 채움 버튼은 하나', ['label','variant','size','state','iconName','count','type','action'], ['click','pattove:action']],
+    'icon-button': ['그림 하나로 행동 실행', '읽는 이름(label)을 반드시 제공. 누르는 칸은 44px 이상', ['label','iconName','variant','size','state','action'], ['click','pattove:action']],
+    'segmented-button': ['2~4개 중 하나를 바로 바꾸기', '같은 그룹은 name 공유. 고른 칸은 색과 체크 표시로 구분', ['legend','items','value','name','disabled'], ['change']],
+    input: ['한 줄 값 입력', 'label과 id를 연결. 오류에는 설명과 aria-invalid를 함께 사용', ['id','value','placeholder','type','name','disabled','invalid','description','look'], ['input','change']],
+    'clear-input': ['통째로 다시 쓰는 값 입력', '지우기 단추는 값이 있을 때만 보임. 이름은 "라벨 지우기"', ['id','label','value','placeholder','disabled'], ['input','change']],
+    'unit-input': ['단위가 붙는 숫자 입력', '숫자와 단위를 한 칸에. 단위 고르기에도 이름 제공', ['id','label','value','units','disabled'], ['input','change']],
+    stepper: ['작은 수를 빼기·더하기로 바꾸기', '빼기·더하기 단추에 이름 제공. 최솟값 아래로 내려가지 않음', ['id','value','min','max','disabled'], ['input','change']],
+    'password-input': ['가려진 비밀번호 입력', '보기 단추는 이름(보기·숨기기)으로 상태 제공. 값은 그대로 유지', ['id','label','value','disabled'], ['input','change']],
     field: ['라벨·입력·설명·오류의 연결', '라벨과 도움말의 id 관계를 함께 가져오기', ['id','label','value','state','help','name','type'], ['input','change']],
-    checkbox: ['여러 개 중 선택', '연결된 label을 조작 영역으로 유지. 전체 선택은 일부만 고르면 중간 상태(indeterminate)', ['label','checked','disabled','indeterminate','name','value'], ['change']],
+    'date-range': ['시작과 끝 값을 한 칸에', '끝 칸은 "라벨 끝" 이름을 가짐. 오류·도움말은 두 칸 모두에 연결', ['id','label','start','end','state','help'], ['input','change']],
+    'search-bar': ['검색어 하나로 찾기', '라벨은 화면에서만 숨김. 검색 단추는 submit', ['prefix','placeholder'], ['submit','change']],
+    checkbox: ['여러 개 중 선택', '연결된 label을 조작 영역으로 유지', ['label','checked','disabled','indeterminate','name','value'], ['change']],
     radio: ['같은 그룹에서 하나 선택', '같은 그룹은 name 공유, 다른 그룹은 name 분리', ['label','checked','disabled','name','value'], ['change']],
     switch: ['설정을 켜고 끄기', '동작 이름을 label로 제공', ['label','checked','disabled'], ['change']],
-    badge: ['짧은 상태 이름과 쌓인 개수', '색만으로 상태를 구분하지 않음. 개수는 읽을 이름(예: 새 알림 3개)을 함께 제공', ['label','tone','count'], []],
+    'check-card': ['설명이 붙은 선택지 고르기', '카드 전체가 누르는 칸. 고르면 테두리와 체크 표시가 함께 바뀜', ['label','description','checked','disabled','name','value'], ['change']],
+    'radio-card': ['설명이 붙은 선택지 중 하나 고르기', '카드 전체가 누르는 칸. 같은 그룹은 name 공유', ['label','description','checked','disabled','name','value'], ['change']],
+    'filter-chip': ['필터 하나를 켜고 끄기', '켜진 칩은 색과 체크 표시로 구분. 여러 개는 checkbox, 하나만은 radio', ['label','checked','disabled','name','value','type'], ['change']],
+    badge: ['짧은 상태 이름', '색만으로 상태를 구분하지 않음', ['label','tone','look'], []],
+    'count-badge': ['아이콘 뒤에 쌓인 개수', '읽는 이름(예: 새 알림 3개)을 함께 제공. 0이면 숫자를 숨기고 99를 넘으면 99+', ['count','icon'], []],
     tabs: ['같은 영역의 내용 전환', '탭과 패널의 id 연결을 유지. 세로 탭은 위아래 방향키. 옆으로 밀기 탭은 고른 탭이 화면 안에 보이도록 스크롤', ['prefix','look'], ['pattove:tabchange']],
     'bottom-nav': ['주요 목적지 선택', '목적지 이동은 pattove:navigate 이벤트에 연결. 가운데 만들기 버튼(float)은 pattove:create(React는 onCreate)에 연결. 표본은 선택 상태를 제공', ['variant','onCreate (React)'], ['pattove:navigate','pattove:create (HTML)']],
-    feedback: ['행동의 결과와 진행률', '표본 저장 알림과 68% 진행률. 실제 저장·업로드는 프로젝트에서 연결', ['look'], []],
-    card: ['제목·본문·상태·행동 조합', '단독 표본은 선택 토글, 검색 모듈에서는 상세 열기', ['title','description','tag','action','behavior','look'], ['pattove:select']],
-    'search-module': ['이름·상태로 검색하고 상세 확인', 'records에 고유 id·title·description·tag 필요. HTML은 화면 안의 보관 상태를 바꾸고 이벤트로 알림. React는 onSave(record)의 성공·실패와 대기 상태를 처리. 영구 저장은 프로젝트에서 연결', ['prefix','records','look','onSave (React)'], ['pattove:save (HTML)','onSave(record) (React)']],
+    notice: ['행동의 결과 알림', 'role="status"로 읽힘. 점과 글자로 상태를 함께 표시', ['text'], []],
+    toast: ['되돌릴 수 있는 행동 직후의 잠깐 알림', '되돌리기는 pattove:undo(React는 onUndo)에 연결. 확인 창 대신 바로 실행하고 되돌리기를 줌', ['text','open','onUndo (React)'], ['pattove:undo']],
+    'progress-bar': ['작업이 얼마나 됐는지', '진짜 progress 요소와 숫자를 함께 유지', ['value','label'], []],
+    'progress-ring': ['남은 양을 고리로', '고리는 그림일 뿐, 읽는 값은 숨긴 progress 요소가 제공', ['value','label'], []],
+    'step-bar': ['정해진 단계 중 몇 번째인지', 'progress의 value·max를 단계 수로 사용. 숫자(3/5)를 함께 표시', ['step','steps','label'], []],
+    card: ['제목·본문·상태·행동 조합', '단독 표본은 선택 토글. 결과 블록에서는 상세 열기', ['title','description','tag','action','behavior','look'], ['pattove:select']],
+    'list-card': ['위아래로 비교하는 가로형 카드', '왼쪽 그림 자리(사진이 없으면 첫 글자), 오른쪽 글. 행동은 카드와 같은 위치', ['title','description','tag','action','initial'], ['pattove:select']],
+    'media-card': ['사진으로 고르는 카드', '그림 자리는 꾸밈(aria-hidden). 제목이 뜻을 전함', ['title','description','tag','action'], ['pattove:select']],
+    'action-row': ['주 행동 하나와 보조 행동 아이콘들', '주 행동이 넓게, 나머지는 아이콘 버튼. 아이콘 버튼마다 읽는 이름', ['label','count','actions'], ['click']],
+    'confirm-row': ['되돌리기 어려운 결정 직전의 확인·취소', '취소는 글자 버튼, 결정은 채움 버튼. 결정 버튼은 오른쪽', ['confirmLabel','cancelLabel'], ['click']],
+    'action-bar': ['긴 화면 끝의 결정 버튼', '화면 아래에 가로로 가득. 엄지가 닿는 자리', ['label'], ['click']],
+    'inline-form': ['짧은 설정 값 여러 줄', '라벨이 왼쪽, 값이 오른쪽. 좁은 칸에서도 라벨과 id 연결 유지', ['fields'], ['input','change']],
+    'check-list': ['설정 화면의 여러 항목 켜기', '줄 전체가 누르는 칸. 이름은 왼쪽, 체크는 오른쪽', ['legend','items'], ['change']],
+    'select-all-list': ['같은 종류 여러 개를 한 번에', '일부만 고르면 부모가 중간 상태(indeterminate)', ['legend','items','value'], ['change']],
+    'radio-list': ['설정 화면에서 하나 고르기', '같은 그룹은 name 공유. 줄 전체가 누르는 칸', ['legend','items','name'], ['change']],
+    'switch-list': ['바로 적용되는 설정 여러 개', '줄마다 스위치 하나. 동작 이름을 label로', ['legend','items'], ['change']],
+    'search-form': ['이름과 상태로 찾기', '검색어·상태 고르기·검색 단추. 상태 칸 대신 필터 칩 줄을 넣을 수 있음. 결과 블록과 함께 쓰면 거름', ['prefix','filter'], ['submit','change']],
+    'filter-chip-row': ['몇 가지 상태로 자주 거르기', '하나만 고르는 radio 칩 줄. 검색 양식 안에 넣으면 바로 거름', ['name','items','value'], ['change']],
+    'result-grid': ['훑어보며 고르는 카드 격자', '개수 줄(role="status")과 카드 격자. 좁으면 한 줄에 하나', ['records','action'], ['pattove:select']],
+    'result-list': ['이름으로 빠르게 비교하는 목록', '개수 줄과 한 줄짜리 행. 행동은 행 끝', ['records','action'], ['pattove:select']],
+    'featured-results': ['추천 하나를 앞세운 결과', '첫 결과만 이미지 카드로 한 줄을 차지', ['records','action'], ['pattove:select']],
+    'people-picker': ['사람이 많을 때 골라 담기', '치는 동안 바로 좁힘. 행 전체가 누르는 칸. 없으면 빈 상태', ['prefix','people'], ['input','pattove:select']],
+    'empty-state': ['결과가 없을 때 되돌아가기', '이유 한 줄과 전체 보기 단추. 검색 블록 안에서는 거른 조건을 풂', ['text','action'], ['click']],
+    'stat-row': ['개수부터 파악하는 숫자 줄', '숫자는 크게, 이름은 작게. 3칸', ['items'], []],
     template: ['제목·본문·하단 탐색의 배치', 'body에는 신뢰할 수 있는 부품 마크업만 전달', ['title','eyebrow','count','body','look'], []],
-    page: ['실제 콘텐츠가 들어간 조합', '템플릿·모듈을 재사용. 서버·로그인 없이 예시 데이터로 실행', ['prefix','look'], []]
+    page: ['실제 콘텐츠가 들어간 조합', '템플릿과 검색 양식·결과 블록을 재사용. HTML은 화면 안의 보관 상태를 바꾸고 pattove:save로 알림. React는 onSave(record)의 성공·실패와 대기 상태를 처리. 서버·로그인 없이 예시 데이터로 실행', ['prefix','look','records','onSave (React)'], ['pattove:save (HTML)','onSave(record) (React)']]
   };
+  // Shared CSS blocks: a part's own block plus the helper blocks it is drawn with.
+  const cssBlocks = {
+    checkbox: ['selection'], radio: ['selection'], switch: ['selection'],
+    'clear-input': ['input-group','clear-input'], 'unit-input': ['input-group','unit-input'], stepper: ['input-group','stepper'], 'password-input': ['input-group','password-input'], 'date-range': ['input-group','date-range'],
+    'check-card': ['choice-card'], 'radio-card': ['choice-card'],
+    'check-list': ['choice-list'], 'radio-list': ['choice-list'], 'switch-list': ['choice-list'],
+    'list-card': ['card-media','list-card'], 'media-card': ['card-media'],
+    'result-grid': ['results'], 'result-list': ['results','result-list'], 'featured-results': ['results','featured-results'], 'people-picker': ['results','people-picker'],
+    'confirm-row': ['confirm-row'], 'action-row': ['action-row'], 'icon-button': ['icon-button']
+  };
+  // Minimum inline size (px) at which a part still reads; wide blocks need more room than a single control.
+  const minInline = { 'bottom-nav': 224, template: 240, page: 240, card: 200, 'list-card': 240, 'media-card': 200, input: 160, field: 160, 'date-range': 200, 'search-bar': 240, tabs: 240, 'search-form': 240, 'result-grid': 240, 'result-list': 240, 'featured-results': 240, 'people-picker': 240, 'action-row': 240, 'action-bar': 240, 'inline-form': 240, 'check-list': 200, 'radio-list': 200, 'switch-list': 200, 'select-all-list': 200, 'stat-row': 240, toast: 224, notice: 200, 'progress-bar': 200, 'step-bar': 200 };
   for (const item of items) {
     const [purpose, compatibility, inputs, events] = contracts[item.id];
     Object.assign(item, { purpose, compatibility, inputs, events, controls: controls[item.id] || [], gallery: galleries[item.id] || null,
-      css: ['checkbox','radio','switch'].includes(item.id) ? ['selection'] : item.id === 'page' ? [] : [item.id],
+      css: cssBlocks[item.id] || (item.id === 'page' ? ['page'] : [item.id]),
       source: 'src/system/parts.js', reactSource: item.layer === 'Token' ? null : 'src/system/react/'+item.id+'.jsx', styles: window.Pattove.catalog.styles.filter(s => s.id !== 'base').map(s => s.id),
-      minInlineSize: ({ 'bottom-nav': 224, 'search-module': 240, template: 240, page: 240, card: 200, input: 160, field: 160, tabs: 240, feedback: 224 })[item.id] || 160,
+      minInlineSize: minInline[item.id] || 160,
       support: { html: 'implemented', react: 'implemented', native: 'not-implemented', print: 'not-verified' },
       verification: { suite: 'tests/system-audit.cjs', evidence: 'test-results/system-audit/results.json' }
     });
@@ -238,6 +345,6 @@
     visit(id);
     return [...result].map(key => index.get(key));
   };
-  const patterns = [{ id: 'search-filter-results', name: '검색·필터·결과', layer: 'Pattern', items: ['search-module', 'template', 'page'], rules: ['입력 필드와 상태 필터 뒤에 검색 동작을 둡니다.', '결과 개수는 바뀔 때마다 알리고, 결과가 없으면 전체 보기로 복구합니다.', '제목이 길어져도 카드의 행동은 같은 위치에 둡니다.'] }];
+  const patterns = [{ id: 'search-filter-results', name: '검색·필터·결과', layer: 'Pattern', items: ['search-form', 'filter-chip-row', 'result-grid', 'result-list', 'empty-state', 'template', 'page'], rules: ['입력 필드와 상태 필터 뒤에 검색 동작을 둡니다.', '결과 개수는 바뀔 때마다 알리고, 결과가 없으면 전체 보기로 복구합니다.', '제목이 길어져도 카드의 행동은 같은 위치에 둡니다.'] }];
   window.Pattove.systemRegistry = { sections, items, index, matching, dependencies, patterns, normalizeOptions, version };
 })();

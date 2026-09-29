@@ -1,8 +1,7 @@
 import React from 'react';
 import { Divider } from './divider.jsx';
-// look matches the HTML data-look values; the media and row looks put a picture area before the body,
-// and initial prints a letter in it when there is no picture (the picker's face rows).
-export function Card({ children, look = 'raised', initial = '', ...props }) { return <article {...props} className="ds-card" data-look={look}>{(look === 'media' || look === 'row') && <div className="ds-card-media" aria-hidden="true">{initial}</div>}{children}</article>; }
+// look: raised (띄움) · filled (면) · outlined (윤곽).
+export function Card({ children, look = 'raised', ...props }) { return <article {...props} className="ds-card" data-look={look}>{children}</article>; }
 export function CardBody({ children }) { return <div className="ds-card-body">{children}</div>; }
 export function CardTitle({ children, as: Tag = 'h3' }) { return <Tag>{children}</Tag>; }
 export function CardDescription({ children }) { return <p>{children}</p>; }

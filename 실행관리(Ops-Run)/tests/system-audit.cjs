@@ -49,7 +49,7 @@ async function run() {
         await route(page,style,item.id);
         check(style+'/'+item.id+' preview relationships', (await page.locator('.component-page').evaluate(integrity)).length===0);
       }
-      console.log(style+': 18 implementations checked');
+      console.log(style+': '+metadata.items.length+' implementations checked');
     }
     // Every shape on the grid can be picked and stays picked after a reload; every other declared variant still renders with sound relationships.
     for(const item of metadata.items) for(const control of item.controls) for(const [value] of control.values) {
@@ -67,8 +67,8 @@ async function run() {
       }
     }
     await page.evaluate(()=>localStorage.removeItem('pattove-part-choice'));
-    await route(page,'main','search-module');
-    const demo=await stage(page,'search-module');
+    await route(page,'main','page');
+    const demo=await stage(page,'page');
     await demo.locator('[data-result] button').first().click();await demo.locator('[data-part-action="save-record"]').click();await demo.locator('[data-part-action="close-record"]').click();await demo.locator('[data-result] button').first().click();
     check('record keeps saved state when reopened',await demo.locator('[data-part-action="save-record"]').getAttribute('aria-pressed')==='true');
     await demo.locator('[data-part-action="save-record"]').click();await demo.locator('[data-part-action="close-record"]').click();await demo.locator('[data-result] button').first().click();
@@ -86,13 +86,14 @@ async function run() {
         await page.setViewportSize({width,height:900});await route(page,style);
         check(name+'/'+width+'/'+style+' single part layout',await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)&&await page.locator('.component-page').count()===1&&await page.locator('.specimen').count()===0);
       }
-      for(const id of ['field','checkbox','radio','switch','tabs','bottom-nav','card','search-module','page']) {
+      for(const id of ['field','checkbox','radio','switch','tabs','bottom-nav','card','people-picker','page']) {
         await route(page,'main',id);
         check(name+'/'+id+' valid relationships',(await page.locator('.component-page').evaluate(integrity)).length===0);
         await stage(page,id);
         if(id==='tabs') {await page.locator('#test-stage [role="tab"]').first().focus();await page.keyboard.press('ArrowRight');check(name+' keyboard tabs',await page.locator('#test-stage [role="tab"]').nth(1).getAttribute('aria-selected')==='true');}
         if(id==='checkbox'||id==='switch') {await page.locator('#test-stage input').uncheck();check(name+' '+id+' toggles',!await page.locator('#test-stage input').isChecked());}
-        if(id==='search-module'||id==='page') {await page.locator('#test-stage [name="query"]').fill('없는결과');await page.locator('#test-stage [type="submit"]').click();check(name+' '+id+' empty recovery',await page.locator('#test-stage .ds-empty').isVisible());await page.locator('#test-stage [data-part-action="reset-search"]').click();check(name+' '+id+' recovered',await page.locator('#test-stage [data-result]:visible').count()===3);}
+        if(id==='people-picker') {await page.locator('#test-stage [name="query"]').fill('없는결과');check(name+' '+id+' empty while typing',await page.locator('#test-stage .ds-empty').isVisible());await page.locator('#test-stage [data-part-action="reset-search"]').click();check(name+' '+id+' recovered',await page.locator('#test-stage [data-result]:visible').count()===3);}
+        if(id==='page') {await page.locator('#test-stage [name="query"]').fill('없는결과');await page.locator('#test-stage [type="submit"]').click();check(name+' '+id+' empty recovery',await page.locator('#test-stage .ds-empty').isVisible());await page.locator('#test-stage [data-part-action="reset-search"]').click();check(name+' '+id+' recovered',await page.locator('#test-stage [data-result]:visible').count()===3);}
       }
       await page.goto(fileURL+'#/system?style=main&detail=button');check(name+' file execution',await page.locator('.variant-card .ds-button').count()>=1);
       await page.screenshot({path:path.join(out,name+'-mobile.png')});console.log(name+': responsive controls checked');

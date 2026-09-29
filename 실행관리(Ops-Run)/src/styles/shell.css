@@ -104,41 +104,37 @@ h3 { font-size: var(--p-text-md); font-weight: var(--p-weight-semibold); }
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 
-/* One left tree carries all navigation: shelves are the 대분류 rows, the open shelf lists its 소분류 under it. The top bar keeps only brand, style and search. */
-:root { --menu-w: calc(var(--p-space-unit) * 56); --rail-w: calc(var(--p-space-unit) * 20); --top-h: var(--p-space-4xl); }
+/* Global shelves stay across the top; the left rail holds only the current shelf's categories. */
+:root { --menu-w: calc(var(--p-space-unit) * 48); --top-h: var(--p-space-4xl); }
 html { scroll-padding-top: var(--chrome-bottom, var(--p-space-md)); }
 .menu-backdrop, .menu-toggle { display: none; }
-.app-top { position: sticky; top: 0; z-index: var(--p-layer-fixed); display: flex; align-items: center; gap: var(--p-space-sm); height: var(--top-h); padding: var(--p-space-xs) var(--p-space-lg); border-bottom: var(--p-border-width) solid var(--p-line); background: var(--p-high); }
+.app-top { position: sticky; top: 0; z-index: var(--p-layer-fixed); display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: var(--p-space-sm); height: var(--top-h); padding: var(--p-space-xs) var(--p-space-lg); border-bottom: var(--p-border-width) solid var(--p-line); background: var(--p-high); }
 .top-brand { display: grid; place-items: center; width: var(--p-control-size-sm); height: var(--p-control-size-sm); border-radius: var(--p-control-radius); }
 .top-brand img { width: var(--p-icon-2xl); height: var(--p-icon-2xl); }
-.style-context { display: inline-flex; align-items: center; min-height: var(--p-control-size-sm); padding-inline: var(--p-space-xs); border-radius: var(--p-radius-md); font-size: var(--p-text-body); font-weight: var(--p-weight-semibold); white-space: nowrap; }
-.style-context:hover { background: var(--p-surface); }
+.primary-nav { display: flex; align-self: stretch; align-items: stretch; justify-content: center; gap: var(--p-space-xs); min-width: 0; }
+.primary-nav a { position: relative; display: flex; justify-content: center; align-items: center; min-height: var(--p-control-size-sm); min-width: var(--p-control-size-sm); padding-inline: var(--p-space-sm); border-radius: var(--p-radius-sm); color: var(--p-muted); font-size: var(--p-text-body); font-weight: var(--p-weight-medium); white-space: nowrap; }
+.primary-nav a:hover { color: var(--p-ink); background: var(--p-surface); }
+.primary-nav a[aria-current='page'] { color: var(--p-ink); font-weight: var(--p-weight-bold); }
+.primary-nav a[aria-current='page']::after { content: ''; position: absolute; inset: auto var(--p-space-sm) 0; height: var(--p-border-width-focus); border-radius: var(--p-radius-full); background: var(--p-accent); }
 .app-menu { position: fixed; inset: var(--top-h) auto 0 0; z-index: var(--p-layer-sticky); display: flex; flex-direction: column; width: var(--menu-w); border-right: var(--p-border-width) solid var(--p-line); background: var(--p-high); }
 .menu-head { flex-shrink: 0; display: none; align-items: center; justify-content: space-between; padding: var(--p-space-sm); }
 .menu-close { display: none; font-size: var(--p-text-lg); border-radius: var(--p-radius-md); }
-.menu-body { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: var(--p-space-md) var(--p-space-sm); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
-.menu-foot { flex-shrink: 0; display: flex; justify-content: flex-end; padding: var(--p-space-xs) var(--p-space-sm); border-top: var(--p-border-width) solid var(--p-line); }
-.rail-toggle { display: inline-grid; place-items: center; border-radius: var(--p-radius-md); color: var(--p-muted); }
-.rail-toggle:hover { color: var(--p-ink); background: var(--p-surface); }
-.rail-toggle .icon { width: var(--p-icon-sm); height: var(--p-icon-sm); }
-/* The tree fills the menu height; only the open shelf's 소분류 list scrolls, so the other shelves are always in reach. */
-.side-nav { flex: 1 1 auto; min-height: calc(var(--p-space-unit) * 88); display: flex; flex-direction: column; }
-.side-tree { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: var(--p-space-2xs); margin: 0; padding: 0; list-style: none; }
-.side-group { flex: 0 0 auto; display: flex; flex-direction: column; }
-.side-group.is-open { flex: 0 1 auto; min-height: 0; }
-.side-parent, .side-child { display: flex; align-items: center; gap: var(--p-space-xs); width: 100%; min-height: var(--p-control-size-sm); padding: var(--p-space-xs) var(--p-space-sm); border-radius: var(--p-radius-md); text-align: left; line-height: var(--p-leading-normal); }
-.side-parent { color: var(--p-ink); font-weight: var(--p-weight-medium); }
-.side-parent > span { flex: 1; min-width: 0; }
-.side-parent > .ui-icon { flex-shrink: 0; width: var(--p-icon-sm); height: var(--p-icon-sm); }
-.side-parent > .ui-icon:first-child { width: var(--p-icon-md); height: var(--p-icon-md); }
-.side-parent > .ui-icon:last-child { color: var(--p-muted); transition: transform var(--p-duration); }
-.is-open > .side-parent { font-weight: var(--p-weight-semibold); }
-.is-open > .side-parent > .ui-icon:last-child { transform: rotate(180deg); }
-.side-children { position: relative; flex: 0 1 auto; min-height: calc(var(--p-control-size-sm) * 3); margin: var(--p-space-2xs) 0 var(--p-space-xs) calc(var(--p-space-unit) * 5); padding-left: var(--p-space-xs); border-left: var(--p-border-width) solid var(--p-line); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
-.side-child { color: var(--p-muted); }
-.side-child span { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-.side-parent:hover, .side-child:not([aria-current]):hover { background: var(--p-surface); }
-.side-parent[aria-current], .side-child[aria-current] { background: var(--p-soft); color: var(--p-ink); font-weight: var(--p-weight-semibold); }
+.menu-body { flex: 1; min-height: 0; padding: var(--p-space-lg) var(--p-space-sm); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+/* Subcategories use quiet rows; top-level navigation has its own treatment. */
+.secondary-nav a { position: relative; isolation: isolate; display: flex; align-items: center; gap: var(--p-space-xs); width: 100%; min-height: var(--p-control-size-sm); padding: var(--p-space-xs) var(--p-space-sm); color: var(--p-ink); font-size: var(--p-text-body); text-align: left; }
+.secondary-nav a::before { content: ''; position: absolute; inset: var(--p-space-2xs) 0; z-index: var(--p-layer-below); border-radius: var(--p-radius-md); }
+.secondary-nav a:focus-visible { outline: none; }
+.secondary-nav a:focus-visible::before { outline: var(--p-border-width-strong) solid var(--p-highlight); outline-offset: var(--p-focus-offset-tight); }
+.secondary-nav a:not([aria-current]):hover::before { background: var(--p-surface); }
+.secondary-nav a { color: var(--p-muted); line-height: var(--p-leading-normal); }
+.secondary-nav a[aria-current], .secondary-nav a[aria-expanded='true'] { color: var(--p-ink); font-weight: var(--p-weight-semibold); }
+.secondary-nav a[aria-current]::before { background: var(--p-soft); }
+.nav-all { margin-bottom: var(--p-space-xs); }
+.nav-subcategory .ui-icon { margin-left: auto; width: var(--p-icon-sm); height: var(--p-icon-sm); color: var(--p-muted); transition: transform var(--p-duration); }
+.nav-subcategory[aria-expanded='true'] .ui-icon { transform: rotate(180deg); }
+.nav-minor-group { margin: 0 0 var(--p-space-xs) calc(var(--p-space-unit) * 4); padding-left: var(--p-space-xs); border-left: var(--p-border-width) solid var(--p-line); }
+.nav-minor span { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+.nav-subcategory span { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .header-context { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: var(--p-space-md); }
 .collection-title { font-size: var(--p-text-body); font-weight: var(--p-weight-semibold); }
 .header-context:not(:has(> :not(.sr-only))) { margin-bottom: 0; }
@@ -151,32 +147,28 @@ html { scroll-padding-top: var(--chrome-bottom, var(--p-space-md)); }
 .catalog-toolbar { display: flex; align-items: center; justify-content: space-between; gap: var(--p-space-sm); margin-bottom: var(--p-space-md); }
 .query-chip { flex-shrink: 0; display: inline-flex; align-items: center; gap: var(--p-space-xs); max-width: 100%; padding: var(--p-space-xs) var(--p-space-sm); border-radius: var(--p-radius-full); background: var(--p-soft); font-size: var(--p-text-sm); overflow-wrap: anywhere; }
 .query-chip .ui-icon { width: var(--p-icon-sm); height: var(--p-icon-sm); flex-shrink: 0; }
-main { min-width: 0; margin-left: var(--menu-w); padding: var(--p-space-xl) var(--p-space-xl) var(--p-space-5xl); }
+main { min-width: 0; margin-left: 0; padding: var(--p-space-xl) var(--p-space-xl) var(--p-space-5xl); }
+body.has-subnav main { margin-left: var(--menu-w); }
 /* Search is rare, so the top bar keeps only a button; the one search box opens in a modal near the top. */
-.search-open { margin-left: auto; display: inline-grid; place-items: center; width: var(--p-control-size-sm); height: var(--p-control-size-sm); border-radius: var(--p-radius-full); color: var(--p-muted); }
+.search-open { justify-self: end; display: inline-grid; place-items: center; width: var(--p-control-size-sm); height: var(--p-control-size-sm); border-radius: var(--p-radius-full); color: var(--p-muted); }
 .search-open:hover { color: var(--p-ink); background: var(--p-surface); }
 .search-open .icon { width: var(--p-icon-md); height: var(--p-icon-md); }
 dialog.search-dialog { width: min(var(--p-container-md), 100% - var(--p-space-lg)); margin-top: calc(var(--p-space-unit) * 20); padding: var(--p-space-sm); overflow: visible; }
 .search-dialog .search-popover { position: static; margin-top: var(--p-space-xs); padding: 0; box-shadow: none; border: 0; background: none; }
-/* Wide screens can fold the tree to a rail of shelf icons. */
-@media (min-width: 761px) {
-  :root.rail { --menu-w: var(--rail-w); }
-  .rail .side-children, .rail .side-parent > .ui-icon:last-child { display: none; }
-  .rail .side-parent { justify-content: center; padding-inline: 0; }
-  .rail .side-parent > span { position: absolute; width: var(--p-size-hairline); height: var(--p-size-hairline); overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-  .rail .menu-foot { justify-content: center; }
-  .rail .rail-toggle .icon { transform: rotate(180deg); }
-}
 @media (max-width: 760px) {
-  :root { --top-h: calc(var(--p-space-unit) * 15); }
-  .app-top { gap: var(--p-space-2xs); padding-inline: var(--p-space-sm); }
-  .menu-toggle { display: inline-grid; place-items: center; width: var(--p-control-size-sm); height: var(--p-control-size-sm); border-radius: var(--p-control-radius); }
-  .menu-toggle .icon { width: var(--p-icon-md); height: var(--p-icon-md); }
+  :root { --top-h: calc(var(--p-space-unit) * 28); }
+  .app-top { grid-template-columns: auto minmax(0,1fr); grid-template-rows: var(--p-control-size-sm) minmax(0,1fr); gap: var(--p-space-2xs) var(--p-space-xs); padding-inline: var(--p-space-sm); }
+  .search-open { grid-column: 2; grid-row: 1; }
+  .primary-nav { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); gap: var(--p-space-2xs); }
+  .primary-nav a { min-width: 0; padding-inline: var(--p-space-2xs); }
+  .primary-nav a[aria-current='page']::after { inset-inline: var(--p-space-xs); }
+  .menu-toggle { display: inline-flex; align-items: center; gap: var(--p-space-2xs); min-height: var(--p-control-size-sm); padding-inline: var(--p-space-xs); border: var(--p-border-width) solid var(--p-line); border-radius: var(--p-control-radius); font-size: var(--p-text-body); }
+  .menu-toggle .icon { width: var(--p-icon-sm); height: var(--p-icon-sm); }
   .menu-toggle:hover { background: var(--p-surface); }
-  .style-context { padding-inline: var(--p-space-2xs); }
   .menu-close { display: inline-grid; place-items: center; }
   .menu-head { display: flex; }
-  .menu-foot { display: none; }
+  .top-brand { display: grid; place-items: center; width: var(--p-control-size-sm); height: var(--p-control-size-sm); }
+  .top-brand img { width: var(--p-icon-lg); height: var(--p-icon-lg); }
   .top-title { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--p-text-md); font-weight: var(--p-weight-semibold); }
   .app-menu { top: 0; z-index: var(--p-layer-modal); width: min(var(--p-container-xs), 100vw * 5 / 6); border-right: 0; box-shadow: var(--p-float); transform: translateX(-100%); visibility: hidden; transition: none; }
   .menu-body { padding-top: var(--p-space-xs); }
@@ -188,7 +180,7 @@ dialog.search-dialog { width: min(var(--p-container-md), 100% - var(--p-space-lg
   .item-switch { width: 100%; }
   .item-switch select { flex: 1; width: 0; font-size: var(--p-text-md); }
   .catalog-toolbar { gap: var(--p-space-xs); margin-bottom: var(--p-space-md); }
-  main { margin-left: 0; padding: var(--p-space-md) var(--p-space-md) var(--p-space-3xl); }
+  main, body.has-subnav main { margin-left: 0; padding: var(--p-space-md) var(--p-space-md) var(--p-space-3xl); }
 }
 
 .system-heading:has(> div > .sr-only:only-child) { margin: 0; }

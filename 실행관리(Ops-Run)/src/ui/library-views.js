@@ -117,26 +117,60 @@
 
   const activeShelf=state=>state.page==='system'?itemShelf(registry.index.get(state.detail)):state.page==='dictionary'?state.filters.shelf:null;
   const querySuffix=state=>state.query&&['dictionary','system'].includes(state.page)?'&q='+encodeURIComponent(state.query):'';
-  // The left tree is the only navigation: each shelf is a 대분류 row, and the open shelf lists its 소분류 beneath it.
-  const shelfIcon={token:'layers',icon:'shapes',part:'grid',block:'box',template:'file'};
-  function subcategories(id) {
-    return id==='part'?partGroups.map(g=>({key:'group',id:g.id,name:g.name}))
-      :id==='icon'?data.iconGroups.map(g=>({key:'icon',id:g.id,name:g.name}))
-      :['token','template'].includes(id)?shelfKinds.get(id).map(k=>({key:'kind',id:k,name:k}))
-      :data.categories.filter(c=>inShelf.has(id+'|'+c.id)).map(c=>({key:'code',id:c.id,name:short(c.name)}));
+  // 대메뉴 = the top tabs (스타일 and the five shelves). 중메뉴 = the left rows of the open shelf. 소메뉴 = the rows that open under a 중 row when it is clicked.
+  function navigation(state) {
+    const open=activeShelf(state), q=querySuffix(state);
+    return '<a class="nav-shelf-link" id="style-context" href="#/styles" data-focus="style-context"'+(state.page==='styles'?' aria-current="page"':'')+'><span>스타일</span></a>'
+      +['token','icon','part','block','template'].map(id=>{
+        const s=shelves.get(id);
+        return '<a class="nav-shelf-link" href="#/dictionary?shelf='+id+q+'" data-focus="tab-'+id+'"'+(open===id?' aria-current="page"':'')+'><span>'+s.name+'</span></a>';
+      }).join('');
   }
-  function sidebar(state) {
-    const open=activeShelf(state), f=state.filters, q=querySuffix(state);
+  // The 55 icon categories are too many for one list, so eight 중 bundles hold them; a category the table forgets falls into 기타.
+  const iconBundles=(()=>{
+    const table=[
+      ['interface','화면·조작',['navigation','actions','status','arrows','layout','accessibility','security']],
+      ['document','글·문서·업무',['text','letters','files','business','charts','math','time','finance']],
+      ['media','미디어·소통',['media','music','communication','ai','design','arts','emoji']],
+      ['device','기기·개발',['devices','development','tools','science','energy']],
+      ['life','사람·생활',['people','hands','home','food','clothing','medical','sports','education','shopping']],
+      ['place','이동·장소',['logistics','maps','travel','transportation','buildings','flags']],
+      ['nature','자연·동물',['nature','farming','weather','space','animals']],
+      ['society','놀이·사회·상징',['gaming','badges','events','religion','fantasy','brands','safety','civic']]
+    ].map(([id,name,ids])=>({id,name,ids:ids.filter(g=>iconGroups.has(g))}));
+    const placed=new Set(table.flatMap(b=>b.ids)), rest=data.iconGroups.map(g=>g.id).filter(g=>!placed.has(g));
+    return rest.length?[...table,{id:'etc',name:'기타',ids:rest}]:table;
+  })();
+  // A 중 row is one address (key=ids); when it has two or more 소 rows it opens them. Shelves with nothing to split show 중 rows only.
+  function menusOf(id) {
+    const plain=(key,list)=>list.map(([mid,name])=>({key,id:mid,name,ids:[mid],kids:[]}));
+    if (id==='part') return plain('group',partGroups.map(g=>[g.id,g.name]));
+    if (id==='icon') return iconBundles.map(b=>({key:'icon',id:b.id,name:b.name,ids:b.ids,kids:b.ids.map(g=>({id:g,name:iconGroups.get(g).name}))}));
+    if (['token','template'].includes(id)) return plain('kind',shelfKinds.get(id).map(k=>[k,k]));
+    return data.groups.map(g=>{
+      const kids=data.categories.filter(c=>g.codes.includes(c.id)&&inShelf.has(id+'|'+c.id)).map(c=>({id:c.id,name:short(c.name)}));
+      return kids.length&&{key:'code',id:g.id,name:g.name,ids:kids.map(k=>k.id),kids};
+    }).filter(Boolean);
+  }
+  function subnavigation(state) {
+    const id=activeShelf(state);
+    if (!id) return '';
+    const s=shelves.get(id), f=state.filters, q=querySuffix(state);
     const built=state.page==='system'&&registry.index.get(state.detail);
-    const selected=o=>built?o.key==='group'?partGroups.find(g=>g.id===o.id).items.includes(built.id):o.key==='kind'?built.browse.kind===o.id:o.key==='code'&&built.browse.code===o.id:f[o.key]?.includes(o.id);
-    return '<ul class="side-tree">'+['token','icon','part','block','template'].map(id=>{
-      const s=shelves.get(id), isOpen=open===id, options=isOpen?subcategories(id):[], picked=options.some(selected);
-      const parent='<a class="side-parent" href="#/dictionary?shelf='+id+q+'" data-focus="tab-'+id+'" title="'+s.name+'" aria-expanded="'+isOpen+'"'+(isOpen&&!picked?' aria-current="page"':'')+'>'+icon(shelfIcon[id])+'<span>'+s.name+'</span>'+icon('chevron-down')+'</a>';
-      const children=isOpen?'<div class="side-children" role="group" aria-label="'+s.name+' 분류">'+options.map(o=>
-        '<a class="side-child" href="#/dictionary?'+new URLSearchParams({shelf:id,[o.key]:o.id})+q+'" data-focus="nav-'+id+'-'+escape(o.id)+'" title="'+escape(o.name)+'"'+(selected(o)?' aria-current="true"':'')+'><span>'+escape(o.name)+'</span></a>'
-      ).join('')+'</div>':'';
-      return '<li class="side-group'+(isOpen?' is-open':'')+'">'+parent+children+'</li>';
-    }).join('')+'</ul>';
+    const menus=menusOf(id), split=m=>m.kids.length>1;
+    const same=(a,b)=>a.length===b.length&&a.every(x=>b.includes(x));
+    // In a part's detail page the part decides what is picked, the same way the list's address would.
+    const picked=m=>built?(m.key==='group'?partGroups.find(g=>g.id===m.id).items.includes(built.id):m.key==='kind'?built.browse.kind===m.id:m.ids.includes(built.browse.code)):(f[m.key]||[]).some(x=>m.ids.includes(x));
+    const pickedKid=(m,k)=>built?built.browse.code===k.id:(f[m.key]||[]).length===1&&f[m.key][0]===k.id;
+    const whole=m=>!built&&same(f[m.key]||[],m.ids);
+    const current=m=>split(m)?whole(m):picked(m);
+    const link=(m,ids)=>'#/dictionary?'+new URLSearchParams({shelf:id,[m.key]:ids.join(',')})+q;
+    const all='<a class="nav-all" href="#/dictionary?shelf='+id+q+'" data-focus="nav-all"'+(!menus.some(picked)?' aria-current="page"':'')+'>전체 보기</a>';
+    return '<div class="nav-subnav" role="group" aria-label="'+s.name+' 분류">'+all+'<div class="nav-subnav-scroll">'+menus.map(m=>{
+      const open=split(m)&&picked(m), kidsHtml=open?'<div class="nav-minor-group" role="group" aria-label="'+escape(m.name)+' 세부 분류">'+m.kids.map(k=>
+        '<a class="nav-minor" href="'+link(m,[k.id])+'" data-focus="nav-'+id+'-'+escape(k.id)+'" title="'+escape(k.name)+'"'+(pickedKid(m,k)?' aria-current="true"':'')+'><span>'+escape(k.name)+'</span></a>').join('')+'</div>':'';
+      return '<a class="nav-subcategory" href="'+link(m,m.ids)+'" data-focus="nav-'+id+'-'+escape(m.id)+'" title="'+escape(m.name)+'"'+(split(m)?' aria-expanded="'+open+'"':'')+(current(m)?' aria-current="true"':'')+'><span>'+escape(m.name)+'</span>'+(split(m)?icon('chevron-down'):'')+'</a>'+kidsHtml;
+    }).join('')+'</div></div>';
   }
   function shelfItems(state) {
     const shelf=state.filters.shelf, found=new Set(registry.matching(state.query).map(e=>e.id));
@@ -225,7 +259,7 @@
         :'<div class="record-detail"><p class="record-kind">'+escape(category.name)+'</p><section><h3>대표 항목</h3><p>'+escape(e.examples)+'</p></section></div>');
   }
   window.Pattove.libraryUI={
-    pages,sidebar,pageCount,readFilters,writeFilters,collection,detail,currentItems,suggestions,searchAll,
+    pages,navigation,subnavigation,pageCount,readFilters,writeFilters,collection,detail,currentItems,suggestions,searchAll,
     validDetail:(page,id)=>components.has(id)||(page==='dictionary'&&(entries.has(id)||registry.index.has(id))),
     suggestionGroup:(page,e)=>page==='dictionary'?(e.term?e.term+' · ':'')+(e.art?'일러스트 아이콘 · '+iconGroups.get(e.sub).name:e.implementation?'구현 · '+e.layer:'미구현 · '+shelves.get(shelfOf(e))?.name+' · '+(e.sub?iconGroups.get(e.sub).name:e.category?short(categoryById.get(e.category)?.name||''):kindOf(e))):data.layers.find(l=>l.id===e.layer).name,
     sample,itemShelf,

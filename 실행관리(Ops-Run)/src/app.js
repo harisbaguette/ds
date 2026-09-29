@@ -149,7 +149,7 @@
     $('#menu-toggle').setAttribute('aria-expanded', String(open));
     $('#main').inert = open;
     $('.app-top').inert = open;
-    if (open) ($('#side-nav [aria-current]') || $('#side-nav a'))?.focus();
+    if (open) ($('#secondary-nav [aria-current]') || $('#secondary-nav a'))?.focus();
     else if (returnFocus) $('#menu-toggle').focus();
   }
   // A picked suggestion opens its detail; closing the detail returns focus to the search button.
@@ -166,15 +166,18 @@
     document.body.dataset.page = state.page;
     document.body.className = 'theme-' + state.style;
     document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : state.page === 'patterns' ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
-    // Only the open shelf's 소분류 list scrolls, so it keeps its place while the same shelf re-renders.
-    const treeShelf = $('.side-group.is-open .side-parent')?.dataset.focus;
-    const treeScroll = $('.side-children')?.scrollTop || 0;
-    $('#side-nav').innerHTML = library.sidebar(state);
-    const children = $('.side-children'), current = $('.side-child[aria-current]');
-    if (children) children.scrollTop = treeShelf === $('.side-group.is-open .side-parent').dataset.focus ? treeScroll : Math.max(0, (current?.offsetTop || 0) - children.clientHeight / 3);
+    const oldShelf = $('#primary-nav [aria-current="page"]')?.dataset.focus;
+    const subnavScroll = $('.menu-body').scrollTop;
+    $('#primary-nav').innerHTML = library.navigation(state);
+    const subnav=library.subnavigation(state);
+    $('#secondary-nav').innerHTML=subnav;
+    $('#app-menu').hidden=!subnav;
+    $('#menu-toggle').hidden=!subnav;
+    if (!subnav) setMenu(false,false);
+    document.body.classList.toggle('has-subnav',!!subnav);
+    $('#top-title').textContent=$('#primary-nav [aria-current="page"]')?.textContent || '';
+    $('.menu-body').scrollTop=oldShelf === $('#primary-nav [aria-current="page"]')?.dataset.focus ? subnavScroll : 0;
     $('#header-context').innerHTML = views.header(state);
-    if (state.page === 'styles') $('#style-context').setAttribute('aria-current','page');
-    else $('#style-context').removeAttribute('aria-current');
     $('#catalog-toolbar').hidden = state.page === 'styles';
     // The one active query shows as a chip beside the title; pressing it clears the search.
     const chip = $('#query-chip');
@@ -294,17 +297,6 @@
       history.pushState(origin, '', '#/system?detail='+encodeURIComponent(event.target.value)); renderRoute();
     }
   });
-  // On wide screens the tree folds to a rail of shelf icons; the choice is kept for the next visit.
-  const railKey = 'pattove-rail';
-  function setRail(collapsed) {
-    document.documentElement.classList.toggle('rail', collapsed);
-    const label = collapsed ? '메뉴 펼치기' : '메뉴 접기';
-    $('#rail-toggle').setAttribute('aria-label', label);
-    $('#rail-toggle').title = label;
-    try { localStorage.setItem(railKey, collapsed ? '1' : ''); } catch {}
-  }
-  try { if (localStorage.getItem(railKey)) setRail(true); } catch {}
-  $('#rail-toggle').addEventListener('click', () => setRail(!document.documentElement.classList.contains('rail')));
   $('#menu-toggle').addEventListener('click', () => setMenu(true));
   $('#search-open').addEventListener('click', openSearch);
   $('#menu-backdrop').addEventListener('click', () => setMenu(false));

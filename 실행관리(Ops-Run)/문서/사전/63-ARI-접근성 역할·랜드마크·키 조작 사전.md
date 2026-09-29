@@ -4,115 +4,115 @@
 
 화면 요소가 보조기술에게 자기가 무엇인지 알리는 역할 이름과, 키보드만으로 다룰 때의 키 배정을 모았다. 역할과 속성은 WAI-ARIA 이름을 그대로 쓰고, 키 배정은 위젯마다 널리 쓰이는 관례를 적었다. 부품을 만들 때 여기서 역할 하나와 키 조작 하나를 골라 붙이는 식으로 쓴다.
 
-| ID | 항목 | 종류 | 역할·사용할 때 | 근거 |
-|---|---|---|---|---|
-| ARI-01 | 랜드마크 — banner | 기준 | 사이트 머리 영역임을 알리는 표시·페이지마다 하나 | 확장 [MK] |
-| ARI-02 | 랜드마크 — navigation | 기준 | 링크 묶음이 길잡이 영역임을 알리는 표시·여러 개면 이름을 붙임 | 확장 [MK] |
-| ARI-03 | 랜드마크 — main | 기준 | 이 페이지의 본 내용이 시작되는 곳을 알리는 표시 | 확장 [MK] |
-| ARI-04 | 랜드마크 — complementary | 기준 | 본 내용을 돕는 곁 영역임을 알리는 표시 | 확장 [MK] |
-| ARI-05 | 랜드마크 — contentinfo | 기준 | 사이트 꼬리 정보 영역임을 알리는 표시 | 확장 [MK] |
-| ARI-06 | 랜드마크 — search | 기준 | 검색 기능이 모인 영역임을 알리는 표시 | 확장 [MK] |
-| ARI-07 | 랜드마크 — form | 기준 | 이름이 붙은 입력 묶음을 독립 영역으로 알리는 표시 | 확장 [MK] |
-| ARI-08 | 랜드마크 — region | 기준 | 이름을 붙여 따로 건너뛸 수 있게 만드는 일반 영역 표시 | 확장 [MK] |
-| ARI-09 | 역할 — button | 기준 | 누르면 무언가 일어나는 요소임을 알림·링크와 구분해 씀 | 확장 [MK] |
-| ARI-10 | 역할 — link | 기준 | 다른 곳으로 이동하는 요소임을 알림 | 확장 [MK] |
-| ARI-11 | 역할 — checkbox | 기준 | 켜고 끌 수 있는 선택 항목임을 알림·중간 상태 포함 | 확장 [MK] |
-| ARI-12 | 역할 — radio·radiogroup | 기준 | 여럿 중 하나만 고르는 묶음과 그 항목임을 알림 | 확장 [MK] |
-| ARI-13 | 역할 — switch | 기준 | 즉시 켜짐·꺼짐이 되는 토글임을 알림 | 확장 [MK] |
-| ARI-14 | 역할 — slider | 기준 | 범위 안에서 값을 끌어 고르는 요소임을 알림 | 확장 [MK] |
-| ARI-15 | 역할 — spinbutton | 기준 | 위아래로 값을 올리고 내리는 숫자 입력임을 알림 | 확장 [MK] |
-| ARI-16 | 역할 — textbox | 기준 | 자유롭게 글을 치는 칸임을 알림·여러 줄 여부 포함 | 확장 [MK] |
-| ARI-17 | 역할 — searchbox | 기준 | 검색어를 치는 칸임을 알림 | 확장 [MK] |
-| ARI-18 | 역할 — combobox | 기준 | 입력과 후보 목록이 이어진 칸임을 알림 | 확장 [MK] |
-| ARI-19 | 역할 — listbox·option | 기준 | 고를 수 있는 항목 목록과 그 항목임을 알림 | 확장 [MK] |
-| ARI-20 | 역할 — menu·menubar·menuitem | 기준 | 명령을 모아 둔 메뉴와 그 항목임을 알림 | 확장 [MK] |
-| ARI-21 | 역할 — menuitemcheckbox·menuitemradio | 기준 | 메뉴 안에서 켜고 끄거나 하나만 고르는 항목임을 알림 | 확장 [MK] |
-| ARI-22 | 역할 — tab·tablist·tabpanel | 기준 | 탭 묶음과 탭, 탭이 여는 내용 판을 알림 | 확장 [MK] |
-| ARI-23 | 역할 — tree·treeitem | 기준 | 접고 펼치는 계층 목록과 그 항목임을 알림 | 확장 [MK] |
-| ARI-24 | 역할 — grid·row·gridcell | 기준 | 키보드로 칸 사이를 옮겨 다니는 표임을 알림 | 확장 [MK] |
-| ARI-25 | 역할 — table | 기준 | 읽기용 데이터 표임을 알림·칸 이동이 없는 경우 | 확장 [MK] |
-| ARI-26 | 역할 — treegrid | 기준 | 행을 접고 펼칠 수 있는 표임을 알림 | 확장 [MK] |
-| ARI-27 | 역할 — dialog | 기준 | 본문 위에 떠서 일을 처리하는 창임을 알림 | 확장 [MK] |
-| ARI-28 | 역할 — alertdialog | 기준 | 즉시 답해야 하는 경고 창임을 알림 | 확장 [MK] |
-| ARI-29 | 역할 — tooltip | 기준 | 요소에 붙는 짧은 설명 풍선임을 알림 | 확장 [MK] |
-| ARI-30 | 역할 — progressbar | 기준 | 끝나가는 정도를 보여 주는 막대임을 알림 | 확장 [MK] |
-| ARI-31 | 역할 — meter | 기준 | 정해진 범위 안 현재 값을 보여 주는 계기임을 알림 | 확장 [MK] |
-| ARI-32 | 역할 — scrollbar | 기준 | 내용 스크롤을 조종하는 막대임을 알림 | 확장 [MK] |
-| ARI-33 | 역할 — separator | 기준 | 내용을 가르는 선임을 알림·크기 조절용인지 구분함 | 확장 [MK] |
-| ARI-34 | 역할 — toolbar | 기준 | 버튼을 모아 둔 도구 줄임을 알림 | 확장 [MK] |
-| ARI-35 | 역할 — feed | 기준 | 끝없이 이어 붙는 글 목록임을 알림 | 확장 [MK] |
-| ARI-36 | 역할 — article | 기준 | 따로 떼어 읽을 수 있는 한 덩어리 글임을 알림 | 확장 [MK] |
-| ARI-37 | 역할 — group | 기준 | 관련된 요소를 이름으로 묶었음을 알림 | 확장 [MK] |
-| ARI-38 | 역할 — heading | 기준 | 제목임과 그 깊이를 알림 | 확장 [MK] |
-| ARI-39 | 역할 — img | 기준 | 여러 조각을 하나의 그림으로 읽게 묶어 알림 | 확장 [MK] |
-| ARI-40 | 역할 — presentation·none | 기준 | 의미 없는 겉틀임을 알려 보조기술이 건너뛰게 함 | 확장 [MK] |
-| ARI-41 | 역할 — application | 기준 | 브라우저 기본 키 대신 앱이 키를 직접 받는다고 알림 | 확장 [MK] |
-| ARI-42 | 역할 — document | 기준 | 앱 영역 안에서 읽기 방식으로 돌아감을 알림 | 확장 [MK] |
-| ARI-43 | 역할 — status | 기준 | 중요하지만 급하지 않은 알림 영역임을 알림 | 확장 [MK] |
-| ARI-44 | 역할 — alert | 기준 | 지금 바로 읽어야 하는 알림 영역임을 알림 | 확장 [MK] |
-| ARI-45 | 역할 — log | 기준 | 새 내용이 아래로 쌓이는 기록 영역임을 알림 | 확장 [MK] |
-| ARI-46 | 역할 — marquee | 기준 | 끊임없이 바뀌는 비필수 정보 영역임을 알림 | 확장 [MK] |
-| ARI-47 | 역할 — timer | 기준 | 남은 시간이 계속 바뀌는 영역임을 알림 | 확장 [MK] |
-| ARI-48 | 속성 — aria-live | 기준 | 바뀐 내용을 조용히 또는 즉시 읽어 줄지 정함 | 확장 [MK] |
-| ARI-49 | 속성 — aria-busy | 기준 | 아직 갱신 중이라 읽기를 미뤄 달라고 알림 | 확장 [MK] |
-| ARI-50 | 속성 — aria-atomic | 기준 | 바뀐 부분만 읽을지 영역 전체를 다시 읽을지 정함 | 확장 [MK] |
-| ARI-51 | 속성 — aria-label | 기준 | 화면에 없는 이름을 요소에 직접 붙임 | 확장 [MK] |
-| ARI-52 | 속성 — aria-labelledby | 기준 | 화면에 있는 글을 가리켜 이름으로 삼음 | 확장 [MK] |
-| ARI-53 | 속성 — aria-describedby | 기준 | 이름 다음에 읽어 줄 보조 설명을 가리킴 | 확장 [MK] |
-| ARI-54 | 속성 — aria-controls | 기준 | 이 요소가 조종하는 다른 영역을 가리킴 | 확장 [MK] |
-| ARI-55 | 속성 — aria-owns | 기준 | 화면 구조가 떨어져 있는 요소를 자식으로 묶어 줌 | 확장 [MK] |
-| ARI-56 | 속성 — aria-expanded | 기준 | 펼쳐졌는지 접혔는지 상태를 알림 | 확장 [MK] |
-| ARI-57 | 속성 — aria-haspopup | 기준 | 눌렀을 때 메뉴·대화상자가 열림을 미리 알림 | 확장 [MK] |
-| ARI-58 | 속성 — aria-current | 기준 | 여러 개 중 지금 있는 위치를 알림 | 확장 [MK] |
-| ARI-59 | 속성 — aria-selected | 기준 | 목록·탭에서 고른 항목임을 알림 | 확장 [MK] |
-| ARI-60 | 속성 — aria-checked | 기준 | 체크·라디오·스위치의 켜짐 여부를 알림 | 확장 [MK] |
-| ARI-61 | 속성 — aria-pressed | 기준 | 눌린 채 유지되는 토글 버튼 상태를 알림 | 확장 [MK] |
-| ARI-62 | 속성 — aria-disabled | 기준 | 지금은 쓸 수 없으나 읽을 수는 있음을 알림 | 확장 [MK] |
-| ARI-63 | 속성 — aria-hidden | 기준 | 보조기술에서만 감추는 표시·초점 가능한 것에는 쓰지 않음 | 확장 [MK] |
-| ARI-64 | 속성 — aria-invalid | 기준 | 입력값이 규칙에 어긋났음을 알림 | 확장 [MK] |
-| ARI-65 | 속성 — aria-required | 기준 | 비워 둘 수 없는 칸임을 알림 | 확장 [MK] |
-| ARI-66 | 속성 — aria-sort | 기준 | 표 머리글의 현재 정렬 방향을 알림 | 확장 [MK] |
-| ARI-67 | 속성 — aria-valuenow·valuemin·valuemax | 기준 | 슬라이더·진행 막대의 현재 값과 범위를 알림 | 확장 [MK] |
-| ARI-68 | 속성 — aria-valuetext | 기준 | 숫자 대신 읽어 줄 사람 말 표현을 줌 | 확장 [MK] |
-| ARI-69 | 속성 — aria-level | 기준 | 제목·트리 항목의 깊이를 알림 | 확장 [MK] |
-| ARI-70 | 속성 — aria-posinset·aria-setsize | 기준 | 전체 몇 개 중 몇 번째인지 알림·일부만 그릴 때 필요 | 확장 [MK] |
-| ARI-71 | 속성 — aria-modal | 기준 | 뒤 내용을 가린 창임을 알려 바깥을 읽지 않게 함 | 확장 [MK] |
-| ARI-72 | 속성 — aria-activedescendant | 기준 | 초점은 한 곳에 두고 활성 항목만 옮겨 알리는 방식 | 확장 [MK] |
-| ARI-73 | 기준 — 이름 계산 순서 | 기준 | 어떤 값이 요소 이름으로 읽힐지 정해지는 차례 | 확장 [MK] |
-| ARI-74 | 기준 — 화면에 없는 안내 텍스트 | 기준 | 눈에는 안 보이고 읽기만 되는 설명을 넣는 방식 | 확장 [MK] |
-| ARI-75 | 기준 — 장식 이미지의 빈 대체 텍스트 | 기준 | 뜻 없는 그림을 읽지 않게 비우는 규칙 | 확장 [MK] |
-| ARI-76 | 키 조작 — 초점 하나만 두기 | 기준 | 묶음 안에서 탭 순서에 들어가는 항목을 하나로 두는 방식 | 확장 [MK] |
-| ARI-77 | 키 조작 — 메뉴 | 기준 | 메뉴 열기·항목 이동·하위 메뉴·닫기의 키 배정 | 확장 [MK] |
-| ARI-78 | 키 조작 — 목록 상자 | 기준 | 항목 이동·다중 선택·처음과 끝으로 가기의 키 배정 | 확장 [MK] |
-| ARI-79 | 키 조작 — 탭 목록 | 기준 | 탭 사이 이동과 자동·수동 전환의 키 배정 | 확장 [MK] |
-| ARI-80 | 키 조작 — 트리 | 기준 | 펼치기·접기·부모로 가기·자식으로 가기의 키 배정 | 확장 [MK] |
-| ARI-81 | 키 조작 — 그리드 | 기준 | 칸 사이 이동·행 끝 이동·편집 모드 진입의 키 배정 | 확장 [MK] |
-| ARI-82 | 키 조작 — 콤보박스 | 기준 | 후보 열기·이동·선택·되돌리기의 키 배정 | 확장 [MK] |
-| ARI-83 | 키 조작 — 대화상자 | 기준 | 열릴 때 초점 자리·닫기 키·기본 버튼 실행 | 확장 [MK] |
-| ARI-84 | 키 조작 — 슬라이더 | 기준 | 잘게 옮기기·크게 옮기기·최소와 최대로 가기의 키 배정 | 확장 [MK] |
-| ARI-85 | 키 조작 — 아코디언 | 기준 | 제목 사이 이동과 펼치기·접기의 키 배정 | 확장 [MK] |
-| ARI-86 | 키 조작 — 툴바 | 기준 | 버튼 사이 이동과 묶음 건너뛰기의 키 배정 | 확장 [MK] |
-| ARI-87 | 키 조작 — 캐러셀 | 기준 | 앞뒤 이동·자동 넘김 멈춤의 키 배정 | 확장 [MK] |
-| ARI-88 | 키 조작 — 디스클로저 | 기준 | 숨은 내용을 여닫는 단일 버튼의 키 동작 | 확장 [MK] |
-| ARI-89 | 키 조작 — 라디오 그룹 | 기준 | 화살표로 고르며 바로 선택되는 동작의 키 배정 | 확장 [MK] |
-| ARI-90 | 키 조작 — 스핀버튼 | 기준 | 값 올리고 내리기와 크게 뛰기의 키 배정 | 확장 [MK] |
-| ARI-91 | 키 조작 — 초점 가두기와 복귀 | 기준 | 열린 창 안에 초점을 묶고 닫으면 원래 자리로 되돌림 | 확장 [MK] |
-| ARI-92 | 키 조작 — 첫 글자 점프 | 기준 | 글자를 쳐서 같은 글자로 시작하는 항목으로 뛰는 동작 | 확장 [MK] |
-| ARI-93 | 키 조작 — 건너뛰기 링크 | 기준 | 반복 영역을 지나 본문으로 바로 가는 숨은 링크 | 확장 [MK] · 대조 [LZA11Y] |
-| ARI-94 | 기준 — 초점 순서와 시각 순서 일치 | 기준 | 탭을 눌렀을 때 옮겨 가는 차례를 눈에 보이는 차례와 맞춤 | 확장 [MK] |
-| ARI-95 | 화면에서만 숨기기 — Visually Hidden | 부품 | 눈에는 안 보이지만 스크린리더에는 읽히게 남겨두는 숨김 방식 | 확인 [POL2][ATL][CHKUI][DAANGN][DC] |
-| ARI-96 | 숫자 조절 위젯 — Spinbutton | 부품 | 값과 증감 버튼을 묶고 위·아래 화살표 키로 조절하는 역할 | 확인 [APGSPIN] |
-| ARI-97 | 화면 구역 표지 8종 | 기준 | 배너·탐색·주요·보조·여백·정보·검색·영역으로 화면을 나눈다 | 확인 [APGLAND] |
-| ARI-98 | 구역 표지 개수 제한 | 기준 | 한 화면에 구역 표지를 일곱 개 넘게 두지 않는다 | 확인 [APGLAND] |
-| ARI-99 | 계량 표시와 진행 표시 구분 | 기준 | 현재 수치를 보여 주는 계량은 작업 진행률과 다른 역할을 쓴다 | 확인 [APGMETER] |
-| ARI-100 | 누르는 영역 최소 24×24px | 기준 | 겹치지 않는 대상은 가로세로 24px 이상을 확보한다 | 확인 [WCAG22N] |
-| ARI-101 | 포커스 표시 대비 3:1 | 기준 | 지금 어디에 있는지 알리는 테두리의 대비 기준 | 확인 [WCAG22N] |
-| ARI-102 | 같은 정보 다시 입력 금지 | 기준 | 한 흐름 안에서 이미 받은 값을 다시 치게 하지 않는다 | 확인 [WCAG22N] |
-| ARI-103 | 도움 위치 일관 | 기준 | 도움말·문의 수단을 화면마다 같은 자리에 둔다 | 확인 [WCAG22N] |
-| ARI-104 | 기억에 의존하지 않는 인증 | 기준 | 암호를 외워 치는 것 외의 대체 수단을 반드시 함께 제공한다 | 확인 [WCAG22N] |
-| ARI-105 | 포커스 가림 방지 | 기준 | 고정 머리글·바닥글이 지금 선택된 요소를 덮지 않게 한다 | 확인 [WCAG22N] |
-| ARI-106 | 끌기 동작의 대체 수단 | 기준 | 끌어다 놓기로만 되는 일은 누르기만으로도 되게 한다 | 확인 [WCAG22N] |
-| ARI-107 | 검색 역할은 입력칸이 아니라 폼에 | 기준 | 검색 역할은 검색 영역 전체에 붙이고 입력칸에는 붙이지 않는다. 입력칸에 붙이면 글자 입력칸이라는 안내가 사라진다 | 확인 [A11YFORM] |
-| ARI-108 | 숨긴 장식 글자가 이름에 섞이는 문제 | 기준 | 화면에만 보이려고 넣은 글자가 일부 낭독기에서는 버튼 이름에 함께 읽히므로 실제 조합에서 확인한다 | 확인 [A11YFORM] |
-| ARI-109 | 스타일 입힌 컨트롤의 낭독기 검증 기준 | 기준 | 꾸민 입력 부품은 브라우저와 낭독기 조합마다 결과가 달라, 쓰기 전에 조합별로 실제로 읽어 보고 결과를 적어 둔다 | 확인 [A11YFORM] |
-| ARI-110 | 링크와 버튼의 역할 선택 기준 | 기준 | 다른 화면·주소로 이동하면 링크(a), 지금 화면 안에서 상태만 바꾸면 버튼(button)으로 요소를 고르며, 시각 스타일을 서로 비슷하게 입히더라도 실제 태그와 역할은 이동 여부라는 행동 기준을 따른다 | 확인 [A11YCOMP] |
+| ID | 항목 | 통용 용어 | 종류 | 역할·사용할 때 | 근거 |
+|---|---|---|---|---|---|
+| ARI-01 | 랜드마크 — banner | ARIA 배너 랜드마크 (banner role) | 기준 | 사이트 머리 영역임을 알리는 표시·페이지마다 하나 | 확장 [MK] |
+| ARI-02 | 랜드마크 — navigation | ARIA 내비게이션 랜드마크 (navigation role) | 기준 | 링크 묶음이 길잡이 영역임을 알리는 표시·여러 개면 이름을 붙임 | 확장 [MK] |
+| ARI-03 | 랜드마크 — main | ARIA 메인 랜드마크 (main role) | 기준 | 이 페이지의 본 내용이 시작되는 곳을 알리는 표시 | 확장 [MK] |
+| ARI-04 | 랜드마크 — complementary | ARIA 보조 콘텐츠 랜드마크 (complementary role) | 기준 | 본 내용을 돕는 곁 영역임을 알리는 표시 | 확장 [MK] |
+| ARI-05 | 랜드마크 — contentinfo | ARIA 푸터 랜드마크 (contentinfo role) | 기준 | 사이트 꼬리 정보 영역임을 알리는 표시 | 확장 [MK] |
+| ARI-06 | 랜드마크 — search | ARIA 검색 랜드마크 (search role) | 기준 | 검색 기능이 모인 영역임을 알리는 표시 | 확장 [MK] |
+| ARI-07 | 랜드마크 — form | ARIA 폼 랜드마크 (form role) | 기준 | 이름이 붙은 입력 묶음을 독립 영역으로 알리는 표시 | 확장 [MK] |
+| ARI-08 | 랜드마크 — region | ARIA 영역 랜드마크 (region role) | 기준 | 이름을 붙여 따로 건너뛸 수 있게 만드는 일반 영역 표시 | 확장 [MK] |
+| ARI-09 | 역할 — button | ARIA 버튼 역할 (button role) | 기준 | 누르면 무언가 일어나는 요소임을 알림·링크와 구분해 씀 | 확장 [MK] |
+| ARI-10 | 역할 — link | ARIA 링크 역할 (link role) | 기준 | 다른 곳으로 이동하는 요소임을 알림 | 확장 [MK] |
+| ARI-11 | 역할 — checkbox | ARIA 체크박스 역할 (checkbox role) | 기준 | 켜고 끌 수 있는 선택 항목임을 알림·중간 상태 포함 | 확장 [MK] |
+| ARI-12 | 역할 — radio·radiogroup | ARIA 라디오 그룹 역할 (radiogroup role) | 기준 | 여럿 중 하나만 고르는 묶음과 그 항목임을 알림 | 확장 [MK] |
+| ARI-13 | 역할 — switch | ARIA 스위치 역할 (switch role) | 기준 | 즉시 켜짐·꺼짐이 되는 토글임을 알림 | 확장 [MK] |
+| ARI-14 | 역할 — slider | ARIA 슬라이더 역할 (slider role) | 기준 | 범위 안에서 값을 끌어 고르는 요소임을 알림 | 확장 [MK] |
+| ARI-15 | 역할 — spinbutton | ARIA 스핀버튼 역할 (spinbutton role) | 기준 | 위아래로 값을 올리고 내리는 숫자 입력임을 알림 | 확장 [MK] |
+| ARI-16 | 역할 — textbox | ARIA 텍스트박스 역할 (textbox role) | 기준 | 자유롭게 글을 치는 칸임을 알림·여러 줄 여부 포함 | 확장 [MK] |
+| ARI-17 | 역할 — searchbox | ARIA 검색창 역할 (searchbox role) | 기준 | 검색어를 치는 칸임을 알림 | 확장 [MK] |
+| ARI-18 | 역할 — combobox | ARIA 콤보박스 역할 (combobox role) | 기준 | 입력과 후보 목록이 이어진 칸임을 알림 | 확장 [MK] |
+| ARI-19 | 역할 — listbox·option | ARIA 리스트박스 역할 (listbox role) | 기준 | 고를 수 있는 항목 목록과 그 항목임을 알림 | 확장 [MK] |
+| ARI-20 | 역할 — menu·menubar·menuitem | ARIA 메뉴 역할 (menu role) | 기준 | 명령을 모아 둔 메뉴와 그 항목임을 알림 | 확장 [MK] |
+| ARI-21 | 역할 — menuitemcheckbox·menuitemradio | ARIA 체크형 메뉴 항목 역할 (menuitemcheckbox role) | 기준 | 메뉴 안에서 켜고 끄거나 하나만 고르는 항목임을 알림 | 확장 [MK] |
+| ARI-22 | 역할 — tab·tablist·tabpanel | ARIA 탭 역할 (tablist role) | 기준 | 탭 묶음과 탭, 탭이 여는 내용 판을 알림 | 확장 [MK] |
+| ARI-23 | 역할 — tree·treeitem | ARIA 트리 역할 (tree role) | 기준 | 접고 펼치는 계층 목록과 그 항목임을 알림 | 확장 [MK] |
+| ARI-24 | 역할 — grid·row·gridcell | ARIA 그리드 역할 (grid role) | 기준 | 키보드로 칸 사이를 옮겨 다니는 표임을 알림 | 확장 [MK] |
+| ARI-25 | 역할 — table | ARIA 테이블 역할 (table role) | 기준 | 읽기용 데이터 표임을 알림·칸 이동이 없는 경우 | 확장 [MK] |
+| ARI-26 | 역할 — treegrid | ARIA 트리그리드 역할 (treegrid role) | 기준 | 행을 접고 펼칠 수 있는 표임을 알림 | 확장 [MK] |
+| ARI-27 | 역할 — dialog | ARIA 대화상자 역할 (dialog role) | 기준 | 본문 위에 떠서 일을 처리하는 창임을 알림 | 확장 [MK] |
+| ARI-28 | 역할 — alertdialog | ARIA 경고 대화상자 역할 (alertdialog role) | 기준 | 즉시 답해야 하는 경고 창임을 알림 | 확장 [MK] |
+| ARI-29 | 역할 — tooltip | ARIA 툴팁 역할 (tooltip role) | 기준 | 요소에 붙는 짧은 설명 풍선임을 알림 | 확장 [MK] |
+| ARI-30 | 역할 — progressbar | ARIA 진행 막대 역할 (progressbar role) | 기준 | 끝나가는 정도를 보여 주는 막대임을 알림 | 확장 [MK] |
+| ARI-31 | 역할 — meter | ARIA 미터 역할 (meter role) | 기준 | 정해진 범위 안 현재 값을 보여 주는 계기임을 알림 | 확장 [MK] |
+| ARI-32 | 역할 — scrollbar | ARIA 스크롤바 역할 (scrollbar role) | 기준 | 내용 스크롤을 조종하는 막대임을 알림 | 확장 [MK] |
+| ARI-33 | 역할 — separator | ARIA 구분선 역할 (separator role) | 기준 | 내용을 가르는 선임을 알림·크기 조절용인지 구분함 | 확장 [MK] |
+| ARI-34 | 역할 — toolbar | ARIA 툴바 역할 (toolbar role) | 기준 | 버튼을 모아 둔 도구 줄임을 알림 | 확장 [MK] |
+| ARI-35 | 역할 — feed | ARIA 피드 역할 (feed role) | 기준 | 끝없이 이어 붙는 글 목록임을 알림 | 확장 [MK] |
+| ARI-36 | 역할 — article | ARIA 아티클 역할 (article role) | 기준 | 따로 떼어 읽을 수 있는 한 덩어리 글임을 알림 | 확장 [MK] |
+| ARI-37 | 역할 — group | ARIA 그룹 역할 (group role) | 기준 | 관련된 요소를 이름으로 묶었음을 알림 | 확장 [MK] |
+| ARI-38 | 역할 — heading | ARIA 제목 역할 (heading role) | 기준 | 제목임과 그 깊이를 알림 | 확장 [MK] |
+| ARI-39 | 역할 — img | ARIA 이미지 역할 (img role) | 기준 | 여러 조각을 하나의 그림으로 읽게 묶어 알림 | 확장 [MK] |
+| ARI-40 | 역할 — presentation·none | ARIA 표현 역할 (presentation role) | 기준 | 의미 없는 겉틀임을 알려 보조기술이 건너뛰게 함 | 확장 [MK] |
+| ARI-41 | 역할 — application | ARIA 애플리케이션 역할 (application role) | 기준 | 브라우저 기본 키 대신 앱이 키를 직접 받는다고 알림 | 확장 [MK] |
+| ARI-42 | 역할 — document | ARIA 문서 역할 (document role) | 기준 | 앱 영역 안에서 읽기 방식으로 돌아감을 알림 | 확장 [MK] |
+| ARI-43 | 역할 — status | ARIA 상태 역할 (status role) | 기준 | 중요하지만 급하지 않은 알림 영역임을 알림 | 확장 [MK] |
+| ARI-44 | 역할 — alert | ARIA 알림 역할 (alert role) | 기준 | 지금 바로 읽어야 하는 알림 영역임을 알림 | 확장 [MK] |
+| ARI-45 | 역할 — log | ARIA 로그 역할 (log role) | 기준 | 새 내용이 아래로 쌓이는 기록 영역임을 알림 | 확장 [MK] |
+| ARI-46 | 역할 — marquee | ARIA 마키 역할 (marquee role) | 기준 | 끊임없이 바뀌는 비필수 정보 영역임을 알림 | 확장 [MK] |
+| ARI-47 | 역할 — timer | ARIA 타이머 역할 (timer role) | 기준 | 남은 시간이 계속 바뀌는 영역임을 알림 | 확장 [MK] |
+| ARI-48 | 속성 — aria-live | 라이브 리전 (aria-live) | 기준 | 바뀐 내용을 조용히 또는 즉시 읽어 줄지 정함 | 확장 [MK] |
+| ARI-49 | 속성 — aria-busy | 로딩 중 상태 속성 (aria-busy) | 기준 | 아직 갱신 중이라 읽기를 미뤄 달라고 알림 | 확장 [MK] |
+| ARI-50 | 속성 — aria-atomic | 라이브 리전 전체 읽기 속성 (aria-atomic) | 기준 | 바뀐 부분만 읽을지 영역 전체를 다시 읽을지 정함 | 확장 [MK] |
+| ARI-51 | 속성 — aria-label | 접근성 이름 속성 (aria-label) | 기준 | 화면에 없는 이름을 요소에 직접 붙임 | 확장 [MK] |
+| ARI-52 | 속성 — aria-labelledby | 참조 이름 속성 (aria-labelledby) | 기준 | 화면에 있는 글을 가리켜 이름으로 삼음 | 확장 [MK] |
+| ARI-53 | 속성 — aria-describedby | 보조 설명 속성 (aria-describedby) | 기준 | 이름 다음에 읽어 줄 보조 설명을 가리킴 | 확장 [MK] |
+| ARI-54 | 속성 — aria-controls | 제어 대상 속성 (aria-controls) | 기준 | 이 요소가 조종하는 다른 영역을 가리킴 | 확장 [MK] |
+| ARI-55 | 속성 — aria-owns | 소유 관계 속성 (aria-owns) | 기준 | 화면 구조가 떨어져 있는 요소를 자식으로 묶어 줌 | 확장 [MK] |
+| ARI-56 | 속성 — aria-expanded | 펼침 상태 속성 (aria-expanded) | 기준 | 펼쳐졌는지 접혔는지 상태를 알림 | 확장 [MK] |
+| ARI-57 | 속성 — aria-haspopup | 팝업 여부 속성 (aria-haspopup) | 기준 | 눌렀을 때 메뉴·대화상자가 열림을 미리 알림 | 확장 [MK] |
+| ARI-58 | 속성 — aria-current | 현재 위치 속성 (aria-current) | 기준 | 여러 개 중 지금 있는 위치를 알림 | 확장 [MK] |
+| ARI-59 | 속성 — aria-selected | 선택 상태 속성 (aria-selected) | 기준 | 목록·탭에서 고른 항목임을 알림 | 확장 [MK] |
+| ARI-60 | 속성 — aria-checked | 체크 상태 속성 (aria-checked) | 기준 | 체크·라디오·스위치의 켜짐 여부를 알림 | 확장 [MK] |
+| ARI-61 | 속성 — aria-pressed | 토글 버튼 눌림 속성 (aria-pressed) | 기준 | 눌린 채 유지되는 토글 버튼 상태를 알림 | 확장 [MK] |
+| ARI-62 | 속성 — aria-disabled | 비활성 상태 속성 (aria-disabled) | 기준 | 지금은 쓸 수 없으나 읽을 수는 있음을 알림 | 확장 [MK] |
+| ARI-63 | 속성 — aria-hidden | 보조기술 숨김 속성 (aria-hidden) | 기준 | 보조기술에서만 감추는 표시·초점 가능한 것에는 쓰지 않음 | 확장 [MK] |
+| ARI-64 | 속성 — aria-invalid | 유효성 오류 속성 (aria-invalid) | 기준 | 입력값이 규칙에 어긋났음을 알림 | 확장 [MK] |
+| ARI-65 | 속성 — aria-required | 필수 입력 속성 (aria-required) | 기준 | 비워 둘 수 없는 칸임을 알림 | 확장 [MK] |
+| ARI-66 | 속성 — aria-sort | 정렬 방향 속성 (aria-sort) | 기준 | 표 머리글의 현재 정렬 방향을 알림 | 확장 [MK] |
+| ARI-67 | 속성 — aria-valuenow·valuemin·valuemax | 현재 값·범위 속성 (aria-valuenow) | 기준 | 슬라이더·진행 막대의 현재 값과 범위를 알림 | 확장 [MK] |
+| ARI-68 | 속성 — aria-valuetext | 값 텍스트 속성 (aria-valuetext) | 기준 | 숫자 대신 읽어 줄 사람 말 표현을 줌 | 확장 [MK] |
+| ARI-69 | 속성 — aria-level | 계층 깊이 속성 (aria-level) | 기준 | 제목·트리 항목의 깊이를 알림 | 확장 [MK] |
+| ARI-70 | 속성 — aria-posinset·aria-setsize | 집합 위치 속성 (aria-posinset / aria-setsize) | 기준 | 전체 몇 개 중 몇 번째인지 알림·일부만 그릴 때 필요 | 확장 [MK] |
+| ARI-71 | 속성 — aria-modal | 모달 속성 (aria-modal) | 기준 | 뒤 내용을 가린 창임을 알려 바깥을 읽지 않게 함 | 확장 [MK] |
+| ARI-72 | 속성 — aria-activedescendant | 활성 하위 항목 속성 (aria-activedescendant) | 기준 | 초점은 한 곳에 두고 활성 항목만 옮겨 알리는 방식 | 확장 [MK] |
+| ARI-73 | 기준 — 이름 계산 순서 | 접근성 이름 계산 (Accessible Name Computation) | 기준 | 어떤 값이 요소 이름으로 읽힐지 정해지는 차례 | 확장 [MK] |
+| ARI-74 | 기준 — 화면에 없는 안내 텍스트 | 스크린리더 전용 텍스트 (Screen Reader Only Text) | 기준 | 눈에는 안 보이고 읽기만 되는 설명을 넣는 방식 | 확장 [MK] |
+| ARI-75 | 기준 — 장식 이미지의 빈 대체 텍스트 | 장식 이미지 빈 대체 텍스트 (Empty Alt Text) | 기준 | 뜻 없는 그림을 읽지 않게 비우는 규칙 | 확장 [MK] |
+| ARI-76 | 키 조작 — 초점 하나만 두기 | 로빙 탭인덱스 (Roving Tabindex) | 기준 | 묶음 안에서 탭 순서에 들어가는 항목을 하나로 두는 방식 | 확장 [MK] |
+| ARI-77 | 키 조작 — 메뉴 | 메뉴 키보드 조작 (Menu Keyboard Interaction) | 기준 | 메뉴 열기·항목 이동·하위 메뉴·닫기의 키 배정 | 확장 [MK] |
+| ARI-78 | 키 조작 — 목록 상자 | 리스트박스 키보드 조작 (Listbox Keyboard Interaction) | 기준 | 항목 이동·다중 선택·처음과 끝으로 가기의 키 배정 | 확장 [MK] |
+| ARI-79 | 키 조작 — 탭 목록 | 탭 키보드 조작 (Tabs Keyboard Interaction) | 기준 | 탭 사이 이동과 자동·수동 전환의 키 배정 | 확장 [MK] |
+| ARI-80 | 키 조작 — 트리 | 트리 키보드 조작 (Tree View Keyboard Interaction) | 기준 | 펼치기·접기·부모로 가기·자식으로 가기의 키 배정 | 확장 [MK] |
+| ARI-81 | 키 조작 — 그리드 | 그리드 키보드 조작 (Grid Keyboard Interaction) | 기준 | 칸 사이 이동·행 끝 이동·편집 모드 진입의 키 배정 | 확장 [MK] |
+| ARI-82 | 키 조작 — 콤보박스 | 콤보박스 키보드 조작 (Combobox Keyboard Interaction) | 기준 | 후보 열기·이동·선택·되돌리기의 키 배정 | 확장 [MK] |
+| ARI-83 | 키 조작 — 대화상자 | 대화상자 키보드 조작 (Dialog Keyboard Interaction) | 기준 | 열릴 때 초점 자리·닫기 키·기본 버튼 실행 | 확장 [MK] |
+| ARI-84 | 키 조작 — 슬라이더 | 슬라이더 키보드 조작 (Slider Keyboard Interaction) | 기준 | 잘게 옮기기·크게 옮기기·최소와 최대로 가기의 키 배정 | 확장 [MK] |
+| ARI-85 | 키 조작 — 아코디언 | 아코디언 키보드 조작 (Accordion Keyboard Interaction) | 기준 | 제목 사이 이동과 펼치기·접기의 키 배정 | 확장 [MK] |
+| ARI-86 | 키 조작 — 툴바 | 툴바 키보드 조작 (Toolbar Keyboard Interaction) | 기준 | 버튼 사이 이동과 묶음 건너뛰기의 키 배정 | 확장 [MK] |
+| ARI-87 | 키 조작 — 캐러셀 | 캐러셀 키보드 조작 (Carousel Keyboard Interaction) | 기준 | 앞뒤 이동·자동 넘김 멈춤의 키 배정 | 확장 [MK] |
+| ARI-88 | 키 조작 — 디스클로저 | 디스클로저 키보드 조작 (Disclosure Keyboard Interaction) | 기준 | 숨은 내용을 여닫는 단일 버튼의 키 동작 | 확장 [MK] |
+| ARI-89 | 키 조작 — 라디오 그룹 | 라디오 그룹 키보드 조작 (Radio Group Keyboard Interaction) | 기준 | 화살표로 고르며 바로 선택되는 동작의 키 배정 | 확장 [MK] |
+| ARI-90 | 키 조작 — 스핀버튼 | 스핀버튼 키보드 조작 (Spinbutton Keyboard Interaction) | 기준 | 값 올리고 내리기와 크게 뛰기의 키 배정 | 확장 [MK] |
+| ARI-91 | 키 조작 — 초점 가두기와 복귀 | 포커스 트랩 (Focus Trap) | 기준 | 열린 창 안에 초점을 묶고 닫으면 원래 자리로 되돌림 | 확장 [MK] |
+| ARI-92 | 키 조작 — 첫 글자 점프 | 타입어헤드 (Type-Ahead) | 기준 | 글자를 쳐서 같은 글자로 시작하는 항목으로 뛰는 동작 | 확장 [MK] |
+| ARI-93 | 키 조작 — 건너뛰기 링크 | 스킵 링크 (Skip Link) | 기준 | 반복 영역을 지나 본문으로 바로 가는 숨은 링크 | 확장 [MK] · 대조 [LZA11Y] |
+| ARI-94 | 기준 — 초점 순서와 시각 순서 일치 | 포커스 순서 (Focus Order) | 기준 | 탭을 눌렀을 때 옮겨 가는 차례를 눈에 보이는 차례와 맞춤 | 확장 [MK] |
+| ARI-95 | 화면에서만 숨기기 — Visually Hidden | 시각적 숨김 (Visually Hidden) | 부품 | 눈에는 안 보이지만 스크린리더에는 읽히게 남겨두는 숨김 방식 | 확인 [POL2][ATL][CHKUI][DAANGN][DC] |
+| ARI-96 | 숫자 조절 위젯 — Spinbutton | 스핀버튼 (Spinbutton) | 부품 | 값과 증감 버튼을 묶고 위·아래 화살표 키로 조절하는 역할 | 확인 [APGSPIN] |
+| ARI-97 | 화면 구역 표지 8종 | ARIA 랜드마크 (Landmark Roles) | 기준 | 배너·탐색·주요·보조·여백·정보·검색·영역으로 화면을 나눈다 | 확인 [APGLAND] |
+| ARI-98 | 구역 표지 개수 제한 | 랜드마크 개수 제한 (Landmark Limit) | 기준 | 한 화면에 구역 표지를 일곱 개 넘게 두지 않는다 | 확인 [APGLAND] |
+| ARI-99 | 계량 표시와 진행 표시 구분 | 미터와 진행 막대 구분 (Meter vs Progressbar) | 기준 | 현재 수치를 보여 주는 계량은 작업 진행률과 다른 역할을 쓴다 | 확인 [APGMETER] |
+| ARI-100 | 누르는 영역 최소 24×24px | 최소 터치 영역 (Target Size Minimum) | 기준 | 겹치지 않는 대상은 가로세로 24px 이상을 확보한다 | 확인 [WCAG22N] |
+| ARI-101 | 포커스 표시 대비 3:1 | 포커스 표시 대비 (Focus Appearance) | 기준 | 지금 어디에 있는지 알리는 테두리의 대비 기준 | 확인 [WCAG22N] |
+| ARI-102 | 같은 정보 다시 입력 금지 | 중복 입력 방지 (Redundant Entry) | 기준 | 한 흐름 안에서 이미 받은 값을 다시 치게 하지 않는다 | 확인 [WCAG22N] |
+| ARI-103 | 도움 위치 일관 | 일관된 도움말 위치 (Consistent Help) | 기준 | 도움말·문의 수단을 화면마다 같은 자리에 둔다 | 확인 [WCAG22N] |
+| ARI-104 | 기억에 의존하지 않는 인증 | 접근 가능한 인증 (Accessible Authentication) | 기준 | 암호를 외워 치는 것 외의 대체 수단을 반드시 함께 제공한다 | 확인 [WCAG22N] |
+| ARI-105 | 포커스 가림 방지 | 포커스 가림 방지 (Focus Not Obscured) | 기준 | 고정 머리글·바닥글이 지금 선택된 요소를 덮지 않게 한다 | 확인 [WCAG22N] |
+| ARI-106 | 끌기 동작의 대체 수단 | 드래그 대체 수단 (Dragging Movements) | 기준 | 끌어다 놓기로만 되는 일은 누르기만으로도 되게 한다 | 확인 [WCAG22N] |
+| ARI-107 | 검색 역할은 입력칸이 아니라 폼에 | 검색 랜드마크 위치 (search role on form) | 기준 | 검색 역할은 검색 영역 전체에 붙이고 입력칸에는 붙이지 않는다. 입력칸에 붙이면 글자 입력칸이라는 안내가 사라진다 | 확인 [A11YFORM] |
+| ARI-108 | 숨긴 장식 글자가 이름에 섞이는 문제 | 숨긴 장식 텍스트 낭독 문제 (Hidden Text in Accessible Name) | 기준 | 화면에만 보이려고 넣은 글자가 일부 낭독기에서는 버튼 이름에 함께 읽히므로 실제 조합에서 확인한다 | 확인 [A11YFORM] |
+| ARI-109 | 스타일 입힌 컨트롤의 낭독기 검증 기준 | 스크린리더 호환성 테스트 (Screen Reader Testing) | 기준 | 꾸민 입력 부품은 브라우저와 낭독기 조합마다 결과가 달라, 쓰기 전에 조합별로 실제로 읽어 보고 결과를 적어 둔다 | 확인 [A11YFORM] |
+| ARI-110 | 링크와 버튼의 역할 선택 기준 | 링크 대 버튼 (Links vs Buttons) | 기준 | 다른 화면·주소로 이동하면 링크(a), 지금 화면 안에서 상태만 바꾸면 버튼(button)으로 요소를 고르며, 시각 스타일을 서로 비슷하게 입히더라도 실제 태그와 역할은 이동 여부라는 행동 기준을 따른다 | 확인 [A11YCOMP] |

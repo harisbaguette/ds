@@ -2,70 +2,70 @@
 
 [패턴 사전 색인과 사용법](<../패턴 사전 색인과 사용법.md>)의 6번 분류 DAT다. 항목 ID·종류·근거 표기 규칙은 색인 문서의 "목록을 읽는 기준"을 따르고, 근거 칸의 출처 기호는 [레퍼런스 출처 대장](<../레퍼런스 출처 대장.md>)의 "출처 기호표"에서 원문으로 이어진다.
 
-| ID | 항목 | 종류 | 역할·사용할 때 | 근거 |
-|---|---|---|---|---|
-| DAT-01 | 검색어 입력과 제안 — Search / Suggestions | 모듈 | 찾을 대상을 입력하고 구체화 | 확인 [UD] |
-| DAT-02 | 필터·적용 조건·초기화 — Faceted Filtering | 모듈 | 조건으로 결과를 좁히고 되돌리기 | 확장 [UD] |
-| DAT-03 | 정렬 — Sorting | 구성 | 목적에 맞는 결과 순서 선택 | 확인 [DT] |
-| DAT-04 | 카드·행 보기 전환 — View Switcher | 구성 | 같은 데이터의 읽기 방식 변경 | 확인 [UN] |
-| DAT-05 | 데이터 표 — Data Table | 모듈 | 여러 속성을 행·열로 비교 | 확인 [DT] |
-| DAT-06 | 행 선택과 일괄 작업 — Bulk Actions | 구성 | 여러 항목을 함께 처리 | 확장 [DT] |
-| DAT-07 | 열 표시·숨김 — Column Visibility | 구성 | 필요한 속성만 표에 표시 | 확인 [DT] |
-| DAT-08 | 긴 목록의 가상화 — Virtual List | 구성 | 대량 데이터 표시 비용을 제한 | 확인 [K] |
-| DAT-09 | 계층 탐색 — Tree View | 부품 | 폴더·분류 구조를 펼쳐 탐색 | 확인 [C] |
-| DAT-10 | 일정 보기 — Event Calendar | 모듈 | 날짜별 일정을 탐색 | 확인 [UN] |
-| DAT-11 | 상태별 작업 보드 — Kanban | 모듈 | 상태를 기준으로 항목 분류·이동 | 확인 [K] |
-| DAT-12 | 현재 위치에서 수정 — Inline Editing | 구성 | 별도 화면 없이 값을 변경 | 확인 [UI] |
-| DAT-13 | 변경 내용 자동 저장 — Autosave | 구성 | 작업 손실을 줄이고 저장 상태 표시 | 확인 [UI] |
-| DAT-14 | 저장된 조건·보기 | 구성 | 반복 조회 조건을 다시 사용 | 확장 [DT] |
-| DAT-15 | 가져오기·필드 대응·결과 확인 | 모듈 | 외부 데이터를 구조에 맞게 입력 | 확장 [B] |
-| DAT-16 | 핵심 지표 — Stat Card | 모듈 | 수치·단위·기준 기간을 함께 표시 | 확인 [B] |
-| DAT-17 | 차트 — Chart | 모듈 | 추이·비교·분포를 목적별 변형으로 표시 | 확인 [CH] |
-| DAT-18 | 대시보드 — Dashboard | 모듈 | 지표·조건·상세 탐색을 한 흐름으로 연결 | 확인 [UD] |
-| DAT-19 | 중첩 행 표 — Treegrid | 모듈 | 부모·자식의 속성을 함께 비교 | 확인 [APG] · 대조 [APGIMPL] |
-| DAT-20 | 그룹별 표 — Grouped Table | 구성 | 공통 속성으로 행을 묶음 | 확인 [CF] |
-| DAT-21 | 셀 범위 편집 — Spreadsheet Grid | 모듈 | 셀 이동·범위 선택·붙여넣기 | 확인 [SHRC] |
-| DAT-22 | 피벗 표 — Pivot Table | 모듈 | 차원을 바꿔 집계 비교 | 확인 [SYNC] |
-| DAT-23 | 행 상세 확장 | 구성 | 목록을 유지하며 추가 속성 표시 | 확장 [PF] |
-| DAT-24 | 열 고정·이동·폭 조절 | 구성 | 넓은 표의 비교 기준 유지 | 확장 [SYNC] |
-| DAT-25 | 전체 결과 선택 범위 안내 | 구성 | 현재 페이지와 전체 결과 선택 구분 | 확인 [PFPAT] |
-| DAT-26 | 속성 묶음 편집 | 모듈 | 객체의 속성을 추가·수정·삭제 | 확인 [CF] |
-| DAT-27 | 데이터 내보내기 설정 | 모듈 | 범위·형식·필드를 골라 출력 | 확장 · 웹앱 요구 |
-| DAT-28 | 목록 정보 밀도 전환 | 구성 | 작업 목적에 맞게 표시량 조절 | 확인 [CF] |
-| DAT-29 | 좁은 화면의 표 재배치 | 구성 | 열이 많은 표를 카드나 접힌 행으로 바꾸기 | 확장 [MK] · 대조 [THISRESP] |
-| DAT-30 | 열 머리글 필터 | 구성 | 열 제목에서 바로 값으로 걸러 내기 | 확장 [MK] |
-| DAT-31 | 셀 값 유형별 표시 규칙 | 기준 | 숫자 오른쪽 정렬·상태 배지·날짜 형식의 통일 | 확장 [MK] |
-| DAT-32 | 합계·요약 행 | 부품 | 표 아래 합계·평균 고정 표시 | 확장 [MK] |
-| DAT-33 | 조건부 셀 강조 | 구성 | 기준을 넘는 값에 색·아이콘 자동 표시 | 확장 [MK] |
-| DAT-34 | 다단 열 머리글 | 구성 | 관련 열을 묶는 위 머리글 한 줄 추가 | 확장 [MK] |
-| DAT-35 | 행 고정·즐겨찾기 | 구성 | 중요한 행을 맨 위에 붙여 두기 | 확장 [MK] |
-| DAT-36 | 선택 행 나란히 비교 | 구성 | 고른 몇 행을 열로 돌려 대조 | 확장 [MK] |
-| DAT-37 | 다른 표의 레코드 연결 필드 — Relation | 부품 | 셀 안에서 다른 목록의 항목을 골라 연결 | 확장 [MK] |
-| DAT-38 | 계산 열·수식 열 | 부품 | 다른 열 값으로 자동 계산되는 열 | 확장 [MK] |
-| DAT-39 | 행 복제·템플릿 행 | 구성 | 비슷한 행을 복사해 새로 시작 | 확장 [MK] |
-| DAT-40 | 빠른 필터 탭 — Quick Filters | 부품 | 전체·진행 중·내 것 같은 자주 쓰는 조건 탭 | 확장 [MK] |
-| DAT-41 | 선택 범위의 즉석 집계 | 구성 | 셀을 드래그하면 합계·개수를 바로 보여 줌 | 확장 [MK] |
-| DAT-42 | 새로 들어온 항목 강조 | 구성 | 방금 추가된 행을 잠깐 밝혀 위치를 알림 | 확장 [MK] |
-| DAT-43 | 실시간 갱신 목록의 자리 유지 | 구성 | 새 항목이 와도 읽던 위치가 밀리지 않게 | 확장 [MK] |
-| DAT-44 | 결과 범위·총 개수 표기 | 부품 | "1–20 / 200"처럼 지금 보는 범위 표시 | 확장 [MK] |
-| DAT-45 | 열 유형 정의·변경 | 구성 | 글·숫자·날짜·선택지 등 열 종류를 정함 | 확장 [MK] |
-| DAT-46 | 보관 처리와 보관함 보기 | 구성 | 지우지 않고 치워 두고 다시 꺼내기 | 확장 [MK] |
-| DAT-47 | 태그·라벨 관리 | 모듈 | 태그 이름 바꾸기·합치기·색 지정 | 확장 [MK] |
-| DAT-48 | 사용자 정의 필드 추가 | 구성 | 사용자가 직접 항목 칸을 늘림 | 확장 [MK] |
-| DAT-49 | 라벨-값 설명 목록 — Structured List/Descriptions | 부품 | 표 없이 라벨-값 짝을 세로로 나열하는 목록 | 확인 [CAR] |
-| DAT-50 | 자르기 목록(더 보기) — Truncated List | 부품 | 항목 일부만 보여주고 "N개 더 보기"로 나머지를 펼침 | 확인 [CAR] |
-| DAT-51 | 저장된 보기+검색+필터 통합 바 — Index Filters | 구성 | 저장된 보기 탭 전환+검색+필터+정렬을 한 줄로 묶은 도구모음 | 확인 [POL2] |
-| DAT-52 | 라벨-값 쌍 읽기전용 표시 — Labeled Value | 부품 | 이름표와 값을 한 쌍으로 나란히 보여주는 읽기 전용 부품 | 확인 [SPC2] |
-| DAT-53 | 테이블+트리 결합 — Table Tree | 구성 | 표의 각 행을 펼치면 하위 행이 나오는 표+트리 결합 부품 | 확인 [ATL] |
-| DAT-54 | 요약 목록(키-값) — Summary List | 구성 | 신청 내용 확인 화면처럼 항목명-값을 짝지어 나열 | 확인 [G] |
-| DAT-55 | 절차 순서 목록 — Process List | 부품 | 여러 단계를 번호 매겨 세로로 나열해 순서를 보여줌 | 확인 [USW] |
-| DAT-56 | 게시판 행 — Board Row | 부품 | 제목·작성자·날짜·조회수를 한 줄로 나열하는 게시판형 표 행 | 확인 [TOSSMINI] |
-| DAT-57 | 선택형 표 행 — Table Row(선택) | 부품 | 체크박스로 여러 행을 선택해 일괄 처리하는 표 행 | 확인 [TOSSMINI] |
-| DAT-58 | 읽기 전용 표 — Read Only Table | 부품 | 편집 없이 조회만 가능한 표 형태 | 확인 [KINTONE] |
-| DAT-59 | 자료 목록 — Resource List | 부품 | 첨부·다운로드용 자료를 아이콘과 함께 나열하는 목록 | 확인 [DC] |
-| DAT-60 | 스프레드시트형 표 — Spreadsheet Table | 구성 | 셀 단위로 직접 편집하는 엑셀형 표 | 확인 [DC] |
-| DAT-61 | 표를 이름·값 목록으로 바꾸기 — Definition List to Table | 구성 | 좁은 화면에서 표를 행마다 이름과 값이 짝지어진 목록으로 펴기 | 확인 [THISRESP] |
-| DAT-62 | 열 머리글 방향 뒤집기 — Header Orientation Flip | 구성 | 위쪽에 있던 열 이름을 왼쪽으로 돌려 행마다 붙이기 | 확인 [THISRESP] |
-| DAT-63 | 행마다 머리글을 붙인 목록 — Table to List with Header | 구성 | 표의 각 행을 한 덩어리 카드로 만들고 머리글을 그 안에 넣기 | 확인 [THISRESP] |
-| DAT-64 | 중요한 열만 남기기 — Priority Columns | 구성 | 화면이 좁아지면 정한 순서대로 덜 중요한 열부터 감추기 | 확인 [THISRESP] |
-| DAT-65 | 전체 표는 별도 화면으로 — Link to Full-Table | 구성 | 요약만 보여 주고 전체 표는 따로 연 화면에서 보게 하기 | 확인 [THISRESP] |
+| ID | 항목 | 통용 용어 | 종류 | 역할·사용할 때 | 근거 |
+|---|---|---|---|---|---|
+| DAT-01 | 검색어 입력과 제안 — Search / Suggestions | 검색 자동완성 (Search Autocomplete) | 모듈 | 찾을 대상을 입력하고 구체화 | 확인 [UD] |
+| DAT-02 | 필터·적용 조건·초기화 — Faceted Filtering | 패싯 필터 (Faceted Filter) | 모듈 | 조건으로 결과를 좁히고 되돌리기 | 확장 [UD] |
+| DAT-03 | 정렬 — Sorting | 정렬 (Sort) | 구성 | 목적에 맞는 결과 순서 선택 | 확인 [DT] |
+| DAT-04 | 카드·행 보기 전환 — View Switcher | 뷰 전환 (View Switcher) | 구성 | 같은 데이터의 읽기 방식 변경 | 확인 [UN] |
+| DAT-05 | 데이터 표 — Data Table | 데이터 테이블 (Data Table) | 모듈 | 여러 속성을 행·열로 비교 | 확인 [DT] |
+| DAT-06 | 행 선택과 일괄 작업 — Bulk Actions | 일괄 작업 (Bulk Actions) | 구성 | 여러 항목을 함께 처리 | 확장 [DT] |
+| DAT-07 | 열 표시·숨김 — Column Visibility | 컬럼 표시 설정 (Column Visibility) | 구성 | 필요한 속성만 표에 표시 | 확인 [DT] |
+| DAT-08 | 긴 목록의 가상화 — Virtual List | 가상 스크롤 (Virtual List) | 구성 | 대량 데이터 표시 비용을 제한 | 확인 [K] |
+| DAT-09 | 계층 탐색 — Tree View | 트리 뷰 (Tree View) | 부품 | 폴더·분류 구조를 펼쳐 탐색 | 확인 [C] |
+| DAT-10 | 일정 보기 — Event Calendar | 캘린더 (Event Calendar) | 모듈 | 날짜별 일정을 탐색 | 확인 [UN] |
+| DAT-11 | 상태별 작업 보드 — Kanban | 칸반 보드 (Kanban Board) | 모듈 | 상태를 기준으로 항목 분류·이동 | 확인 [K] |
+| DAT-12 | 현재 위치에서 수정 — Inline Editing | 인라인 편집 (Inline Editing) | 구성 | 별도 화면 없이 값을 변경 | 확인 [UI] |
+| DAT-13 | 변경 내용 자동 저장 — Autosave | 자동 저장 (Autosave) | 구성 | 작업 손실을 줄이고 저장 상태 표시 | 확인 [UI] |
+| DAT-14 | 저장된 조건·보기 | 저장된 필터 (Saved Views) | 구성 | 반복 조회 조건을 다시 사용 | 확장 [DT] |
+| DAT-15 | 가져오기·필드 대응·결과 확인 | 데이터 가져오기 (Data Import / Field Mapping) | 모듈 | 외부 데이터를 구조에 맞게 입력 | 확장 [B] |
+| DAT-16 | 핵심 지표 — Stat Card | 스탯 카드 (Stat Card / KPI Card) | 모듈 | 수치·단위·기준 기간을 함께 표시 | 확인 [B] |
+| DAT-17 | 차트 — Chart | 차트 (Chart) | 모듈 | 추이·비교·분포를 목적별 변형으로 표시 | 확인 [CH] |
+| DAT-18 | 대시보드 — Dashboard | 대시보드 (Dashboard) | 모듈 | 지표·조건·상세 탐색을 한 흐름으로 연결 | 확인 [UD] |
+| DAT-19 | 중첩 행 표 — Treegrid | 트리 그리드 (Treegrid) | 모듈 | 부모·자식의 속성을 함께 비교 | 확인 [APG] · 대조 [APGIMPL] |
+| DAT-20 | 그룹별 표 — Grouped Table | 그룹 테이블 (Grouped Table) | 구성 | 공통 속성으로 행을 묶음 | 확인 [CF] |
+| DAT-21 | 셀 범위 편집 — Spreadsheet Grid | 스프레드시트 그리드 (Spreadsheet Grid) | 모듈 | 셀 이동·범위 선택·붙여넣기 | 확인 [SHRC] |
+| DAT-22 | 피벗 표 — Pivot Table | 피벗 테이블 (Pivot Table) | 모듈 | 차원을 바꿔 집계 비교 | 확인 [SYNC] |
+| DAT-23 | 행 상세 확장 | 확장 행 (Expandable Row) | 구성 | 목록을 유지하며 추가 속성 표시 | 확장 [PF] |
+| DAT-24 | 열 고정·이동·폭 조절 | 컬럼 고정·리사이즈 (Column Pinning & Resizing) | 구성 | 넓은 표의 비교 기준 유지 | 확장 [SYNC] |
+| DAT-25 | 전체 결과 선택 범위 안내 | 전체 선택 안내 (Select All Results) | 구성 | 현재 페이지와 전체 결과 선택 구분 | 확인 [PFPAT] |
+| DAT-26 | 속성 묶음 편집 | 속성 편집기 (Property Editor) | 모듈 | 객체의 속성을 추가·수정·삭제 | 확인 [CF] |
+| DAT-27 | 데이터 내보내기 설정 | 데이터 내보내기 (Data Export) | 모듈 | 범위·형식·필드를 골라 출력 | 확장 · 웹앱 요구 |
+| DAT-28 | 목록 정보 밀도 전환 | 밀도 설정 (Density Toggle) | 구성 | 작업 목적에 맞게 표시량 조절 | 확인 [CF] |
+| DAT-29 | 좁은 화면의 표 재배치 | 반응형 테이블 (Responsive Table) | 구성 | 열이 많은 표를 카드나 접힌 행으로 바꾸기 | 확장 [MK] · 대조 [THISRESP] |
+| DAT-30 | 열 머리글 필터 | 컬럼 필터 (Column Header Filter) | 구성 | 열 제목에서 바로 값으로 걸러 내기 | 확장 [MK] |
+| DAT-31 | 셀 값 유형별 표시 규칙 | 셀 포맷 규칙 (Cell Formatting) | 기준 | 숫자 오른쪽 정렬·상태 배지·날짜 형식의 통일 | 확장 [MK] |
+| DAT-32 | 합계·요약 행 | 합계 행 (Summary Row) | 부품 | 표 아래 합계·평균 고정 표시 | 확장 [MK] |
+| DAT-33 | 조건부 셀 강조 | 조건부 서식 (Conditional Formatting) | 구성 | 기준을 넘는 값에 색·아이콘 자동 표시 | 확장 [MK] |
+| DAT-34 | 다단 열 머리글 | 다단 헤더 (Grouped Column Headers) | 구성 | 관련 열을 묶는 위 머리글 한 줄 추가 | 확장 [MK] |
+| DAT-35 | 행 고정·즐겨찾기 | 행 고정 (Pinned Rows) | 구성 | 중요한 행을 맨 위에 붙여 두기 | 확장 [MK] |
+| DAT-36 | 선택 행 나란히 비교 | 항목 비교 (Side-by-Side Compare) | 구성 | 고른 몇 행을 열로 돌려 대조 | 확장 [MK] |
+| DAT-37 | 다른 표의 레코드 연결 필드 — Relation | 관계 필드 (Relation Field) | 부품 | 셀 안에서 다른 목록의 항목을 골라 연결 | 확장 [MK] |
+| DAT-38 | 계산 열·수식 열 | 수식 컬럼 (Formula Column) | 부품 | 다른 열 값으로 자동 계산되는 열 | 확장 [MK] |
+| DAT-39 | 행 복제·템플릿 행 | 행 복제 (Duplicate Row) | 구성 | 비슷한 행을 복사해 새로 시작 | 확장 [MK] |
+| DAT-40 | 빠른 필터 탭 — Quick Filters | 퀵 필터 (Quick Filters) | 부품 | 전체·진행 중·내 것 같은 자주 쓰는 조건 탭 | 확장 [MK] |
+| DAT-41 | 선택 범위의 즉석 집계 | 선택 영역 집계 (Selection Summary) | 구성 | 셀을 드래그하면 합계·개수를 바로 보여 줌 | 확장 [MK] |
+| DAT-42 | 새로 들어온 항목 강조 | 신규 항목 하이라이트 (New Item Highlight) | 구성 | 방금 추가된 행을 잠깐 밝혀 위치를 알림 | 확장 [MK] |
+| DAT-43 | 실시간 갱신 목록의 자리 유지 | 스크롤 위치 고정 (Scroll Anchoring) | 구성 | 새 항목이 와도 읽던 위치가 밀리지 않게 | 확장 [MK] |
+| DAT-44 | 결과 범위·총 개수 표기 | 결과 개수 표시 (Result Count) | 부품 | "1–20 / 200"처럼 지금 보는 범위 표시 | 확장 [MK] |
+| DAT-45 | 열 유형 정의·변경 | 컬럼 타입 (Column Type) | 구성 | 글·숫자·날짜·선택지 등 열 종류를 정함 | 확장 [MK] |
+| DAT-46 | 보관 처리와 보관함 보기 | 보관함 (Archive) | 구성 | 지우지 않고 치워 두고 다시 꺼내기 | 확장 [MK] |
+| DAT-47 | 태그·라벨 관리 | 태그 관리 (Tag Management) | 모듈 | 태그 이름 바꾸기·합치기·색 지정 | 확장 [MK] |
+| DAT-48 | 사용자 정의 필드 추가 | 커스텀 필드 (Custom Fields) | 구성 | 사용자가 직접 항목 칸을 늘림 | 확장 [MK] |
+| DAT-49 | 라벨-값 설명 목록 — Structured List/Descriptions | 디스크립션 리스트 (Description List) | 부품 | 표 없이 라벨-값 짝을 세로로 나열하는 목록 | 확인 [CAR] |
+| DAT-50 | 자르기 목록(더 보기) — Truncated List | 더보기 리스트 (Truncated List) | 부품 | 항목 일부만 보여주고 "N개 더 보기"로 나머지를 펼침 | 확인 [CAR] |
+| DAT-51 | 저장된 보기+검색+필터 통합 바 — Index Filters | 인덱스 필터 (Index Filters) | 구성 | 저장된 보기 탭 전환+검색+필터+정렬을 한 줄로 묶은 도구모음 | 확인 [POL2] |
+| DAT-52 | 라벨-값 쌍 읽기전용 표시 — Labeled Value | 라벨-값 (Labeled Value) | 부품 | 이름표와 값을 한 쌍으로 나란히 보여주는 읽기 전용 부품 | 확인 [SPC2] |
+| DAT-53 | 테이블+트리 결합 — Table Tree | 테이블 트리 (Table Tree) | 구성 | 표의 각 행을 펼치면 하위 행이 나오는 표+트리 결합 부품 | 확인 [ATL] |
+| DAT-54 | 요약 목록(키-값) — Summary List | 요약 목록 (Summary List) | 구성 | 신청 내용 확인 화면처럼 항목명-값을 짝지어 나열 | 확인 [G] |
+| DAT-55 | 절차 순서 목록 — Process List | 프로세스 리스트 (Process List) | 부품 | 여러 단계를 번호 매겨 세로로 나열해 순서를 보여줌 | 확인 [USW] |
+| DAT-56 | 게시판 행 — Board Row | 게시판 목록 (Board List Row) | 부품 | 제목·작성자·날짜·조회수를 한 줄로 나열하는 게시판형 표 행 | 확인 [TOSSMINI] |
+| DAT-57 | 선택형 표 행 — Table Row(선택) | 선택 가능한 행 (Selectable Table Row) | 부품 | 체크박스로 여러 행을 선택해 일괄 처리하는 표 행 | 확인 [TOSSMINI] |
+| DAT-58 | 읽기 전용 표 — Read Only Table | 읽기 전용 테이블 (Read-Only Table) | 부품 | 편집 없이 조회만 가능한 표 형태 | 확인 [KINTONE] |
+| DAT-59 | 자료 목록 — Resource List | 리소스 리스트 (Resource List) | 부품 | 첨부·다운로드용 자료를 아이콘과 함께 나열하는 목록 | 확인 [DC] |
+| DAT-60 | 스프레드시트형 표 — Spreadsheet Table | 스프레드시트 테이블 (Spreadsheet Table) | 구성 | 셀 단위로 직접 편집하는 엑셀형 표 | 확인 [DC] |
+| DAT-61 | 표를 이름·값 목록으로 바꾸기 — Definition List to Table | 정의 목록 변환 (Definition List to Table) | 구성 | 좁은 화면에서 표를 행마다 이름과 값이 짝지어진 목록으로 펴기 | 확인 [THISRESP] |
+| DAT-62 | 열 머리글 방향 뒤집기 — Header Orientation Flip | 헤더 방향 전환 (Flipped Table Header) | 구성 | 위쪽에 있던 열 이름을 왼쪽으로 돌려 행마다 붙이기 | 확인 [THISRESP] |
+| DAT-63 | 행마다 머리글을 붙인 목록 — Table to List with Header | 카드형 테이블 (Table to Card List) | 구성 | 표의 각 행을 한 덩어리 카드로 만들고 머리글을 그 안에 넣기 | 확인 [THISRESP] |
+| DAT-64 | 중요한 열만 남기기 — Priority Columns | 우선순위 컬럼 (Priority Columns) | 구성 | 화면이 좁아지면 정한 순서대로 덜 중요한 열부터 감추기 | 확인 [THISRESP] |
+| DAT-65 | 전체 표는 별도 화면으로 — Link to Full-Table | 전체 테이블 링크 (Link to Full Table) | 구성 | 요약만 보여 주고 전체 표는 따로 연 화면에서 보게 하기 | 확인 [THISRESP] |

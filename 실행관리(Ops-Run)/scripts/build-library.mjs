@@ -53,11 +53,15 @@ for (const doc of chapters) {
   categories.push(category);
   for(const {table,section} of tables) {
     const glyphColumn=table.header.findIndex(h=>text(h)==='그림');
+    // 통용 용어: the name the industry uses for the item (햄버거 메뉴 (Hamburger Menu)), so an entry is found by the word people actually say.
+    const termColumn=table.header.findIndex(h=>text(h)==='통용 용어');
+    if(termColumn<0)throw new Error('Missing 통용 용어 column: '+doc.source);
     for(const row of table.rows) {
-      const [id,name,kind,usage,evidence]=row.map(text), cell=glyphColumn<0?'':text(row[glyphColumn]);
+      const cells=row.map(text), term=cells[termColumn], cell=glyphColumn<0?'':cells[glyphColumn];
+      const [id,name,kind,usage,evidence]=cells.filter((_,i)=>i!==termColumn);
       const glyph=cell&&cell!=='—'?cell.split(',').map(g=>g.trim()):null;
-      if(!id.startsWith(category.id+'-')||ids.has(id)||!name||!usage)throw new Error('Invalid dictionary record: '+id);
-      ids.add(id);entries.push({id,name,kind,usage,evidence,category:category.id,...(section&&{section}),...(glyph&&{glyph})});
+      if(!id.startsWith(category.id+'-')||ids.has(id)||!name||!usage||!term)throw new Error('Invalid dictionary record: '+id);
+      ids.add(id);entries.push({id,name,term,kind,usage,evidence,category:category.id,...(section&&{section}),...(glyph&&{glyph})});
     }
   }
 }

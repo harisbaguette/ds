@@ -4,6 +4,8 @@
 .component-heading>a .ui-icon { width:var(--p-icon-sm); transform:rotate(180deg); order:-1; }
 .component-heading h2 { font-size:var(--p-text-heading); font-weight:var(--p-weight-semibold); letter-spacing:var(--p-tracking-tighter); line-height:var(--p-leading-snug); }
 .component-heading p { color:var(--p-muted); font-size:var(--p-text-md); line-height:var(--p-leading-relaxed); margin-top:var(--p-space-xs); }
+.component-heading .component-term { color:var(--p-ink); }
+.component-term span { margin-right:var(--p-space-xs); font-size:var(--p-text-sm); color:var(--p-muted); }
 .component-layout { display:grid; grid-template-columns:minmax(0,1fr) calc(var(--p-space-unit) * 36); gap:var(--p-space-2xl); align-items:start; }
 .component-content { padding:0; min-width:0; }
 .component-page .part-demo { border:0; border-radius:0; background:var(--p-bg); overflow:visible; }

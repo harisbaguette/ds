@@ -2,66 +2,66 @@
 
 [패턴 사전 색인과 사용법](<../패턴 사전 색인과 사용법.md>)의 2번 분류 LAY다. 항목 ID·종류·근거 표기 규칙은 색인 문서의 "목록을 읽는 기준"을 따르고, 근거 칸의 출처 기호는 [레퍼런스 출처 대장](<../레퍼런스 출처 대장.md>)의 "출처 기호표"에서 원문으로 이어진다.
 
-| ID | 항목 | 종류 | 역할·사용할 때 | 근거 |
-|---|---|---|---|---|
-| LAY-01 | 단일 열 읽기 화면 — Reading Layout | 구성 | 긴 글에 집중 | 확장 [BP] |
-| LAY-02 | 본문과 사이드바 — Content + Sidebar | 구성 | 주 내용 옆에 보조 탐색 제공 | 확인 [K] |
-| LAY-03 | 앱 기본 화면 — Application Shell | 모듈 | 탐색·도구·작업 영역을 연결 | 확인 [B] |
-| LAY-04 | 목록과 상세 — List–Detail | 구성 | 항목 탐색과 확인을 연결 | 확장 [DT] |
-| LAY-05 | 분할 화면 — Split Layout | 구성 | 이미지와 설명을 나란히 배치 | 확인 [M] |
-| LAY-06 | 균등 그리드 — Grid | 구성 | 동등한 항목을 반복 배치 | 확인 [K] |
-| LAY-07 | 높이가 다른 그리드 — Masonry | 구성 | 다양한 이미지 비율을 수용 | 확인 [K] |
-| LAY-08 | 크기 차이가 있는 그리드 — Bento | 구성 | 정보별 비중을 공간으로 표현 | 확인 [K] |
-| LAY-09 | 화면 폭을 채우는 이미지 — Full Bleed | 구성 | 시각 자료의 인상을 강조 | 확인 [K] |
-| LAY-10 | 고정 보조 영역 — Sticky Sidebar | 구성 | 본문 이동 중 보조 정보 유지 | 확인 [K] |
-| LAY-11 | 크기 조절 패널 — Resizable Panels | 구성 | 사용자가 작업 공간을 조절 | 확인 [S] |
-| LAY-12 | 대표 기사와 보조 기사 — Featured + Grid | 구성 | 콘텐츠의 중요도를 달리 배치 | 확인 [BL] |
-| LAY-13 | 이미지·설명 교차 배치 | 구성 | 여러 주제를 리듬 있게 소개 | 확인 [BL] |
-| LAY-14 | 인쇄용 문서 배치 — Print Layout | 구성 | HTML 문서를 페이지 단위로 출력 | 확장 · 사용자 요구 |
-| LAY-15 | 카드 컨테이너 — Card | 부품 | 한 대상의 관련 정보를 묶음 | 확인 [DC] |
-| LAY-16 | 일정한 간격의 묶음 — Stack | 부품 | 부품 사이의 간격·방향을 관리 | 확인 [C] |
-| LAY-17 | 구분선 — Separator / Divider | 부품 | 인접한 정보 영역을 나눔 | 확인 [S] |
-| LAY-18 | 자동 줄바꿈 묶음 — Cluster | 구성 | 폭에 따라 관련 요소를 줄바꿈 | 확인 [EVERY] |
-| LAY-19 | 폭에 따른 가로·세로 전환 — Switcher | 구성 | 공간이 부족하면 그룹 전체를 재배치 | 확인 [EVERY] |
-| LAY-20 | 가로 탐색 띠 — Reel | 구성 | 연속 항목을 수평으로 탐색 | 확인 [EVERY] |
-| LAY-21 | 중앙 표지 배치 — Cover | 구성 | 중심 메시지와 상하 보조 요소 배치 | 확인 [EVERY] |
-| LAY-22 | 비율 유지 프레임 — Frame | 부품 | 미디어 영역의 비율 유지 | 확인 [EVERY] |
-| LAY-23 | 겹침 기준 컨테이너 — Imposter | 구성 | 기준 영역 안에 요소를 겹쳐 배치 | 확인 [EVERY] |
-| LAY-24 | 보조 작업 패널 배치 — Supporting Pane | 구성 | 주 과제 옆에서 관련 과제 수행 | 확인 [ADAPT] |
-| LAY-25 | 집중 작업 모드 — Focus Mode | 구성 | 긴 과제에서 주변 탐색을 잠시 축소 | 확인 [AGDS] |
-| LAY-26 | 객체 중심 상세 허브 | 모듈 | 한 대상과 관련 자료·작업을 연결 | 확인 [CF] |
-| LAY-27 | 고밀도 행 목록 — Data List | 구성 | 표로 표현하기 어려운 복합 속성 배치 | 확인 [PF] |
-| LAY-28 | 양쪽 사이드바 3단 배치 — Holy Grail | 구성 | 탐색·본문·보조 정보를 한 화면에 나란히 | 확장 [MK] |
-| LAY-29 | 목록·상세·보조 3면 배치 — Three Pane | 구성 | 메일·메신저처럼 목록과 열람과 부가 정보를 함께 | 확장 [MK] |
-| LAY-30 | 스크롤 시 축소·고정되는 헤더 | 구성 | 내려갈수록 작아지고 올라오면 돌아오는 상단 바 | 확장 [MK] |
-| LAY-31 | 하단 고정 행동 바 — Sticky Action Bar | 구성 | 긴 화면 아래에 저장·구매 같은 주 행동 고정 | 확장 [MK] |
-| LAY-32 | 화면 단위 스냅 스크롤 | 구성 | 한 번에 한 장면씩 넘어가는 소개 화면 | 확장 [MK] |
-| LAY-33 | 아이콘 레일로 접히는 사이드바 | 구성 | 탐색을 아이콘 열로 줄여 작업 공간 확보 | 확장 [MK] |
-| LAY-34 | 여러 문서 탭 작업 공간 | 구성 | 브라우저 탭처럼 열린 문서를 나란히 두고 전환 | 확장 [MK] |
-| LAY-35 | 도구·캔버스·속성 3면 편집기 배치 | 구성 | 왼쪽 도구, 가운데 작업면, 오른쪽 속성 | 확장 [MK] |
-| LAY-36 | 첫 화면 접힘선 기준 배치 | 기준 | 스크롤 없이 보이는 영역에 핵심을 두는 판단 | 확장 [MK] |
-| LAY-37 | 컨테이너 크기 기준 재배치 | 기준 | 화면 폭이 아니라 담긴 상자 폭으로 부품 배치 결정 | 확장 [MK] |
-| LAY-38 | 겹쳐 밀리는 상세 패널 — Stacked Panels | 구성 | 상세 안의 상세를 옆으로 밀어 쌓고 되돌아가기 | 확장 [MK] |
-| LAY-39 | 고정 비율 무대 — Letterboxed Stage | 구성 | 발표·게임 화면을 비율 유지하며 가운데 배치 | 확장 [MK] |
-| LAY-40 | 본문 폭을 넘는 확장 블록 — Breakout | 구성 | 이미지·표만 본문보다 넓게 튀어나오게 | 확장 [MK] |
-| LAY-41 | 설정 페이지 표준 배치 — Settings Layout | 구성 | 왼쪽 항목 목록과 오른쪽 설정 묶음 | 확장 [MK] |
-| LAY-42 | 프로필·객체 헤더와 탭 본문 | 구성 | 대상 요약을 위에 두고 아래를 탭으로 나눔 | 확장 [MK] |
-| LAY-43 | 창 분할 리사이저 — Window Splitter | 부품 | 화면을 두 영역으로 나눈 경계선을 끌어 각 영역 크기를 조절 | 확인 [APG] · 대조 [APGIMPL] |
-| LAY-44 | 툴바 간격 조절 — Toolbar Spacer | 부품 | 툴바 버튼 묶음 사이에 고정·유동 간격을 넣어 그룹을 나눔 | 확인 [LGR] |
-| LAY-45 | 커스텀 스크롤 영역 — Scroll Area | 부품 | 브라우저 기본 스크롤바 대신 직접 꾸민 스크롤바 영역 | 확인 [CHKUI] |
-| LAY-46 | 플로팅 패널 — Floating Panel | 부품 | 화면 위에서 드래그해 옮길 수 있는 떠 있는 창 | 확인 [CHKUI] |
-| LAY-47 | 스크롤 가장자리 흐림 표시 — Scroll Fog | 부품 | 스크롤 가능한 영역의 가장자리를 흐리게 해 더 있음을 암시 | 확인 [DAANGN] |
-| LAY-48 | 브랜드 없는 범용 헤더 틀 — Generic Header | 구성 | 기관 로고 없이 서비스명만 쓰는 범용 상단 헤더 틀 | 확인 [G] |
-| LAY-49 | 그리드 목록 — Grid List | 구성 | 카드형 항목을 격자로 배열하는 목록 틀 | 확인 [TOSSMINI] |
-| LAY-50 | 하단 보조 정보 바 — Bottom Info Bar | 부품 | 화면 하단에 배송비·재고 같은 보조 정보를 고정 표시 | 확인 [TOSSMINI] |
-| LAY-51 | 유동 중심 재배치 — Mostly Fluid | 구성 | 넓을 때는 여러 단으로 두고 좁아지면 단을 접어 한 줄로 쌓는 반응형 기본형 | 확인 [THISRESP] |
-| LAY-52 | 단 떨어뜨리기 — Column Drop | 구성 | 폭이 줄 때마다 오른쪽 단부터 아래로 떨어뜨려 세로로 쌓기 | 확인 [THISRESP] |
-| LAY-53 | 배치 재구성 — Layout Shifter | 구성 | 화면 크기 구간마다 요소의 자리를 크게 바꿔 다른 배치를 쓰기 | 확인 [THISRESP] |
-| LAY-54 | 최소 조정 — Tiny Tweaks | 구성 | 한 단짜리 화면에서 글자 크기와 여백만 조금 바꿔 대응 | 확인 [THISRESP] |
-| LAY-55 | 화면 밖 서랍 — Off Canvas | 구성 | 보조 영역을 화면 밖에 두고 필요할 때 밀어 넣기. 위·왼쪽·오른쪽·아래·전체 덮기 방향 선택 | 확인 [THISRESP] |
-| LAY-56 | 보이는 순서와 읽는 순서 분리 — Source-Order Shift | 기준 | 눈에 보이는 자리만 바꾸고 낭독기·키보드가 읽는 차례는 원래대로 두는 배치 판단 | 확인 [THISRESP] |
-| LAY-57 | 폭에 따라 자리 옮겨 끼우기 — AppendAround | 구성 | 같은 요소를 화면 폭에 맞춰 다른 위치의 자리로 옮겨 붙이기 | 확인 [THISRESP] |
-| LAY-58 | 같은 폭 단 나누기 — Equal Width Columns | 구성 | 2단부터 6단까지 같은 폭으로 나누고 좁아지면 단 수를 줄이기 | 확인 [THISRESP] |
-| LAY-59 | 두 칸을 차지하는 격자 블록 — Double-Wide Grid Block | 구성 | 격자 안에서 특정 칸만 두 칸 폭으로 키워 강약을 주기 | 확인 [THISRESP] |
-| LAY-60 | 행 높이를 맞춘 격자 — Equal Height Rows | 구성 | 내용 길이가 달라도 같은 줄의 칸 높이를 맞춰 줄이 어긋나지 않게 하기 | 확인 [THISRESP] |
-| LAY-61 | 섬네일 목록 — List with Thumbnails | 구성 | 작은 그림과 제목을 한 줄로 묶고 폭이 넓어지면 요약문을 함께 펴는 목록 틀 | 확인 [THISRESP] |
+| ID | 항목 | 통용 용어 | 종류 | 역할·사용할 때 | 근거 |
+|---|---|---|---|---|---|
+| LAY-01 | 단일 열 읽기 화면 — Reading Layout | 리딩 레이아웃 (Single Column Layout) | 구성 | 긴 글에 집중 | 확장 [BP] |
+| LAY-02 | 본문과 사이드바 — Content + Sidebar | 사이드바 레이아웃 (Content + Sidebar) | 구성 | 주 내용 옆에 보조 탐색 제공 | 확인 [K] |
+| LAY-03 | 앱 기본 화면 — Application Shell | 앱 셸 (Application Shell) | 모듈 | 탐색·도구·작업 영역을 연결 | 확인 [B] |
+| LAY-04 | 목록과 상세 — List–Detail | 리스트-디테일 (List-Detail) | 구성 | 항목 탐색과 확인을 연결 | 확장 [DT] |
+| LAY-05 | 분할 화면 — Split Layout | 스플릿 레이아웃 (Split Screen) | 구성 | 이미지와 설명을 나란히 배치 | 확인 [M] |
+| LAY-06 | 균등 그리드 — Grid | 그리드 레이아웃 (Grid) | 구성 | 동등한 항목을 반복 배치 | 확인 [K] |
+| LAY-07 | 높이가 다른 그리드 — Masonry | 메이슨리 (Masonry) | 구성 | 다양한 이미지 비율을 수용 | 확인 [K] |
+| LAY-08 | 크기 차이가 있는 그리드 — Bento | 벤토 그리드 (Bento Grid) | 구성 | 정보별 비중을 공간으로 표현 | 확인 [K] |
+| LAY-09 | 화면 폭을 채우는 이미지 — Full Bleed | 풀 블리드 (Full Bleed) | 구성 | 시각 자료의 인상을 강조 | 확인 [K] |
+| LAY-10 | 고정 보조 영역 — Sticky Sidebar | 스티키 사이드바 (Sticky Sidebar) | 구성 | 본문 이동 중 보조 정보 유지 | 확인 [K] |
+| LAY-11 | 크기 조절 패널 — Resizable Panels | 리사이저블 패널 (Resizable Panels) | 구성 | 사용자가 작업 공간을 조절 | 확인 [S] |
+| LAY-12 | 대표 기사와 보조 기사 — Featured + Grid | 피처드 + 그리드 (Featured + Grid) | 구성 | 콘텐츠의 중요도를 달리 배치 | 확인 [BL] |
+| LAY-13 | 이미지·설명 교차 배치 | 지그재그 레이아웃 (Alternating Layout) | 구성 | 여러 주제를 리듬 있게 소개 | 확인 [BL] |
+| LAY-14 | 인쇄용 문서 배치 — Print Layout | 인쇄 레이아웃 (Print Stylesheet) | 구성 | HTML 문서를 페이지 단위로 출력 | 확장 · 사용자 요구 |
+| LAY-15 | 카드 컨테이너 — Card | 카드 (Card) | 부품 | 한 대상의 관련 정보를 묶음 | 확인 [DC] |
+| LAY-16 | 일정한 간격의 묶음 — Stack | 스택 (Stack) | 부품 | 부품 사이의 간격·방향을 관리 | 확인 [C] |
+| LAY-17 | 구분선 — Separator / Divider | 구분선 (Divider) | 부품 | 인접한 정보 영역을 나눔 | 확인 [S] |
+| LAY-18 | 자동 줄바꿈 묶음 — Cluster | 클러스터 (Cluster) | 구성 | 폭에 따라 관련 요소를 줄바꿈 | 확인 [EVERY] |
+| LAY-19 | 폭에 따른 가로·세로 전환 — Switcher | 스위처 (Switcher) | 구성 | 공간이 부족하면 그룹 전체를 재배치 | 확인 [EVERY] |
+| LAY-20 | 가로 탐색 띠 — Reel | 릴 (Reel) | 구성 | 연속 항목을 수평으로 탐색 | 확인 [EVERY] |
+| LAY-21 | 중앙 표지 배치 — Cover | 커버 (Cover) | 구성 | 중심 메시지와 상하 보조 요소 배치 | 확인 [EVERY] |
+| LAY-22 | 비율 유지 프레임 — Frame | 프레임 (Aspect Ratio Frame) | 부품 | 미디어 영역의 비율 유지 | 확인 [EVERY] |
+| LAY-23 | 겹침 기준 컨테이너 — Imposter | 임포스터 (Imposter) | 구성 | 기준 영역 안에 요소를 겹쳐 배치 | 확인 [EVERY] |
+| LAY-24 | 보조 작업 패널 배치 — Supporting Pane | 서포팅 페인 (Supporting Pane) | 구성 | 주 과제 옆에서 관련 과제 수행 | 확인 [ADAPT] |
+| LAY-25 | 집중 작업 모드 — Focus Mode | 포커스 모드 (Focus Mode) | 구성 | 긴 과제에서 주변 탐색을 잠시 축소 | 확인 [AGDS] |
+| LAY-26 | 객체 중심 상세 허브 | 객체 상세 페이지 (Object Detail Page) | 모듈 | 한 대상과 관련 자료·작업을 연결 | 확인 [CF] |
+| LAY-27 | 고밀도 행 목록 — Data List | 데이터 리스트 (Data List) | 구성 | 표로 표현하기 어려운 복합 속성 배치 | 확인 [PF] |
+| LAY-28 | 양쪽 사이드바 3단 배치 — Holy Grail | 홀리 그레일 레이아웃 (Holy Grail Layout) | 구성 | 탐색·본문·보조 정보를 한 화면에 나란히 | 확장 [MK] |
+| LAY-29 | 목록·상세·보조 3면 배치 — Three Pane | 3단 레이아웃 (Three-Pane Layout) | 구성 | 메일·메신저처럼 목록과 열람과 부가 정보를 함께 | 확장 [MK] |
+| LAY-30 | 스크롤 시 축소·고정되는 헤더 | 축소 헤더 (Shrinking Sticky Header) | 구성 | 내려갈수록 작아지고 올라오면 돌아오는 상단 바 | 확장 [MK] |
+| LAY-31 | 하단 고정 행동 바 — Sticky Action Bar | 스티키 액션 바 (Sticky Action Bar) | 구성 | 긴 화면 아래에 저장·구매 같은 주 행동 고정 | 확장 [MK] |
+| LAY-32 | 화면 단위 스냅 스크롤 | 스크롤 스냅 (Scroll Snap) | 구성 | 한 번에 한 장면씩 넘어가는 소개 화면 | 확장 [MK] |
+| LAY-33 | 아이콘 레일로 접히는 사이드바 | 접이식 사이드바 (Collapsible Sidebar) | 구성 | 탐색을 아이콘 열로 줄여 작업 공간 확보 | 확장 [MK] |
+| LAY-34 | 여러 문서 탭 작업 공간 | 탭 워크스페이스 (Tabbed Workspace) | 구성 | 브라우저 탭처럼 열린 문서를 나란히 두고 전환 | 확장 [MK] |
+| LAY-35 | 도구·캔버스·속성 3면 편집기 배치 | 에디터 레이아웃 (Toolbar, Canvas, Inspector) | 구성 | 왼쪽 도구, 가운데 작업면, 오른쪽 속성 | 확장 [MK] |
+| LAY-36 | 첫 화면 접힘선 기준 배치 | 퍼스트 뷰 (Above the Fold) | 기준 | 스크롤 없이 보이는 영역에 핵심을 두는 판단 | 확장 [MK] |
+| LAY-37 | 컨테이너 크기 기준 재배치 | 컨테이너 쿼리 (Container Queries) | 기준 | 화면 폭이 아니라 담긴 상자 폭으로 부품 배치 결정 | 확장 [MK] |
+| LAY-38 | 겹쳐 밀리는 상세 패널 — Stacked Panels | 스택 패널 (Stacked Panels) | 구성 | 상세 안의 상세를 옆으로 밀어 쌓고 되돌아가기 | 확장 [MK] |
+| LAY-39 | 고정 비율 무대 — Letterboxed Stage | 레터박스 (Letterboxed Stage) | 구성 | 발표·게임 화면을 비율 유지하며 가운데 배치 | 확장 [MK] |
+| LAY-40 | 본문 폭을 넘는 확장 블록 — Breakout | 브레이크아웃 (Breakout Layout) | 구성 | 이미지·표만 본문보다 넓게 튀어나오게 | 확장 [MK] |
+| LAY-41 | 설정 페이지 표준 배치 — Settings Layout | 설정 페이지 (Settings Layout) | 구성 | 왼쪽 항목 목록과 오른쪽 설정 묶음 | 확장 [MK] |
+| LAY-42 | 프로필·객체 헤더와 탭 본문 | 프로필 헤더 + 탭 (Profile Header with Tabs) | 구성 | 대상 요약을 위에 두고 아래를 탭으로 나눔 | 확장 [MK] |
+| LAY-43 | 창 분할 리사이저 — Window Splitter | 스플리터 (Window Splitter) | 부품 | 화면을 두 영역으로 나눈 경계선을 끌어 각 영역 크기를 조절 | 확인 [APG] · 대조 [APGIMPL] |
+| LAY-44 | 툴바 간격 조절 — Toolbar Spacer | 툴바 스페이서 (Toolbar Spacer) | 부품 | 툴바 버튼 묶음 사이에 고정·유동 간격을 넣어 그룹을 나눔 | 확인 [LGR] |
+| LAY-45 | 커스텀 스크롤 영역 — Scroll Area | 스크롤 영역 (Scroll Area) | 부품 | 브라우저 기본 스크롤바 대신 직접 꾸민 스크롤바 영역 | 확인 [CHKUI] |
+| LAY-46 | 플로팅 패널 — Floating Panel | 플로팅 패널 (Floating Panel) | 부품 | 화면 위에서 드래그해 옮길 수 있는 떠 있는 창 | 확인 [CHKUI] |
+| LAY-47 | 스크롤 가장자리 흐림 표시 — Scroll Fog | 스크롤 그림자 (Scroll Shadow) | 부품 | 스크롤 가능한 영역의 가장자리를 흐리게 해 더 있음을 암시 | 확인 [DAANGN] |
+| LAY-48 | 브랜드 없는 범용 헤더 틀 — Generic Header | 범용 헤더 (Generic Header) | 구성 | 기관 로고 없이 서비스명만 쓰는 범용 상단 헤더 틀 | 확인 [G] |
+| LAY-49 | 그리드 목록 — Grid List | 그리드 리스트 (Grid List) | 구성 | 카드형 항목을 격자로 배열하는 목록 틀 | 확인 [TOSSMINI] |
+| LAY-50 | 하단 보조 정보 바 — Bottom Info Bar | 하단 정보 바 (Bottom Info Bar) | 부품 | 화면 하단에 배송비·재고 같은 보조 정보를 고정 표시 | 확인 [TOSSMINI] |
+| LAY-51 | 유동 중심 재배치 — Mostly Fluid | 모스틀리 플루이드 (Mostly Fluid) | 구성 | 넓을 때는 여러 단으로 두고 좁아지면 단을 접어 한 줄로 쌓는 반응형 기본형 | 확인 [THISRESP] |
+| LAY-52 | 단 떨어뜨리기 — Column Drop | 컬럼 드롭 (Column Drop) | 구성 | 폭이 줄 때마다 오른쪽 단부터 아래로 떨어뜨려 세로로 쌓기 | 확인 [THISRESP] |
+| LAY-53 | 배치 재구성 — Layout Shifter | 레이아웃 시프터 (Layout Shifter) | 구성 | 화면 크기 구간마다 요소의 자리를 크게 바꿔 다른 배치를 쓰기 | 확인 [THISRESP] |
+| LAY-54 | 최소 조정 — Tiny Tweaks | 타이니 트윅 (Tiny Tweaks) | 구성 | 한 단짜리 화면에서 글자 크기와 여백만 조금 바꿔 대응 | 확인 [THISRESP] |
+| LAY-55 | 화면 밖 서랍 — Off Canvas | 오프캔버스 (Off-Canvas) | 구성 | 보조 영역을 화면 밖에 두고 필요할 때 밀어 넣기. 위·왼쪽·오른쪽·아래·전체 덮기 방향 선택 | 확인 [THISRESP] |
+| LAY-56 | 보이는 순서와 읽는 순서 분리 — Source-Order Shift | 소스 순서 분리 (Source Order vs Visual Order) | 기준 | 눈에 보이는 자리만 바꾸고 낭독기·키보드가 읽는 차례는 원래대로 두는 배치 판단 | 확인 [THISRESP] |
+| LAY-57 | 폭에 따라 자리 옮겨 끼우기 — AppendAround | 어펜드어라운드 (AppendAround) | 구성 | 같은 요소를 화면 폭에 맞춰 다른 위치의 자리로 옮겨 붙이기 | 확인 [THISRESP] |
+| LAY-58 | 같은 폭 단 나누기 — Equal Width Columns | 균등 컬럼 (Equal Width Columns) | 구성 | 2단부터 6단까지 같은 폭으로 나누고 좁아지면 단 수를 줄이기 | 확인 [THISRESP] |
+| LAY-59 | 두 칸을 차지하는 격자 블록 — Double-Wide Grid Block | 와이드 그리드 셀 (Double-Wide Grid Item) | 구성 | 격자 안에서 특정 칸만 두 칸 폭으로 키워 강약을 주기 | 확인 [THISRESP] |
+| LAY-60 | 행 높이를 맞춘 격자 — Equal Height Rows | 등높이 행 (Equal Height Rows) | 구성 | 내용 길이가 달라도 같은 줄의 칸 높이를 맞춰 줄이 어긋나지 않게 하기 | 확인 [THISRESP] |
+| LAY-61 | 섬네일 목록 — List with Thumbnails | 썸네일 리스트 (List with Thumbnails) | 구성 | 작은 그림과 제목을 한 줄로 묶고 폭이 넓어지면 요약문을 함께 펴는 목록 틀 | 확인 [THISRESP] |

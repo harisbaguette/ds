@@ -3,6 +3,8 @@ dialog::backdrop { background: var(--p-backdrop); backdrop-filter: var(--p-blur-
 .dialog-header { padding: calc(var(--p-space-unit) * 5) var(--p-space-lg); border-bottom: var(--p-border-width) solid var(--p-line-subtle); display: flex; align-items: center; gap: var(--p-space-sm); position: sticky; top: 0; background: var(--p-tile-header); z-index: var(--p-layer-lifted); }
 .dialog-category { display: block; font-size: var(--p-text-sm); color: var(--p-muted); margin-bottom: var(--p-space-2xs); }
 .dialog-header h2 { font-size: var(--p-text-title); font-weight: var(--p-weight-extrabold); }
+.detail-term { margin-top: var(--p-space-2xs); font-size: var(--p-text-md); color: var(--p-ink); }
+.detail-term span { margin-right: var(--p-space-xs); font-size: var(--p-text-sm); color: var(--p-muted); }
 .dialog-header > div { min-width: 0; overflow-wrap: anywhere; }
 .dialog-header > button { margin-left: auto; }
 .detail-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(var(--p-container-2xs), 1fr); }

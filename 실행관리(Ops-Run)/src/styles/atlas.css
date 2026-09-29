@@ -39,6 +39,10 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .is-todo .dict-thumb { border:var(--p-border-width) dashed var(--p-control-border); background:none; }
 .dict-todo,.detail-todo { color:var(--p-muted); font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); }
 .is-todo strong { color:var(--p-muted); }
+/* 통용 용어: the industry name under the dictionary name. Icon tiles already carry their English name, so they skip it. */
+.dict-term { display:block; padding:0 var(--p-space-xs); font-size:var(--p-text-sm); line-height:var(--p-leading-snug); color:var(--p-muted); overflow-wrap:anywhere; }
+.dict-hit .dict-term { padding:0; }
+.dict[data-shelf='icon'] .dict-term { display:none; }
 /* Icon-set pictures carry no paint of their own: outline sets draw with a stroke, filled sets with a fill, both in the ink color. */
 .paint-stroke { fill:none; stroke:currentColor; stroke-width:var(--p-icon-stroke-bold); stroke-linecap:round; stroke-linejoin:round; }
 .paint-fill { fill:currentColor; }

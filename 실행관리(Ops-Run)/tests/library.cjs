@@ -10,6 +10,7 @@ const sourceIDs=fs.readdirSync(path.join(root,'문서/사전')).filter(f=>f.ends
 const checks=[],errors=[];
 const check=(name,value)=>{assert.ok(value,name);checks.push(name);};
 check('사전 원본의 모든 ID를 누락·중복 없이 연결',sourceIDs.length===data.entries.length&&new Set(sourceIDs).size===new Set(data.entries.map(e=>e.id)).size&&sourceIDs.every(id=>data.entries.some(e=>e.id===id)));
+check('모든 사전 항목이 업계 통용 용어를 가짐',data.entries.every(e=>typeof e.term==='string'&&e.term.trim()&&!/[|\n]/.test(e.term))&&data.entries.find(e=>e.id==='NAV-10').term.includes('Pagination'));
 check('5개 계층 모두 실제 구성요소를 가짐',data.layers.length===5&&data.layers.every(l=>data.components.some(c=>c.layer===l.id)));
 check('모든 항목이 토큰·부품·블록·템플릿·아이콘 중 정확히 한 갈래에 들어가고, 아이콘 사전은 통째로 아이콘 갈래',data.shelves.length===5&&data.entries.every(e=>data.shelves.filter(s=>s.id===e.shelf).length===1)&&data.entries.every(e=>(e.category==='ICO')===(e.shelf==='icon')));
 check('토큰 갈래가 맨 앞이고 TOK 146개를 모두 담음',data.shelves[0].id==='token'&&data.entries.filter(e=>e.shelf==='token').length===146&&data.entries.filter(e=>e.category==='TOK').every(e=>e.shelf==='token'));

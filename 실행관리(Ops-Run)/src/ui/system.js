@@ -7,9 +7,6 @@
     return '<label class="item-switch"><span>'+e(library.shelfFor(state).name)+' 목록</span><select data-item-switch data-focus="item-switch">'+items.map(item=>'<option value="'+item.id+'"'+(state.detail===item.id?' selected':'')+'>'+e(item.name)+'</option>').join('')+'</select></label>';
   }
 
-  function itemMarkup(state, options = {}) {
-    return window.Pattove.componentDocs.live(state.detail, { ...state.options, ...options }, state.style, 'component-live');
-  }
   function detail(state) { return window.Pattove.componentDocs.page(state); }
   // Inert specimens retain their real proportions. Fit the entire scene to its tray,
   // rather than clipping the last control or changing the reusable component itself.
@@ -74,9 +71,5 @@
     window.Pattove.mountParts(root);
     fitPreviews(root);
   }
-  function updateInspector(state) {
-    document.querySelector('.system-inspector .part-demo').innerHTML = itemMarkup(state) + '<p class="ds-demo-note" role="status"></p>';
-    hydrate(document);
-  }
-  window.Pattove.systemUI = { partLinks, detail, hydrate, updateInspector, itemMarkup };
+  window.Pattove.systemUI = { partLinks, detail, hydrate };
 })();

@@ -7,6 +7,18 @@ const origin = 'http://127.0.0.1:4173/';
 const fileURL = pathToFileURL(path.join(root,'index.html')).href;
 const out = path.join(root,'test-results/system-audit');
 fs.mkdirSync(out,{recursive:true});
+// The part page shows still pictures only, so a part's own behaviour is pressed on a stage built from the same renderer.
+const stage = async (page, id, options = {}) => {
+  await page.evaluate(([id, options]) => {
+    document.querySelector('#test-stage')?.remove();
+    const node = document.createElement('div');
+    node.id = 'test-stage'; node.className = 'part-demo ds theme-main'; node.dataset.style = 'main';
+    node.innerHTML = Pattove.parts.renderItem(id, 'stage', Pattove.systemRegistry.normalizeOptions(id, options));
+    document.querySelector('main').append(node);
+    Pattove.mountParts(document);
+  }, [id, options]);
+  return page.locator('#test-stage');
+};
 const checks = [], failures = [], errors = [];
 const check = (name, value, detail) => { checks.push({name,pass:!!value}); if(!value) failures.push({name,detail}); };
 const integrity = root => {
@@ -20,7 +32,7 @@ const integrity = root => {
 };
 async function route(page,style,id='') {
   await page.goto(origin+'#/system?style='+style+(id?'&detail='+id:''));
-  await page.locator('.system-inspector').waitFor();
+  await page.locator('.component-page'+(id?'[data-component="'+id+'"]':'')).waitFor();
   await page.evaluate(()=>document.fonts.ready);
 }
 async function run() {
@@ -35,29 +47,35 @@ async function run() {
     for(const style of metadata.styles) {
       for(const item of metadata.items) {
         await route(page,style,item.id);
-        check(style+'/'+item.id+' preview relationships', (await page.locator('.part-demo > .ds').evaluate(integrity)).length===0);
+        check(style+'/'+item.id+' preview relationships', (await page.locator('.component-page').evaluate(integrity)).length===0);
       }
       console.log(style+': 18 implementations checked');
     }
-    // Every declared variant must be selectable, serializable and deep-linkable.
+    // Every shape on the grid can be picked and stays picked after a reload; every other declared variant still renders with sound relationships.
     for(const item of metadata.items) for(const control of item.controls) for(const [value] of control.values) {
       await route(page,'main',item.id);
-      const card=item.gallery?.key===control.key, picked=()=>card?page.locator('[data-variant-pick="'+value+'"]').getAttribute('aria-pressed').then(v=>v==='true'?value:null):page.locator('[data-part-option="'+control.key+'"]').inputValue();
-      if(card) await page.locator('[data-variant-pick="'+value+'"]').click(); else await page.locator('[data-part-option="'+control.key+'"]').selectOption(value);
-      const stateBefore=await page.locator('.part-demo > .ds').evaluate(integrity);
-      check(item.id+'/'+control.key+'/'+value+' accessible variant',stateBefore.length===0,stateBefore);
-      const href=page.url();await page.reload();
-      check(item.id+'/'+control.key+'/'+value+' reload restores variant', await picked()===value && page.url()===href);
+      if(item.gallery?.key===control.key) {
+        const picked=()=>page.locator('[data-variant-pick="'+value+'"]').getAttribute('aria-pressed');
+        await page.locator('[data-variant-pick="'+value+'"]').click();
+        const stateBefore=await page.locator('.component-page').evaluate(integrity);
+        check(item.id+'/'+control.key+'/'+value+' accessible variant',stateBefore.length===0,stateBefore);
+        const href=page.url();await page.reload();await page.locator('.variant-card').first().waitFor();
+        check(item.id+'/'+control.key+'/'+value+' reload keeps the picked shape', await picked()==='true' && page.url()===href);
+      } else {
+        const stateBefore=await (await stage(page,item.id,{[control.key]:value})).evaluate(integrity);
+        check(item.id+'/'+control.key+'/'+value+' accessible variant',stateBefore.length===0,stateBefore);
+      }
     }
+    await page.evaluate(()=>localStorage.removeItem('pattove-part-choice'));
     await route(page,'main','search-module');
-    const demo=page.locator('.part-demo');
+    const demo=await stage(page,'search-module');
     await demo.locator('[data-result] button').first().click();await demo.locator('[data-part-action="save-record"]').click();await demo.locator('[data-part-action="close-record"]').click();await demo.locator('[data-result] button').first().click();
     check('record keeps saved state when reopened',await demo.locator('[data-part-action="save-record"]').getAttribute('aria-pressed')==='true');
     await demo.locator('[data-part-action="save-record"]').click();await demo.locator('[data-part-action="close-record"]').click();await demo.locator('[data-result] button').first().click();
     check('record keeps unsaved state when reopened',await demo.locator('[data-part-action="save-record"]').getAttribute('aria-pressed')==='false');
     // Two runtimes mounting an existing document must not duplicate actions.
-    await route(page,'main','card');await page.evaluate(()=>{Pattove.mountParts(document);Pattove.mountParts(document);});
-    await page.locator('.part-demo .ds-card button').click();check('repeated mount does not double toggle',await page.locator('.part-demo .ds-card').getAttribute('data-selected')==='true');
+    await route(page,'main','card');await stage(page,'card');await page.evaluate(()=>{Pattove.mountParts(document);Pattove.mountParts(document);});
+    await page.locator('#test-stage .ds-card button').click();check('repeated mount does not double toggle',await page.locator('#test-stage .ds-card').getAttribute('data-selected')==='true');
     await context.close();
   } finally {await browser.close();}
   for(const [name,engine] of [['Firefox',firefox],['WebKit',webkit]]) {
@@ -70,12 +88,13 @@ async function run() {
       }
       for(const id of ['field','checkbox','radio','switch','tabs','bottom-nav','card','search-module','page']) {
         await route(page,'main',id);
-        check(name+'/'+id+' valid relationships',(await page.locator('.part-demo > .ds').evaluate(integrity)).length===0);
-        if(id==='tabs') {await page.locator('.part-demo [role="tab"]').first().focus();await page.keyboard.press('ArrowRight');check(name+' keyboard tabs',await page.locator('.part-demo [role="tab"]').nth(1).getAttribute('aria-selected')==='true');}
-        if(id==='checkbox'||id==='switch') {await page.locator('.part-demo input').uncheck();check(name+' '+id+' toggles',!await page.locator('.part-demo input').isChecked());}
-        if(id==='search-module'||id==='page') {await page.locator('.part-demo [name="query"]').fill('없는결과');await page.locator('.part-demo [type="submit"]').click();check(name+' '+id+' empty recovery',await page.locator('.part-demo .ds-empty').isVisible());await page.locator('.part-demo [data-part-action="reset-search"]').click();check(name+' '+id+' recovered',await page.locator('.part-demo [data-result]:visible').count()===3);}
+        check(name+'/'+id+' valid relationships',(await page.locator('.component-page').evaluate(integrity)).length===0);
+        await stage(page,id);
+        if(id==='tabs') {await page.locator('#test-stage [role="tab"]').first().focus();await page.keyboard.press('ArrowRight');check(name+' keyboard tabs',await page.locator('#test-stage [role="tab"]').nth(1).getAttribute('aria-selected')==='true');}
+        if(id==='checkbox'||id==='switch') {await page.locator('#test-stage input').uncheck();check(name+' '+id+' toggles',!await page.locator('#test-stage input').isChecked());}
+        if(id==='search-module'||id==='page') {await page.locator('#test-stage [name="query"]').fill('없는결과');await page.locator('#test-stage [type="submit"]').click();check(name+' '+id+' empty recovery',await page.locator('#test-stage .ds-empty').isVisible());await page.locator('#test-stage [data-part-action="reset-search"]').click();check(name+' '+id+' recovered',await page.locator('#test-stage [data-result]:visible').count()===3);}
       }
-      await page.goto(fileURL+'#/system?style=main&detail=button');check(name+' file execution',await page.locator('.part-demo .ds-button').count()>=1);
+      await page.goto(fileURL+'#/system?style=main&detail=button');check(name+' file execution',await page.locator('.variant-card .ds-button').count()>=1);
       await page.screenshot({path:path.join(out,name+'-mobile.png')});console.log(name+': responsive controls checked');
     } finally {await browser.close();}
   }

@@ -3,6 +3,18 @@ const assert = require('node:assert/strict'), fs = require('node:fs'), path = re
 const root=path.resolve(__dirname,'..'), out=path.join(root,'test-results/main-style');fs.mkdirSync(out,{recursive:true});
 const retired=['ikdeor','soft','ink','routine','block','sticker','garden','landscape','night'];
 const origin='http://127.0.0.1:4173';
+// The part page shows still pictures only, so a part's own behaviour is pressed on a stage built from the same renderer.
+const stage = async (page, id, options = {}) => {
+  await page.evaluate(([id, options]) => {
+    document.querySelector('#test-stage')?.remove();
+    const node = document.createElement('div');
+    node.id = 'test-stage'; node.className = 'part-demo ds theme-main'; node.dataset.style = 'main';
+    node.innerHTML = Pattove.parts.renderItem(id, 'stage', Pattove.systemRegistry.normalizeOptions(id, options));
+    document.querySelector('main').append(node);
+    Pattove.mountParts(document);
+  }, [id, options]);
+  return page.locator('#test-stage');
+};
 const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);checks.push(name);};
 (async()=>{
  const browser=await chromium.launch({headless:true});
@@ -27,7 +39,7 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
   check('배포 CSS에 이전 스타일 분기 없음',retired.every(s=>!css.includes('theme-'+s)&&!css.includes('data-style="'+s+'"')));
   await page.goto(origin+'/#/system?style=main&detail=button');
   const contrast=await page.evaluate(()=>{
-   const source=document.querySelector('.part-demo .ds'),s=getComputedStyle(source);
+   const source=document.querySelector('.variant-card .ds'),s=getComputedStyle(source);
    const rgb=value=>{const canvas=document.createElement('canvas'),c=canvas.getContext('2d');c.fillStyle=value.trim();c.fillRect(0,0,1,1);return [...c.getImageData(0,0,1,1).data].slice(0,3);};
    const luminance=c=>c.map(x=>x/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4).reduce((v,x,i)=>v+x*[.2126,.7152,.0722][i],0);
    const ratio=(a,b)=>{const x=luminance(rgb(a)),y=luminance(rgb(b));return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
@@ -37,13 +49,13 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
   for(const name of ['text','muted','primary','success','error'])check(name+' 글자 대비 4.5:1 이상',contrast[name]>=4.5);
   for(const name of ['inputBoundary','focus'])check(name+' 조작 경계 대비 3:1 이상',contrast[name]>=3);
   fs.writeFileSync(path.join(out,'contrast.json'),JSON.stringify(contrast,null,2));
-  check('외곽과 부품이 같은 바탕 토큰 사용',await page.evaluate(()=>getComputedStyle(document.body).getPropertyValue('--p-bg').trim()===getComputedStyle(document.querySelector('.part-demo .ds')).getPropertyValue('--p-bg').trim()));
+  check('외곽과 부품이 같은 바탕 토큰 사용',await page.evaluate(()=>getComputedStyle(document.body).getPropertyValue('--p-bg').trim()===getComputedStyle(document.querySelector('.variant-card .ds')).getPropertyValue('--p-bg').trim()));
   // Central tokens: editing one role in src/tokens/semantic/color.css must repaint the shell and every part.
   const partIds=await page.evaluate(()=>Pattove.systemRegistry.items.map(item=>item.id));
   check('부품 목록 확보',partIds.length>=20);
   const linkage={},partBlocks=Object.fromEntries([...fs.readFileSync(path.join(root,'src/system/parts.css'),'utf8').matchAll(/\/\* @part ([\w-]+) \*\/([\s\S]*?)(?=\/\* @part |$)/g)].map(m=>[m[1],m[2]]));
   for(const id of partIds){
-   await page.goto(origin+'/#/system?style=main&detail='+id);await page.locator('.part-demo').first().waitFor();
+   await page.goto(origin+'/#/system?style=main&detail='+id);await page.locator('.component-page[data-component="'+id+'"] .ds').first().waitFor();
    linkage[id]=await page.evaluate(()=>{
     const rules=[...document.styleSheets].filter(x=>(x.href||'').includes('/src/tokens/semantic/color.css')).flatMap(x=>[...x.cssRules]).filter(r=>r.style&&r.style.getPropertyValue('--p-bg'));
     const nodes=[...document.querySelectorAll('body, body *')],read=()=>nodes.map(n=>[getComputedStyle(n).backgroundColor,getComputedStyle(n).color]);
@@ -55,7 +67,7 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
     twins.forEach(([r,k],i)=>r.style.setProperty(k,'rgb(1, 2, '+(3+i)+')'));
     const oldBg=before[0][0],stale=read().filter(c=>c[0]===oldBg).length;
     twins.forEach(([r,k,v])=>r.style.setProperty(k,v));rules.forEach((r,i)=>{r.style.setProperty('--p-bg',old[i][0]);r.style.setProperty('--p-ink',old[i][1]);});
-    const inDemo=i=>!!nodes[i].closest('.part-demo');
+    const inDemo=i=>!!nodes[i].closest('.part-demo, .variant-card .ds');
     return {rules:rules.length,shell:after[0][0]==='rgb(255, 0, 170)',
      partBg:after.filter((c,i)=>inDemo(i)&&c[0]==='rgb(255, 0, 170)').length,partInk:after.filter((c,i)=>inDemo(i)&&c[1]==='rgb(0, 170, 255)').length,stale};
    });
@@ -73,7 +85,7 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
     const all=flat([...document.styleSheets].flatMap(x=>{try{return [...x.cssRules];}catch{return [];}}));
     // Rules of the part's own CSS (and the parts it composes), parsed the same way the page parses them.
     const ownSheet=new CSSStyleSheet();ownSheet.replaceSync(own);const ownSelectors=new Set(flat(ownSheet.cssRules).map(x=>x.selectorText).filter(Boolean));
-    const nodes=[...document.querySelectorAll('body, body *')],side=n=>n.closest('.part-demo')?(n.closest('.part-demo .ds')?'part':null):'shell';
+    const nodes=[...document.querySelectorAll('body, body *')],side=n=>n.closest('.part-demo .ds, .variant-card .ds')?'part':n.closest('.part-demo')?null:'shell';
     const out=Object.fromEntries(sizeRoles.map(([kind,role,value])=>{
      const home=all.filter(x=>x.style&&(x.parentStyleSheet?.href||'').includes('/src/tokens/semantic/'+kind+'.css')&&x.style.getPropertyValue(role));
      const reads=new RegExp('var\\('+role+'\\s*[,)]');
@@ -93,17 +105,17 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
    for(const [role,v] of Object.entries(r.sizes))check(id+' '+role+' 한 줄 수정이 외곽과 부품에 함께 반영되고 되돌림',v.rules===1&&v.shell>0&&(!v.partReads||v.part>0)&&v.restored);
   }
   fs.writeFileSync(path.join(out,'token-linkage.json'),JSON.stringify(linkage,null,2));
-  await page.goto(origin+'/#/system?style=main&detail=button');
-  check('비활성 버튼의 그림자 제거',await page.locator('.component-page [data-state="disabled"]').evaluateAll(ns=>ns.length>0&&ns.every(n=>getComputedStyle(n).boxShadow==='none'&&n.disabled)));
-  const stateButton=async s=>{await page.goto(origin+'/#/system?style=main&detail=button&option-state='+s);return page.locator('.part-demo [data-state="'+s+'"]').first();};
+  await page.goto(origin+'/#/system?style=main&detail=button');await stage(page,'button',{state:'disabled'});
+  check('비활성 버튼의 그림자 제거',await page.locator('#test-stage [data-state="disabled"]').evaluateAll(ns=>ns.length>0&&ns.every(n=>getComputedStyle(n).boxShadow==='none'&&n.disabled)));
+  const stateButton=async s=>{await page.goto(origin+'/#/system?style=main&detail=button');return (await stage(page,'button',{state:s})).locator('[data-state="'+s+'"]').first();};
   check('누름과 키보드 초점은 다른 상태',await (await stateButton('pressed')).evaluate(n=>getComputedStyle(n).boxShadow.includes('inset'))&&await (await stateButton('focus')).evaluate(n=>getComputedStyle(n).outlineStyle==='solid'&&getComputedStyle(n).outlineWidth==='3px'));
-  await page.goto(origin+'/#/system?style=main&detail=checkbox');const choice=page.locator('.component-page input[type=checkbox]:not(:checked):not(:disabled)').first();await choice.check();
+  await page.goto(origin+'/#/system?style=main&detail=checkbox');const choice=(await stage(page,'checkbox',{state:'unchecked'})).locator('input[type=checkbox]').first();await choice.check();
   check('선택은 실제 값과 체크 기호로 표시',await choice.isChecked()&&await choice.evaluate(n=>getComputedStyle(n,'::after').content==='""'));
   await page.emulateMedia({forcedColors:'active'});
   check('고대비 환경에서 네이티브 체크 표현 복구',await choice.evaluate(n=>getComputedStyle(n).appearance==='auto'));
   await page.emulateMedia({forcedColors:'none',reducedMotion:'reduce'});
-  await page.goto(origin+'/#/system?style=main&detail=button');
-  check('움직임 감소 설정에서 로딩 회전 정지',await page.locator('.ds-spinner').first().evaluate(n=>getComputedStyle(n).animationName==='none'));
+  await page.goto(origin+'/#/system?style=main&detail=button');await stage(page,'button',{state:'loading'});
+  check('움직임 감소 설정에서 로딩 회전 정지',await page.locator('#test-stage .ds-spinner').first().evaluate(n=>getComputedStyle(n).animationName==='none'));
   await page.emulateMedia({reducedMotion:'no-preference'});
   for(const width of [320,375,768,1101,1440,1920]) {
    await page.setViewportSize({width,height:1080});

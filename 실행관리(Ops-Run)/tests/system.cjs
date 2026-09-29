@@ -14,8 +14,20 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
 const inspect = async (page, style, id) => {
   await page.goto(url + '#/system?style=' + style + '&detail=' + id);
   // Wait for this part's page, not any inspector: a hash-only move keeps the previous page on screen for a moment.
-  await page.locator('.component-page[data-component="' + id + '"] .system-inspector').waitFor();
+  await page.locator('.component-page[data-component="' + id + '"]').waitFor();
   await page.evaluate(() => document.fonts.ready);
+};
+// The part page shows still pictures only, so a part's own behaviour is pressed on a stage built from the same renderer.
+const stage = async (page, id, options = {}) => {
+  await page.evaluate(([id, options]) => {
+    document.querySelector('#test-stage')?.remove();
+    const node = document.createElement('div');
+    node.id = 'test-stage'; node.className = 'part-demo ds theme-main'; node.dataset.style = 'main';
+    node.innerHTML = Pattove.parts.renderItem(id, 'stage', Pattove.systemRegistry.normalizeOptions(id, options));
+    document.querySelector('main').append(node);
+    Pattove.mountParts(document);
+  }, [id, options]);
+  return page.locator('#test-stage');
 };
 const fingerprint = element => {
   const s = getComputedStyle(element);
@@ -45,7 +57,8 @@ const fingerprint = element => {
     check('토큰은 원시값·역할 두 층, 부품은 존재하는 --p-* 역할만 읽음', !fs.existsSync(path.join(root,'src/tokens/component')) && fs.readdirSync(path.join(root,'src/tokens')).sort().join()==='primitive,semantic' && partRoles.length > 0 && liveRoles.every(Boolean) && !/var\(--(color|font|space|radius|shadow|duration)-/.test(Object.values(sourceBlocks).join('')) && !('systemTokens' in generated.window.Pattove));
     check('사전 연결 무결성', await page.evaluate(() => Pattove.systemRegistry.items.every(item => !item.entry || Pattove.library.entries.some(e=>e.id===item.entry))));
     await inspect(page, 'main', 'button');
-    check('크기와 상태는 버튼의 변형', await page.locator('[data-part-option="size"]').count() === 1 && await page.locator('[data-part-option="state"]').count() === 1);
+    const buttonLooks = await page.evaluate(() => Pattove.systemRegistry.index.get('button').gallery.list.length);
+    check('부품 화면은 표현 방식 격자만: 옵션 칸·큰 미리보기·예시·함께 쓰는 부품·목차 없음', await page.locator('.variant-card').count() === buttonLooks && await page.locator('[data-part-option],.part-demo,#component-examples,.part-dependencies,.component-toc,.variant-when,.variant-save,[data-variant-use]').count() === 0);
     await page.screenshot({ path: path.join(output, 'button.png') });
     await page.locator('#search-open').click();
     await page.locator('#query').fill('버튼');
@@ -54,35 +67,31 @@ const fingerprint = element => {
     await page.reload();
     check('검색 결과와 검색어가 새로고침해도 유지', await page.locator('[data-library-entry="button"]').count() === 1 && (await page.locator('#query-chip').innerText()).includes('버튼'));
     await page.locator('[data-library-entry="button"]').click();
-    await page.locator('[data-part-option="variant"]').selectOption('outline');
-    await page.locator('[data-part-option="size"]').selectOption('lg');
-    check('고른 변형이 미리보기에 바로 반영', await page.locator('.part-demo .ds-button').getAttribute('data-size') === 'lg' && await page.locator('.part-demo .ds-button').getAttribute('data-variant') === 'outline');
+    check('검색에서 부품을 열면 표현 방식 격자', await page.locator('.component-page[data-component="button"] .variant-card').count() === buttonLooks);
     check('부품 화면에는 그림만: 설치·코드·내려받기 칸 없음', await page.locator('[data-system-download],.install-panel,[data-doc-tab],[data-doc-environment],#part-source,.component-code,#component-usage').count() === 0 && !(await page.locator('main').innerText()).toLowerCase().includes('shadcn'));
-    // Look-alike versions: a card grid replaces the shape select, a card swaps the big preview, "이걸로 쓰기" survives a reload.
+    // Shapes: a card grid only. Pressing a card makes it the shape in use, and that survives a reload.
     await inspect(page, 'main', 'bottom-nav');
     const looks = await page.locator('.variant-card .ds-bottom-nav').evaluateAll(nodes => nodes.map(n => n.dataset.variant));
     check('하단 탐색 모양 5가지 이상, 모두 다른 모양', looks.length >= 5 && new Set(looks).size === looks.length && looks.includes('line') && looks.includes('pill'));
     check('형태 선택 칸은 모양 격자로 흡수', await page.locator('[data-part-option="variant"]').count() === 0);
     await page.locator('[data-variant-pick="float"]').click();
-    check('카드를 누르면 큰 미리보기가 그 모양으로', await page.locator('.part-demo .ds-bottom-nav').getAttribute('data-variant') === 'float' && await page.locator('.part-demo .ds-bottom-nav-create').count() === 1 && await page.locator('[data-variant-pick="float"]').getAttribute('aria-pressed') === 'true' && page.url().includes('option-variant=float'));
-    await page.locator('[data-variant-use="pill"]').click();
-    check('이걸로 쓰기는 사용 중 표시', await page.locator('[data-variant-use="pill"]').getAttribute('aria-pressed') === 'true' && (await page.locator('[data-variant-use="pill"]').innerText()).includes('사용 중') && await page.locator('.part-demo .ds-bottom-nav').getAttribute('data-variant') === 'pill');
+    check('카드를 누르면 그 모양이 사용 중', await page.locator('[data-variant-pick="float"]').getAttribute('aria-pressed') === 'true' && (await page.locator('[data-variant-pick="float"]').innerText()).includes('사용 중') && await page.locator('.variant-card[data-current]').count() === 1 && await page.locator('[data-variant-pick="float"]').evaluate(n => n === document.activeElement));
     check('모양 미리보기는 조작 대상이 아님', await page.locator('.variant-card .variant-frame[inert]').count() === looks.length);
     await page.goto(url + '#/system?style=main&detail=bottom-nav');
     await page.reload();
     await page.locator('.variant-card').first().waitFor();
-    check('고른 모양은 새로고침 뒤에도 기본', await page.locator('.part-demo .ds-bottom-nav').getAttribute('data-variant') === 'pill' && await page.locator('[data-variant-use="pill"]').getAttribute('aria-pressed') === 'true' && !page.url().includes('option-variant'));
+    check('고른 모양은 새로고침 뒤에도 사용 중', await page.locator('[data-variant-pick="float"]').getAttribute('aria-pressed') === 'true' && !page.url().includes('option-variant'));
     await page.evaluate(() => localStorage.removeItem('pattove-part-choice'));
     const blocked = await browser.newContext({ viewport: { width: 390, height: 900 } });
     await blocked.addInitScript(() => Object.defineProperty(window, 'localStorage', { get() { throw new Error('storage blocked'); } }));
     const locked = await blocked.newPage(), lockedErrors = [];
     locked.on('pageerror', error => lockedErrors.push(error.message));
     await locked.goto(url + '#/system?style=main&detail=bottom-nav');
-    await locked.locator('[data-variant-use="glass"]').click();
-    check('저장소가 막혀도 모양 고르기 동작', lockedErrors.length === 0 && await locked.locator('.part-demo .ds-bottom-nav').getAttribute('data-variant') === 'glass' && await locked.locator('[data-variant-use="glass"]').getAttribute('aria-pressed') === 'true');
+    await locked.locator('[data-variant-pick="glass"]').click();
+    check('저장소가 막혀도 모양 고르기 동작', lockedErrors.length === 0 && await locked.locator('[data-variant-pick="glass"]').getAttribute('aria-pressed') === 'true');
     await blocked.close();
     await inspect(page, 'main', 'search-module');
-    const demo = page.locator('.part-demo');
+    let demo = await stage(page, 'search-module');
     await demo.locator('[name="query"]').fill('없는이름');
     await demo.locator('button[type="submit"]').click();
     check('빈 결과와 복구 동작', await demo.locator('.ds-empty').isVisible() && await demo.locator('[data-result]:visible').count() === 0);
@@ -96,9 +105,8 @@ const fingerprint = element => {
     check('상세의 주요 행동 피드백', await demo.locator('[data-part-action="save-record"]').getAttribute('aria-pressed') === 'true');
     await demo.locator('[data-part-action="close-record"]').click();
     check('목록으로 돌아오면 필터와 초점 유지', await demo.locator('[data-result]:visible').count() === 1 && await demo.locator('[data-result]:visible button').evaluate(n=>n===document.activeElement));
-    await page.locator('.part-dependencies a[href*="detail=field"]').click();
-    check('모듈에서 하위 부품으로 탐색', await page.locator('#detail-title').textContent() === '입력 필드');
     await inspect(page,'main','tabs');
+    demo = await stage(page, 'tabs');
     await demo.locator('[role="tab"]').first().focus();
     await page.keyboard.press('ArrowRight');
     check('탭 방향키, 선택, 패널 동기화', await demo.locator('[role="tab"]').nth(1).getAttribute('aria-selected') === 'true' && await demo.locator('[role="tabpanel"]:visible').textContent() === '진행 중인 컬렉션을 보고 있어요.');
@@ -106,7 +114,7 @@ const fingerprint = element => {
     check('탭 End 키', await demo.locator('[role="tab"]').last().evaluate(n=>n===document.activeElement));
     // Atom looks earn their place by a hand action they remove; press each one and check it really works.
     await inspect(page,'main','input');
-    await page.locator('[data-variant-pick="reveal"]').click();
+    demo = await stage(page, 'input', { look: 'reveal' });
     const secret = demo.locator('.ds-input-group[data-look="reveal"] input'), show = demo.locator('[data-part-action="reveal"]');
     await secret.fill('pattove8');
     await show.click();
@@ -114,7 +122,7 @@ const fingerprint = element => {
     await show.click();
     check('숨기기를 누르면 다시 가림', await secret.getAttribute('type') === 'password' && (await show.getAttribute('aria-label')).endsWith('보기'));
     await inspect(page,'main','checkbox');
-    await page.locator('[data-variant-pick="all"]').click();
+    demo = await stage(page, 'checkbox', { look: 'all' });
     const parentBox = demo.locator('[data-part="select-all"]'), kids = demo.locator('.ds-select-all input:not([data-part="select-all"])');
     await parentBox.uncheck();
     check('전체 선택을 끄면 자식이 모두 꺼짐', await kids.evaluateAll(n => n.length === 3 && n.every(k => !k.checked)));
@@ -123,11 +131,11 @@ const fingerprint = element => {
     await parentBox.click();
     check('일부 선택에서 부모를 누르면 모두 켜짐', await kids.evaluateAll(n => n.every(k => k.checked)) && await parentBox.evaluate(n => n.checked && !n.indeterminate));
     await inspect(page,'main','badge');
-    await page.locator('[data-variant-pick="count"]').click();
+    demo = await stage(page, 'badge', { look: 'count' });
     check('개수 배지는 읽는 이름에 개수를 담음', await demo.locator('.ds-badge[data-look="count"]').getAttribute('aria-label') === '새 알림 3개');
     await page.setViewportSize({width:390,height:844});
     await inspect(page,'main','tabs');
-    await page.locator('[data-variant-pick="scroll"]').click();
+    demo = await stage(page, 'tabs', { look: 'scroll' });
     await demo.locator('[role="tab"]').first().focus();
     await page.keyboard.press('End');
     const inView = await demo.locator('.ds-tablist').evaluate(list => { const l = list.getBoundingClientRect(), t = list.lastElementChild.getBoundingClientRect(); return t.left >= l.left - 1 && t.right <= l.right + 1; });
@@ -135,40 +143,39 @@ const fingerprint = element => {
     await page.setViewportSize({width:1280,height:1000});
     for (const id of ['checkbox','radio','switch']) {
       await inspect(page,'main',id);
+      demo = await stage(page, id);
       const inputs = demo.locator('input');
       if(id==='radio') { await inputs.last().check(); check('라디오 상호 배타 선택', !await inputs.first().isChecked() && await inputs.last().isChecked()); }
       else { await inputs.first().uncheck(); check(id+' 네이티브 선택 동작', !await inputs.first().isChecked()); }
     }
     await inspect(page,'main','feedback');
+    demo = await stage(page, 'feedback');
     await demo.locator('[data-part-action="notify"]').click();
     check('알림 실제 표시', await demo.locator('[data-part-feedback]').isVisible());
-    // Look galleries on the six larger parts: every card shows its own look, and picking one swaps the big preview.
+    // Look galleries on the six larger parts: every card shows its own look, and pressing one makes it the one in use.
     for (const id of ['tabs','feedback','card','search-module','template','page']) {
       await inspect(page,'main',id);
       const cards = await page.locator('.variant-card').evaluateAll(nodes => nodes.map(n => [n.dataset.variantCard, n.querySelector('.variant-frame [data-look]')?.dataset.look]));
       check(id+' 모양 2가지 이상, 카드마다 제 모양', cards.length >= 2 && new Set(cards.map(c => c[0])).size === cards.length && cards.every(([v, look]) => v === look));
       const last = cards.at(-1)[0];
       await page.locator('[data-variant-pick="'+last+'"]').click();
-      check(id+' 카드를 누르면 큰 미리보기 data-look이 바뀜', await demo.locator('[data-look]').first().getAttribute('data-look') === last && await page.locator('[data-variant-pick="'+last+'"]').getAttribute('aria-pressed') === 'true' && page.url().includes('option-look='+last));
+      check(id+' 카드를 누르면 그 모양만 사용 중', await page.locator('[data-variant-pick="'+last+'"]').getAttribute('aria-pressed') === 'true' && await page.locator('[data-variant-pick][aria-pressed="true"]').count() === 1);
     }
-    // A look earns its place by the situation it fits and the effort it takes away; the card says both instead of style tags.
-    const bare = await page.evaluate(() => [...window.Pattove.systemRegistry.index.values()].flatMap(item => (item.gallery?.list || []).filter(v => !String(v.when || '').trim() || !String(v.saves || '').trim()).map(v => item.id + ':' + v.id)));
-    check('모든 모양에 이럴 때·덜 하는 일이 있음 ' + bare.join(','), bare.length === 0);
-    const cardCount = await page.locator('.variant-card').count();
-    check('모양 카드는 태그 대신 이럴 때·덜 하는 일 두 줄', cardCount > 0 && await page.locator('.variant-card .variant-when').count() === cardCount && await page.locator('.variant-card .variant-save').count() === cardCount && await page.locator('.variant-tags').count() === 0);
+    check('모양 카드는 그림과 이름만', await page.locator('.variant-card .variant-when,.variant-card .variant-save,.variant-no,.variant-tags').count() === 0);
+    await page.evaluate(() => localStorage.removeItem('pattove-part-choice'));
     await inspect(page,'main','search-module');
-    await page.locator('[data-variant-pick="chips"]').click();
+    demo = await stage(page, 'search-module', { look: 'chips' });
     await demo.locator('.ds-chip', { hasText: '완료' }).click();
     check('칩 모양의 상태 필터도 실제로 거름', await demo.locator('[name="status"]:checked').getAttribute('value') === '완료' && await demo.locator('[data-result]:visible').count() === 1);
     await inspect(page,'main','tabs');
-    await page.locator('[data-variant-pick="vertical"]').click();
+    demo = await stage(page, 'tabs', { look: 'vertical' });
     await demo.locator('[role="tab"]').first().focus();
     await page.keyboard.press('ArrowDown');
     check('세로 탭은 아래 방향키로 이동', await demo.locator('[role="tablist"]').getAttribute('aria-orientation') === 'vertical' && await demo.locator('[role="tab"]').nth(1).getAttribute('aria-selected') === 'true' && await demo.locator('[role="tab"]').nth(1).evaluate(n=>n===document.activeElement));
     for(const width of [320,375,768,1440]) {
       await page.setViewportSize({width,height:1000});
       for(const [style,id] of [['main','page'],['main','bottom-nav']]) {
-        await page.goto(url+'#/system?style='+style+'&detail='+id);await page.locator('.system-inspector').waitFor();
+        await page.goto(url+'#/system?style='+style+'&detail='+id);await page.locator('.component-page[data-component="'+id+'"] .variant-grid').waitFor();
         check(width+' '+style+' '+id+' 부품 화면 가로 넘침 없음', await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
         const duplicates=await page.evaluate(()=>{const ids=[...document.querySelectorAll('[id]')].map(n=>n.id);return ids.length!==new Set(ids).size;});
         check(width+' '+style+' '+id+' 중복 ID 없음', !duplicates);
@@ -191,28 +198,29 @@ const fingerprint = element => {
       const looks = await lp.evaluate(id => window.Pattove.systemRegistry.index.get(id).gallery.list.map(v => v.id), id);
       check(id + ' 모양 2개 이상', looks.length >= 2 && await lp.locator('.variant-card').count() === looks.length);
       check(id + ' 모양 이름 중복 없음', new Set(looks).size === looks.length);
-      const current = () => lp.locator('.part-demo [data-look]').first().getAttribute('data-look');
-      check(id + ' 기본 data-look은 첫 모양', await current() === looks[0]);
+      const current = () => lp.locator('[data-variant-pick][aria-pressed="true"]').getAttribute('data-variant-pick');
+      check(id + ' 기본 사용 중은 첫 모양', await current() === looks[0]);
+      check(id + ' 카드마다 제 모양', (await lp.locator('.variant-card').evaluateAll(nodes => nodes.map(n => n.querySelector('.variant-frame [data-look]')?.dataset.look))).join() === looks.join());
       check(id + ' 모양은 옵션 목록이 아닌 격자로만', await lp.locator('[data-part-option="look"]').count() === 0);
       await lp.locator('.variant-grid').first().screenshot({ path: path.join(lookShots, id + '-1440.png') });
       await lp.locator('[data-variant-pick]').nth(1).click();
-      check(id + ' 카드를 누르면 data-look 변경', await current() === looks[1]);
+      check(id + ' 카드를 누르면 사용 중 변경', await current() === looks[1]);
       await lp.setViewportSize({ width: 390, height: 900 });
       await lp.waitForTimeout(100);
       check(id + ' 390 가로 넘침 없음', await lp.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-      const small = await lp.evaluate(() => [...document.querySelectorAll('.part-demo :is(button,input.ds-input,label.ds-choice),.variant-card :is(button,input.ds-input,label.ds-choice),[data-variant-pick],[data-variant-use]')]
+      const small = await lp.evaluate(() => [...document.querySelectorAll('[data-variant-pick]')]
         .filter(n => n.offsetParent).map(n => n.getBoundingClientRect()).filter(r => r.width < 44 || r.height < 44).length);
       check(id + ' 390 터치 칸 44px 이상', small === 0);
       await lp.screenshot({ path: path.join(lookShots, id + '-390.png'), fullPage: true });
       await fresh.close();
     }
     for (const id of ['card','search-module']) {
-      await page.goto(url + '#/system?style=main&detail=' + id); await page.locator('.component-page[data-component="' + id + '"] .part-demo').waitFor();
+      await inspect(page, 'main', id); await stage(page, id);
       // The module carries its own look; the small parts inside it keep their plain default.
-      check(id + ' 안 작은 부품은 기본 모양 유지(data-look 없음)', await page.locator('.part-demo :is(.ds-button,.ds-badge,.ds-input,.ds-field,.ds-choice,.ds-divider,.ds-status,.ds-icon)[data-look]').count() === 0);
+      check(id + ' 안 작은 부품은 기본 모양 유지(data-look 없음)', await page.locator('#test-stage :is(.ds-button,.ds-badge,.ds-input,.ds-field,.ds-choice,.ds-divider,.ds-status,.ds-icon)[data-look]').count() === 0);
     }
     await page.goto(origin + '/#/system?style=main&detail=button');
-    check('HTTP 실행에서도 같은 부품 화면', await page.locator('.part-demo .ds-button').count()>=1);
+    check('HTTP 실행에서도 같은 부품 화면', await page.locator('.variant-card .ds-button').count()>=1);
     check('브라우저 실행 오류 없음', errors.length===0);
     fs.writeFileSync(path.join(output,'results.json'),JSON.stringify({checks,errors},null,2));
     console.log(checks.length+' atomic system checks passed.');

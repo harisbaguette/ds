@@ -251,9 +251,7 @@
     const data = target.dataset;
     if (target.matches('a') && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return;
     if (target.classList.contains('skip-link')) { event.preventDefault(); $('#main').focus(); return; }
-    if (data.docSection) {
-      event.preventDefault(); navigate({section:data.docSection}, {replace:true});
-    } else if (data.styleSelect && validStyle(data.styleSelect)) {
+    if (data.styleSelect && validStyle(data.styleSelect)) {
       state.style = data.styleSelect;
       try { localStorage.setItem(styleKey, state.style); } catch {}
       render();
@@ -283,28 +281,23 @@
     } else if (data.action === 'search-all') submitSearch();
     else if (data.action === 'close-dialog') closeDetail();
     else if (data.action === 'close-menu') setMenu(false);
-    else if (data.variantPick || data.variantUse) pickVariant(data.variantPick || data.variantUse, Boolean(data.variantUse));
+    else if (data.variantPick) pickVariant(data.variantPick);
   });
-  // A version card swaps the big preview; "이걸로 쓰기" also keeps it as this part's opening version.
-  function pickVariant(value, keep) {
+  // Pressing a shape card makes it the shape this part uses, here and everywhere the part is drawn.
+  function pickVariant(value) {
     const g = systemRegistry.index.get(state.detail)?.gallery, look = g?.list.find(v => v.id === value);
     if (!look) return;
-    if (keep) componentDocs.choose(state.detail, value);
+    componentDocs.choose(state.detail, value);
     state.options = systemRegistry.normalizeOptions(state.detail, { ...state.options, [g.key]: value });
     history.replaceState(history.state, '', hash()); renderedHash = location.hash;
     componentDocs.refresh(state);
-    if (keep) document.querySelector(`[data-variant-use="${CSS.escape(value)}"]`)?.focus();
-    $('#announcer').textContent = `${look.name} ${keep ? '사용 중' : '미리보기'}`;
+    $('#announcer').textContent = `${look.name} 사용 중`;
   }
   document.addEventListener('change', event => {
     if (event.target.matches('[data-item-switch]')) {
       rememberLocation();
       const origin = history.state?.pattoveOverlay ? {pattoveOverlay:true,origin:history.state.origin,depth:(history.state.depth||1)+1} : {};
       history.pushState(origin, '', '#/system?detail='+encodeURIComponent(event.target.value)); renderRoute();
-    } else if (event.target.matches('[data-part-option]')) {
-      state.options = systemRegistry.normalizeOptions(state.detail, { ...state.options, ...Object.fromEntries([...document.querySelectorAll('.system-inspector [data-part-option]')].map(el => [el.dataset.partOption,el.value])) });
-      history.replaceState(history.state, '', hash()); renderedHash = location.hash;
-      system.updateInspector(state);
     }
   });
   $('#menu-toggle').addEventListener('click', () => setMenu(true));

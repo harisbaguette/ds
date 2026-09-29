@@ -5,6 +5,18 @@ const path = require('node:path');
 const origin = process.env.PATTOVE_TEST_URL || 'http://127.0.0.1:4173/';
 const out = path.resolve(__dirname, '../test-results/preview-fit');
 fs.mkdirSync(out, { recursive: true });
+// The part page shows still pictures only, so a part's own behaviour is pressed on a stage built from the same renderer.
+const stage = async (page, id, options = {}) => {
+  await page.evaluate(([id, options]) => {
+    document.querySelector('#test-stage')?.remove();
+    const node = document.createElement('div');
+    node.id = 'test-stage'; node.className = 'part-demo ds theme-main'; node.dataset.style = 'main';
+    node.innerHTML = Pattove.parts.renderItem(id, 'stage', Pattove.systemRegistry.normalizeOptions(id, options));
+    document.querySelector('main').append(node);
+    Pattove.mountParts(document);
+  }, [id, options]);
+  return page.locator('#test-stage');
+};
 const checks = [], errors = [];
 
 // Page overflow is insufficient: a card may clip its contents without widening the page.
@@ -52,10 +64,13 @@ async function inspect(page, label) {
       await page.locator('[data-focus="overview-bottom-nav"]').click();
       assert.equal(await page.locator('#detail-title').innerText(), '하단 탐색');
       await page.locator('[data-variant-pick="float"]').click();
-      assert.equal(await page.locator('.part-demo .ds-bottom-nav > button').count(), 5);
-      const live = page.locator('.part-demo .ds-bottom-nav > button').nth(1);
+      assert.equal(await page.locator('[data-variant-pick="float"]').getAttribute('aria-pressed'), 'true');
+      const demo = await stage(page, 'bottom-nav', { variant: 'float' });
+      assert.equal(await demo.locator('.ds-bottom-nav > button').count(), 5);
+      const live = demo.locator('.ds-bottom-nav > button').nth(1);
       await live.click();
       assert.equal(await live.getAttribute('aria-pressed'), 'true');
+      await page.evaluate(() => { document.querySelector('#test-stage').remove(); localStorage.removeItem('pattove-part-choice'); });
       checks.push(name + ' full-size navigation remains interactive');
       for (const width of [320, 768, 955, 1101, 1440]) {
         await page.setViewportSize({ width, height: 900 });

@@ -152,7 +152,14 @@
       return kids.length&&{key:'code',id:g.id,name:g.name,ids:kids.map(k=>k.id),kids};
     }).filter(Boolean);
   }
+  // The 스타일 tab's left menu: one row per style; a pick opens that style's grid (the address carries ?style=).
+  function styleMenu(state) {
+    const rows=window.Pattove.catalog.styles.filter(s=>s.id!=='base');
+    return '<div class="nav-subnav" role="group" aria-label="스타일 목록"><div class="nav-subnav-scroll">'+rows.map(s=>
+      '<a class="nav-subcategory" href="#/styles?style='+escape(s.id)+'" data-focus="style-'+escape(s.id)+'" title="'+escape(s.description)+'"'+(state.style===s.id?' aria-current="true"':'')+'><span>'+escape(s.name)+'</span></a>').join('')+'</div></div>';
+  }
   function subnavigation(state) {
+    if (state.page==='styles') return styleMenu(state);
     const id=activeShelf(state);
     if (!id) return '';
     const s=shelves.get(id), f=state.filters, q=querySuffix(state);

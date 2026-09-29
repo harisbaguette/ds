@@ -105,7 +105,9 @@ h3 { font-size: var(--p-text-md); font-weight: var(--p-weight-semibold); }
 }
 
 /* Global shelves stay across the top; the left rail holds only the current shelf's categories. */
-:root { --menu-w: calc(var(--p-space-unit) * 48); --top-h: var(--p-space-4xl); }
+/* The side menu keeps one width on every tab; folding swaps it for a narrow rail that holds only the fold button. */
+:root { --menu-w: calc(var(--p-space-unit) * 48); --rail-w: calc(var(--p-space-unit) * 14); --top-h: var(--p-space-4xl); }
+:root.rail { --menu-w: var(--rail-w); }
 html { scroll-padding-top: var(--chrome-bottom, var(--p-space-md)); }
 .menu-backdrop, .menu-toggle { display: none; }
 .app-top { position: sticky; top: 0; z-index: var(--p-layer-fixed); display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: var(--p-space-sm); height: var(--top-h); padding: var(--p-space-xs) var(--p-space-lg); border-bottom: var(--p-border-width) solid var(--p-line); background: var(--p-high); }
@@ -147,6 +149,15 @@ html { scroll-padding-top: var(--chrome-bottom, var(--p-space-md)); }
 .query-chip .ui-icon { width: var(--p-icon-sm); height: var(--p-icon-sm); flex-shrink: 0; }
 main { min-width: 0; margin-left: 0; padding: var(--p-space-xl) var(--p-space-xl) var(--p-space-5xl); }
 body.has-subnav main { margin-left: var(--menu-w); }
+.menu-foot { flex-shrink: 0; display: flex; justify-content: flex-end; padding: var(--p-space-xs) var(--p-space-sm); border-top: var(--p-border-width) solid var(--p-line); }
+.rail-toggle { display: inline-grid; place-items: center; width: var(--p-control-size-sm); height: var(--p-control-size-sm); border-radius: var(--p-radius-md); color: var(--p-muted); }
+.rail-toggle:hover { color: var(--p-ink); background: var(--p-surface); }
+.rail-toggle .icon { width: var(--p-icon-sm); height: var(--p-icon-sm); }
+@media (min-width: 761px) {
+  .rail .menu-body { display: none; }
+  .rail .menu-foot { flex: 1; align-items: flex-end; justify-content: center; border-top: 0; }
+  .rail .rail-toggle .icon { transform: rotate(180deg); }
+}
 /* Search is rare, so the top bar keeps only a button; the one search box opens in a modal near the top. */
 .search-open { justify-self: end; display: inline-grid; place-items: center; width: var(--p-control-size-sm); height: var(--p-control-size-sm); border-radius: var(--p-radius-full); color: var(--p-muted); }
 .search-open:hover { color: var(--p-ink); background: var(--p-surface); }
@@ -163,6 +174,7 @@ dialog.search-dialog { width: min(var(--p-container-md), 100% - var(--p-space-lg
   .menu-toggle { display: inline-flex; align-items: center; gap: var(--p-space-2xs); min-height: var(--p-control-size-sm); padding-inline: var(--p-space-xs); border: var(--p-border-width) solid var(--p-line); border-radius: var(--p-control-radius); font-size: var(--p-text-body); }
   .menu-toggle .icon { width: var(--p-icon-sm); height: var(--p-icon-sm); }
   .menu-toggle:hover { background: var(--p-surface); }
+  .menu-foot { display: none; }
   .menu-close { display: inline-grid; place-items: center; }
   .menu-head { display: flex; }
   .top-brand { display: grid; place-items: center; width: var(--p-control-size-sm); height: var(--p-control-size-sm); }

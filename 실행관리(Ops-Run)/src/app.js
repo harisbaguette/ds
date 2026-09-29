@@ -40,7 +40,7 @@
   function hash(overrides = {}) {
     const next = { ...state, ...overrides };
     const params = new URLSearchParams();
-    if (next.page === 'patterns') params.set('style', next.style);
+    if (['patterns', 'styles'].includes(next.page)) params.set('style', next.style);
     if (next.page === 'patterns' && next.filters.category?.length) params.set('category', next.filters.category.join(','));
     if (library.pages.includes(next.page)) library.writeFilters(next, params);
     if (next.query && !['styles'].includes(next.page)) params.set('q', next.query);
@@ -63,7 +63,7 @@
     state.query = ['styles'].includes(state.page) ? '' : (params.get('q') || '').slice(0, 100);
     state.section = (params.get('section') || '').slice(0, 250);
     state.pageNo = Math.min(9999, Math.max(1, Number.parseInt(params.get('p'), 10) || 1));
-    if (validStyle(params.get('style'))) state.style = params.get('style');
+    if (validStyle(params.get('style'))) { state.style = params.get('style'); try { localStorage.setItem(styleKey, state.style); } catch {} }
     state.detail = (state.page === 'system' ? systemRegistry.index.has(params.get('detail')) : isCollection() ? library.validDetail(state.page, params.get('detail')) : state.page === 'patterns' && validPattern(params.get('detail'))) ? params.get('detail') : null;
     if (state.page === 'system' && !state.detail) { state.detail = (systemRegistry.matching(state.query)[0] || systemRegistry.items[0]).id; state.query = ''; }
     state.options = state.page === 'system' && state.detail ? systemRegistry.normalizeOptions(state.detail, { ...componentDocs.defaults(state.detail), ...Object.fromEntries([...params].filter(([key]) => key.startsWith('option-')).map(([key,value]) => [key.slice(7),value])) }) : {};
@@ -290,6 +290,18 @@
     componentDocs.refresh(state);
     $('#announcer').textContent = `${look.name} 사용 중`;
   }
+  // On wide screens the side menu folds to a narrow rail; the choice is kept for the next visit.
+  const railKey = 'pattove-rail';
+  function setRail(collapsed) {
+    document.documentElement.classList.toggle('rail', collapsed);
+    const label = collapsed ? '사이드 메뉴 펼치기' : '사이드 메뉴 접기';
+    $('#rail-toggle').setAttribute('aria-label', label);
+    $('#rail-toggle').setAttribute('aria-expanded', String(!collapsed));
+    $('#rail-toggle').title = label;
+    try { localStorage.setItem(railKey, collapsed ? '1' : ''); } catch {}
+  }
+  try { if (localStorage.getItem(railKey)) setRail(true); } catch {}
+  $('#rail-toggle').addEventListener('click', () => setRail(!document.documentElement.classList.contains('rail')));
   $('#menu-toggle').addEventListener('click', () => setMenu(true));
   $('#search-open').addEventListener('click', openSearch);
   $('#menu-backdrop').addEventListener('click', () => setMenu(false));

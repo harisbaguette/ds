@@ -290,13 +290,6 @@
     componentDocs.refresh(state);
     $('#announcer').textContent = `${look.name} 사용 중`;
   }
-  document.addEventListener('change', event => {
-    if (event.target.matches('[data-item-switch]')) {
-      rememberLocation();
-      const origin = history.state?.pattoveOverlay ? {pattoveOverlay:true,origin:history.state.origin,depth:(history.state.depth||1)+1} : {};
-      history.pushState(origin, '', '#/system?detail='+encodeURIComponent(event.target.value)); renderRoute();
-    }
-  });
   $('#menu-toggle').addEventListener('click', () => setMenu(true));
   $('#search-open').addEventListener('click', openSearch);
   $('#menu-backdrop').addEventListener('click', () => setMenu(false));

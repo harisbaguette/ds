@@ -17,7 +17,7 @@
     const shelf = ['dictionary','system'].includes(state.page) ? library.shelfFor(state) : null;
     if (state.page === 'system') {
       const item = window.Pattove.systemRegistry.index.get(state.detail);
-      return `<h1 id="page-title" class="sr-only">${escape(item.name)}</h1><nav class="content-breadcrumb" aria-label="현재 위치"><a href="#/dictionary?shelf=${shelf.id}" data-action="back-to-list" data-focus="back-to-list">${escape(shelf.name)}</a>${icon('chevron')}<span aria-current="page">${escape(item.name)}</span></nav>${window.Pattove.systemUI.partLinks(state)}`;
+      return `<h1 id="page-title" class="sr-only">${escape(item.name)}</h1><nav class="content-breadcrumb" aria-label="현재 위치"><a href="#/dictionary?shelf=${shelf.id}" data-action="back-to-list" data-focus="back-to-list">${escape(shelf.name)}</a>${icon('chevron')}<span aria-current="page">${escape(item.name)}</span></nav>`;
     }
     const current = document.querySelector('.nav-minor[aria-current="true"], .nav-subcategory[aria-current="true"]')?.textContent;
     return `<h1 id="page-title" class="collection-title">${escape(current || shelf?.name || ({styles:'전체 미리보기',patterns:'패턴',components:'구성요소'})[state.page])}</h1>`;

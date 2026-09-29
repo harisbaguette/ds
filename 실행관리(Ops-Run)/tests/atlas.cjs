@@ -9,10 +9,10 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
       const page=await browser.newPage({viewport:{width:1440,height:1080}});page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
       await page.goto('http://127.0.0.1:4173/#/system');await page.evaluate(()=>document.fonts.ready);
       check(name+' 시작 화면은 첫 부품 한 장',await page.locator('.component-page[data-component="token-color"]').count()===1&&await page.locator('.specimen').count()===0);
-      check(name+' 토큰 상세에서 같은 분류 목록 제공',await page.locator('[data-item-switch] option').count()===20);
+      check(name+' 상세 화면에 부품 고르는 목록 없음',await page.locator('[data-item-switch]').count()===0);
       await page.locator('[data-focus="tab-part"]').click();
       await page.locator('[data-library-entry="button"]').click();
-      check(name+' 고른 부품이 본문 목록에 표시',await page.locator('[data-item-switch]').inputValue()==='button');
+      check(name+' 고른 부품 상세가 열림',await page.locator('.component-page[data-component="button"]').count()===1);
       await page.locator('[data-focus="tab-part"]').click();
       check(name+' 사전 첫 화면은 부품 탭 격자, 탭은 토큰·부품·블록·템플릿·아이콘',await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1&&await page.locator('[data-focus^="tab-"]').count()===await page.evaluate(()=>Pattove.library.shelves.length)&&await page.locator('.dict-entry').count()>0);
       await page.locator('[data-focus="tab-token"]').click();

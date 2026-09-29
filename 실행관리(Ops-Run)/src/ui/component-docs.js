@@ -47,8 +47,8 @@
   function page(state) {
     const item = r.index.get(state.detail), g = item.gallery;
     const options = r.normalizeOptions(item.id, state.options);
-    // The dictionary entry a part implements carries the name the industry uses for it; its parenthesis (English name) sits after the title.
-    const term = window.Pattove.library.entries.find(x => x.id === item.entry)?.term, alias = term?.match(/\(([^)]+)\)\s*$/)?.[1];
+    // The dictionary entry a part implements carries the name the industry uses for it; the item's own English name, else that term's parenthesis, sits after the title.
+    const term = window.Pattove.library.entries.find(x => x.id === item.entry)?.term, alias = item.english || term?.match(/\(([^)]+)\)\s*$/)?.[1];
     const body = g
       ? `<ul class="variant-grid" id="component-variants" role="list" aria-label="표현 방식">${g.list.map(v => card(item, v, options[g.key], state.style)).join('')}</ul>`
       : `<div class="part-demo" id="component-preview">${live(item.id, options, state.style, 'component-live')}<p class="ds-demo-note" role="status"></p></div>`;

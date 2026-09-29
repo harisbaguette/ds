@@ -23,7 +23,7 @@
 .variant-pick strong { font-size:var(--p-text-md); font-weight:var(--p-weight-semibold); }
 .variant-kept { display:inline-flex; align-items:center; gap:var(--p-space-2xs); padding:var(--p-space-3xs) var(--p-space-sm); border-radius:var(--p-radius-full); background:var(--p-accent); color:var(--p-on-accent); font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); white-space:nowrap; }
 /* The picture is square whatever frame it uses; the name sits under it. */
-.variant-grid .variant-card>.variant-frame[data-frame] { width:100%; aspect-ratio:1; height:auto; min-height:0; }
+.variant-grid .variant-card>.variant-frame[data-frame] { width:100%; aspect-ratio:var(--p-aspect-square); height:auto; min-height:0; }
 .variant-kept .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); }
 /* Phone-bottom frame: the part sits on the screen's bottom edge, rounded like the device corners */
 .variant-frame { grid-area:frame; position:relative; height:calc(var(--p-space-unit) * 44); overflow:hidden; border:var(--p-border-width) solid var(--p-line); border-top:0; border-radius:0 0 calc(var(--p-radius-xl) * 2) calc(var(--p-radius-xl) * 2); background:var(--p-bg); }

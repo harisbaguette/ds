@@ -41,6 +41,30 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
     check('격자의 사용 중 표시도 옮겨 감',await sp.locator('[data-style-card="alt"] .variant-kept').count()===1&&await sp.locator('[data-style-card="main"] .variant-kept').count()===0);
     await ctx.close();
   }
+  { // Preview: on the part, block, template and token tabs the specimens can be redrawn in another style without changing the site's style.
+    check('스타일이 하나여도 미리보기 선택이 부품 탭에 있음',await (async()=>{await page.goto(origin+'#/dictionary?shelf=part');return await page.locator('.preview-style [data-preview-style]').count()===1&&await page.locator('[data-preview-style="main"][aria-pressed="true"]').count()===1;})());
+    const ctx=await browser.newContext({viewport:{width:1440,height:1080}});
+    await ctx.addInitScript(()=>{const freeze=Object.freeze;Object.freeze=o=>{if(o&&Array.isArray(o.styles)&&Array.isArray(o.patterns)&&!o.styles.some(s=>s.id==='alt'))o.styles.push({id:'alt',name:'시험 스타일',description:'전환 시험',rules:'시험',references:[],constraints:[]});return freeze(o);};});
+    const sp=await ctx.newPage();sp.on('pageerror',e=>errors.push(e.message));
+    await sp.goto(origin+'#/dictionary?shelf=part');
+    await sp.addStyleTag({content:'.theme-alt{--p-accent:rgb(200,0,0)}'});
+    const themes=()=>sp.evaluate(()=>[...new Set([...document.querySelectorAll('#content .ds[data-style]')].map(n=>n.dataset.style))]);
+    check('처음에는 견본이 사이트 스타일로 그려짐',JSON.stringify(await themes())==='["main"]');
+    await sp.locator('[data-preview-style="alt"]').click();
+    check('미리보기를 바꾸면 견본만 그 스타일로, 사이트는 그대로',JSON.stringify(await themes())==='["alt"]'&&await sp.evaluate(()=>document.body.classList.contains('theme-main'))&&await sp.evaluate(()=>document.activeElement?.dataset.previewStyle==='alt')&&await sp.locator('[data-preview-style="alt"][aria-pressed="true"]').count()===1);
+    check('미리보기 견본에 그 스타일의 토큰이 실제로 입혀짐',await sp.evaluate(()=>getComputedStyle(document.querySelector('#content .ds.theme-alt')).getPropertyValue('--p-accent').trim()==='rgb(200,0,0)'));
+    for (const shelf of ['block','template','token']) { await sp.goto(origin+'#/dictionary?shelf='+shelf); check(shelf+' 탭에서도 미리보기 유지',JSON.stringify(await themes())==='["alt"]'); }
+    await sp.goto(origin+'#/system?detail=button');
+    check('부품 상세의 모양 카드도 미리보기 스타일로',JSON.stringify(await themes())==='["alt"]'&&await sp.locator('.variant-card .ds.theme-alt').count()>0);
+    await sp.reload();
+    check('다시 열어도 이번 방문 동안 유지',JSON.stringify(await themes())==='["alt"]');
+    await sp.goto(origin+'#/dictionary?shelf=icon');
+    check('아이콘 탭과 스타일 탭에는 미리보기 선택 없음',await sp.locator('.preview-style').count()===0&&await (async()=>{await sp.goto(origin+'#/styles');return await sp.locator('.preview-style').count()===0;})());
+    await sp.goto(origin+'#/dictionary?shelf=part');
+    await sp.locator('[data-preview-style="main"]').click();
+    check('사이트 스타일을 다시 누르면 미리보기가 사이트를 따라감',JSON.stringify(await themes())==='["main"]'&&await sp.evaluate(()=>sessionStorage.getItem('pattove-preview-style'))===null);
+    await ctx.close();
+  }
   const registry=JSON.parse(fs.readFileSync(path.join(root,'src/registry/registry.json'),'utf8'));
   check('배포 목록은 메인과 공용 아이콘·글꼴뿐',registry.items.every(i=>!i.meta.style||i.meta.style==='main'));
   for(const style of retired){

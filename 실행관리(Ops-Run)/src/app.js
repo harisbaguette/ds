@@ -8,8 +8,11 @@
   // 스타일 화면에서 고른 디자인 스타일은 앱 전체에 입혀지고 다음 방문에도 유지된다.
   const styleKey = 'pattove-style';
   const storedStyle = (() => { try { return localStorage.getItem(styleKey); } catch { return null; } })();
+  // 부품·블록·템플릿 화면의 견본만 다른 스타일로 그려 보는 선택. 사이트는 그대로이고, 이번 방문 동안 탭을 옮겨도 유지된다.
+  const previewKey = 'pattove-preview-style';
+  const storedPreview = (() => { try { return sessionStorage.getItem(previewKey); } catch { return null; } })();
   const state = {
-    page: 'styles', filters: {}, query: '', style: validStyle(storedStyle) ? storedStyle : 'main', detail: null, options: {}, section: '', pageNo: 1
+    page: 'styles', filters: {}, query: '', style: validStyle(storedStyle) ? storedStyle : 'main', preview: validStyle(storedPreview) ? storedPreview : null, detail: null, options: {}, section: '', pageNo: 1
   };
   let lastOpener = null;
   let renderedHash = '';
@@ -163,6 +166,7 @@
     lastOpener = 'search-open';
   }
   function render(previousDetail = state.detail, focus = document.activeElement?.dataset.focus) {
+    if (state.preview === state.style) state.preview = null;
     document.body.dataset.page = state.page;
     document.body.className = 'theme-' + state.style;
     document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : state.page === 'styles' && state.detail ? views.styleName(state.detail) : state.page === 'patterns' ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
@@ -188,7 +192,7 @@
     $('#query').setAttribute('aria-label', searchLabel);
     $('#search-open').setAttribute('aria-label', searchLabel);
     $('#search-open').title = searchLabel + ' (/)';
-    const nextMainKey = JSON.stringify([state.page, state.style, state.filters, state.query, state.pageNo, state.page==='system'?[state.detail,state.options]:state.page==='styles'?state.detail:null]);
+    const nextMainKey = JSON.stringify([state.page, state.style, state.preview, state.filters, state.query, state.pageNo, state.page==='system'?[state.detail,state.options]:state.page==='styles'?state.detail:null]);
     if (mainRenderKey !== nextMainKey) {
       $('#content').innerHTML = state.page === 'styles' ? (state.detail ? views.styleDetail(state) : views.styleGallery(state)) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
       mainRenderKey = nextMainKey;
@@ -256,6 +260,12 @@
       render();
       $('#detail-title')?.focus({ preventScroll: true });
       $('#announcer').textContent = `${views.styleName(state.style)} 적용함`;
+    }
+    else if (data.previewStyle && validStyle(data.previewStyle)) {
+      state.preview = data.previewStyle === state.style ? null : data.previewStyle;
+      try { state.preview ? sessionStorage.setItem(previewKey, state.preview) : sessionStorage.removeItem(previewKey); } catch {}
+      render();
+      $('#announcer').textContent = `${views.styleName(data.previewStyle)}로 미리보기`;
     }
     else if (data.action === 'back-to-list' && history.state?.pattoveOverlay && new URLSearchParams(history.state.origin?.split('?')[1]).get('shelf') === library.shelfFor(state).id) {
       event.preventDefault(); rememberLocation(); history.go(-(history.state.depth || 1));

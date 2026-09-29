@@ -12,7 +12,19 @@
       return `<a href="${url}" target="_blank" rel="noopener" aria-label="${escape(ref.name)} 원본 새 탭에서 보기"><img src="${url}" alt="${escape(ref.name)}" loading="lazy"><span>${escape(ref.name)}</span></a>`;
     }).join('')}</div>` : ''}`;
   }
+  // The style the specimens are drawn in: the one picked for preview, else the style the site wears.
+  const previewStyle = state => state.preview || state.style;
+  // Shown where built specimens are drawn (토큰·부품·블록·템플릿 and a part's page). Pressing a style redraws only the specimens.
+  function stylePicker(state) {
+    const shelf = ['dictionary','system'].includes(state.page) ? window.Pattove.libraryUI.shelfFor(state)?.id : null;
+    if (!['token','part','block','template'].includes(shelf)) return '';
+    const current = previewStyle(state);
+    return `<div class="preview-style" role="group" aria-label="미리보기 스타일"><span class="preview-style-label" aria-hidden="true">미리보기</span>${styles.map(s => `<button type="button" class="preview-style-option" data-preview-style="${escape(s.id)}" data-focus="preview-style-${escape(s.id)}" aria-pressed="${s.id === current}" title="${escape(s.description)}">${escape(s.name)}${styles.length > 1 && s.id === state.style ? '<small>사용 중</small>' : ''}</button>`).join('')}</div>`;
+  }
   function header(state) {
+    return headline(state) + stylePicker(state);
+  }
+  function headline(state) {
     const library = window.Pattove.libraryUI;
     const shelf = ['dictionary','system'].includes(state.page) ? library.shelfFor(state) : null;
     if (state.page === 'styles' && state.detail) return `<h1 id="page-title" class="sr-only">${escape(styleName(state.detail))}</h1><nav class="content-breadcrumb" aria-label="현재 위치"><a href="#/styles" data-focus="back-to-styles">스타일</a>${icon('chevron')}<span aria-current="page">${escape(styleName(state.detail))}</span></nav>`;
@@ -83,5 +95,5 @@
       </section>
     </article>`;
   }
-  window.Pattove.views = { escape, styleName, styleReferences, header, patterns, detail, styleGallery, styleDetail };
+  window.Pattove.views = { escape, styleName, previewStyle, styleReferences, header, patterns, detail, styleGallery, styleDetail };
 })();

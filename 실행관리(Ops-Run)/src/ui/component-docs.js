@@ -46,12 +46,12 @@
   // The part page is only the grid of shapes, drawn in the current style. Tokens have no shapes, so they show their one picture.
   function page(state) {
     const item = r.index.get(state.detail), g = item.gallery;
-    const options = r.normalizeOptions(item.id, state.options);
+    const options = r.normalizeOptions(item.id, state.options), style = window.Pattove.views.previewStyle(state);
     // The dictionary entry a part implements carries the name the industry uses for it; the item's own English name, else that term's parenthesis, sits after the title.
     const term = window.Pattove.library.entries.find(x => x.id === item.entry)?.term, alias = item.english || term?.match(/\(([^)]+)\)\s*$/)?.[1];
     const body = g
-      ? `<ul class="variant-grid" id="component-variants" role="list" aria-label="표현 방식">${g.list.map(v => card(item, v, options[g.key], state.style)).join('')}</ul>`
-      : `<div class="part-demo" id="component-preview"${item.browse.fit ? ' data-wide="true"' : ''}>${live(item.id, options, state.style, 'component-live')}<p class="ds-demo-note" role="status"></p></div>`;
+      ? `<ul class="variant-grid" id="component-variants" role="list" aria-label="표현 방식">${g.list.map(v => card(item, v, options[g.key], style)).join('')}</ul>`
+      : `<div class="part-demo" id="component-preview"${item.browse.fit ? ' data-wide="true"' : ''}>${live(item.id, options, style, 'component-live')}<p class="ds-demo-note" role="status"></p></div>`;
     return `<article class="component-page" data-component="${item.id}" aria-labelledby="detail-title"><header class="component-heading"><h2 id="detail-title" tabindex="-1">${e(item.name)}${alias ? ` (${e(alias)})` : ''}</h2></header>${body}</article>`;
   }
   window.Pattove.componentDocs = { page, url, live, refresh, chosen, choose, defaults };

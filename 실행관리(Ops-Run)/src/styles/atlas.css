@@ -36,10 +36,10 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .dict-thumb { width:100%; height:auto; min-height:0; display:grid; place-items:center; border-radius:var(--p-radius-xl); background:var(--p-bg); overflow:hidden; }
 /* In every grid the picture is square; the name and the rest sit under it. */
 .dict-entry { display:grid; align-content:start; align-items:start; justify-items:stretch; }
-.dict-thumb, .dict-thumb.atlas-preview { aspect-ratio:1; height:auto; }
+.dict-thumb, .dict-thumb.atlas-preview { aspect-ratio:var(--p-aspect-square); height:auto; }
 .dict-thumb>.variant-frame[data-frame] { height:100%; min-height:0; }
 .dict-thumb .atlas-sample { padding:calc(var(--p-space-unit) * 5) var(--p-space-md); }
-.is-todo .dict-thumb { border:var(--p-border-width) dashed var(--p-control-border); background:none; }
+.is-todo .dict-thumb { border:var(--p-border-width) var(--p-stroke-dashed) var(--p-control-border); background:none; }
 .dict-todo,.detail-todo { color:var(--p-muted); font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); }
 .is-todo strong { color:var(--p-muted); }
 /* 통용 용어: the industry name under the dictionary name. Icon tiles already carry their English name, so they skip it. */
@@ -62,7 +62,7 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .dict[data-shelf='icon'] .dict-thumb { display:flex; align-items:center; justify-content:center; height:auto; min-height:0; background:none; }
 .dict[data-shelf='icon'] .dict-entry strong { display:block; padding:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; font-size:var(--p-text-sm); font-weight:var(--p-weight-medium); }
 .illustrated-icon { display:block; width:100%; height:100%; object-fit:contain; }
-.detail-art.illustrated-detail { width:min(calc(100% - var(--p-space-xl)),calc(var(--p-space-unit) * 80)); aspect-ratio:1; min-height:0; margin-inline:auto; background:transparent; }
+.detail-art.illustrated-detail { width:min(calc(100% - var(--p-space-xl)),calc(var(--p-space-unit) * 80)); aspect-ratio:var(--p-aspect-square); min-height:0; margin-inline:auto; background:transparent; }
 .illustrated-detail .illustrated-icon { width:100%; height:auto; }
 .illustrated-downloads { display:flex; flex-wrap:wrap; gap:var(--p-space-sm); margin:0 var(--p-space-lg) var(--p-space-xl); }
 .illustrated-downloads p { flex-basis:100%; font-size:var(--p-text-sm); color:var(--p-muted); }
@@ -83,7 +83,7 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .style-fact ul { display:grid; gap:var(--p-space-2xs); padding-left:var(--p-space-md); list-style:disc; }
 .style-overview { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--p-space-lg); max-width:var(--p-container-2xl); margin:auto; }
 .overview-tile { position:relative; display:flex; flex-direction:column; min-width:0; border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-xl); background:var(--p-high); }
-.overview-preview { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:var(--p-space-sm); flex:none; width:100%; aspect-ratio:1; min-height:0; padding:var(--p-space-lg); border-radius:var(--p-radius-xl); background:var(--p-bg); overflow:clip; }
+.overview-preview { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:var(--p-space-sm); flex:none; width:100%; aspect-ratio:var(--p-aspect-square); min-height:0; padding:var(--p-space-lg); border-radius:var(--p-radius-xl); background:var(--p-bg); overflow:clip; }
 .overview-link { display:flex; align-items:center; justify-content:space-between; gap:var(--p-space-sm); min-height:var(--p-control-size-sm); padding:var(--p-space-sm) var(--p-space-md); }
 .overview-link h2 { font-size:var(--p-text-sm); font-weight:var(--p-weight-medium); }
 .overview-link .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); color:var(--p-muted); }

@@ -146,6 +146,13 @@ html { scroll-padding-top: var(--chrome-bottom, var(--p-space-md)); }
 .content-breadcrumb span { color: var(--p-ink); }
 .catalog-toolbar { display: flex; align-items: center; justify-content: space-between; gap: var(--p-space-sm); margin-bottom: var(--p-space-md); }
 .query-chip { flex-shrink: 0; display: inline-flex; align-items: center; gap: var(--p-space-xs); max-width: 100%; padding: var(--p-space-xs) var(--p-space-sm); border-radius: var(--p-radius-full); background: var(--p-soft); font-size: var(--p-text-sm); overflow-wrap: anywhere; }
+/* 미리보기 스타일: 견본만 다른 스타일로 그려 보는 알약 줄. 스타일이 많아지면 옆으로 넘긴다. */
+.preview-style { display: flex; align-items: center; gap: var(--p-space-2xs); min-width: 0; max-width: 100%; overflow-x: auto; }
+.preview-style-label { flex-shrink: 0; margin-right: var(--p-space-2xs); font-size: var(--p-text-sm); color: var(--p-muted); }
+.preview-style-option { flex-shrink: 0; display: inline-flex; align-items: center; gap: var(--p-space-2xs); min-height: var(--p-control-size-sm); padding-inline: var(--p-space-sm); border-radius: var(--p-radius-full); font-size: var(--p-text-sm); color: var(--p-muted); white-space: nowrap; }
+.preview-style-option:hover { background: var(--p-surface); color: var(--p-ink); }
+.preview-style-option[aria-pressed='true'] { background: var(--p-soft); color: var(--p-ink); font-weight: var(--p-weight-semibold); }
+.preview-style-option small { font-size: var(--p-text-sm); font-weight: var(--p-weight-regular); color: var(--p-muted); }
 .query-chip .ui-icon { width: var(--p-icon-sm); height: var(--p-icon-sm); flex-shrink: 0; }
 main { min-width: 0; margin-left: 0; padding: var(--p-space-xl) var(--p-space-xl) var(--p-space-5xl); }
 body.has-subnav main { margin-left: var(--menu-w); }
@@ -153,7 +160,7 @@ body.has-subnav main { margin-left: var(--menu-w); }
 .rail-toggle { display: inline-grid; place-items: center; width: var(--p-control-size-sm); height: var(--p-control-size-sm); border-radius: var(--p-radius-md); color: var(--p-muted); }
 .rail-toggle:hover { color: var(--p-ink); background: var(--p-surface); }
 .rail-toggle .icon { width: var(--p-icon-sm); height: var(--p-icon-sm); }
-@media (min-width: 761px) {
+@media not all and (max-width: 760px) {
   .rail .menu-body { display: none; }
   .rail .menu-foot { flex: 1; align-items: flex-end; justify-content: center; border-top: 0; }
   .rail .rail-toggle .icon { transform: rotate(180deg); }

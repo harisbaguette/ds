@@ -1,0 +1,232 @@
+{
+  "style": "mint-ceramic-shadowless",
+  "batches": [
+    {
+      "source": "source/core-01.png",
+      "columns": 4,
+      "rows": 3,
+      "crop": {
+        "left": 30,
+        "top": 70,
+        "width": 1200,
+        "height": 900
+      },
+      "icons": [
+        {
+          "entry": "ICO-01",
+          "name": "home"
+        },
+        {
+          "entry": "ICO-62",
+          "name": "search"
+        },
+        {
+          "entry": "ICO-169",
+          "name": "folder"
+        },
+        {
+          "entry": "ICO-174",
+          "name": "document"
+        },
+        {
+          "entry": "ICO-119",
+          "name": "bookmark"
+        },
+        {
+          "entry": "ICO-100",
+          "name": "bell"
+        },
+        {
+          "entry": "ICO-69",
+          "name": "settings"
+        },
+        {
+          "entry": "ICO-313",
+          "name": "calendar"
+        },
+        {
+          "entry": "ICO-592",
+          "name": "image"
+        },
+        {
+          "entry": "ICO-27",
+          "name": "trash"
+        },
+        null,
+        null
+      ]
+    },
+    {
+      "source": "source/work-01.png",
+      "columns": 3,
+      "rows": 3,
+      "icons": [
+        {
+          "entry": "ICO-30",
+          "name": "edit"
+        },
+        {
+          "entry": "ICO-32",
+          "name": "save"
+        },
+        {
+          "entry": "ICO-34",
+          "name": "copy"
+        },
+        {
+          "entry": "ICO-47",
+          "name": "download"
+        },
+        {
+          "entry": "ICO-48",
+          "name": "upload"
+        },
+        {
+          "entry": "ICO-122",
+          "name": "check"
+        },
+        {
+          "entry": "ICO-42",
+          "name": "share"
+        },
+        {
+          "entry": "ICO-55",
+          "name": "lock"
+        },
+        {
+          "entry": "ICO-56",
+          "name": "unlock"
+        }
+      ]
+    },
+    {
+      "source": "source/communication-01.png",
+      "columns": 3,
+      "rows": 3,
+      "icons": [
+        {
+          "entry": "ICO-136",
+          "name": "person",
+          "offset": {
+            "y": 32
+          }
+        },
+        {
+          "entry": "ICO-139",
+          "name": "people"
+        },
+        {
+          "entry": "ICO-149",
+          "name": "mail"
+        },
+        null,
+        {
+          "entry": "ICO-151",
+          "name": "phone"
+        },
+        {
+          "entry": "ICO-153",
+          "name": "video"
+        },
+        {
+          "entry": "ICO-343",
+          "name": "microphone",
+          "offset": {
+            "y": -24
+          }
+        },
+        {
+          "entry": "ICO-346",
+          "name": "headphones"
+        },
+        {
+          "entry": "ICO-585",
+          "name": "music"
+        }
+      ]
+    },
+    {
+      "source": "source/commerce-01.png",
+      "columns": 3,
+      "rows": 3,
+      "icons": [
+        {
+          "entry": "ICO-285",
+          "name": "cart",
+          "offset": {
+            "y": 32
+          }
+        },
+        {
+          "entry": "ICO-727",
+          "name": "shopping-bag",
+          "offset": {
+            "y": 24
+          }
+        },
+        {
+          "entry": "ICO-289",
+          "name": "wallet"
+        },
+        null,
+        {
+          "entry": "ICO-160",
+          "name": "gift"
+        },
+        {
+          "entry": "ICO-292",
+          "name": "shipping"
+        },
+        {
+          "entry": "ICO-295",
+          "name": "coupon",
+          "offset": {
+            "x": 16
+          }
+        },
+        {
+          "entry": "ICO-312",
+          "name": "clock"
+        },
+        {
+          "entry": "ICO-324",
+          "name": "location"
+        }
+      ]
+    },
+    {
+      "source": "source/communication-01.png",
+      "columns": 1,
+      "rows": 1,
+      "crop": {
+        "left": 24,
+        "top": 442,
+        "width": 384,
+        "height": 384
+      },
+      "icons": [
+        {
+          "entry": "ICO-144",
+          "name": "chat"
+        }
+      ]
+    },
+    {
+      "source": "source/commerce-01.png",
+      "columns": 1,
+      "rows": 1,
+      "crop": {
+        "left": 28,
+        "top": 446,
+        "width": 384,
+        "height": 384
+      },
+      "icons": [
+        {
+          "entry": "ICO-288",
+          "name": "credit-card"
+        }
+      ]
+    }
+  ]
+}

@@ -121,6 +121,20 @@ for(const e of entries.filter(e=>e.sub&&e.glyph)){
   if(also.length)e.also=also;
 }
 writeSprites(root,glyphSets);
+// Attach approved artwork to existing meanings; the dictionary IDs and categories stay stable.
+const illustratedDir='assets/icons/illustrated';
+const illustrated=JSON.parse(fs.readFileSync(path.join(root,illustratedDir,'manifest.json'),'utf8'));
+const illustratedIDs=new Set();
+for(const batch of illustrated.batches) for(const item of batch.icons){
+  if(item===null)continue;
+  const entry=entries.find(e=>e.id===item.entry&&e.category==='ICO');
+  if(!entry||illustratedIDs.has(item.entry)||!/^[a-z][a-z0-9-]*$/.test(item.name))throw new Error('Invalid illustrated icon: '+item.entry);
+  illustratedIDs.add(item.entry);
+  const base=illustratedDir+'/'+item.name;
+  const art={style:illustrated.style,src:base+'.webp',thumb:base+'-192.webp',png:base+'.png',width:512,height:512};
+  for(const file of [art.src,art.thumb,art.png])if(!fs.existsSync(path.join(root,file)))throw new Error('Missing illustrated asset: '+file+'; run npm run build:icons');
+  entry.art=art;
+}
 // Pictures no meaning entry points at still show in the icon tab as their own kind.
 shelves.find(s=>s.codes?.includes('ICO')).kinds.push('세트 그림');
 const layerDoc=read('문서/구성요소 계층표.md');
@@ -142,4 +156,3 @@ fs.writeFileSync(path.join(out,'library.js'),'/* Generated from repository Markd
 fs.mkdirSync(path.join(root,'test-results/library'),{recursive:true});
 fs.writeFileSync(path.join(root,'test-results/library/source-audit.json'),JSON.stringify({categories:categories.length,entries:entries.length,layers:layers.length,components:components.length,glyphs:glyphs.length},null,2));
 console.log(JSON.stringify({categories:categories.length,entries:entries.length,layers:layers.length,components:components.length,glyphs:Object.fromEntries(glyphSets.map(s=>[s.id,s.count]))}));
-

@@ -94,7 +94,7 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   await page.locator('[data-focus="nav-icon-navigation"]').click();await page.waitForURL(/icon=navigation/);
   // An icon shows in its home category and in the up-to-two categories it also belongs to.
   const navigation=data.entries.filter(e=>e.sub==='navigation'||e.also?.includes('navigation')).length+glyphOnly.filter(([,,sub,also=[]])=>sub==='navigation'||also.includes('navigation')).length;
-  check('아이콘은 아직 그리지 않았으니 카드마다 빌린 그림 대신 미구현 표시',await page.locator('.dict-entry').count()>0&&await page.locator('.dict-entry:not(.is-todo), .dict-entry svg').count()===0);
+  check('완성한 일러스트만 그림을 표시하고 나머지는 미구현 표시',await page.locator('.dict-entry.is-illustrated img').count()>0&&await page.locator('.dict-entry:not(.is-todo):not(.is-illustrated), .dict-entry svg').count()===0);
   const navItems=await itemsOf('shelf=icon&icon=navigation');
   check('아이콘 카테고리로 좁히기',await page.locator('.dict-entry:not(.is-built)').count()===Math.min(48,navItems.filter(e=>!e.implementation).length)&&await shown()===navigation&&navItems.length===navigation&&await page.locator('[data-focus="nav-icon-navigation"][aria-current="true"]').count()===1);
   check('쓰는 곳으로 게임 전용 부품 모으기',(await itemsOf('shelf=part&place=game')).every(e=>data.places.find(p=>p.id==='game').codes.includes(e.category)&&e.shelf==='part'));
@@ -163,4 +163,3 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   console.log(checks.length+' library checks passed.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
-

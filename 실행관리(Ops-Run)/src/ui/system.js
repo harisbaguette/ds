@@ -1,6 +1,12 @@
 ﻿(() => {
   const { parts: p, systemRegistry: r } = window.Pattove;
   const e = p.esc;
+  // Switch between implemented items in the current category without replacing the primary menu.
+  function partLinks(state) {
+    const library = window.Pattove.libraryUI, items = library.peers(state.detail);
+    return '<label class="item-switch"><span>'+e(library.shelfFor(state).name)+' 목록</span><select data-item-switch data-focus="item-switch">'+items.map(item=>'<option value="'+item.id+'"'+(state.detail===item.id?' selected':'')+'>'+e(item.name)+'</option>').join('')+'</select></label>';
+  }
+
   function detail(state) { return window.Pattove.componentDocs.page(state); }
   // Inert specimens retain their real proportions. Fit the entire scene to its tray,
   // rather than clipping the last control or changing the reusable component itself.
@@ -67,5 +73,5 @@
     window.Pattove.mountParts(root);
     fitPreviews(root);
   }
-  window.Pattove.systemUI = { detail, hydrate };
+  window.Pattove.systemUI = { partLinks, detail, hydrate };
 })();

@@ -51,6 +51,8 @@
     scenes.forEach(scene=>{
       if (scene.closest('.part-demo')) return;
       scene.dataset.previewScene='';
+      // Every grid cell is square, so a whole phone shrinks until it fits the height too.
+      if (scene.matches('.variant-phone')) scene.dataset.previewFit='both';
       if (!scene.parentElement.matches('.preview-viewport')) {
         const viewport=document.createElement('div');
         viewport.className='preview-viewport';

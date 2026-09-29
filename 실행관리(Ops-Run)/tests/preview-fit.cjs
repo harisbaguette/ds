@@ -39,6 +39,11 @@ async function inspect(page, label) {
     document.querySelectorAll('[data-preview-scene]').forEach(scene => contains(scene.parentElement, scene, 'fitted scene', scene.dataset.previewFit === 'both'));
     const buttons = [...document.querySelectorAll('.overview-actions > button')];
     if (buttons.length && buttons.some(b => Math.abs(b.getBoundingClientRect().top - buttons[0].getBoundingClientRect().top) > 1)) result.push('overview buttons wrap');
+    // Every grid cell is square: dictionary tiles, shape cards and style overview tiles alike.
+    document.querySelectorAll('.dict-entry, .variant-card, .overview-tile').forEach(cell => {
+      const r = cell.getBoundingClientRect();
+      if (Math.abs(r.width - r.height) > 1) result.push({ name: 'square cell', cell: cell.dataset.variantCard || cell.dataset.overview || cell.textContent.trim().slice(0, 20), width: r.width, height: r.height });
+    });
     if (document.documentElement.scrollWidth > innerWidth) result.push('page overflow');
     return result;
   });

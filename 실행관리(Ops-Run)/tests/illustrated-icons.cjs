@@ -39,14 +39,13 @@ fs.mkdirSync(out, { recursive: true });
       assert.ok(queue.jobs.every(job => job.status === 'imported'), 'Every production sheet is imported');
     }
     assert.deepEqual(artwork.map(e => e.id).sort(), expected.slice().sort());
-    const visibleCount=Math.min(expected.length,96);
-    while (await page.locator('.is-illustrated').count() < visibleCount) await page.locator('[data-action="load-more"]').click();
+    const visibleCount=Math.min(expected.length,72);
     assert.equal(await page.locator('.is-illustrated').count(), visibleCount);
     await page.locator('.is-illustrated img').evaluateAll(images => Promise.all(images.map(img => { img.loading='eager'; return img.decode(); })));
     assert.ok(await page.locator('.is-illustrated img').evaluateAll(images => images.every(img => { const r=img.getBoundingClientRect(), p=img.parentElement.getBoundingClientRect(); return r.top>=p.top && r.bottom<=p.bottom+1; })), 'Thumbnails fit without clipping');
-    assert.ok(await page.locator('.is-illustrated .dict-thumb').evaluateAll(els => els.every(el => { const r=el.getBoundingClientRect(); return Math.abs(r.width-r.height)<1; })), 'Thumbnail canvases are square');
+    assert.ok(await page.locator('.is-illustrated').evaluateAll(els => els.every(el => { const r=el.getBoundingClientRect(); return Math.abs(r.width-r.height)<1.5; })), 'Icon tiles are square (1:1)');
     await page.screenshot({ path: path.join(out, 'desktop.png'), fullPage: true });
-    await page.locator('.illustrated-collection').screenshot({ path: path.join(out, 'collection.png') });
+    await page.locator('.dict-entries').screenshot({ path: path.join(out, 'collection.png') });
     const samples=artwork.length<=48?artwork:[artwork[0],...new Map(artwork.map(e=>[e.sub,e])).values()];
     for (const entry of samples) {
       await page.goto('http://127.0.0.1:4173/#/dictionary?shelf=icon&detail='+entry.id);

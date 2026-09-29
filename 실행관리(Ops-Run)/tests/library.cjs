@@ -33,17 +33,17 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
  const shot=async name=>{await page.mouse.move(0,0);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(out,name+'.png')});};
  try{
   await goto('styles');
-  check('상단에 구성요소 다섯 갈래와 스타일',await page.locator('.app-top .nav-shelf-link').count()===data.shelves.length&&await page.locator('.app-top #style-context').isVisible());
+  check('상단에는 스타일과 검색, 구성요소 다섯 갈래는 왼쪽 나무',await page.locator('#app-menu .side-parent').count()===data.shelves.length&&await page.locator('.app-top .side-parent').count()===0&&await page.locator('.app-top #style-context').isVisible());
   await shot('01-styles');
   // The count is not printed on screen any more; the screen-reader announcement still carries it.
-  const shown=async()=>Number((await page.locator('#announcer').textContent()).replace(/[^0-9]/g,''));
+  const shown=async()=>Number((await page.locator('#announcer').textContent()).match(/\d+/)[0]);
   // The side menu is the only way to narrow a tab; there is no separate filter panel.
   const menuSide=async()=>await page.locator('#app-menu').isVisible()&&await page.evaluate(()=>Math.round(document.querySelector('main').getBoundingClientRect().left)===Math.round(document.querySelector('#app-menu').getBoundingClientRect().right));
   const noFilterUI=async()=>await page.locator('#filter-bar, #filter-toggle, #active-filters, .facet-search, [data-filter]').count()===0;
   // Each left-rail row is an address: [key, value] of its one narrowing.
-  const railPicks=()=>page.locator('#secondary-nav .nav-subcategory').evaluateAll(els=>els.map(a=>[...new URLSearchParams(a.getAttribute('href').split('?')[1])].find(([k])=>k!=='shelf')));
+  const railPicks=()=>page.locator('#side-nav .side-child').evaluateAll(els=>els.map(a=>[...new URLSearchParams(a.getAttribute('href').split('?')[1])].find(([k])=>k!=='shelf')));
   await goto('components');
-  check('구성요소 화면에 필터 칸 없이 전부 보임',await page.locator('#app-menu').evaluate(e=>e.hidden)&&await noFilterUI()&&await shown()===data.components.length);
+  check('구성요소 화면에 필터 칸 없이 전부 보임',await page.locator('.side-group.is-open').count()===0&&await noFilterUI()&&await shown()===data.components.length);
   await shot('02-components');
   for(const layer of data.layers){
    await goto('components?layer='+layer.id);
@@ -69,7 +69,7 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    for(const [i,[key,code]] of picks.entries()){
     await goto('dictionary?shelf='+shelf.id+'&'+key+'='+encodeURIComponent(code));
     const items=await itemsOf('shelf='+shelf.id+'&'+key+'='+encodeURIComponent(code));
-    check(shelf.id+'.'+code+' 분류 항목 수 일치',items.length===counts[i]&&await shown()===counts[i]&&await page.locator('.dict-entry:not(.is-built)').count()===Math.min(48,items.filter(e=>!e.implementation).length));
+    check(shelf.id+'.'+code+' 분류 항목 수 일치',items.length===counts[i]&&await shown()===counts[i]&&await page.locator('.dict-entry').count()===Math.min(shelf.id==='icon'?72:48,items.length));
    }
   }
   const tokenComponents=data.components.filter(c=>c.layer==='token').length;
@@ -97,17 +97,17 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   const navigation=data.entries.filter(e=>e.sub==='navigation'||e.also?.includes('navigation')).length+glyphOnly.filter(([,,sub,also=[]])=>sub==='navigation'||also.includes('navigation')).length;
   check('완성한 일러스트만 그림을 표시하고 나머지는 미구현 표시',await page.locator('.dict-entry.is-illustrated img').count()>0&&await page.locator('.dict-entry:not(.is-todo):not(.is-illustrated), .dict-entry svg').count()===0);
   const navItems=await itemsOf('shelf=icon&icon=navigation');
-  check('아이콘 카테고리로 좁히기',await page.locator('.dict-entry:not(.is-built)').count()===Math.min(48,navItems.filter(e=>!e.implementation).length)&&await shown()===navigation&&navItems.length===navigation&&await page.locator('[data-focus="nav-icon-navigation"][aria-current="true"]').count()===1);
+  check('아이콘 카테고리로 좁히기',await page.locator('.dict-entry').count()===Math.min(72,navItems.length)&&await shown()===navigation&&navItems.length===navigation&&await page.locator('[data-focus="nav-icon-navigation"][aria-current="true"]').count()===1);
   check('쓰는 곳으로 게임 전용 부품 모으기',(await itemsOf('shelf=part&place=game')).every(e=>data.places.find(p=>p.id==='game').codes.includes(e.category)&&e.shelf==='part'));
   const [alsoKey,,alsoHome,[alsoCat]]=glyphOnly.find(g=>g[3]);
   check('여러 칸에 속한 그림은 주 칸과 함께 보일 칸 모두에서 보임',(await itemsOf('shelf=icon&icon='+alsoCat)).some(e=>e.id===alsoKey)&&(await itemsOf('shelf=icon&icon='+alsoHome)).some(e=>e.id===alsoKey));
   await goto('dictionary?category=ICO');
   check('옛 분류 주소는 아이콘 탭에서 아이콘 전체를 보여줌',(await itemsOf('category=ICO')).length===data.entries.filter(e=>e.category==='ICO').length+glyphOnly.length&&page.url().includes('shelf=icon'));
-  await page.locator('[data-action="load-more"]').click();
-  check('대량 분류 더 보기 48개씩',await page.locator('.dict-entry:not(.is-built)').count()===96);
-  check('더 보기 뒤 새 항목으로 초점',await page.locator('.dict-entry:not(.is-built)').nth(48).evaluate(e=>e===document.activeElement));
+  check('대량 분류는 72개씩 쪽으로 나뉨',await page.locator('.dict-entry:not(.is-built)').count()===72&&await page.locator('.pagination [aria-current="page"]').innerText()==='1');
+  await page.locator('.page-step[aria-label="다음"]').click();
+  check('다음 쪽은 이어지는 72개를 맨 위부터 보여줌',await page.locator('.dict-entry:not(.is-built)').count()===72&&page.url().includes('p=2')&&await page.evaluate(()=>scrollY)===0);
   await page.reload();
-  check('표시한 범위 새로고침 유지',await page.locator('.dict-entry:not(.is-built)').count()===96);
+  check('보고 있는 쪽 새로고침 유지',await page.locator('.pagination [aria-current="page"]').innerText()==='2');
   // Suggestions stay inside the current tab, and TOK-01 lives in the token tab.
   await goto('dictionary?shelf=token');
   await page.locator('#search-open').click();await page.locator('#query').fill('TOK-01');
@@ -155,7 +155,7 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
     check(width+' Esc로 메뉴 서랍 닫기',!await page.evaluate(()=>document.documentElement.classList.contains('menu-open')));
     await goto('system?detail=button');await page.evaluate(()=>document.fonts.ready);
     await openMenu();
-    check(width+' 부품 상세에서도 소속 분류가 서랍 안에 보임',await inView('#app-menu')&&await inView('#secondary-nav [aria-current="true"]'));
+    check(width+' 부품 상세에서도 소속 분류가 서랍 안에 보임',await inView('#app-menu')&&await inView('#side-nav [aria-current="true"]'));
     await page.keyboard.press('Escape');
    }
   }

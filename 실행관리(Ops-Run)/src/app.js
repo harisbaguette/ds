@@ -9,7 +9,7 @@
   const styleKey = 'pattove-style';
   const storedStyle = (() => { try { return localStorage.getItem(styleKey); } catch { return null; } })();
   const state = {
-    page: 'styles', filters: {}, query: '', style: validStyle(storedStyle) ? storedStyle : 'main', detail: null, options: {}, section: '', limit: 48
+    page: 'styles', filters: {}, query: '', style: validStyle(storedStyle) ? storedStyle : 'main', detail: null, options: {}, section: '', pageNo: 1
   };
   let lastOpener = null;
   let renderedHash = '';
@@ -44,7 +44,7 @@
     if (next.page === 'patterns' && next.filters.category?.length) params.set('category', next.filters.category.join(','));
     if (library.pages.includes(next.page)) library.writeFilters(next, params);
     if (next.query && !['styles'].includes(next.page)) params.set('q', next.query);
-    if (['dictionary', 'components'].includes(next.page) && next.limit > 48) params.set('shown', next.limit);
+    if (['dictionary', 'components'].includes(next.page) && next.pageNo > 1) params.set('p', next.pageNo);
     if (next.detail) params.set('detail', next.detail);
     if (next.page === 'system' && next.detail) {
       if (next.section) params.set('section', next.section);
@@ -62,11 +62,12 @@
     state.filters = readFilters(state.page, params);
     state.query = ['styles'].includes(state.page) ? '' : (params.get('q') || '').slice(0, 100);
     state.section = (params.get('section') || '').slice(0, 250);
-    state.limit = Math.min(5000, Math.max(48, Number.parseInt(params.get('shown'), 10) || 48));
+    state.pageNo = Math.min(9999, Math.max(1, Number.parseInt(params.get('p'), 10) || 1));
     if (validStyle(params.get('style'))) state.style = params.get('style');
     state.detail = (state.page === 'system' ? systemRegistry.index.has(params.get('detail')) : isCollection() ? library.validDetail(state.page, params.get('detail')) : state.page === 'patterns' && validPattern(params.get('detail'))) ? params.get('detail') : null;
     if (state.page === 'system' && !state.detail) { state.detail = (systemRegistry.matching(state.query)[0] || systemRegistry.items[0]).id; state.query = ''; }
     state.options = state.page === 'system' && state.detail ? systemRegistry.normalizeOptions(state.detail, { ...componentDocs.defaults(state.detail), ...Object.fromEntries([...params].filter(([key]) => key.startsWith('option-')).map(([key,value]) => [key.slice(7),value])) }) : {};
+    if (isCollection()) state.pageNo = Math.min(state.pageNo, library.pageCount(state));
     if (state.page === 'dictionary' && state.detail) {
       const implementation = systemRegistry.index.get(state.detail) || systemRegistry.items.find(i=>i.entry===state.detail);
       if (implementation) { state.page='system'; state.detail=implementation.id; state.filters={}; state.options=systemRegistry.normalizeOptions(implementation.id, componentDocs.defaults(implementation.id)); }
@@ -137,7 +138,7 @@
       history.pushState({}, '', '#/dictionary?shelf='+shelf + (query ? '&q=' + encodeURIComponent(query) : '')); renderRoute();
     }
     // Like its suggestions, a search covers the whole tab, so the left rail's pick is dropped.
-    else navigate({ query, filters: cleared(state.filters), detail: null, section: '', limit: 48 }, { replace: true });
+    else navigate({ query, filters: cleared(state.filters), detail: null, section: '', pageNo: 1 }, { replace: true });
     $('#main').focus({ preventScroll: true });
   }
   // Phones use a navigation-only drawer. Closing by hand returns focus to the menu button.
@@ -148,7 +149,7 @@
     $('#menu-toggle').setAttribute('aria-expanded', String(open));
     $('#main').inert = open;
     $('.app-top').inert = open;
-    if (open) ($('#secondary-nav [aria-current]') || $('#secondary-nav a'))?.focus();
+    if (open) ($('#side-nav [aria-current]') || $('#side-nav a'))?.focus();
     else if (returnFocus) $('#menu-toggle').focus();
   }
   // A picked suggestion opens its detail; closing the detail returns focus to the search button.
@@ -165,17 +166,12 @@
     document.body.dataset.page = state.page;
     document.body.className = 'theme-' + state.style;
     document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : state.page === 'patterns' ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
-    const oldShelf = $('#primary-nav [aria-current="page"]')?.dataset.focus;
-    const subnavScroll = $('.menu-body').scrollTop;
-    $('#primary-nav').innerHTML = library.navigation(state);
-    const subnav=library.subnavigation(state);
-    $('#secondary-nav').innerHTML=subnav;
-    $('#app-menu').hidden=!subnav;
-    $('#menu-toggle').hidden=!subnav;
-    if (!subnav) setMenu(false,false);
-    document.body.classList.toggle('has-subnav',!!subnav);
-    $('#top-title').textContent=$('#primary-nav [aria-current="page"]')?.textContent || '';
-    $('.menu-body').scrollTop=oldShelf === $('#primary-nav [aria-current="page"]')?.dataset.focus ? subnavScroll : 0;
+    // Only the open shelf's 소분류 list scrolls, so it keeps its place while the same shelf re-renders.
+    const treeShelf = $('.side-group.is-open .side-parent')?.dataset.focus;
+    const treeScroll = $('.side-children')?.scrollTop || 0;
+    $('#side-nav').innerHTML = library.sidebar(state);
+    const children = $('.side-children'), current = $('.side-child[aria-current]');
+    if (children) children.scrollTop = treeShelf === $('.side-group.is-open .side-parent').dataset.focus ? treeScroll : Math.max(0, (current?.offsetTop || 0) - children.clientHeight / 3);
     $('#header-context').innerHTML = views.header(state);
     if (state.page === 'styles') $('#style-context').setAttribute('aria-current','page');
     else $('#style-context').removeAttribute('aria-current');
@@ -190,7 +186,7 @@
     $('#query').setAttribute('aria-label', searchLabel);
     $('#search-open').setAttribute('aria-label', searchLabel);
     $('#search-open').title = searchLabel + ' (/)';
-    const nextMainKey = JSON.stringify([state.page, state.style, state.filters, state.query, state.limit, state.page==='system'?[state.detail,state.options]:null]);
+    const nextMainKey = JSON.stringify([state.page, state.style, state.filters, state.query, state.pageNo, state.page==='system'?[state.detail,state.options]:null]);
     if (mainRenderKey !== nextMainKey) {
       $('#content').innerHTML = state.page === 'styles' ? views.styleGrid(state) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
       mainRenderKey = nextMainKey;
@@ -221,6 +217,7 @@
     const previousDetail = state.detail;
     const previousStyle = state.style;
     const previousShelf = state.filters.shelf;
+    const previousPageNo = state.pageNo;
     const previousFilters = JSON.stringify(state.filters);
     const focus = document.activeElement?.dataset.focus;
     readRoute();
@@ -230,7 +227,7 @@
     render(previousDetail, focus);
     renderedHash = location.hash;
     // A new page or tab moves focus to the content; a filter change only returns to the top and leaves focus where it was.
-    if (previousPage !== state.page || (state.page==='system' && previousDetail!==state.detail) || (!state.detail && (previousStyle !== state.style || previousShelf !== state.filters.shelf))) {
+    if (previousPage !== state.page || (state.page==='system' && previousDetail!==state.detail) || (!state.detail && (previousStyle !== state.style || previousShelf !== state.filters.shelf || previousPageNo !== state.pageNo))) {
       window.scrollTo(0, 0);
       if (!state.detail) $('#main').focus({ preventScroll: true });
     } else if (!state.detail && previousFilters !== JSON.stringify(state.filters)) window.scrollTo(0, 0);
@@ -242,7 +239,7 @@
       focusKey(history.state?.pattoveFocus);
       if (history.state?.pattoveScroll) window.scrollTo(...history.state.pattoveScroll);
     }
-    $('#announcer').textContent = state.page === 'styles' ? `${views.styleName(state.style)} 전체 미리보기` : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개`;
+    $('#announcer').textContent = state.page === 'styles' ? `${views.styleName(state.style)} 전체 미리보기` : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개${isCollection() && library.pageCount(state) > 1 ? ` · ${state.pageNo} / ${library.pageCount(state)}쪽` : ''}`;
   }
   document.addEventListener('click', event => {
     if (!event.target.closest('.search-area, #search-open')) hideSuggestions();
@@ -271,14 +268,11 @@
     else if (data.open) navigate({ detail: data.open, style: data.style || state.style }, { overlay: true, opener: data.focus });
     else if (data.action === 'clear-filters' || data.action === 'clear-query') {
       // Clearing removes the clicked control, so focus moves to the content.
-      navigate({ filters: data.action === 'clear-filters' ? cleared(state.filters) : state.filters, query: '', limit: 48 }, { replace: true });
+      navigate({ filters: data.action === 'clear-filters' ? cleared(state.filters) : state.filters, query: '', pageNo: 1 }, { replace: true });
       $('#main').focus({ preventScroll: true });
     }
-    else if (data.action === 'load-more') {
-      const firstNew = library.currentItems(state).filter(e=>!e.implementation)[state.limit]?.id;
-      navigate({ limit: state.limit + 48 }, { replace: true });
-      if (firstNew) document.querySelector(`[data-focus="entry-${CSS.escape(firstNew)}"]`)?.focus();
-    } else if (data.action === 'search-all') submitSearch();
+    else if (data.pageGo) navigate({ pageNo: Number(data.pageGo) }, { replace: true });
+    else if (data.action === 'search-all') submitSearch();
     else if (data.action === 'close-dialog') closeDetail();
     else if (data.action === 'close-menu') setMenu(false);
     else if (data.variantPick) pickVariant(data.variantPick);
@@ -300,6 +294,17 @@
       history.pushState(origin, '', '#/system?detail='+encodeURIComponent(event.target.value)); renderRoute();
     }
   });
+  // On wide screens the tree folds to a rail of shelf icons; the choice is kept for the next visit.
+  const railKey = 'pattove-rail';
+  function setRail(collapsed) {
+    document.documentElement.classList.toggle('rail', collapsed);
+    const label = collapsed ? '메뉴 펼치기' : '메뉴 접기';
+    $('#rail-toggle').setAttribute('aria-label', label);
+    $('#rail-toggle').title = label;
+    try { localStorage.setItem(railKey, collapsed ? '1' : ''); } catch {}
+  }
+  try { if (localStorage.getItem(railKey)) setRail(true); } catch {}
+  $('#rail-toggle').addEventListener('click', () => setRail(!document.documentElement.classList.contains('rail')));
   $('#menu-toggle').addEventListener('click', () => setMenu(true));
   $('#search-open').addEventListener('click', openSearch);
   $('#menu-backdrop').addEventListener('click', () => setMenu(false));
@@ -309,6 +314,13 @@
     $('#search-clear').hidden = true;
     $('#query').focus();
     hideSuggestions();
+  });
+  document.addEventListener('submit', event => {
+    if (!event.target.matches('[data-page-jump]')) return;
+    event.preventDefault();
+    const input = event.target.querySelector('input'), to = Number.parseInt(input.value, 10);
+    if (!to) { input.focus(); return; }
+    navigate({ pageNo: Math.min(Math.max(to, 1), library.pageCount(state)) }, { replace: true });
   });
   $('#search-form').addEventListener('submit', event => { event.preventDefault(); submitSearch(); });
   $('#query').addEventListener('input', () => { $('#search-clear').hidden = !$('#query').value; showSuggestions(); });

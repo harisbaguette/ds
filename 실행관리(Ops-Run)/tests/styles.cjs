@@ -21,10 +21,26 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
  try {
   const context=await browser.newContext({viewport:{width:1440,height:1080}});
   const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(8000);
-  await page.goto(origin+'#/styles');await page.evaluate(()=>document.fonts.ready);
+  await page.goto(origin+'#/styles?detail=main');await page.evaluate(()=>document.fonts.ready);
   check('메인 스타일 하나만 등록',await page.evaluate(()=>Pattove.catalog.styles.length===1&&Pattove.catalog.styles[0].id==='main'));
   check('이전 스타일 선택 UI 제거',await page.locator('.style-picker,#style-switch,#style-menu,.style-cover').count()===0);
   check('스타일 화면은 실제 부품과 완성 화면 미리보기',await page.locator('.style-overview .overview-tile').count()===7&&await page.locator('.style-overview .variant-phone .ds-page').count()===1&&await page.locator('.component-page,.style-choose').count()===0);
+  { // Switching: a second style (added only in this test page) can be opened, applied, and stays applied across tabs and reloads.
+    const ctx=await browser.newContext({viewport:{width:1440,height:1080}});
+    await ctx.addInitScript(()=>{const freeze=Object.freeze;Object.freeze=o=>{if(o&&Array.isArray(o.styles)&&Array.isArray(o.patterns)&&!o.styles.some(s=>s.id==='alt'))o.styles.push({id:'alt',name:'시험 스타일',description:'전환 시험',rules:'시험',references:[],constraints:[]});return freeze(o);};});
+    const sp=await ctx.newPage();sp.on('pageerror',e=>errors.push(e.message));
+    await sp.goto(origin+'#/styles');
+    check('스타일 격자는 스타일마다 카드 한 장',await sp.locator('.style-card').count()===2&&await sp.locator('[data-style-card="main"] .variant-kept').count()===1);
+    await sp.locator('[data-style-card="alt"] .dict-hit').click();
+    check('사용 중이 아닌 스타일 화면에는 적용 단추',sp.url().endsWith('#/styles?detail=alt')&&await sp.locator('[data-style-select="alt"]').isVisible()&&await sp.locator('.style-page .overview-preview.theme-alt').count()===7);
+    await sp.locator('[data-style-select="alt"]').click();
+    check('적용하면 사이트 전체가 그 스타일로 바뀌고 단추는 사용 중 표시로',await sp.evaluate(()=>document.body.classList.contains('theme-alt'))&&await sp.locator('[data-style-select]').count()===0&&await sp.locator('.style-heading .variant-kept').isVisible());
+    await sp.goto(origin+'#/dictionary?shelf=part');await sp.reload();
+    check('적용한 스타일은 다른 탭과 다시 열기에서도 유지',await sp.evaluate(()=>document.body.classList.contains('theme-alt')));
+    await sp.goto(origin+'#/styles');
+    check('격자의 사용 중 표시도 옮겨 감',await sp.locator('[data-style-card="alt"] .variant-kept').count()===1&&await sp.locator('[data-style-card="main"] .variant-kept').count()===0);
+    await ctx.close();
+  }
   const registry=JSON.parse(fs.readFileSync(path.join(root,'src/registry/registry.json'),'utf8'));
   check('배포 목록은 메인과 공용 아이콘·글꼴뿐',registry.items.every(i=>!i.meta.style||i.meta.style==='main'));
   for(const style of retired){

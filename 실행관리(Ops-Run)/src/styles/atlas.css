@@ -71,6 +71,16 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .dict[data-shelf='template'] .variant-frame { grid-area:auto; width:100%; border:0; }
 .dict[data-shelf='template'] .preview-viewport[data-phone] { max-width:calc(var(--p-space-unit) * 48); }
 .dict[data-shelf='block'] .dict-entries { grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--p-container-xs)),1fr)); }
+/* One style's page: name and the switch on one line, its preview tiles, then what it is for. */
+.style-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:var(--p-space-md); flex-wrap:wrap; }
+.style-heading>.variant-kept { margin-top:var(--p-space-xs); }
+.style-card .dict-hit .variant-kept { align-self:flex-start; margin-inline:var(--p-space-xs); }
+.style-card .dict-thumb .variant-frame[data-frame='phone'] { width:100%; height:100%; padding:var(--p-space-md) var(--p-space-sm); border:0; background:none; }
+.style-card .dict-thumb .preview-viewport[data-phone] { max-width:var(--p-container-2xs); }
+.style-facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--p-container-2xs)),1fr)); gap:var(--p-space-lg); max-width:var(--p-container-2xl); margin:calc(var(--p-space-unit) * 8) auto 0; padding-top:var(--p-space-lg); border-top:var(--p-border-width) solid var(--p-line); }
+.style-fact h3 { font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); margin-bottom:var(--p-space-xs); }
+.style-fact p, .style-fact li { font-size:var(--p-text-sm); line-height:var(--p-leading-relaxed); color:var(--p-muted); }
+.style-fact ul { display:grid; gap:var(--p-space-2xs); padding-left:var(--p-space-md); list-style:disc; }
 .style-overview { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--p-space-lg); max-width:var(--p-container-2xl); margin:auto; }
 .overview-tile { position:relative; display:flex; flex-direction:column; min-width:0; border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-xl); background:var(--p-high); }
 .overview-preview { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:var(--p-space-sm); flex:none; width:100%; aspect-ratio:1; min-height:0; padding:var(--p-space-lg); border-radius:var(--p-radius-xl); background:var(--p-bg); overflow:clip; }

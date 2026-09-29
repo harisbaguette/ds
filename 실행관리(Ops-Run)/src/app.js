@@ -40,7 +40,7 @@
   function hash(overrides = {}) {
     const next = { ...state, ...overrides };
     const params = new URLSearchParams();
-    if (['patterns', 'styles'].includes(next.page)) params.set('style', next.style);
+    if (next.page === 'patterns') params.set('style', next.style);
     if (next.page === 'patterns' && next.filters.category?.length) params.set('category', next.filters.category.join(','));
     if (library.pages.includes(next.page)) library.writeFilters(next, params);
     if (next.query && !['styles'].includes(next.page)) params.set('q', next.query);
@@ -63,8 +63,8 @@
     state.query = ['styles'].includes(state.page) ? '' : (params.get('q') || '').slice(0, 100);
     state.section = (params.get('section') || '').slice(0, 250);
     state.pageNo = Math.min(9999, Math.max(1, Number.parseInt(params.get('p'), 10) || 1));
-    if (validStyle(params.get('style'))) { state.style = params.get('style'); try { localStorage.setItem(styleKey, state.style); } catch {} }
-    state.detail = (state.page === 'system' ? systemRegistry.index.has(params.get('detail')) : isCollection() ? library.validDetail(state.page, params.get('detail')) : state.page === 'patterns' && validPattern(params.get('detail'))) ? params.get('detail') : null;
+    if (validStyle(params.get('style'))) state.style = params.get('style');
+    state.detail = (state.page === 'styles' ? validStyle(params.get('detail')) && params.get('detail') !== 'base' : state.page === 'system' ? systemRegistry.index.has(params.get('detail')) : isCollection() ? library.validDetail(state.page, params.get('detail')) : state.page === 'patterns' && validPattern(params.get('detail'))) ? params.get('detail') : null;
     if (state.page === 'system' && !state.detail) { state.detail = (systemRegistry.matching(state.query)[0] || systemRegistry.items[0]).id; state.query = ''; }
     state.options = state.page === 'system' && state.detail ? systemRegistry.normalizeOptions(state.detail, { ...componentDocs.defaults(state.detail), ...Object.fromEntries([...params].filter(([key]) => key.startsWith('option-')).map(([key,value]) => [key.slice(7),value])) }) : {};
     if (isCollection()) state.pageNo = Math.min(state.pageNo, library.pageCount(state));
@@ -165,7 +165,7 @@
   function render(previousDetail = state.detail, focus = document.activeElement?.dataset.focus) {
     document.body.dataset.page = state.page;
     document.body.className = 'theme-' + state.style;
-    document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : state.page === 'patterns' ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
+    document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : state.page === 'styles' && state.detail ? views.styleName(state.detail) : state.page === 'patterns' ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
     const oldShelf = $('#primary-nav [aria-current="page"]')?.dataset.focus;
     const subnavScroll = $('.menu-body').scrollTop;
     $('#primary-nav').innerHTML = library.navigation(state);
@@ -178,7 +178,6 @@
     $('#top-title').textContent=$('#primary-nav [aria-current="page"]')?.textContent || '';
     $('.menu-body').scrollTop=oldShelf === $('#primary-nav [aria-current="page"]')?.dataset.focus ? subnavScroll : 0;
     $('#header-context').innerHTML = views.header(state);
-    $('#catalog-toolbar').hidden = state.page === 'styles';
     // The one active query shows as a chip beside the title; pressing it clears the search.
     const chip = $('#query-chip');
     chip.hidden = !state.query || state.page === 'system';
@@ -189,12 +188,12 @@
     $('#query').setAttribute('aria-label', searchLabel);
     $('#search-open').setAttribute('aria-label', searchLabel);
     $('#search-open').title = searchLabel + ' (/)';
-    const nextMainKey = JSON.stringify([state.page, state.style, state.filters, state.query, state.pageNo, state.page==='system'?[state.detail,state.options]:null]);
+    const nextMainKey = JSON.stringify([state.page, state.style, state.filters, state.query, state.pageNo, state.page==='system'?[state.detail,state.options]:state.page==='styles'?state.detail:null]);
     if (mainRenderKey !== nextMainKey) {
-      $('#content').innerHTML = state.page === 'styles' ? views.styleGrid(state) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
+      $('#content').innerHTML = state.page === 'styles' ? (state.detail ? views.styleDetail(state) : views.styleGallery(state)) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
       mainRenderKey = nextMainKey;
     }
-    if (state.detail && state.page !== 'system') {
+    if (state.detail && !['system','styles'].includes(state.page)) {
       const scroll = dialog.scrollTop;
       dialog.innerHTML = state.page === 'system' ? system.detail(state) : isCollection() ? library.detail(state) : views.detail(state, catalog.patterns.find(p => p.id === state.detail));
       if (!dialog.open) dialog.showModal();
@@ -203,7 +202,7 @@
     } else {
       if (dialog.open) dialog.close();
       dialog.replaceChildren();
-      if (state.page==='system' && state.detail) {
+      if (['system','styles'].includes(state.page) && state.detail) {
         if (previousDetail !== state.detail) $('#detail-title').focus({preventScroll:true});
         else focusKey(focus);
       } else if (previousDetail) {
@@ -230,7 +229,7 @@
     render(previousDetail, focus);
     renderedHash = location.hash;
     // A new page or tab moves focus to the content; a filter change only returns to the top and leaves focus where it was.
-    if (previousPage !== state.page || (state.page==='system' && previousDetail!==state.detail) || (!state.detail && (previousStyle !== state.style || previousShelf !== state.filters.shelf || previousPageNo !== state.pageNo))) {
+    if (previousPage !== state.page || (['system','styles'].includes(state.page) && previousDetail!==state.detail) || (!state.detail && (previousStyle !== state.style || previousShelf !== state.filters.shelf || previousPageNo !== state.pageNo))) {
       window.scrollTo(0, 0);
       if (!state.detail) $('#main').focus({ preventScroll: true });
     } else if (!state.detail && previousFilters !== JSON.stringify(state.filters)) window.scrollTo(0, 0);
@@ -242,7 +241,7 @@
       focusKey(history.state?.pattoveFocus);
       if (history.state?.pattoveScroll) window.scrollTo(...history.state.pattoveScroll);
     }
-    $('#announcer').textContent = state.page === 'styles' ? `${views.styleName(state.style)} 전체 미리보기` : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개${isCollection() && library.pageCount(state) > 1 ? ` · ${state.pageNo} / ${library.pageCount(state)}쪽` : ''}`;
+    $('#announcer').textContent = state.page === 'styles' ? (state.detail ? views.styleName(state.detail) : `스타일 ${catalog.styles.filter(s => s.id !== 'base').length}개 · ${views.styleName(state.style)} 사용 중`) : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개${isCollection() && library.pageCount(state) > 1 ? ` · ${state.pageNo} / ${library.pageCount(state)}쪽` : ''}`;
   }
   document.addEventListener('click', event => {
     if (!event.target.closest('.search-area, #search-open')) hideSuggestions();
@@ -255,6 +254,7 @@
       state.style = data.styleSelect;
       try { localStorage.setItem(styleKey, state.style); } catch {}
       render();
+      $('#detail-title')?.focus({ preventScroll: true });
       $('#announcer').textContent = `${views.styleName(state.style)} 적용함`;
     }
     else if (data.action === 'back-to-list' && history.state?.pattoveOverlay && new URLSearchParams(history.state.origin?.split('?')[1]).get('shelf') === library.shelfFor(state).id) {

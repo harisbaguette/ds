@@ -57,7 +57,7 @@ async function inspect(page, label) {
     try {
       const page = await browser.newPage({ viewport: { width: 768, height: 900 }, deviceScaleFactor: 1.25, reducedMotion: 'reduce' });
       page.on('pageerror', error => errors.push(name + ': ' + error.message));
-      await page.goto(origin + '#/styles');
+      await page.goto(origin + '#/styles?detail=main');
       await page.evaluate(() => document.fonts.ready);
       // Resize the same document across both breakpoints, then grow again. No reload may be required.
       for (const width of [768, 761, 800, 955, 1100, 1101, 1200, 1440, 760, 390, 320, 1440, 768]) {
@@ -67,7 +67,7 @@ async function inspect(page, label) {
       await page.evaluate(() => scrollTo(0, 160));
       await page.screenshot({ path: path.join(out, name + '-overview-768.png') });
       await page.locator('[data-focus="overview-bottom-nav"]').click();
-      assert.ok((await page.locator('#detail-title').innerText()).startsWith('하단 탐색'));
+      assert.ok((await page.locator('#detail-title').innerText()).startsWith('탭바'));
       await page.locator('[data-variant-pick="float"]').click();
       assert.equal(await page.locator('[data-variant-pick="float"]').getAttribute('aria-pressed'), 'true');
       const demo = await stage(page, 'bottom-nav', { variant: 'float' });

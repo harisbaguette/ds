@@ -37,10 +37,17 @@ const server = http.createServer((req, res) => {
       return;
     }
   }
-  fs.readFile(target, (error, content) => {
-    if (error) { res.writeHead(404); res.end(); return; }
-    res.writeHead(200, { 'Content-Type': `${types[path.extname(target)] || 'application/octet-stream'}; charset=utf-8`, 'Cache-Control': 'no-store' });
-    res.end(content);
+  fs.stat(target, (statError, stat) => {
+    if (statError) { res.writeHead(404); res.end(); return; }
+    // no-cache + ETag: the browser keeps files but asks each time, so edits still show and unchanged images return 304.
+    const etag = `W/"${stat.size.toString(16)}-${Math.floor(stat.mtimeMs).toString(16)}"`;
+    const headers = { 'Cache-Control': 'no-cache', ETag: etag };
+    if (req.headers['if-none-match'] === etag) { res.writeHead(304, headers); res.end(); return; }
+    fs.readFile(target, (error, content) => {
+      if (error) { res.writeHead(404); res.end(); return; }
+      res.writeHead(200, { ...headers, 'Content-Type': `${types[path.extname(target)] || 'application/octet-stream'}; charset=utf-8` });
+      res.end(content);
+    });
   });
 });
 server.on('error', error => {

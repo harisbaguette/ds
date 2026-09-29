@@ -118,12 +118,13 @@
   const activeShelf=state=>state.page==='system'?itemShelf(registry.index.get(state.detail)):state.page==='dictionary'?state.filters.shelf:null;
   const querySuffix=state=>state.query&&['dictionary','system'].includes(state.page)?'&q='+encodeURIComponent(state.query):'';
   // 대메뉴 = the top tabs (스타일 and the five shelves). 중메뉴 = the left rows of the open shelf. 소메뉴 = the rows that open under a 중 row when it is clicked.
+  const shelfIcon={token:'layers',icon:'shapes',part:'grid',block:'box',template:'file'};
   function navigation(state) {
     const open=activeShelf(state), q=querySuffix(state);
-    return '<a class="nav-shelf-link" id="style-context" href="#/styles" data-focus="style-context"'+(state.page==='styles'?' aria-current="page"':'')+'><span>스타일</span></a>'
+    return '<a class="nav-shelf-link" id="style-context" href="#/styles" data-focus="style-context"'+(state.page==='styles'?' aria-current="page"':'')+'><span>메인 스타일</span></a>'
       +['token','icon','part','block','template'].map(id=>{
         const s=shelves.get(id);
-        return '<a class="nav-shelf-link" href="#/dictionary?shelf='+id+q+'" data-focus="tab-'+id+'"'+(open===id?' aria-current="page"':'')+'><span>'+s.name+'</span></a>';
+        return '<a class="nav-shelf-link" href="#/dictionary?shelf='+id+q+'" data-focus="tab-'+id+'"'+(open===id?' aria-current="page"':'')+'>'+icon(shelfIcon[id])+'<span>'+s.name+'</span></a>';
       }).join('');
   }
   // The 55 icon categories are too many for one list, so eight 중 bundles hold them; a category the table forgets falls into 기타.

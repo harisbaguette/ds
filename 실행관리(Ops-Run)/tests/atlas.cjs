@@ -8,7 +8,7 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
     try{
       const page=await browser.newPage({viewport:{width:1440,height:1080}});page.setDefaultTimeout(8000);page.on('pageerror',e=>errors.push(e.message));
       await page.goto('http://127.0.0.1:4173/#/system');await page.evaluate(()=>document.fonts.ready);
-      check(name+' 시작 화면은 첫 부품 한 장',await page.locator('.component-page[data-component="token-color"]').count()===1&&await page.locator('.specimen').count()===0);
+      check(name+' 시작 화면은 첫 부품 한 장',await page.locator('.component-page').count()===1&&await page.locator('.component-page').getAttribute('data-component')===await page.evaluate(()=>Pattove.systemRegistry.matching('')[0].id)&&await page.locator('.specimen').count()===0);
       check(name+' 상세 화면에 부품 고르는 목록 없음',await page.locator('[data-item-switch]').count()===0);
       await page.locator('[data-focus="tab-part"]').click();
       await page.locator('[data-library-entry="button"]').click();
@@ -18,8 +18,8 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
       await page.locator('[data-focus="tab-token"]').click();
       check(name+' 토큰 탭 목록과 상세의 색 토큰 그림이 같음',await page.locator('[data-focus="tab-token"][aria-current="page"]').count()===1&&await page.locator('.atlas-sample[data-kind="token-color"] .ds-token-swatches i').count()===4);
       await page.locator('[data-focus="tab-part"]').click();
-      await page.locator('[data-focus="nav-part-fields"]').click();await page.waitForURL(/group=fields/);check(name+' 탭→왼쪽 분류→항목으로 탐색',await page.locator('.dict-entry.is-built').count()>=1);
-      await page.locator('[data-library-entry="field"]').click();check(name+' 사전에서 부품 표현 방식 격자로 연결, 설치 칸 없음',await page.locator('.component-page[data-component="field"] .variant-card input').count()>=1&&await page.locator('.install-panel,[data-system-download]').count()===0);
+      await page.locator('[data-focus="nav-part-interaction"]').click();await page.locator('[data-focus="nav-part-INP"]').click();await page.waitForURL(/code=INP/);check(name+' 탭→왼쪽 분류→항목으로 탐색',await page.locator('.dict-entry.is-built').count()>=1);
+      await page.locator('[data-library-entry="field"]').click();check(name+' 사전에서 입력 필드 견본으로 연결, 설치 칸 없음',await page.locator('.component-page[data-component="field"] .part-demo input').count()>=1&&await page.locator('.install-panel,[data-system-download]').count()===0);
       await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);
       await page.locator('[data-focus="tab-token"]').click();await page.locator('#search-open').click();await page.locator('#query').fill('TOK-01');await page.locator('#query').press('Enter');
       check(name+' 원문 ID로 같은 구현 조회',await page.locator('[data-library-entry="token-color"]').count()===1);

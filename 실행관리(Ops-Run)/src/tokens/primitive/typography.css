@@ -17,5 +17,6 @@
 
 :root {
   --font-pretendard: Pretendard, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Consolas, monospace;
   --font-outfit: Outfit, Pretendard, sans-serif;
 }

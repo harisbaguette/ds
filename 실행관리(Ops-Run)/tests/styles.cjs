@@ -71,11 +71,11 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
    check(style+' 생성 파일 제거',!fs.readdirSync(path.join(root,'src/registry/r')).some(f=>f.startsWith('pattove-'+style+'-')));
    check(style+' 이전 설치 URL 제거',(await fetch(origin+'/src/registry/r/pattove-'+style+'-button-html.json')).status===404);
    await page.goto(origin+'/#/system?style='+style+'&category=buttons');
-   await page.waitForURL('**/#/system?detail=token-color');
+   await page.waitForURL(url=>url.hash.startsWith('#/system?detail=')&&!url.hash.includes('style='));
    check(style+' 이전 주소는 첫 부품으로 이동',!page.url().includes('style=')&&await page.locator('.component-page').count()===1);
   }
   check('이전 스타일 표지 소스 제거',!fs.existsSync(path.join(root,'src/ui/style-covers.js'))&&!fs.existsSync(path.join(root,'src/styles/style-covers.css')));
-  const css=['src/system/parts.css','src/styles/themes.css',...['primitive','semantic'].flatMap(d=>fs.readdirSync(path.join(root,'src/tokens',d)).map(f=>'src/tokens/'+d+'/'+f))].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('');
+  const css=['src/system/parts.css',...['primitive','semantic'].flatMap(d=>fs.readdirSync(path.join(root,'src/tokens',d)).map(f=>'src/tokens/'+d+'/'+f))].map(f=>fs.readFileSync(path.join(root,f),'utf8')).join('');
   check('배포 CSS에 이전 스타일 분기 없음',retired.every(s=>!css.includes('theme-'+s)&&!css.includes('data-style="'+s+'"')));
   await page.goto(origin+'/#/system?style=main&detail=button');
   const contrast=await page.evaluate(()=>{

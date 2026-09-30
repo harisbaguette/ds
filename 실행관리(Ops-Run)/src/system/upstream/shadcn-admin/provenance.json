@@ -1,0 +1,46 @@
+{
+  "repository": "https://github.com/satnaing/shadcn-admin",
+  "commit": "e16c87f213a5ba5e45964e9b67c792105ec74d26",
+  "license": "MIT",
+  "files": [
+    {
+      "path": "LICENSE",
+      "sha256": "d28c723c33a18dfed6af67b1a0ac368724f79bcb80750d3e080dbcf8dedb9e4b"
+    },
+    {
+      "path": "src/features/tasks/components/tasks-table.tsx",
+      "sha256": "a3533fc8aa0f2dff2f7aec88bcbfc24b4bf7ed0a096f3ecf2e29d8475485466c"
+    },
+    {
+      "path": "src/components/data-table/pagination.tsx",
+      "sha256": "8af50acc0018f2a972581064efeb891636e180ecb268da10519965c75c04e5b0"
+    },
+    {
+      "path": "src/components/data-table/toolbar.tsx",
+      "sha256": "06a59a2818b6874458c9b5207171ff4acf079f25d767f39c6e700bd15631cd52"
+    },
+    {
+      "path": "src/features/users/components/users-action-dialog.tsx",
+      "sha256": "9cb5ca655df634ec5250148648fa3c9f6405bf5e6e91a248964193eaa548f6b1"
+    },
+    {
+      "path": "src/components/layout/authenticated-layout.tsx",
+      "sha256": "e3ab0837b3bd3e39153aad8b7b3c07c8fe6768f23bb0dc362ab4a41a5ee6e1ff"
+    }
+  ],
+  "adapted": [
+    "src/system/react/data-table.jsx",
+    "src/system/react/table-toolbar.jsx",
+    "src/system/react/table-pagination.jsx"
+  ],
+  "referenceOnly": [
+    "users-action-dialog.tsx",
+    "authenticated-layout.tsx"
+  ],
+  "changes": [
+    "Router dependency replaced by controlled local state",
+    "Tailwind and shadcn wrappers replaced by Pattove tokens and semantic HTML",
+    "Stable row IDs and Korean labels",
+    "Native dialog with asynchronous save and retry for both environments"
+  ]
+}

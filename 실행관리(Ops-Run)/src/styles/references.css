@@ -1,0 +1,23 @@
+.element-id { display:block; min-width:0; max-width:100%; color:var(--p-muted); font-family:var(--p-mono-font); font-size:var(--p-text-sm); line-height:var(--p-leading-normal); overflow-wrap:anywhere; user-select:text; }
+.element-reference { position:relative; z-index:var(--p-layer-raised); display:flex; align-items:center; gap:var(--p-space-xs); min-width:0; padding:var(--p-space-xs) var(--p-space-xs) var(--p-space-xs) var(--p-space-md); margin-top:var(--p-space-sm); transition:background-color var(--p-duration) var(--p-ease-standard),border-color var(--p-duration) var(--p-ease-standard); }
+.reference-identity { flex:1; min-width:0; display:grid; gap:var(--p-space-3xs); }
+.reference-caption { display:grid; color:var(--p-muted); font-size:var(--p-text-sm); font-weight:var(--p-weight-medium); line-height:var(--p-leading-normal); }
+.reference-caption>* { grid-area:1/1; }
+.element-reference .element-id { color:var(--p-ink); font-family:var(--p-mono-font); letter-spacing:var(--p-tracking-tight); }
+.reference-icon { flex:none; }
+.ds .reference-icon-check { display:none; }
+.reference-status { color:var(--p-success); font-size:var(--p-text-sm); }
+.reference-status:empty { display:none; }
+.element-reference[data-copied] { background:var(--p-success-soft); border-color:var(--p-success-line); }
+.element-reference[data-copied] .reference-icon-copy { display:none; }
+.element-reference[data-copied] .reference-icon-check { display:block; }
+.component-heading>.element-reference, .dialog-header .element-reference { width:min(100%,calc(var(--p-space-unit) * 88)); }
+.variant-card>.element-reference { grid-area:reference; margin-top:0; }
+.dict-entry>.element-id, .dict-hit>.element-id { padding-inline:var(--p-space-xs); }
+.dict[data-shelf='icon'] .element-id { text-align:center; font-size:var(--p-text-sm); }
+.reference-dialog { width:min(calc(100% - var(--p-space-lg)),var(--p-container-lg)); padding:var(--p-space-lg); }
+.reference-dialog h2 { font-size:var(--p-text-heading); padding-inline-end:calc(var(--p-control-size-md) + var(--p-space-xs)); }
+.reference-dialog p { margin-block:var(--p-space-sm); color:var(--p-muted); }
+.reference-dialog .ds-input { height:calc(100vh / 2); margin-bottom:var(--p-space-md); font-family:var(--p-mono-font); resize:vertical; }
+.reference-dialog .reference-dismiss { position:absolute; top:var(--p-space-md); right:var(--p-space-md); }
+@media(prefers-reduced-motion:reduce) { .element-reference, .element-reference .reference-copy { transition:none; } }

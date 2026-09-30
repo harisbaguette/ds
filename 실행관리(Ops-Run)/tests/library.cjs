@@ -62,10 +62,12 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    await goto('dictionary?shelf='+shelf.id);
    const total=await shown();shelfTotal+=total;
    check(shelf.id+' 탭 항목 수 일치',total===(await itemsOf('shelf='+shelf.id)).length);
-   // Each tab's left rail narrows by its own facet (부품 by group, 아이콘 by icon category, 토큰·템플릿 by kind, 블록 by source category).
+   // Every entry, including unbuilt entries and icon rules, is reachable through the left rail.
    const picks=await railPicks();
    const counts=[];for(const [key,code] of picks)counts.push((await itemsOf('shelf='+shelf.id+'&'+key+'='+encodeURIComponent(code))).length);
    check(shelf.id+' 왼쪽 분류는 이 탭에 있는 분류만',picks.length>0&&counts.every(n=>n>0));
+   const reachable=new Set((await Promise.all(picks.map(([key,code])=>itemsOf('shelf='+shelf.id+'&'+key+'='+encodeURIComponent(code))))).flat().map(e=>e.id));
+   check(shelf.id+' 왼쪽 분류를 통해 미구현을 포함한 모든 항목에 접근',reachable.size===total&&(await itemsOf('shelf='+shelf.id)).every(e=>reachable.has(e.id)));
    if(picks.some(([k])=>k==='code'))check(shelf.id+' 중메뉴가 묶은 소분류를 합치면 이 탭의 분류 전부(빠짐·겹침 없음)',picks.flatMap(([,v])=>v.split(',')).sort().join()===[...new Set((await itemsOf('shelf='+shelf.id)).map(e=>e.category).filter(Boolean))].sort().join());
    for(const [i,[key,code]] of picks.entries()){
     await goto('dictionary?shelf='+shelf.id+'&'+key+'='+encodeURIComponent(code));
@@ -75,6 +77,8 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   }
   const tokenComponents=data.components.filter(c=>c.layer==='token').length;
   check('모든 탭을 합치면 사전 전체·토큰 계층 구성요소·구현 부품이 빠짐없이 들어감',tokenComponents===30&&shelfTotal===data.entries.length+glyphOnly.length+tokenComponents+await page.evaluate(()=>Pattove.systemRegistry.items.filter(i=>!i.entry).length));
+  const visibleIDs=(await Promise.all(data.shelves.map(s=>itemsOf('shelf='+s.id)))).flat().map(e=>e.implementation&&e.entry?e.entry:e.id);
+  check('사전 원본의 모든 ID가 화면 항목이나 연결된 구현으로 한 번씩 표시',sourceIDs.every(id=>visibleIDs.includes(id))&&new Set(visibleIDs).size===visibleIDs.length);
   // 토큰 탭 왼쪽 분류 = 이름의 " — " 앞부분(색·글자·간격 …), 하나뿐인 갈래와 이름만 있는 항목은 기타.
   await goto('dictionary?shelf=token');
   const tokenKinds=(await railPicks()).filter(([k])=>k==='kind').map(([,v])=>v);
@@ -123,8 +127,10 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   await shot('05-search');
   await goto('dictionary?code=VIS');
   check('견본 없는 항목은 가짜 그림 대신 미구현 표시',await page.locator('button.dict-entry.is-todo').count()>0&&await page.locator('button.dict-entry.is-todo svg').count()===0&&(await page.locator('button.dict-entry.is-todo .dict-todo').first().textContent())==='미구현');
+  const unbuiltID=await page.locator('button.dict-entry.is-todo').first().getAttribute('data-library-entry');
   await page.locator('button.dict-entry.is-todo').first().click();
-  check('미구현 항목 상세도 미구현이라고 말함',/미구현/.test(await page.locator('dialog .detail-art.is-todo').textContent())&&await page.locator('dialog .detail-art svg, dialog .dialog-footer, dialog .record-detail').count()===0);
+  check('미구현 항목 상세도 미구현이라고 말함',/미구현/.test(await page.locator('dialog .detail-art.is-todo').textContent())&&await page.locator('dialog .detail-art svg, dialog .dialog-footer').count()===0);
+  check('미구현 항목도 사전 ID와 실제 쓰임을 보여 줌',(await page.locator('dialog .record-kind').textContent()).includes(unbuiltID)&&await page.locator('dialog .record-detail section p').textContent()===data.entries.find(e=>e.id===unbuiltID).usage);
   await shot('06-entry-art');
   await close();
   await goto('dictionary?shelf=icon&kind='+encodeURIComponent('세트 그림'));

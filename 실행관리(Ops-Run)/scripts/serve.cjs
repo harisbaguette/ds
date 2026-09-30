@@ -30,10 +30,12 @@ const server = http.createServer((req, res) => {
     else {
       const items = fs.readdirSync(target, { withFileTypes: true }).map(entry => {
         const href = '/' + path.relative(root, path.join(target, entry.name)).split(path.sep).map(encodeURIComponent).join('/');
-        return `<li><a href="${href}">${escape(entry.name)}${entry.isDirectory() ? '/' : ''}</a></li>`;
+        return `<li><a class="ds-tab" href="${href}">${escape(entry.name)}${entry.isDirectory() ? '/' : ''}</a></li>`;
       }).join('');
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
-      res.end(`<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(path.basename(target))}</title><style>body{font:16px/1.7 system-ui;max-width:900px;margin:40px auto;padding:0 20px}h1{font-size:18px}a{color:#284ceb}li{padding:8px 0;overflow-wrap:anywhere}</style><a href="/">처음으로</a><h1>${escape(path.basename(target))}</h1><ul>${items}</ul></html>`);
+      const styles = [...fs.readFileSync(path.join(root, 'index.html'), 'utf8').matchAll(/<link rel="stylesheet" href="([^"]+)">/g)]
+        .map(([, href]) => `<link rel="stylesheet" href="/${href}">`).join('');
+      res.end(`<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${escape(path.basename(target))}</title>${styles}</head><body class="ds theme-main"><main class="directory"><a class="ds-button" data-variant="outline" href="/">처음으로</a><h1>${escape(path.basename(target))}</h1><ul>${items}</ul></main></body></html>`);
       return;
     }
   }

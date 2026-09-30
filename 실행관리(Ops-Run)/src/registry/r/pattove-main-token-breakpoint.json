@@ -43,7 +43,7 @@
     }
   ],
   "meta": {
-    "version": "0.4.0",
+    "version": "0.6.0",
     "lifecycle": "Trial",
     "item": "token-breakpoint",
     "purpose": "화면 폭과 영역 폭의 분기 기준",

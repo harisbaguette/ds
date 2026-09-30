@@ -1,11 +1,5 @@
 ﻿/* Application and specimens share the single main style's material tokens. */
-body { background:var(--p-bg); color:var(--p-ink); }
-:where(button,a,input,select,textarea,summary):focus-visible { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
-.search { border:var(--p-border-width) solid var(--p-control-border); border-radius:var(--p-radius-xl); background:var(--p-bg); box-shadow:var(--p-inset); }
-.search:focus-within { box-shadow:var(--p-inset); outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
-.search input:focus-visible { outline:none; }
-.search-popover { border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-xl); background:var(--p-high); box-shadow:var(--p-float); }
-.search-suggestion:hover,.search-suggestion[aria-selected='true'] { background:var(--p-row-active); }
+
 .atlas { max-width:var(--p-container-2xl); margin:auto; }
 .atlas-preview { height:calc(var(--p-space-unit) * 52); overflow:hidden; display:grid; align-items:center; background:var(--p-bg); }
 .atlas-sample { width:100%; height:100%; padding:var(--p-space-xl) var(--p-space-lg); display:flex; gap:var(--p-space-sm); align-items:center; justify-content:center; flex-wrap:wrap; }
@@ -14,28 +8,17 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .atlas-sample[data-kind^='token-'] { justify-content:flex-start; }
 .atlas-sample[data-kind='tabs'] { display:block; padding-top:var(--p-space-2xl); }
 .atlas-sample:is([data-kind='input'],[data-kind='field']) { display:block; padding-top:calc(var(--p-space-unit) * 11); }
-.catalog-tile { box-shadow:none; border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-xl); background:var(--p-high); min-height:calc(var(--p-space-unit) * 32); }
-.catalog-tile:hover { transform:none; }.record-code { box-shadow:none; border-radius:var(--p-radius-md); background:var(--p-bg)!important; padding:var(--p-space-2xs) var(--p-space-xs); font-size:var(--p-text-sm); font-weight:var(--p-weight-medium); }
-#detail-dialog { background:var(--p-surface); border:var(--p-border-width) solid var(--p-edge); border-radius:var(--p-radius-2xl); box-shadow:var(--p-dialog-shadow); }
-.dialog-header { padding:var(--p-space-lg) calc(var(--p-space-unit) * 7); background:var(--p-surface); }.dialog-header h2 { font-size:var(--p-text-lg); font-weight:var(--p-weight-semibold); }.dialog-header .icon-button { box-shadow:var(--p-raised); background:var(--p-surface); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-xl); }
-.primary { background:var(--p-accent); color:var(--p-on-accent); border:var(--p-border-width) solid var(--p-accent); box-shadow:var(--p-lift); }
-.primary:hover { background:var(--p-accent-hover); }.secondary { background:var(--p-high); border:var(--p-border-width) solid var(--p-control-border); color:var(--p-ink); box-shadow:var(--p-raised); }
-.part-demo { background:var(--p-bg); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-2xl); }
-@media(max-width:760px) {.atlas-preview { height:calc(var(--p-space-unit) * 45); }.atlas-sample { padding:calc(var(--p-space-unit) * 5) var(--p-space-md); }.dialog-header { padding:calc(var(--p-space-unit) * 5) var(--p-space-md); }
+@media(max-width:760px) {.atlas-preview { height:calc(var(--p-space-unit) * 45); }.atlas-sample { padding:calc(var(--p-space-unit) * 5) var(--p-space-md); }
 }
 @media(max-width:440px) {.atlas-preview { height:calc(var(--p-space-unit) * 52); }.atlas-sample { padding:calc(var(--p-space-unit) * 7); } }
-@media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; } }
 /* 부품사전 격자: 그림이 뜻을 싣고, 이름은 짧은 한 줄이다. */
 .dict-grid { display:grid; gap:calc(var(--p-space-unit) * 5); }
 .dict-entries { grid-template-columns:repeat(auto-fill,minmax(var(--p-container-2xs),1fr)); }
-.dict-entry { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:var(--p-space-sm); padding:calc(var(--p-space-unit) * 5); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-2xl); background:var(--p-high); color:var(--p-ink); text-align:left; transition:border-color var(--p-duration),box-shadow var(--p-duration); }
+.dict-entry { min-width:0; display:grid; align-content:start; align-items:start; justify-items:stretch; gap:var(--p-space-xs); padding:var(--p-space-xs) var(--p-space-xs) var(--p-space-md); text-align:left; transition:border-color var(--p-duration),box-shadow var(--p-duration); }
 .dict-entry:hover { border-color:var(--p-control-border); box-shadow:var(--p-raised); }
-.dict-entry strong { font-size:var(--p-text-md); font-weight:var(--p-weight-semibold); line-height:var(--p-leading-snug); overflow-wrap:anywhere; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-.dict-entry { padding:var(--p-space-xs) var(--p-space-xs) var(--p-space-md); gap:var(--p-space-xs); }
-.dict-entry strong { font-size:var(--p-text-sm); padding:0 var(--p-space-xs); }
+.dict-entry strong { font-size:var(--p-text-sm); padding:0 var(--p-space-xs); font-weight:var(--p-weight-semibold); line-height:var(--p-leading-snug); overflow-wrap:anywhere; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
 .dict-thumb { width:100%; height:auto; min-height:0; display:grid; place-items:center; border-radius:var(--p-radius-xl); background:var(--p-bg); overflow:hidden; }
 /* In every grid the picture is square; the name and the rest sit under it. */
-.dict-entry { display:grid; align-content:start; align-items:start; justify-items:stretch; }
 .dict-thumb, .dict-thumb.atlas-preview { aspect-ratio:var(--p-aspect-square); height:auto; }
 .dict-thumb>.variant-frame[data-frame] { height:100%; min-height:0; }
 .dict-thumb .atlas-sample { padding:calc(var(--p-space-unit) * 5) var(--p-space-md); }
@@ -57,7 +40,7 @@ body { background:var(--p-bg); color:var(--p-ink); }
 /* Compact glyphs, legible parts and complete screens each get an appropriate canvas. */
 .dict[data-shelf='icon'] .dict-entries { grid-template-columns:repeat(auto-fill,minmax(calc(var(--p-space-unit) * 32),1fr)); gap:var(--p-space-sm); }
 /* Icons are square, so every icon tile is 1:1: the picture fills the top, the name sits on one line under it. */
-.dict[data-shelf='icon'] .dict-entry { display:grid; align-items:stretch; gap:var(--p-space-2xs); padding:var(--p-space-sm); border-radius:var(--p-radius-xl); background:var(--p-bg); box-shadow:none; }
+.dict[data-shelf='icon'] .dict-entry { align-items:stretch; gap:var(--p-space-2xs); padding:var(--p-space-sm); }
 .dict[data-shelf='icon'] .dict-entry:hover { box-shadow:none; }
 .dict[data-shelf='icon'] .dict-thumb { display:flex; align-items:center; justify-content:center; height:auto; min-height:0; background:none; }
 .dict[data-shelf='icon'] .dict-entry strong { display:block; padding:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; font-size:var(--p-text-sm); font-weight:var(--p-weight-medium); }
@@ -66,7 +49,7 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .illustrated-detail .illustrated-icon { width:100%; height:auto; }
 .illustrated-downloads { display:flex; flex-wrap:wrap; gap:var(--p-space-sm); margin:0 var(--p-space-lg) var(--p-space-xl); }
 .illustrated-downloads p { flex-basis:100%; font-size:var(--p-text-sm); color:var(--p-muted); }
-.illustrated-downloads a { display:inline-flex; align-items:center; justify-content:center; min-height:var(--p-control-size-sm); padding:var(--p-space-sm) var(--p-space-md); border-radius:var(--p-radius-lg); font-size:var(--p-text-sm); }
+
 .dict[data-shelf='template'] .dict-entries { grid-template-columns:repeat(auto-fill,minmax(min(100%,var(--p-container-xs)),1fr)); }
 .dict[data-shelf='template'] .variant-frame { grid-area:auto; width:100%; border:0; }
 .dict[data-shelf='template'] .preview-viewport[data-phone] { max-width:calc(var(--p-space-unit) * 48); }
@@ -82,12 +65,12 @@ body { background:var(--p-bg); color:var(--p-ink); }
 .style-fact p, .style-fact li { font-size:var(--p-text-sm); line-height:var(--p-leading-relaxed); color:var(--p-muted); }
 .style-fact ul { display:grid; gap:var(--p-space-2xs); padding-left:var(--p-space-md); list-style:disc; }
 .style-overview { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--p-space-lg); max-width:var(--p-container-2xl); margin:auto; }
-.overview-tile { position:relative; display:flex; flex-direction:column; min-width:0; border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-xl); background:var(--p-high); }
-.overview-preview { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:var(--p-space-sm); flex:none; width:100%; aspect-ratio:var(--p-aspect-square); min-height:0; padding:var(--p-space-lg); border-radius:var(--p-radius-xl); background:var(--p-bg); overflow:clip; }
+.overview-tile { position:relative; display:flex; flex-direction:column; min-width:0; }
+.overview-preview { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:var(--p-space-sm); flex:none; width:100%; aspect-ratio:var(--p-aspect-square); min-height:0; padding:var(--p-space-lg); border-radius:inherit; background:var(--p-bg); overflow:clip; }
 .overview-link { display:flex; align-items:center; justify-content:space-between; gap:var(--p-space-sm); min-height:var(--p-control-size-sm); padding:var(--p-space-sm) var(--p-space-md); }
 .overview-link h2 { font-size:var(--p-text-sm); font-weight:var(--p-weight-medium); }
 .overview-link .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); color:var(--p-muted); }
-.overview-link::after { content:''; position:absolute; inset:0; border-radius:var(--p-radius-xl); }
+.overview-link::after { content:''; position:absolute; inset:0; border-radius:var(--p-radius); }
 .overview-link:hover::after { box-shadow:inset 0 0 0 var(--p-border-width) var(--p-control-border); }
 .overview-link:focus-visible { outline:none; }
 .overview-link:focus-visible::after { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }

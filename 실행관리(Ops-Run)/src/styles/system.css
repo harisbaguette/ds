@@ -1,7 +1,0 @@
-.part-demo { border-radius: var(--p-radius-lg); overflow: hidden; border: var(--p-border-width) solid var(--p-line); }
-.part-demo > .ds { padding: var(--p-space-xl); min-height: calc(var(--p-space-unit) * 40); }
-.part-demo > .ds-demo-note { padding-inline: calc(var(--p-space-unit) * 5); font-size: var(--p-text-sm); }
-.part-demo > .ds-demo-note:empty { display: none; }
-@media (max-width: 760px) {
-  .part-demo > .ds { padding: calc(var(--p-space-unit) * 5) var(--p-space-md); }
-}

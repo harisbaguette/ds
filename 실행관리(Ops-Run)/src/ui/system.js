@@ -1,6 +1,4 @@
 ﻿(() => {
-  const { parts: p, systemRegistry: r } = window.Pattove;
-  const e = p.esc;
   function detail(state) { return window.Pattove.componentDocs.page(state); }
   // Inert specimens retain their real proportions. Fit the entire scene to its tray,
   // rather than clipping the last control or changing the reusable component itself.

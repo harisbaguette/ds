@@ -2,6 +2,7 @@
 :root,
 .theme-main {
   --p-font: var(--font-pretendard);
+  --p-mono-font: var(--font-mono);
   --p-display-font: var(--font-outfit);
   --p-type-body: var(--p-text-md)/var(--p-leading-normal) var(--p-font);
   --p-type-display: var(--p-weight-semibold) var(--p-text-display) var(--p-display-font);

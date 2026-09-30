@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#ffffff">
+  <meta name="theme-color">
   <title>사전</title>
   <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="src/tokens/primitive/color.css">
@@ -47,71 +47,79 @@
   <link rel="stylesheet" href="src/tokens/semantic/layer.css">
   <link rel="stylesheet" href="src/tokens/semantic/breakpoint.css">
   <link rel="stylesheet" href="src/styles/previews.css">
-  <link rel="stylesheet" href="src/styles/themes.css">
   <link rel="stylesheet" href="src/system/parts.css">
   <link rel="stylesheet" href="src/styles/shell.css">
   <link rel="stylesheet" href="src/styles/dialogs.css">
   <link rel="stylesheet" href="src/styles/library.css">
-  <link rel="stylesheet" href="src/styles/system.css">
   <link rel="stylesheet" href="src/styles/atlas.css">
   <link rel="stylesheet" href="src/styles/components.css">
+  <link rel="stylesheet" href="src/styles/references.css">
   <script defer src="src/data/catalog.js"></script>
   <script defer src="src/data/library.js"></script>
   <script defer src="src/ui/icons.js"></script>
   <script defer src="src/ui/previews.js"></script>
   <script defer src="src/system/registry.js"></script>
   <script defer src="src/system/parts.js"></script>
+  <script defer src="src/system/vendor/table-core.min.js"></script>
+  <script defer src="src/system/admin.js"></script>
   <script defer src="src/system/behaviors.js"></script>
+  <script defer src="src/ui/references.js"></script>
   <script defer src="src/ui/views.js"></script>
   <script defer src="src/ui/library-views.js"></script>
   <script defer src="src/ui/system.js"></script>
   <script defer src="src/ui/component-docs.js"></script>
   <script defer src="src/app.js"></script>
 </head>
-<body class="theme-main">
+<body class="ds theme-main">
   <a class="skip-link" href="#main">본문으로</a>
   <header class="app-top">
     <a class="top-brand" href="#/styles" aria-label="스타일" data-focus="home"><img src="assets/mark.svg" alt="" width="32" height="32"></a>
-    <nav id="primary-nav" class="primary-nav" aria-label="주 메뉴"></nav>
-    <button type="button" id="search-open" class="search-open" aria-label="검색" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/" data-focus="search-open"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg></button>
+    <nav id="primary-nav" class="primary-nav ds-tablist" aria-label="주 메뉴"></nav>
+    <button type="button" id="search-open" class="search-open ds-button" data-variant="outline" data-size="sm" data-icon-only aria-label="검색" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/" data-focus="search-open"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg></button>
   </header>
   <div class="menu-backdrop" id="menu-backdrop"></div>
   <aside class="app-menu" id="app-menu" aria-label="하위 분류" hidden>
     <div class="menu-head">
       <span class="top-title" id="top-title"></span>
-      <button type="button" class="menu-close" data-action="close-menu" aria-label="메뉴 닫기">×</button>
+      <button type="button" class="menu-close ds-button" data-variant="outline" data-size="sm" data-icon-only data-action="close-menu" aria-label="메뉴 닫기" title="메뉴 닫기"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"></path></svg></button>
     </div>
     <div class="menu-body">
       <nav id="secondary-nav" class="secondary-nav" aria-label="하위 분류"></nav>
     </div>
     <div class="menu-foot">
-      <button type="button" id="rail-toggle" class="rail-toggle" aria-label="사이드 메뉴 접기" title="사이드 메뉴 접기" aria-expanded="true" aria-controls="secondary-nav" data-focus="rail-toggle"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><path d="m11 17-5-5 5-5m7 10-5-5 5-5"></path></svg></button>
+      <button type="button" id="rail-toggle" class="rail-toggle ds-button" data-variant="ghost" data-size="sm" data-icon-only aria-label="사이드 메뉴 접기" title="사이드 메뉴 접기" aria-expanded="true" aria-controls="secondary-nav" data-focus="rail-toggle"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><path d="m11 17-5-5 5-5m7 10-5-5 5-5"></path></svg></button>
     </div>
   </aside>
   <main id="main" tabindex="-1">
     <div id="catalog-toolbar" class="catalog-toolbar">
-      <button type="button" id="menu-toggle" class="menu-toggle" aria-label="하위 분류 열기" aria-expanded="false" aria-controls="app-menu" data-focus="menu-toggle"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><path d="M4 7h16M4 12h16M4 17h16"></path></svg><span>분류</span></button>
+      <button type="button" id="menu-toggle" class="menu-toggle ds-button" data-variant="outline" data-size="sm" data-icon-only aria-label="하위 분류 열기" title="하위 분류 열기" aria-expanded="false" aria-controls="app-menu" data-focus="menu-toggle"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
       <div id="header-context" class="header-context"></div>
-      <button type="button" id="query-chip" class="query-chip" data-action="clear-query" data-focus="query-chip" hidden></button>
+      <button type="button" id="query-chip" class="query-chip ds-button" data-variant="outline" data-size="sm" data-action="clear-query" data-focus="query-chip" hidden></button>
     </div>
     <div id="content"></div>
   </main>
-  <dialog id="detail-dialog" aria-labelledby="detail-title"></dialog>
-  <dialog id="search-dialog" class="search-dialog" aria-label="검색">
+  <dialog id="detail-dialog" class="ds-surface" data-material="raised" aria-labelledby="detail-title"></dialog>
+  <dialog id="search-dialog" class="search-dialog ds-surface" data-material="raised" aria-label="검색">
     <div class="search-area">
-      <form class="search" id="search-form" role="search">
+      <form class="search ds-input-group" id="search-form" role="search">
         <label class="sr-only" for="query">검색</label>
         <svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
-        <input id="query" name="query" placeholder="패턴 검색" autocomplete="off" maxlength="100" role="combobox" aria-autocomplete="list" aria-controls="search-suggestions" aria-expanded="false" data-focus="search-query">
-        <button id="search-clear" type="button" aria-label="검색어 지우기" data-focus="search-clear" hidden><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><path d="m7 7 10 10M7 17 17 7"></path></svg></button>
+        <input class="ds-input" id="query" name="query" placeholder="패턴 검색" autocomplete="off" maxlength="100" role="combobox" aria-autocomplete="list" aria-controls="search-suggestions" aria-expanded="false" data-focus="search-query">
+        <button id="search-clear" class="ds-input-tool" type="button" aria-label="검색어 지우기" title="검색어 지우기" data-focus="search-clear" hidden><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><path d="m7 7 10 10M7 17 17 7"></path></svg></button>
       </form>
       <div class="search-popover" id="search-popover" hidden>
         <div id="search-suggestions" role="listbox" aria-label="검색 제안"></div>
-        <button type="button" class="search-all" data-action="search-all">검색 결과 보기 <span aria-hidden="true">↵</span></button>
+        <button type="button" class="search-all ds-button" data-variant="ghost" data-size="sm" data-action="search-all">검색 결과 보기 <span aria-hidden="true">↵</span></button>
       </div>
     </div>
   </dialog>
   <p class="sr-only" id="announcer" role="status" aria-live="polite"></p>
+  <dialog id="reference-dialog" class="reference-dialog ds-surface" data-material="raised" aria-labelledby="reference-title" aria-describedby="reference-help">
+    <h2 id="reference-title">AI용 정보 복사</h2>
+    <p id="reference-help">자동 복사를 사용할 수 없어요. 아래 내용을 전체 선택해 복사한 뒤 AI에게 붙여 넣으세요.</p>
+    <textarea class="ds-input" readonly aria-label="AI에게 전달할 요소 정보" spellcheck="false"></textarea>
+    <form method="dialog" class="reference-dismiss"><button class="icon-button ds-button" data-variant="outline" data-icon-only aria-label="복사 창 닫기" title="복사 창 닫기"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="m6 6 12 12M6 18 18 6"></path></svg></button></form>
+  </dialog>
   <noscript><p class="noscript">화면 이동과 저장을 사용하려면 JavaScript를 켜 주세요.</p></noscript>
 </body>
 </html>

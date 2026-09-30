@@ -34,7 +34,7 @@
   const shelfOf=e=>e.category?e.shelf:data.shelves.find(s=>s.layers?.includes(e.layer))?.id;
   const itemShelf=item=>item.browse.shelf;
   const browseSections=['buttons','fields','selection','navigation','composition','feedback','primitives','foundations','page'];
-  // These groups contain working specimens. The shelf itself still includes the complete dictionary.
+  // Keep the specimen shortcuts for existing addresses and the style overview; the menu covers the full dictionary.
   const partGroups=[
     {id:'buttons',name:'버튼',items:['button','icon-button','segmented-button']},
     {id:'fields',name:'입력',items:['input','clear-input','unit-input','stepper','password-input','field','date-range','search-bar']},
@@ -47,7 +47,7 @@
   // Implementations own their browsing metadata; a missing dictionary link never changes their category.
   const browseEntry=item=>({...entries.get(item.entry),id:item.id,name:item.name,shelf:item.browse.shelf,kind:item.browse.kind,category:item.browse.code});
   const inShelf=new Map(), bump=key=>inShelf.set(key,(inShelf.get(key)||0)+1);
-  for (const e of dictionary) { bump(e.shelf+'|'+e.category); for (const sub of iconCats(e)) bump(e.shelf+'|ICO.'+sub); }
+  for (const e of dictionary.filter(e=>!part(e.id))) { bump(e.shelf+'|'+e.category); for (const sub of iconCats(e)) bump(e.shelf+'|ICO.'+sub); }
   for (const item of registry.items) bump(itemShelf(item)+'|'+item.browse.code);
   const short=name=>String(name).split(' — ')[0];
   // A shelf with no kinds (토큰) sorts by the family named before " — " (색, 글자, 간격 …); a family of one or a bare name reads as 기타,
@@ -120,10 +120,10 @@
   // 대메뉴 = the top tabs (스타일 and the five shelves). 중메뉴 = the left rows of the open shelf. 소메뉴 = the rows that open under a 중 row when it is clicked.
   function navigation(state) {
     const open=activeShelf(state), q=querySuffix(state);
-    return '<a class="nav-shelf-link" id="style-context" href="#/styles" data-focus="style-context"'+(state.page==='styles'?' aria-current="page"':'')+'><span>스타일</span></a>'
+    return '<a class="nav-shelf-link ds-tab" id="style-context" href="#/styles" data-focus="style-context"'+(state.page==='styles'?' aria-current="page"':'')+'><span>스타일</span></a>'
       +['token','icon','part','block','template'].map(id=>{
         const s=shelves.get(id);
-        return '<a class="nav-shelf-link" href="#/dictionary?shelf='+id+q+'" data-focus="tab-'+id+'"'+(open===id?' aria-current="page"':'')+'><span>'+s.name+'</span></a>';
+        return '<a class="nav-shelf-link ds-tab" href="#/dictionary?shelf='+id+q+'" data-focus="tab-'+id+'"'+(open===id?' aria-current="page"':'')+'><span>'+s.name+'</span></a>';
       }).join('');
   }
   // The 55 icon categories are too many for one list, so eight 중 bundles hold them; a category the table forgets falls into 기타.
@@ -144,8 +144,10 @@
   // A 중 row is one address (key=ids); when it has two or more 소 rows it opens them. Shelves with nothing to split show 중 rows only.
   function menusOf(id) {
     const plain=(key,list)=>list.map(([mid,name])=>({key,id:mid,name,ids:[mid],kids:[]}));
-    if (id==='part') return plain('group',partGroups.map(g=>[g.id,g.name]));
-    if (id==='icon') return iconBundles.map(b=>({key:'icon',id:b.id,name:b.name,ids:b.ids,kids:b.ids.map(g=>({id:g,name:iconGroups.get(g).name}))}));
+    if (id==='icon') return [
+      ...iconBundles.map(b=>({key:'icon',id:b.id,name:b.name,ids:b.ids,kids:b.ids.map(g=>({id:g,name:iconGroups.get(g).name}))})),
+      ...plain('kind',shelfKinds.get(id).filter(kind=>dictionary.some(e=>e.shelf===id&&e.kind===kind&&!e.sub)).map(kind=>[kind,'아이콘 '+kind]))
+    ];
     if (['token','template'].includes(id)) return plain('kind',shelfKinds.get(id).map(k=>[k,k]));
     return data.groups.map(g=>{
       const kids=data.categories.filter(c=>g.codes.includes(c.id)&&inShelf.has(id+'|'+c.id)).map(c=>({id:c.id,name:short(c.name)}));
@@ -155,9 +157,9 @@
   // The 스타일 tab's left menu, shaped like every shelf's: 전체 보기 is the card grid, each row opens one style's page.
   function styleMenu(state) {
     const rows=window.Pattove.catalog.styles.filter(s=>s.id!=='base');
-    const all='<a class="nav-all" href="#/styles" data-focus="nav-all"'+(!state.detail?' aria-current="page"':'')+'>전체 보기</a>';
+    const all='<a class="nav-all ds-tab" href="#/styles" data-focus="nav-all"'+(!state.detail?' aria-current="page"':'')+'>전체 보기</a>';
     return '<div class="nav-subnav" role="group" aria-label="스타일 목록">'+all+'<div class="nav-subnav-scroll">'+rows.map(s=>
-      '<a class="nav-subcategory" href="#/styles?detail='+encodeURIComponent(s.id)+'" data-focus="style-'+escape(s.id)+'" title="'+escape(s.description)+'"'+(state.detail===s.id?' aria-current="true"':'')+'><span>'+escape(s.name)+'</span></a>').join('')+'</div></div>';
+      '<a class="nav-subcategory ds-tab" href="#/styles?detail='+encodeURIComponent(s.id)+'" data-focus="style-'+escape(s.id)+'" title="'+escape(s.description)+'"'+(state.detail===s.id?' aria-current="true"':'')+'><span>'+escape(s.name)+'</span></a>').join('')+'</div></div>';
   }
   function subnavigation(state) {
     if (state.page==='styles') return styleMenu(state);
@@ -173,11 +175,11 @@
     const whole=m=>!built&&same(f[m.key]||[],m.ids);
     const current=m=>split(m)?whole(m):picked(m);
     const link=(m,ids)=>'#/dictionary?'+new URLSearchParams({shelf:id,[m.key]:ids.join(',')})+q;
-    const all='<a class="nav-all" href="#/dictionary?shelf='+id+q+'" data-focus="nav-all"'+(!menus.some(picked)?' aria-current="page"':'')+'>전체 보기</a>';
+    const all='<a class="nav-all ds-tab" href="#/dictionary?shelf='+id+q+'" data-focus="nav-all"'+(!menus.some(picked)?' aria-current="page"':'')+'>전체 보기</a>';
     return '<div class="nav-subnav" role="group" aria-label="'+s.name+' 분류">'+all+'<div class="nav-subnav-scroll">'+menus.map(m=>{
       const open=split(m)&&picked(m), kidsHtml=open?'<div class="nav-minor-group" role="group" aria-label="'+escape(m.name)+' 세부 분류">'+m.kids.map(k=>
-        '<a class="nav-minor" href="'+link(m,[k.id])+'" data-focus="nav-'+id+'-'+escape(k.id)+'" title="'+escape(k.name)+'"'+(pickedKid(m,k)?' aria-current="true"':'')+'><span>'+escape(k.name)+'</span></a>').join('')+'</div>':'';
-      return '<a class="nav-subcategory" href="'+link(m,m.ids)+'" data-focus="nav-'+id+'-'+escape(m.id)+'" title="'+escape(m.name)+'"'+(split(m)?' aria-expanded="'+open+'"':'')+(current(m)?' aria-current="true"':'')+'><span>'+escape(m.name)+'</span>'+(split(m)?icon('chevron-down'):'')+'</a>'+kidsHtml;
+        '<a class="nav-minor ds-tab" href="'+link(m,[k.id])+'" data-focus="nav-'+id+'-'+escape(k.id)+'" title="'+escape(k.name)+'"'+(pickedKid(m,k)?' aria-current="true"':'')+'><span>'+escape(k.name)+'</span></a>').join('')+'</div>':'';
+      return '<a class="nav-subcategory ds-tab" href="'+link(m,m.ids)+'" data-focus="nav-'+id+'-'+escape(m.id)+'" title="'+escape(m.name)+'"'+(split(m)?' aria-expanded="'+open+'"':'')+(current(m)?' aria-current="true"':'')+'><span>'+escape(m.name)+'</span>'+(split(m)?icon('chevron-down'):'')+'</a>'+kidsHtml;
     }).join('')+'</div></div>';
   }
   function shelfItems(state) {
@@ -204,18 +206,19 @@
   }
   function entryCard(state,e) {
     const label=data.layers.find(l=>l.id===e.layer).english;
-    return '<button class="catalog-tile entry-tile" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><span class="record-code">'+label+'</span><h3>'+escape(e.name)+'</h3><span class="tile-foot">'+escape(e.kind||'')+icon('arrow')+'</span></button>';
+    return '<button class="catalog-tile entry-tile ds-surface" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><span class="record-code ds-badge">'+label+'</span><h3>'+escape(e.name)+'</h3>'+window.Pattove.references.label(e.id)+'<span class="tile-foot">'+escape(e.kind||'')+icon('arrow')+'</span></button>';
   }
   // The industry name sits under the dictionary name so a tile is recognised by the word people say (햄버거 메뉴, 페이지네이션).
   const termLine=e=>e.term?'<small class="dict-term">'+escape(e.term)+'</small>':'';
   function dictEntry(state,e) {
-    if (e.art) return '<button class="dict-entry is-illustrated" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" title="'+escape(e.name+(e.term?' · '+e.term:''))+'"><span class="dict-thumb">'+illustration(e)+'</span><strong>'+escape(short(e.name))+'</strong></button>';
-    if (e.implementation) return '<div class="dict-entry is-built"><span class="dict-thumb atlas-preview" inert aria-hidden="true">'+(['template','page'].includes(e.id)?window.Pattove.componentDocs.live(e.id,{},views.previewStyle(state),'thumb-'+e.id):sample(e,views.previewStyle(state),'thumb-'+e.id))+'</span><button class="dict-hit" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><strong>'+escape(e.name)+'</strong>'+termLine(e)+'</button></div>';
+    const idLine=window.Pattove.references.label(e.id);
+    if (e.art) return '<button class="dict-entry ds-surface is-illustrated" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" title="'+escape(e.name+(e.term?' · '+e.term:''))+'"><span class="dict-thumb">'+illustration(e)+'</span><strong>'+escape(short(e.name))+'</strong>'+idLine+'</button>';
+    if (e.implementation) return '<div class="dict-entry ds-surface is-built"><span class="dict-thumb atlas-preview" inert aria-hidden="true">'+(['template','page'].includes(e.id)?window.Pattove.componentDocs.live(e.id,{},views.previewStyle(state),'thumb-'+e.id):sample(e,views.previewStyle(state),'thumb-'+e.id))+'</span><button class="dict-hit" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><strong>'+escape(e.name)+'</strong>'+termLine(e)+idLine+'</button></div>';
     // On a family-sorted shelf the family is the filter, so the tile keeps the whole name (색 — primary), not just 색.
     const kind=e.kind||'기준', label=byName(shelfOf(e))?e.name:short(e.name);
-    return '<button class="dict-entry is-todo" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(kind)+'" title="'+escape(e.name+(e.term?' · '+e.term:''))+'"><span class="dict-thumb">'+todoArt('dict-todo')+'</span><strong>'+escape(label)+'</strong>'+termLine(e)+'</button>';
+    return '<button class="dict-entry ds-surface is-todo" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(kind)+'" title="'+escape(e.name+(e.term?' · '+e.term:''))+'"><span class="dict-thumb">'+todoArt('dict-todo')+'</span><strong>'+escape(label)+'</strong>'+termLine(e)+idLine+'</button>';
   }
-  const empty='<div class="empty-state"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary" data-action="clear-filters" data-focus="empty-clear">전체 보기</button></div>';
+  const empty='<div class="empty-state ds-surface"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary ds-button" data-variant="outline" data-action="clear-filters" data-focus="empty-clear">전체 보기</button></div>';
   // Long shelves are cut into numbered pages. The icon shelf holds thousands of square tiles, so its page is a little longer.
   const pageSize=state=>state.page==='dictionary'&&state.filters.shelf===iconShelf?72:48;
   function paging(state,total) {
@@ -241,10 +244,10 @@
   }
   function pagination(state,{n,pages}) {
     if (pages<2) return '';
-    const step=(to,label,d)=>'<button type="button" class="page-step" data-page-go="'+to+'" data-focus="page-'+label+'" aria-label="'+label+'"'+(to<1||to>pages||to===n?' disabled':'')+'>'+pathIcon(d)+'</button>';
+    const step=(to,label,d)=>'<button type="button" class="page-step ds-button" data-variant="outline" data-size="sm" data-icon-only data-page-go="'+to+'" data-focus="page-'+label+'" aria-label="'+label+'" title="'+label+'"'+(to<1||to>pages||to===n?' disabled':'')+'>'+pathIcon(d)+'</button>';
     const numbers=pageNumbers(n,pages).map(i=>i==='…'?'<span class="page-gap" aria-hidden="true">…</span>'
-      :'<button type="button" class="page-num'+(i===n?' is-current':'')+'" data-page-go="'+i+'" data-focus="page-'+i+'"'+(i===n?' aria-current="page"':'')+' aria-label="'+i+'쪽">'+i+'</button>').join('');
-    const jump=pages>7?'<form class="page-jump" data-page-jump><label><span class="sr-only">이동할 쪽</span><input type="number" inputmode="numeric" min="1" max="'+pages+'" placeholder="'+n+'" data-focus="page-jump"></label><span class="page-total">/ '+pages+'</span><button type="submit" class="secondary" data-focus="page-jump-go">이동</button></form>':'';
+      :'<button type="button" class="page-num ds-button'+(i===n?' is-current':'')+'" data-page-go="'+i+'" data-focus="page-'+i+'"'+(i===n?' aria-current="page"':'')+' data-size="sm" data-variant="'+(i===n?'primary':'outline')+'" aria-label="'+i+'쪽">'+i+'</button>').join('');
+    const jump=pages>7?'<form class="page-jump" data-page-jump><label><span class="sr-only">이동할 쪽</span><input class="ds-input" type="number" inputmode="numeric" min="1" max="'+pages+'" placeholder="'+n+'" data-focus="page-jump"></label><span class="page-total">/ '+pages+'</span><button type="submit" class="secondary ds-button" data-variant="outline" data-size="sm" data-icon-only data-focus="page-jump-go" aria-label="입력한 쪽으로 이동" title="입력한 쪽으로 이동">'+icon('arrow')+'</button></form>':'';
     return '<nav class="pagination" aria-label="쪽 이동">'+
       '<div class="page-list">'+(pages>7?step(1,'처음','m11 17-5-5 5-5m7 10-5-5 5-5'):'')+step(n-1,'이전','m15 6-6 6 6 6')+numbers+'<span class="page-status">'+n+' / '+pages+'</span>'+step(n+1,'다음','m9 6 6 6-6 6')+(pages>7?step(pages,'마지막','m13 17 5-5-5-5M6 17l5-5-5-5'):'')+'</div>'+jump+'</nav>';
   }
@@ -260,9 +263,11 @@
     // A hierarchy component opened from the 토큰 shelf reads like its components-page record.
     const e=state.page==='dictionary'&&entries.get(state.detail)||components.get(state.detail);
     const dict=!!e.category, category=dict?null:data.layers.find(l=>l.id===e.layer);
+    const downloadIcon=pathIcon('M12 3v12m-5-5 5 5 5-5M5 16v4h14v-4');
     // An unbuilt entry says so; an icon then lists the borrowed set pictures it stands in for, with their keys and sources.
-    return '<header class="dialog-header"><div><span class="dialog-category">'+escape(dict?[shelves.get(shelfOf(e))?.name,e.sub?'':short(categoryById.get(e.category)?.name||''),places.get(placeOf.get(e.category))?.name,iconGroups.get(e.sub)?.name].filter(Boolean).join(' · '):category.english)+'</span><h2 id="detail-title" tabindex="-1">'+escape(e.name)+'</h2>'+(e.term?'<p class="detail-term"><span>통용 용어</span>'+escape(e.term)+'</p>':'')+'</div><button class="icon-button" data-action="close-dialog" aria-label="상세 닫기">'+icon('close')+'</button></header>'+
-      (dict?(e.art?'<div class="detail-art illustrated-detail">'+illustration(e,true)+'</div><div class="illustrated-downloads"><p>'+escape(e.usage)+'</p><a class="secondary" href="'+escape(e.art.png)+'" download>PNG 다운로드</a><a class="secondary" href="'+escape(e.art.src)+'" download>WebP 다운로드</a></div>':'<div class="detail-art is-todo">'+todoArt('detail-todo')+'<p>'+(e.glyph?'아직 그리지 않았어요':'아직 견본이 없어요')+'</p></div>')
+    return '<header class="dialog-header"><div><span class="dialog-category">'+escape(dict?[shelves.get(shelfOf(e))?.name,e.sub?'':short(categoryById.get(e.category)?.name||''),places.get(placeOf.get(e.category))?.name,iconGroups.get(e.sub)?.name].filter(Boolean).join(' · '):category.english)+'</span><h2 id="detail-title" tabindex="-1">'+escape(e.name)+'</h2>'+(e.term?'<p class="detail-term"><span>통용 용어</span>'+escape(e.term)+'</p>':'')+window.Pattove.references.control(e.id)+'</div><button class="icon-button ds-button" data-variant="outline" data-icon-only data-action="close-dialog" aria-label="상세 닫기">'+icon('close')+'</button></header>'+
+      (dict?(e.art?'<div class="detail-art illustrated-detail">'+illustration(e,true)+'</div><div class="illustrated-downloads"><p>'+escape(e.usage)+'</p><a class="secondary ds-button" data-variant="outline" href="'+escape(e.art.png)+'" download aria-label="PNG 다운로드" title="PNG 다운로드">'+downloadIcon+'<span>PNG</span></a><a class="secondary ds-button" data-variant="outline" href="'+escape(e.art.src)+'" download aria-label="WebP 다운로드" title="WebP 다운로드">'+downloadIcon+'<span>WebP</span></a></div>':'<div class="detail-art is-todo">'+todoArt('detail-todo')+'<p>'+(e.glyph?'아직 그리지 않았어요':'아직 견본이 없어요')+'</p></div>')
+        +(!e.art&&e.usage?'<div class="record-detail"><p class="record-kind">'+escape(e.id)+' · '+escape(e.kind)+'</p><section><h3>쓰임</h3><p>'+escape(e.usage)+'</p></section></div>':'')
         +(e.glyph?'<section class="glyph-ref"><h3>참고로 빌려 온 그림</h3><ul class="glyph-keys">'+e.glyph.map(g=>'<li>'+glyphArt(g,'glyph-mini')+'<code>'+escape(g)+'</code><span>'+escape(glyphSource(g))+'</span></li>').join('')+'</ul></section>':'')
         :'<div class="record-detail"><p class="record-kind">'+escape(category.name)+'</p><section><h3>대표 항목</h3><p>'+escape(e.examples)+'</p></section></div>');
   }

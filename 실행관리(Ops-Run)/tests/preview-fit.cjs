@@ -79,7 +79,7 @@ async function inspect(page, label) {
       checks.push(name + ' full-size navigation remains interactive');
       for (const width of [320, 768, 955, 1101, 1440]) {
         await page.setViewportSize({ width, height: 900 });
-        for (const route of ['dictionary?shelf=part', 'dictionary?shelf=block', 'dictionary?shelf=template', 'system?detail=bottom-nav', 'system?detail=page']) {
+        for (const route of ['patterns', 'dictionary?shelf=part', 'dictionary?shelf=block', 'dictionary?shelf=template', 'system?detail=bottom-nav', 'system?detail=page']) {
           await page.goto(origin + '#/' + route);
           await inspect(page, name + ' ' + width + ' ' + route);
         }

@@ -43,7 +43,7 @@
     }
   ],
   "meta": {
-    "version": "0.4.0",
+    "version": "0.6.0",
     "lifecycle": "Trial",
     "item": "token-border",
     "purpose": "테두리 두께와 초점 링 간격",

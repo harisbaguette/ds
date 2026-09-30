@@ -28,7 +28,8 @@
   function updateChromeOffset() {
     const bar = $('.app-top');
     const shown = bar.getClientRects().length && getComputedStyle(bar).position === 'sticky';
-    document.documentElement.style.setProperty('--chrome-bottom', `${shown ? Math.ceil(bar.getBoundingClientRect().height + 16) : 16}px`);
+    const gap = getComputedStyle(bar).getPropertyValue('--p-space-md').trim();
+    document.documentElement.style.setProperty('--chrome-bottom', `calc(${shown ? Math.ceil(bar.getBoundingClientRect().height) : 0}px + ${gap})`);
   }
   const list = value => [...new Set(String(value || '').split(',').filter(Boolean))];
   function readFilters(page, params) {
@@ -36,7 +37,7 @@
     return isCollection() ? library.readFilters(page, params) : {};
   }
   const cleared = filters => Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, Array.isArray(value) ? [] : value]));
-  const phone = matchMedia('(max-width: 760px)');
+  const phone = matchMedia(`(max-width: ${getComputedStyle(document.documentElement).getPropertyValue('--p-bp-lg').trim()})`);
   function rememberLocation(focus = document.activeElement?.dataset.focus) {
     history.replaceState({...history.state,pattoveScroll:[scrollX,scrollY],pattoveFocus:focus},'',location.href);
   }
@@ -50,6 +51,7 @@
     if (['dictionary', 'components'].includes(next.page) && next.pageNo > 1) params.set('p', next.pageNo);
     if (next.detail) params.set('detail', next.detail);
     if (next.page === 'system' && next.detail) {
+      if (next.preview) params.set('preview', next.preview);
       if (next.section) params.set('section', next.section);
       const defaults = systemRegistry.normalizeOptions(next.detail, componentDocs.defaults(next.detail));
       for (const [key, value] of Object.entries(systemRegistry.normalizeOptions(next.detail, next.options))) if (value !== defaults[key]) params.set('option-' + key, value);
@@ -67,6 +69,7 @@
     state.section = (params.get('section') || '').slice(0, 250);
     state.pageNo = Math.min(9999, Math.max(1, Number.parseInt(params.get('p'), 10) || 1));
     if (validStyle(params.get('style'))) state.style = params.get('style');
+    if (validStyle(params.get('preview'))) state.preview = params.get('preview');
     state.detail = (state.page === 'styles' ? validStyle(params.get('detail')) && params.get('detail') !== 'base' : state.page === 'system' ? systemRegistry.index.has(params.get('detail')) : isCollection() ? library.validDetail(state.page, params.get('detail')) : state.page === 'patterns' && validPattern(params.get('detail'))) ? params.get('detail') : null;
     if (state.page === 'system' && !state.detail) { state.detail = (systemRegistry.matching(state.query)[0] || systemRegistry.items[0]).id; state.query = ''; }
     state.options = state.page === 'system' && state.detail ? systemRegistry.normalizeOptions(state.detail, { ...componentDocs.defaults(state.detail), ...Object.fromEntries([...params].filter(([key]) => key.startsWith('option-')).map(([key,value]) => [key.slice(7),value])) }) : {};
@@ -113,7 +116,7 @@
     if (!query) { hideSuggestions(); return; }
     suggestions = state.page === 'styles' ? library.searchAll(query) : state.page === 'system' ? systemRegistry.matching(query).filter(i=>library.itemShelf(i)===library.shelfFor(state).id).slice(0, 6) : isCollection() ? library.suggestions(state, query) : catalog.patterns.filter(p => matches(p, query)).slice(0, 6);
     suggestionIndex = -1;
-    $('#search-suggestions').innerHTML = suggestions.length ? suggestions.map((p, i) => `<button type="button" role="option" aria-selected="false" tabindex="-1" class="search-suggestion" id="suggestion-${i}" data-suggest-open="${p.id}"><span>${views.escape(p.name)}</span><small>${views.escape(state.page === 'styles' ? library.suggestionGroup('dictionary',p) : state.page === 'system' ? p.layer : isCollection() ? library.suggestionGroup(state.page, p) : catalog.categories.find(c => c.id === p.category).name)}</small></button>`).join('') : '<p class="search-no-match">일치하는 항목이 없어요</p>';
+    $('#search-suggestions').innerHTML = suggestions.length ? suggestions.map((p, i) => `<button type="button" role="option" aria-selected="false" tabindex="-1" class="search-suggestion ds-tab" id="suggestion-${i}" data-suggest-open="${p.id}"><span>${views.escape(p.name)}</span><small>${views.escape(state.page === 'styles' ? library.suggestionGroup('dictionary',p) : state.page === 'system' ? p.layer : isCollection() ? library.suggestionGroup(state.page, p) : catalog.categories.find(c => c.id === p.category).name)}</small></button>`).join('') : '<p class="search-no-match">일치하는 항목이 없어요</p>';
     $('#search-popover').hidden = false;
     $('#query').setAttribute('aria-expanded', 'true');
     $('#query').removeAttribute('aria-activedescendant');
@@ -135,6 +138,13 @@
     const query = $('#query').value.trim();
     closeSearch();
     setMenu(false, false);
+    // A complete shape ID opens that exact shape, independent of a previously kept choice.
+    if (query.includes('/') && window.Pattove.references.resolve(query)) {
+      rememberLocation();
+      history.pushState({}, '', new URL(window.Pattove.references.payload(query, state).url).hash);
+      renderRoute();
+      return;
+    }
     if (['styles','system'].includes(state.page)) {
       rememberLocation();
       const shelf = state.page === 'system' ? library.shelfFor(state).id : library.searchAll(query)[0]?.shelf || 'part';
@@ -168,7 +178,8 @@
   function render(previousDetail = state.detail, focus = document.activeElement?.dataset.focus) {
     if (state.preview === state.style) state.preview = null;
     document.body.dataset.page = state.page;
-    document.body.className = 'theme-' + state.style;
+    document.body.className = 'ds theme-' + state.style;
+    document.querySelector('meta[name="theme-color"]').content = getComputedStyle(document.body).backgroundColor;
     document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : state.page === 'styles' && state.detail ? views.styleName(state.detail) : state.page === 'patterns' ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
     const oldShelf = $('#primary-nav [aria-current="page"]')?.dataset.focus;
     const subnavScroll = $('.menu-body').scrollTop;
@@ -252,6 +263,11 @@
     const target = event.target.closest('button, a');
     if (!target || target.disabled) return;
     const data = target.dataset;
+    if (data.copyReference) {
+      event.preventDefault();
+      window.Pattove.references.copy(target, state);
+      return;
+    }
     if (target.matches('a') && (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)) return;
     if (target.classList.contains('skip-link')) { event.preventDefault(); $('#main').focus(); return; }
     if (data.styleSelect && validStyle(data.styleSelect)) {
@@ -351,7 +367,7 @@
     $('#query').setAttribute('aria-activedescendant', `suggestion-${suggestionIndex}`);
   });
   document.addEventListener('keydown', event => {
-    if (event.key === '/' && !dialog.open && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest('input,textarea,select,[contenteditable="true"]')) {
+    if (event.key === '/' && !dialog.open && !$('#reference-dialog').open && !event.ctrlKey && !event.metaKey && !event.altKey && !event.target.closest('input,textarea,select,[contenteditable="true"]')) {
       event.preventDefault();
       openSearch();
     } else if (event.key === 'Escape' && document.documentElement.classList.contains('menu-open')) { event.preventDefault(); setMenu(false); }
@@ -390,6 +406,7 @@
   window.addEventListener('hashchange', () => { if (location.hash !== renderedHash && location.hash !== '#main') renderRoute(); });
   window.addEventListener('resize', updateChromeOffset);
   window.visualViewport?.addEventListener('resize', updateChromeOffset);
+  new ResizeObserver(updateChromeOffset).observe($('.app-top'));
   if (!location.hash || location.hash === '#main') history.replaceState({}, '', '#/styles');
   renderRoute();
 })();

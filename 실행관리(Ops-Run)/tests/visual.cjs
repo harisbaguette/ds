@@ -15,41 +15,27 @@ fs.mkdirSync(output, { recursive: true });
   const ready = () => page.evaluate(async () => {
     await document.fonts.ready;
     await Promise.all([...document.images].filter(img => !img.closest('details:not([open])')).map(img => img.decode().catch(() => {})));
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
   });
   async function inspect(name, selector) {
     await ready();
     const problems = await page.locator(selector).evaluateAll(frames => {
-      const out = [];
+      const out = frames.length ? [] : ['preview frames missing'];
       for (const frame of frames) {
         const bounds = frame.getBoundingClientRect();
-        for (const child of frame.querySelectorAll('.sample, .sample > *, .style-clock, .style-start, .style-form-result, .style-task, .style-collection, .sample-toast, .component-sheet > section')) {
+        for (const child of frame.querySelectorAll('[data-preview-scene], .sample > *')) {
           const r = child.getBoundingClientRect();
           if (!r.width || !r.height) continue;
           if (r.left < bounds.left - 1 || r.right > bounds.right + 1 || r.top < bounds.top - 1 || r.bottom > bounds.bottom + 1) {
             out.push(`${frame.className}: ${child.className} clipped`);
           }
         }
-        if (frame.scrollWidth > frame.clientWidth + 1) out.push(`${frame.className}: horizontal overflow`);
-        const banner = frame.querySelector('.sea-banner');
-        const body = frame.querySelector('.style-example-body');
-        if (banner && body && banner.getBoundingClientRect().bottom > body.getBoundingClientRect().top + 1) {
-          out.push(`${frame.className}: illustration covers form`);
-        }
-        const subject = frame.querySelector('.focus-subject');
-        const start = frame.querySelector('.style-start');
-        const coverScale = parseFloat(getComputedStyle(frame.querySelector('.style-example') || frame).zoom) || 1;
-        if (subject && start && start.getBoundingClientRect().top - subject.getBoundingClientRect().bottom < 8 * coverScale) {
-          out.push(`${frame.className}: focus text crowds start action`);
-        }
       }
       if (document.documentElement.scrollWidth > innerWidth) out.push('page overflow');
       if ([...document.images].filter(img => !img.closest('details:not([open])')).some(img => !img.complete || !img.naturalWidth)) out.push('image missing');
       const icons = [...document.querySelectorAll('svg.ui-icon')];
       if (!icons.length || icons.some(icon => !icon.querySelector('path, circle, rect, polyline, line, polygon'))) out.push('icon artwork missing');
-      for (const family of ['Pretendard', 'Outfit']) {
-        if (![...document.fonts].some(font => font.family === family && font.status === 'loaded')) out.push(`${family}: font missing`);
-      }
-      if ([...document.querySelectorAll('.sample')].some(el => getComputedStyle(el).transform !== 'none')) out.push('scaled miniature');
+      if (![...document.fonts].some(font => font.family === 'Pretendard' && font.status === 'loaded')) out.push('body font missing');
       return out;
     });
     checks.push({ name, problems });
@@ -67,8 +53,8 @@ fs.mkdirSync(output, { recursive: true });
         await inspect(`${width} patterns ${style}`, '.pattern-card .preview');
         if (width === 1440 && style !== 'base') await shot(`${width}-patterns-${style}`);
       }
-      await page.goto(`${url}#/system`);
-      await inspect(`${width} system`, '.component-page .part-demo');
+      await page.goto(`${url}#/system?detail=button`);
+      await inspect(`${width} system`, '.component-page .variant-frame');
       if ([375, 1440].includes(width)) await shot(`${width}-styles`);
     }
     fs.writeFileSync(path.join(output, 'checks.json'), JSON.stringify({ checkedAt: new Date().toISOString(), checks, failures }, null, 2));

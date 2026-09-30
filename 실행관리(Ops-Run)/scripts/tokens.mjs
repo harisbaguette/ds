@@ -4,6 +4,7 @@
 // values, and resolves values for distribution.
 import fs from 'node:fs';
 import path from 'node:path';
+import postcss from 'postcss';
 
 export const kinds = ['color', 'gradient', 'typography', 'text', 'weight', 'leading', 'tracking', 'space', 'size', 'container', 'radius', 'border', 'stroke', 'shadow', 'blur', 'opacity', 'aspect', 'motion', 'layer', 'breakpoint'];
 // Korean display name of each kind; the registry names its token item "<label> 토큰".
@@ -22,7 +23,7 @@ const prefixes = {
 const allPrefixes = Object.values(prefixes).flat();
 for (const a of allPrefixes) for (const b of allPrefixes) if (a !== b && b.startsWith(a)) throw new Error(`tokens.mjs: prefix ${b} overlaps ${a}`);
 if (kinds.some(kind => !prefixes[kind] || !kindLabels[kind])) throw new Error('tokens.mjs: every kind needs a prefix and a label');
-const primitiveRead = new RegExp(`var\\((${allPrefixes.join('|')})[\\w-]*`);
+const primitiveRead = new RegExp(`var\\(\\s*(${allPrefixes.join('|')})[\\w-]*`);
 
 // Designed scales. A role is a step of one of these ramps or a use name (control, icon, focus, prose...);
 // the ramps stay short, so each has a step limit. kind = primitives in that kind file, role = roles with that prefix.
@@ -74,8 +75,8 @@ export function maskValue(value) {
     .replace(/"[^"]*"|'[^']*'/g, blank)                                   // strings
     .replace(/url\([^)]*\)/g, blank)                                      // file and data URLs
     .replace(/!important/g, blank)
-    .replace(/var\(--[\w-]+\s*,/g, m => 'var(' + ' '.repeat(m.length - 4)) // a fallback carries a value, keep scanning it
-    .replace(/var\(--[\w-]+\)/g, blank)                                   // a role read carries no raw value
+    .replace(/var\(\s*--[\w-]+\s*,/g, m => 'var(' + ' '.repeat(m.length - 4)) // a fallback carries a value, keep scanning it
+    .replace(/var\(\s*--[\w-]+\s*\)/g, blank)                            // a role read carries no raw value
     .replace(/\*\s*-1(?![\d.])/g, blank)                                  // calc(role * -1) flips a role's sign
     .replace(/#[0-9a-f]{3,8}\b/gi, blank);                                // colours have their own hex check
 }
@@ -95,27 +96,33 @@ export function numbersIn(value) {
   }
   return found;
 }
-// Innermost rule bodies of a stylesheet (at-rule preludes such as @supports are not bodies).
-const ruleBodies = css => [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/\{([^{}]*)\}/g)].map(match => match[1]);
 export function rawValues(css) {
   const found = [];
-  for (const body of ruleBodies(css)) {
-    for (const declaration of body.split(/;(?![^(]*\))/)) {
-      const colon = declaration.indexOf(':');
-      if (colon < 0) continue;
-      const property = declaration.slice(0, colon).trim(), value = declaration.slice(colon + 1);
+  const tree = typeof css === 'string' ? postcss.parse(css) : css;
+  // Walk all declarations, including a parent's declarations beside nested rules.
+  tree.walkDecls(({ prop: property, value }) => {
+      // A zero-only rgb() and a hex color used to bypass the numeric guard.
+      // Ignore SVG data/asset URLs and text content, not color declarations.
+      const literal = value.replace(/url\([^)]*\)|"[^"]*"|'[^']*'/g, '');
+      const color = literal.match(/#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/i);
+      if (color) found.push({ property, token: color[0] });
+      if (property === 'font-family' && !/^\s*(?:var\(\s*--p-[\w-]+\s*\)|inherit|initial|unset|revert)\s*$/i.test(value)) found.push({ property, token: value.trim() });
       for (const number of numbersIn(value)) if (!allowedToken(property, number.token, number)) found.push({ property, token: number.token });
       if (/^(border|outline)(-[a-z-]+)?$/.test(property) && !/radius|width|offset|color|image|collapse|spacing/.test(property)) {
         const keyword = maskValue(value).match(styleKeywords);
         if (keyword) found.push({ property, token: keyword[1] });
       }
-    }
-  }
+  });
   return found;
 }
 // px widths written in @media / @container preludes (custom properties cannot be read there).
-const queryWidths = css => [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/@(media|container)\b([^{]*)\{/g)]
-  .flatMap(([, , prelude]) => [...prelude.matchAll(/(\d*\.?\d+)(px|em|rem)\b/g)].map(([token, number, unit]) => ({ token, px: unit === 'px' ? Number(number) : NaN })));
+const queryWidths = tree => {
+  const widths = [];
+  tree.walkAtRules(/^(media|container)$/i, rule => {
+    for (const [token, number, unit] of rule.params.matchAll(/(\d*\.?\d+)(px|em|rem)\b/g)) widths.push({ token, px: unit === 'px' ? Number(number) : NaN });
+  });
+  return widths;
+};
 
 const declarations = (text, file) => {
   const result = {};
@@ -209,18 +216,22 @@ export function loadTokens(root) {
   // --p-* roles only and writes no raw values: a primitive read, an unknown role, a bare number or a
   // query width that is not a registered breakpoint stops the build.
   const kindsIn = (css, where) => {
-    const raw = css.match(primitiveRead);
-    if (raw) throw new Error(`${where}: reads primitive ${raw[1]}…; parts read --p-* roles only`);
-    const values = rawValues(css);
+    const tree = postcss.parse(css, { from: where });
+    const values = rawValues(tree);
     if (values.length) throw new Error(`${where}: ${values.length} raw value(s), use a --p-* role: ${values.slice(0, 8).map(v => `${v.property}:${v.token}`).join(', ')}`);
-    const widths = queryWidths(css);
+    const widths = queryWidths(tree);
     const stray = widths.filter(width => !breakpoints.has(width.px));
     if (stray.length) throw new Error(`${where}: query width ${stray.map(w => w.token).join(', ')} is not a breakpoint; register it in src/tokens/primitive/breakpoint.css (${[...breakpoints].join('/')})`);
     const found = new Set(widths.length ? ['breakpoint'] : []);
-    for (const [, name] of css.matchAll(/var\((--p-[\w-]+)/g)) {
-      if (!(name in main)) throw new Error(`${where}: ${name} is not a semantic role`);
-      found.add(roleKind[name]);
-    }
+    tree.walkDecls(declaration => {
+      const value = declaration.value.replace(/url\([^)]*\)|"[^"]*"|'[^']*'/g, '');
+      const raw = value.match(primitiveRead);
+      if (raw) throw new Error(`${where}: reads primitive ${raw[1]}…; parts read --p-* roles only`);
+      for (const [, name] of value.matchAll(/var\(\s*(--p-[\w-]+)/g)) {
+        if (!(name in main)) throw new Error(`${where}: ${name} is not a semantic role`);
+        found.add(roleKind[name]);
+      }
+    });
     return closure(found);
   };
   // Semantic roles of a style (optionally one kind set) for installs that ship without primitives.

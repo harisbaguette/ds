@@ -212,6 +212,10 @@
     return `<span class="ds-token-row ${className}">${names.map(mark).join('')}</span>`;
   }
   function renderItem(id, prefix = uid('example'), options = {}) {
+    if (id === 'data-table') return window.Pattove.admin.renderTable(prefix, options);
+    if (id === 'record-editor') return window.Pattove.admin.renderEditorDemo(prefix);
+    if (id === 'admin-shell') return window.Pattove.admin.renderShell(prefix, {body:'<p>본문과 작업 블록을 이 자리에 놓습니다.</p>',...options});
+    if (id === 'admin-page') return window.Pattove.admin.renderPage(prefix, options);
     const off = options.state === 'disabled';
     const picked = options.state !== 'unchecked';
     const labelled = (inputId, label, control) => `<div class="ds-field">${fieldLabel(inputId, label)}${control}</div>`;

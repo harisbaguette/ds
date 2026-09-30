@@ -9,7 +9,7 @@
       "path": "design/styles/main/typography.css",
       "type": "registry:file",
       "target": "~/design/styles/main/typography.css",
-      "content": ".ds[data-style=\"main\"]{--p-font:Pretendard, sans-serif;--p-display-font:Outfit, Pretendard, sans-serif;--p-type-body:var(--p-text-md)/var(--p-leading-normal) var(--p-font);--p-type-display:var(--p-weight-semibold) var(--p-text-display) var(--p-display-font);--p-type-figure:var(--p-weight-bold) var(--p-text-md)/var(--p-leading-none) var(--p-display-font);--p-type-stat:var(--p-weight-bold) var(--p-text-lg)/var(--p-leading-tight) var(--p-display-font);}\n"
+      "content": ".ds[data-style=\"main\"]{--p-font:Pretendard, sans-serif;--p-mono-font:ui-monospace, SFMono-Regular, Consolas, monospace;--p-display-font:Outfit, Pretendard, sans-serif;--p-type-body:var(--p-text-md)/var(--p-leading-normal) var(--p-font);--p-type-display:var(--p-weight-semibold) var(--p-text-display) var(--p-display-font);--p-type-figure:var(--p-weight-bold) var(--p-text-md)/var(--p-leading-none) var(--p-display-font);--p-type-stat:var(--p-weight-bold) var(--p-text-lg)/var(--p-leading-tight) var(--p-display-font);}\n"
     },
     {
       "path": "design/styles/main/text.css",
@@ -43,7 +43,7 @@
     }
   ],
   "meta": {
-    "version": "0.4.0",
+    "version": "0.6.0",
     "lifecycle": "Trial",
     "item": "token-text",
     "purpose": "글자 크기 단계",

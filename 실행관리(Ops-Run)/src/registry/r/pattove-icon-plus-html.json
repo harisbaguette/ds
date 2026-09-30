@@ -9,11 +9,11 @@
       "path": "design/icons/plus.svg",
       "type": "registry:file",
       "target": "~/design/icons/plus.svg",
-      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg>\r\n"
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 5v14M5 12h14\"/></svg>\n"
     }
   ],
   "meta": {
-    "version": "0.4.0",
+    "version": "0.6.0",
     "lifecycle": "Trial",
     "item": "icon",
     "icon": "plus",

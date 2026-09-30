@@ -1,7 +1,15 @@
 {
-  "version": "0.4.0",
-  "revision": "26882af3d3332e9d24e3b733ce834c24d96cf06568a0efce1c95db997fc12d85",
+  "version": "0.6.0",
+  "revision": "24b661bb7a812d1ae4acb3aeb48ef6b87872489825cf75d21b61467f74832cca",
   "sources": [
+    "src/system/react/admin-records.jsx",
+    "src/system/react/table-toolbar.jsx",
+    "src/system/react/table-pagination.jsx",
+    "src/system/admin.js",
+    "src/system/react/data-table.jsx",
+    "src/system/react/record-editor.jsx",
+    "src/system/react/admin-shell.jsx",
+    "src/system/react/admin-page.jsx",
     "src/system/parts.js",
     "src/system/parts.css",
     "src/system/behaviors.js",
@@ -46,8 +54,7 @@
     "src/tokens/semantic/aspect.css",
     "src/tokens/semantic/motion.css",
     "src/tokens/semantic/layer.css",
-    "src/tokens/semantic/breakpoint.css",
-    "src/styles/themes.css"
+    "src/tokens/semantic/breakpoint.css"
   ],
   "sections": [
     {
@@ -103,6 +110,315 @@
   ],
   "items": [
     {
+      "id": "data-table",
+      "browse": {
+        "shelf": "block",
+        "kind": "모듈",
+        "code": "DAT",
+        "fit": true
+      },
+      "name": "데이터 표",
+      "section": "composition",
+      "layer": "Module",
+      "keywords": "표 검색 필터 정렬 페이지 선택 table filter sort",
+      "deps": [
+        "button",
+        "field",
+        "checkbox",
+        "token-color",
+        "token-space",
+        "token-text",
+        "token-weight",
+        "token-border",
+        "token-radius",
+        "token-size"
+      ],
+      "entry": "DAT-05",
+      "behavior": true,
+      "english": "Data Table",
+      "version": "0.6.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "자료를 검색·필터·정렬하고 쪽 단위로 선택",
+      "compatibility": "records의 id는 유일하고 안정적이어야 함. 검색·필터 변경 시 첫 쪽과 선택을 초기화. React는 TanStack React Table, HTML은 동봉한 Table Core 필요. Toolbar·Pagination은 table 인스턴스를 받아 따로 배치 가능.",
+      "inputs": [
+        "records",
+        "statuses",
+        "titleLabel",
+        "ownerLabel",
+        "searchLabel",
+        "onEdit",
+        "onSelectionChange",
+        "loading",
+        "error",
+        "onRetry",
+        "actions"
+      ],
+      "events": [
+        "onEdit(record)",
+        "onSelectionChange(records)"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "data-table"
+      ],
+      "source": "src/system/admin.js",
+      "reactSource": "src/system/react/data-table.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 280,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/admin.cjs",
+        "evidence": "test-results/admin/results.json"
+      },
+      "provenance": {
+        "repository": "https://github.com/satnaing/shadcn-admin",
+        "commit": "e16c87f213a5ba5e45964e9b67c792105ec74d26",
+        "license": "MIT",
+        "relationship": "adapted",
+        "record": "src/system/upstream/shadcn-admin/provenance.json"
+      },
+      "publicParts": [
+        {
+          "name": "TableToolbar",
+          "source": "src/system/react/table-toolbar.jsx",
+          "requires": "TanStack table instance"
+        },
+        {
+          "name": "TablePagination",
+          "source": "src/system/react/table-pagination.jsx",
+          "requires": "TanStack table instance"
+        }
+      ]
+    },
+    {
+      "id": "record-editor",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "ACT",
+        "fit": true
+      },
+      "name": "자료 편집",
+      "section": "fields",
+      "layer": "Molecule",
+      "keywords": "대화상자 편집 저장 오류 복구 dialog editor",
+      "deps": [
+        "button",
+        "field",
+        "token-color",
+        "token-space",
+        "token-border",
+        "token-radius",
+        "token-shadow",
+        "token-container",
+        "token-text"
+      ],
+      "entry": "ACT-07",
+      "behavior": true,
+      "english": "Record Editor",
+      "version": "0.6.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "상세 확인과 비동기 저장·실패 복구",
+      "compatibility": "저장 중 중복 요청과 닫기를 막음. 실패하면 입력 유지. 변경 취소는 재확인. React는 record·onSave·onClose, HTML은 Pattove.admin.connectEditor(root, options).open(record, trigger)로 단독 사용. null이나 잘못된 저장 응답은 실패로 처리.",
+      "inputs": [
+        "record",
+        "statuses",
+        "titleLabel",
+        "ownerLabel",
+        "onSave",
+        "onClose"
+      ],
+      "events": [
+        "onSave(record)",
+        "onClose()"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "record-editor"
+      ],
+      "source": "src/system/admin.js",
+      "reactSource": "src/system/react/record-editor.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 240,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/admin.cjs",
+        "evidence": "test-results/admin/results.json"
+      },
+      "provenance": {
+        "repository": "https://github.com/satnaing/shadcn-admin",
+        "commit": "e16c87f213a5ba5e45964e9b67c792105ec74d26",
+        "license": "MIT",
+        "relationship": "reference",
+        "record": "src/system/upstream/shadcn-admin/provenance.json"
+      }
+    },
+    {
+      "id": "admin-shell",
+      "name": "관리 화면 틀",
+      "section": "page",
+      "layer": "Template",
+      "browse": {
+        "shelf": "template",
+        "kind": "템플릿",
+        "code": "LAY",
+        "fit": true
+      },
+      "keywords": "관리 화면 틀 사이드바 admin shell layout",
+      "entry": "LAY-03",
+      "deps": [
+        "token-breakpoint",
+        "token-space",
+        "token-size",
+        "token-radius",
+        "token-color",
+        "token-text"
+      ],
+      "english": "Admin Layout",
+      "version": "0.6.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "관리 메뉴와 본문 배치",
+      "compatibility": "navigation은 실제 목적지와 label을 제공. 작은 화면에서는 메뉴를 본문 위로 이동. 인증이나 권한 검사는 소비 프로젝트가 연결.",
+      "inputs": [
+        "title",
+        "navigation",
+        "children",
+        "notice"
+      ],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "admin-shell"
+      ],
+      "source": "src/system/admin.js",
+      "reactSource": "src/system/react/admin-shell.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 280,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/admin.cjs",
+        "evidence": "test-results/admin/results.json"
+      },
+      "provenance": {
+        "repository": "https://github.com/satnaing/shadcn-admin",
+        "commit": "e16c87f213a5ba5e45964e9b67c792105ec74d26",
+        "license": "MIT",
+        "relationship": "reference",
+        "record": "src/system/upstream/shadcn-admin/provenance.json"
+      }
+    },
+    {
+      "id": "admin-page",
+      "name": "자료 관리 화면",
+      "section": "page",
+      "layer": "Page",
+      "browse": {
+        "shelf": "template",
+        "kind": "페이지",
+        "code": "ADM",
+        "fit": true
+      },
+      "keywords": "관리자 자료 목록 상세 편집 저장 실패 재시도 admin CRUD",
+      "entry": "ADM-01",
+      "deps": [
+        "admin-shell",
+        "data-table",
+        "record-editor",
+        "token-color",
+        "token-text"
+      ],
+      "behavior": true,
+      "english": "Admin Page",
+      "version": "0.6.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "목록·상세·편집·저장·복귀 흐름",
+      "compatibility": "initialRecords로 초기 콘텐츠를 제공. onSave는 Promise 또는 저장된 record를 반환하며 실패 시 reject. 연결하지 않은 예제는 화면 안에서만 유지. loadRecords({signal})로 목록 읽기와 새로고침·실패 재시도를 연결. 늦은 응답은 폐기. initialRecords는 초기값이며 편집 중 목록 교체 금지.",
+      "inputs": [
+        "title",
+        "initialRecords",
+        "statuses",
+        "titleLabel",
+        "ownerLabel",
+        "searchLabel",
+        "navigation",
+        "onSave",
+        "loadRecords"
+      ],
+      "events": [
+        "onSave(record)",
+        "pattove:admin-saved"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "admin-page"
+      ],
+      "source": "src/system/admin.js",
+      "reactSource": "src/system/react/admin-page.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 280,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/admin.cjs",
+        "evidence": "test-results/admin/results.json"
+      },
+      "provenance": {
+        "repository": "https://github.com/satnaing/shadcn-admin",
+        "commit": "e16c87f213a5ba5e45964e9b67c792105ec74d26",
+        "license": "MIT",
+        "relationship": "reference",
+        "record": "src/system/upstream/shadcn-admin/provenance.json"
+      }
+    },
+    {
       "id": "token-color",
       "browse": {
         "shelf": "token",
@@ -115,7 +431,7 @@
       "keywords": "색 색상 컬러 배경 글자색 강조 color",
       "deps": [],
       "entry": "TOK-01",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -162,7 +478,7 @@
       "deps": [
         "token-color"
       ],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -212,7 +528,7 @@
         "token-leading"
       ],
       "entry": "TOK-62",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -257,7 +573,7 @@
       "layer": "Token",
       "keywords": "글자 크기 본문 제목 크기 font-size text",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -302,7 +618,7 @@
       "layer": "Token",
       "keywords": "굵기 글자 두께 font-weight weight",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -347,7 +663,7 @@
       "layer": "Token",
       "keywords": "줄 간격 행간 line-height leading",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -392,7 +708,7 @@
       "layer": "Token",
       "keywords": "자간 글자 사이 letter-spacing tracking",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -438,7 +754,7 @@
       "keywords": "간격 여백 거리 spacing space",
       "deps": [],
       "entry": "TOK-76",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -483,7 +799,7 @@
       "layer": "Token",
       "keywords": "크기 너비 높이 아이콘 조작 크기 size",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -528,7 +844,7 @@
       "layer": "Token",
       "keywords": "너비 폭 컨테이너 읽기 폭 container measure",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -574,7 +890,7 @@
       "keywords": "모서리 둥글기 반경 radius",
       "deps": [],
       "entry": "TOK-91",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -619,7 +935,7 @@
       "layer": "Token",
       "keywords": "테두리 선 두께 초점 링 border outline",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -664,7 +980,7 @@
       "layer": "Token",
       "keywords": "선 모양 점선 파선 아이콘 선 굵기 stroke dashed dotted",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -710,7 +1026,7 @@
       "keywords": "그림자 입체 층 깊이 shadow elevation",
       "deps": [],
       "entry": "TOK-95",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -755,7 +1071,7 @@
       "layer": "Token",
       "keywords": "흐림 유리 블러 backdrop blur",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -800,7 +1116,7 @@
       "layer": "Token",
       "keywords": "불투명도 투명도 흐리게 opacity",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -845,7 +1161,7 @@
       "layer": "Token",
       "keywords": "비율 가로세로 비 aspect ratio",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -891,7 +1207,7 @@
       "keywords": "움직임 시간 전환 애니메이션 가속 motion duration easing",
       "deps": [],
       "entry": "TOK-113",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -936,7 +1252,7 @@
       "layer": "Token",
       "keywords": "쌓임 순서 겹침 z-index layer",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -981,7 +1297,7 @@
       "layer": "Token",
       "keywords": "화면 폭 기준 반응형 분기 breakpoint media query",
       "deps": [],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1027,7 +1343,7 @@
       "keywords": "검색 닫기 화살표 svg icon",
       "deps": [],
       "english": "Icon",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1209,7 +1525,7 @@
         "token-size"
       ],
       "english": "Label",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1284,7 +1600,7 @@
         "token-border"
       ],
       "english": "Divider",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1338,7 +1654,7 @@
         "token-border"
       ],
       "english": "Divider with title",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1392,7 +1708,7 @@
         "token-radius"
       ],
       "english": "Status light",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1448,7 +1764,7 @@
       ],
       "entry": "SOC-01",
       "english": "Avatar",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1512,7 +1828,7 @@
       ],
       "entry": "ACT-01",
       "english": "Button",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1699,7 +2015,7 @@
       ],
       "entry": "ATM-08",
       "english": "Icon button",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1878,7 +2194,7 @@
       ],
       "entry": "NAV-07",
       "english": "Segmented button",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1957,7 +2273,7 @@
         "token-opacity"
       ],
       "english": "Text field",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2101,7 +2417,7 @@
       ],
       "entry": "INP-92",
       "english": "Text field with clear button",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2185,7 +2501,7 @@
       ],
       "entry": "INP-34",
       "english": "Prefix / suffix",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2270,7 +2586,7 @@
       ],
       "entry": "INP-10",
       "english": "Stepper",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2354,7 +2670,7 @@
       ],
       "entry": "INP-15",
       "english": "Password input",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2435,7 +2751,7 @@
       ],
       "entry": "INP-47",
       "english": "Text input",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2545,7 +2861,7 @@
       ],
       "entry": "INP-11",
       "english": "Date range input",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2641,7 +2957,7 @@
       ],
       "entry": "ATM-89",
       "english": "Search field",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2705,7 +3021,7 @@
       ],
       "behavior": true,
       "english": "Checkbox",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2794,7 +3110,7 @@
       ],
       "behavior": true,
       "english": "Radio button",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2878,7 +3194,7 @@
       ],
       "behavior": true,
       "english": "Switch",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2957,7 +3273,7 @@
       ],
       "entry": "INP-77",
       "english": "Multi-select tile",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3040,7 +3356,7 @@
       ],
       "entry": "INP-78",
       "english": "Single-select tile",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3123,7 +3439,7 @@
       ],
       "entry": "ACT-36",
       "english": "Filter chip",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3209,7 +3525,7 @@
       ],
       "entry": "STA-01",
       "english": "Badge",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3328,7 +3644,7 @@
       ],
       "entry": "NAV-25",
       "english": "Counter badge",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3408,7 +3724,7 @@
       ],
       "entry": "NAV-06",
       "english": "Tabs",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3542,7 +3858,7 @@
       ],
       "entry": "NAV-05",
       "english": "Tab bar",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3672,7 +3988,7 @@
       ],
       "entry": "STA-02",
       "english": "Inline notification",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3731,7 +4047,7 @@
       ],
       "entry": "STA-03",
       "english": "Snackbar",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3792,7 +4108,7 @@
         "token-shadow"
       ],
       "english": "Progress bar",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3855,7 +4171,7 @@
       ],
       "entry": "STA-49",
       "english": "Circular progress indicator",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3911,7 +4227,7 @@
       ],
       "entry": "ATM-123",
       "english": "Step indicator",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3975,7 +4291,7 @@
       ],
       "entry": "LAY-15",
       "english": "Card",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4108,7 +4424,7 @@
         "token-aspect"
       ],
       "english": "Horizontal card",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4168,7 +4484,7 @@
         "token-opacity"
       ],
       "english": "Card with cover",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4229,7 +4545,7 @@
       ],
       "entry": "ACT-03",
       "english": "Button group",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4285,7 +4601,7 @@
         "token-space"
       ],
       "english": "Confirm / dismiss buttons",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4343,7 +4659,7 @@
       ],
       "entry": "ACT-49",
       "english": "Fixed bottom CTA",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4398,7 +4714,7 @@
       ],
       "entry": "INP-67",
       "english": "Side label",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4458,7 +4774,7 @@
       ],
       "entry": "ATM-153",
       "english": "Checkbox group",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4533,7 +4849,7 @@
         "token-border"
       ],
       "english": "Check all",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4616,7 +4932,7 @@
         "token-border"
       ],
       "english": "Radio group",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4692,7 +5008,7 @@
       ],
       "entry": "ATM-203",
       "english": "Switch in a list row",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4765,7 +5081,7 @@
       ],
       "entry": "DAT-01",
       "behavior": true,
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4822,7 +5138,7 @@
       ],
       "entry": "ATM-120",
       "english": "Filter chips",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4881,7 +5197,7 @@
       ],
       "entry": "LAY-49",
       "english": "Feed",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4939,7 +5255,7 @@
         "token-border"
       ],
       "entry": "LAY-27",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4999,7 +5315,7 @@
         "token-space"
       ],
       "entry": "LAY-12",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5064,7 +5380,7 @@
       "entry": "INP-69",
       "behavior": true,
       "english": "User picker",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5125,7 +5441,7 @@
       ],
       "entry": "STA-06",
       "behavior": true,
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5186,7 +5502,7 @@
         "token-border"
       ],
       "entry": "DAT-16",
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5247,7 +5563,7 @@
         "token-border",
         "token-stroke"
       ],
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5382,7 +5698,7 @@
         "token-border"
       ],
       "behavior": true,
-      "version": "0.4.0",
+      "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5510,6 +5826,22 @@
         "입력 필드와 상태 필터 뒤에 검색 동작을 둡니다.",
         "결과 개수는 바뀔 때마다 알리고, 결과가 없으면 전체 보기로 복구합니다.",
         "제목이 길어져도 카드의 행동은 같은 위치에 둡니다."
+      ]
+    },
+    {
+      "id": "admin-edit-save",
+      "name": "관리 목록·편집·저장·복구",
+      "layer": "Pattern",
+      "items": [
+        "admin-shell",
+        "data-table",
+        "record-editor",
+        "admin-page"
+      ],
+      "rules": [
+        "검색과 필터를 바꾸면 첫 쪽으로 돌아갑니다.",
+        "저장이 실패하면 입력을 유지하고 다시 시도합니다.",
+        "저장 결과가 확인된 뒤 목록을 갱신하고 원래 위치로 초점을 돌립니다."
       ]
     }
   ]

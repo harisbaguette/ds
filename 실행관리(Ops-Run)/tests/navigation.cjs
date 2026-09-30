@@ -38,7 +38,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       check(engineName + ' 전체 미리보기에서 모든 갈래의 항목 검색', await page.locator('[data-focus="tab-token"][aria-current="page"]').count()===1);
       await goto('dictionary');
       assert.deepEqual((await page.locator('.nav-shelf-link').allTextContents()).map(t=>t.trim()), ['스타일','토큰','아이콘','부품','블록','템플릿']);
-      check(engineName + ' 왼쪽 192px에는 선택한 부품의 여섯 분류만 표시', await page.locator('#app-menu').evaluate(e=>e.getBoundingClientRect().width)===192 && await page.locator('#secondary-nav .nav-subnav').count()===1 && await page.locator('#app-menu .nav-shelf-link').count()===0 && JSON.stringify(await page.locator('.nav-subcategory').allTextContents())===JSON.stringify(['버튼','입력','선택','탐색','표시','피드백']));
+      check(engineName + ' 왼쪽 192px에 사전 전체의 부품 분류 표시', await page.locator('#app-menu').evaluate(e=>e.getBoundingClientRect().width)===192 && await page.locator('#secondary-nav .nav-subnav').count()===1 && await page.locator('#app-menu .nav-shelf-link').count()===0 && JSON.stringify(await page.locator('.nav-subcategory').allTextContents())===JSON.stringify(await page.evaluate(()=>Pattove.library.groups.map(g=>g.name))));
       const menuBox = () => page.evaluate(() => { const m = document.querySelector('#app-menu').getBoundingClientRect(); return [Math.round(m.width), Math.round(document.querySelector('main').getBoundingClientRect().left)]; });
       const widths = [];
       for (const hash of ['styles', 'dictionary?shelf=token', 'dictionary?shelf=icon', 'dictionary?shelf=part', 'dictionary?shelf=block', 'dictionary?shelf=template']) { await goto(hash); widths.push((await menuBox()).join('/')); }
@@ -48,16 +48,18 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       check(engineName + ' 접으면 모든 탭에서 좁은 띠(56px)로 유지되고 눌러서 다시 폄', (await menuBox()).join('/') === '56/56' && await page.locator('#secondary-nav').isHidden() && await page.locator('#rail-toggle[aria-expanded="false"]').count() === 1 && (await page.locator('#rail-toggle').click(), (await menuBox()).join('/')) === '192/192');
       await goto('dictionary');
       check(engineName + ' 사전 주소는 기존 부품 목록, 주 메뉴 5개 모두 보임', await page.locator('#page-title').innerText()==='부품' && await visibleNav());
-      await page.locator('[data-focus="nav-part-selection"]').click();
-      assert.deepEqual(await page.locator('[data-library-entry]').evaluateAll(es=>es.map(e=>e.dataset.libraryEntry)),['checkbox','radio','switch','check-card','radio-card','filter-chip']);
+      await page.locator('[data-focus="nav-part-interaction"]').click();
+      await page.locator('[data-focus="nav-part-INP"]').click();
+      check(engineName + ' 입력 분류에 구현 부품과 미구현 사전 항목을 함께 표시', await page.locator('.dict-entry.is-built').count()>0 && await page.locator('.dict-entry.is-todo').count()>0);
       await page.reload();
-      check(engineName + ' 선택 분류 새로고침 유지', await page.locator('.nav-subcategory[aria-current="true"]').innerText()==='선택');
+      check(engineName + ' 입력 분류 새로고침 유지', await page.locator('[data-focus="nav-part-INP"][aria-current="true"]').count()===1);
       await page.locator('[data-focus="nav-all"]').click();
-      check(engineName + ' 전체 보기로 하위 분류 해제', !page.url().includes('group=') && await page.locator('[data-focus="nav-all"][aria-current="page"]').count()===1 && await page.locator('[data-library-entry="button"]').count()===1);
-      await page.locator('[data-focus="nav-part-selection"]').click();
+      check(engineName + ' 전체 보기로 하위 분류 해제', !page.url().includes('code=') && await page.locator('[data-focus="nav-all"][aria-current="page"]').count()===1 && await page.locator('[data-library-entry="button"]').count()===1);
+      await page.locator('[data-focus="nav-part-interaction"]').click();
+      await page.locator('[data-focus="nav-part-INP"]').click();
       await page.locator('[data-library-entry="checkbox"]').click();
-      check(engineName + ' 상세에서도 선택 분류 유지', await page.locator('.nav-subcategory[aria-current="true"]').innerText()==='선택');
-      await page.locator('[data-action="back-to-list"]').click(); await page.waitForURL(/group=selection/);
+      check(engineName + ' 상세에서도 입력 분류 유지', await page.locator('[data-focus="nav-part-INP"][aria-current="true"]').count()===1);
+      await page.locator('[data-action="back-to-list"]').click(); await page.waitForURL(/code=INP/);
       check(engineName + ' 목록 복귀 시 하위 분류와 초점 복원', await page.locator('[data-library-entry="checkbox"]').evaluate(e=>e===document.activeElement));
       await goto('dictionary');
       check(engineName + ' 필터 단추·필터 칸·분류 찾기 칸 없음', await page.locator('#filter-toggle, #filter-bar, #active-filters, .facet-search, [data-filter]').count() === 0);
@@ -70,7 +72,8 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
           valid:r.items.every(i=>d.shelves.some(s=>s.id===i.browse.shelf)&&d.categories.some(c=>c.id===i.browse.code)),
           tokens:items('shelf=token').filter(i=>i.implementation).map(i=>i.id),
           parts:items('shelf=part').filter(i=>i.implementation).map(i=>i.id),
-          grouped:['buttons','fields','selection','navigation','display','feedback'].flatMap(group=>items('shelf=part&group='+group).map(i=>i.id)),
+          allParts:items('shelf=part').map(i=>i.id),
+          grouped:[...document.querySelectorAll('#secondary-nav .nav-subcategory')].flatMap(a=>items(a.getAttribute('href').split('?')[1]).map(i=>i.id)),
           filtered:items('shelf=part&kind='+encodeURIComponent('부품')).filter(i=>i.implementation).map(i=>i.id),
           input:items('shelf=part&code=INP').filter(i=>i.implementation).map(i=>i.id)
         };
@@ -78,7 +81,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       check(engineName + ' 모든 구현의 소속은 유효하고 정확히 한 곳에 존재', data.valid && data.ids.length===data.registered && new Set(data.ids).size===data.registered);
       check(engineName + ' 토큰 20종 모두 토큰, 부품에 토큰 없음', data.tokens.length===20 && data.tokens.every(id=>id.startsWith('token-')) && data.parts.every(id=>!id.startsWith('token-')));
       assert.deepEqual(data.parts, data.filtered);
-      check(engineName + ' 여섯 하위 분류가 구현 부품을 누락·중복 없이 포함', data.grouped.length===data.parts.length && new Set(data.grouped).size===data.parts.length && data.parts.every(id=>data.grouped.includes(id)));
+      check(engineName + ' 부품 분류가 미구현까지 전체 항목을 누락·중복 없이 포함', data.grouped.length===data.allParts.length && new Set(data.grouped).size===data.allParts.length && data.allParts.every(id=>data.grouped.includes(id)));
       check(engineName + ' 사전 연결 없는 입력 부품도 입력 분류에서 찾음', ['input','field','checkbox','radio','switch'].every(id=>data.input.includes(id)));
       await shot('parts');
       await goto('dictionary?shelf=icon&icon=navigation');
@@ -131,7 +134,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       check(engineName + ' 아이콘 부품은 부품 메뉴에 소속', await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1 && (await page.locator('#detail-title').innerText()).startsWith('아이콘 ('));
       await goto('dictionary?shelf=icon');
       const topBefore = await page.locator('#primary-nav').boundingBox();
-      check(engineName + ' 아이콘 중메뉴 여덟 개, 소메뉴는 클릭 전에는 접혀 있음', await page.locator('#secondary-nav .nav-subcategory').count()===8 && await page.locator('#secondary-nav .nav-minor').count()===0 && await page.locator('#secondary-nav .nav-subcategory[aria-expanded="false"]').count()===8);
+      check(engineName + ' 아이콘 중메뉴 여덟 개와 공통 기준, 소메뉴는 클릭 전에는 접혀 있음', await page.locator('#secondary-nav .nav-subcategory').count()===9 && await page.locator('[data-focus="nav-icon-기준"]').innerText()==='아이콘 기준' && await page.locator('#secondary-nav .nav-minor').count()===0 && await page.locator('#secondary-nav .nav-subcategory[aria-expanded="false"]').count()===8);
       await page.locator('#secondary-nav .nav-subcategory').first().click();
       check(engineName + ' 중메뉴를 누르면 그 아래에 소메뉴가 펼쳐지고 묶음 전체를 보여줌', await page.locator('#secondary-nav .nav-subcategory').first().getAttribute('aria-current')==='true' && await page.locator('#secondary-nav .nav-minor').count()===7 && page.url().includes('icon=') && await page.locator('.pagination, .dict-entry').first().isVisible());
       await page.locator('#secondary-nav .nav-minor').first().click();
@@ -184,11 +187,11 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
         }
         if (width<=760) {
           await goto('dictionary'); await page.locator('#menu-toggle').click();
-          check(`${engineName} ${width} 모바일 서랍에는 선택한 분류만 표시`, await page.locator('#secondary-nav .nav-subcategory').count()===6 && await page.locator('#main').evaluate(e=>e.inert) && await page.locator('.app-top').evaluate(e=>e.inert));
+          check(`${engineName} ${width} 모바일 서랍에도 전체 부품 분류 표시`, await page.locator('#secondary-nav .nav-subcategory').count()===await page.evaluate(()=>Pattove.library.groups.length) && await page.locator('#main').evaluate(e=>e.inert) && await page.locator('.app-top').evaluate(e=>e.inert));
           await page.locator('#secondary-nav a').last().focus(); await page.keyboard.press('Tab');
           check(`${engineName} ${width} 메뉴 안에서 키보드 초점 유지`, await page.evaluate(()=>!!document.activeElement.closest('#app-menu')));
-          await page.locator('[data-focus="nav-part-selection"]').click();
-          check(`${engineName} ${width} 분류 이동 후 서랍 닫힘`, page.url().includes('group=selection') && !await page.locator('#main').evaluate(e=>e.inert) && !await page.locator('.app-top').evaluate(e=>e.inert));
+          await page.locator('[data-focus="nav-part-interaction"]').click();
+          check(`${engineName} ${width} 분류 이동 후 서랍 닫힘`, page.url().includes('code=') && !await page.locator('#main').evaluate(e=>e.inert) && !await page.locator('.app-top').evaluate(e=>e.inert));
           await page.locator('[data-focus="tab-token"]').click();
           await page.keyboard.press('/');
           check(`${engineName} ${width} 검색 단축키는 검색 창으로`, await page.locator('#search-dialog').evaluate(d=>d.open) && await page.locator('#query').evaluate(e=>e===document.activeElement) && await page.locator('#menu-toggle').getAttribute('aria-expanded')==='false');

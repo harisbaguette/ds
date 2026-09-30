@@ -1,5 +1,6 @@
 /* Self-contained so the exact same behavior can travel with an exported HTML file. */
 window.Pattove.mountParts = function mountParts(root) {
+  window.Pattove?.admin?.mount(root);
   root.querySelectorAll('[data-indeterminate]').forEach(input => {
     if (!input.__pattoveInitialized) { input.indeterminate = true; input.__pattoveInitialized = true; }
   });
@@ -62,7 +63,7 @@ window.Pattove.mountParts = function mountParts(root) {
     }
   });
   root.addEventListener('click', event => {
-    const tab = event.target.closest('.ds-tab');
+    const tab = event.target.closest('.ds-tabs .ds-tab[role="tab"]');
     if (tab) selectTab(tab);
     const button = event.target.closest('[data-part-action]');
     if (!button || button.disabled) return;
@@ -144,7 +145,7 @@ window.Pattove.mountParts = function mountParts(root) {
     }
   });
   root.addEventListener('keydown', event => {
-    const tab = event.target.closest('.ds-tab');
+    const tab = event.target.closest('.ds-tabs .ds-tab[role="tab"]');
     if (!tab) return;
     const list = tab.closest('[role="tablist"]');
     // A vertical tab list moves with the up and down arrows, a horizontal one with left and right.

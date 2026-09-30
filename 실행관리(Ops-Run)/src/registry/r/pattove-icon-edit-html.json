@@ -9,11 +9,11 @@
       "path": "design/icons/edit.svg",
       "type": "registry:file",
       "target": "~/design/icons/edit.svg",
-      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#242424\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M13 5H5v15h15v-8M10 14l1-5 7-7 4 4-7 7z\"/></svg>\r\n"
+      "content": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"#242424\" stroke-width=\"1.65\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M13 5H5v15h15v-8M10 14l1-5 7-7 4 4-7 7z\"/></svg>\n"
     }
   ],
   "meta": {
-    "version": "0.4.0",
+    "version": "0.6.0",
     "lifecycle": "Trial",
     "item": "icon",
     "icon": "edit",

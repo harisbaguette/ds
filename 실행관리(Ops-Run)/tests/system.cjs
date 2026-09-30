@@ -42,10 +42,14 @@ const fingerprint = element => {
     page.on('pageerror', error => errors.push(error.message));
     await page.goto(url + '#/system');
     await page.evaluate(() => document.fonts.ready);
-    check('부품 진입은 첫 부품 한 장', page.url().endsWith('detail=token-color') && await page.locator('.component-page').count() === 1 && await page.locator('.specimen,.system-board').count() === 0 && await page.locator('[data-style-choice]').count() === 0);
+    check('부품 진입은 첫 부품 한 장', page.url().endsWith('detail='+await page.evaluate(()=>Pattove.systemRegistry.matching('')[0].id)) && await page.locator('.component-page').count() === 1 && await page.locator('.specimen,.system-board').count() === 0 && await page.locator('[data-style-choice]').count() === 0);
     check('현재 스타일은 하나', await page.evaluate(()=>Pattove.catalog.styles.length===1 && Pattove.catalog.styles[0].id==='main'));
     await page.screenshot({ path: path.join(output, 'styles.png') });
-    check('73개 대표 구현(토큰 20·부품 35·블록 16·템플릿 2)과 8개 역할', await page.evaluate(() => Pattove.systemRegistry.items.length === 73 && ['token','part','block','template'].map(s => Pattove.systemRegistry.items.filter(i => i.browse.shelf === s).length).join() === '20,35,16,2' && new Set([...Pattove.systemRegistry.items, ...Pattove.systemRegistry.patterns].map(i=>i.layer)).size === 8));
+    const expectedItems=JSON.parse(fs.readFileSync(path.join(root,'src/data/system-registry.json'),'utf8')).items;
+    check('브라우저의 구현·분류 목록이 배포 목록과 일치하고 8개 역할 포함', await page.evaluate(expected => {
+      const r=Pattove.systemRegistry, inventory=items=>items.map(i=>[i.id,i.layer,i.browse.shelf]);
+      return JSON.stringify(inventory(r.items))===JSON.stringify(inventory(expected)) && new Set([...r.items,...r.patterns].map(i=>i.layer)).size===8;
+    },expectedItems));
     check('의존 관계는 존재하는 구현을 참조', await page.evaluate(() => Pattove.systemRegistry.items.every(item => item.deps.every(id=>Pattove.systemRegistry.index.has(id)))));
     const sourceBlocks = Object.fromEntries([...fs.readFileSync(path.join(root,'src/system/parts.css'),'utf8').matchAll(/\/\* @part ([\w-]+) \*\/([\s\S]*?)(?=\/\* @part |$)/g)].map(match=>[match[1],match[2].trim()]));
     const generated = { window: { Pattove: {} } };
@@ -75,7 +79,7 @@ const fingerprint = element => {
     check('하단 탐색 모양 5가지 이상, 모두 다른 모양', looks.length >= 5 && new Set(looks).size === looks.length && looks.includes('line') && looks.includes('pill'));
     check('형태 선택 칸은 모양 격자로 흡수', await page.locator('[data-part-option="variant"]').count() === 0);
     await page.locator('[data-variant-pick="float"]').click();
-    check('카드를 누르면 그 모양이 사용 중', await page.locator('[data-variant-pick="float"]').getAttribute('aria-pressed') === 'true' && (await page.locator('[data-variant-pick="float"]').innerText()).includes('사용 중') && await page.locator('.variant-card[data-current]').count() === 1 && await page.locator('[data-variant-pick="float"]').evaluate(n => n === document.activeElement));
+    check('카드를 누르면 그 모양에 사용 중 체크 표시', await page.locator('[data-variant-pick="float"]').getAttribute('aria-pressed') === 'true' && await page.locator('[data-variant-pick="float"] .variant-kept[aria-label="사용 중"]').count() === 1 && await page.locator('.variant-card[data-current]').count() === 1 && await page.locator('[data-variant-pick="float"]').evaluate(n => n === document.activeElement));
     check('모양 미리보기는 조작 대상이 아님', await page.locator('.variant-card .variant-frame[inert]').count() === looks.length);
     await page.goto(url + '#/system?style=main&detail=bottom-nav');
     await page.reload();
@@ -219,7 +223,7 @@ const fingerprint = element => {
     const roots = { button: '.ds-button', 'icon-button': '.ds-button[data-icon-only]', input: '.ds-input', badge: '.ds-badge', card: '.ds-card', tabs: '.ds-tabs', 'bottom-nav': '.ds-bottom-nav', template: '.ds-page', page: '.ds-page' };
     for (const [id, selector] of Object.entries(roots)) {
       await page.goto(url + '#/system?style=main&detail=' + id); await page.locator('.component-page[data-component="' + id + '"] .variant-grid').waitFor();
-      check(id + ' 모양 카드마다 그 부품 한 개만', await page.locator('.variant-card').evaluateAll((cards, selector) => cards.length >= 2 && cards.every(card => card.querySelectorAll(selector).length === 1), selector));
+      check(id + ' 모양 카드마다 그 부품 한 개만', await page.locator('.variant-card .variant-frame').evaluateAll((frames, selector) => frames.length >= 2 && frames.every(frame => frame.querySelectorAll(selector).length === 1), selector));
     }
     check('버튼 모양은 채움·윤곽·글자 버튼 한 개씩', (await page.evaluate(() => Pattove.systemRegistry.index.get('button').gallery.list.map(v => v.id).join())) === 'primary,outline,ghost');
     // Old look ids kept from before the split (button hero, input reveal …) fall back to the first look without errors.

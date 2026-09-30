@@ -7,7 +7,8 @@ const routes = [
   '/patterns?style=main', '/patterns?q=zzzz', '/styles', '/patterns?detail=toast&style=main',
   '/components', '/components?layer=organism', '/dictionary', '/dictionary?shelf=icon',
   '/dictionary?code=TOK&detail=TOK-01',
-  '/system?style=main', '/system?style=main&detail=button', '/system?style=main&detail=page', '/system?style=main&detail=checkbox'
+  '/system?style=main', '/system?style=main&detail=button', '/system?style=main&detail=page', '/system?style=main&detail=checkbox',
+  '/system?detail=admin-page', '/system?detail=record-editor', '/system?detail=admin-shell'
 ];
 
 (async () => {
@@ -15,6 +16,8 @@ const routes = [
   const context = await browser.newContext();
   const page = await context.newPage();
   const checks = [];
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
   try {
     for (const width of [375, 1440]) {
       await page.setViewportSize({ width, height: 1080 });
@@ -22,12 +25,14 @@ const routes = [
         await page.goto(`${origin}#${route}`);
         await page.reload();
         await page.evaluate(() => document.fonts.ready);
+        for (const details of await page.locator('.component-install').all()) await details.locator('summary').click();
+        if (route.includes('detail=record-editor')) await page.locator('[data-editor-open]').click();
         const result = await page.evaluate(() => {
           const findings = [];
           const root = document.querySelector('dialog[open]') || document.body;
           const visible = el => {
             const s = getComputedStyle(el), r = el.getBoundingClientRect();
-            return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && !el.closest('[hidden],[inert]');
+            return el.checkVisibility({visibilityProperty:true}) && r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && !el.closest('[hidden],[inert]');
           };
           const controls = [...root.querySelectorAll('button, a, select, input, summary')].filter(visible);
           let minTarget = Infinity;
@@ -98,7 +103,8 @@ const routes = [
     await page.keyboard.press('Escape');
     await page.waitForTimeout(300);
     const metrics = await page.evaluate(() => ({ ...window.metrics, resourceBytes: performance.getEntriesByType('resource').reduce((sum, r) => sum + r.encodedBodySize, 0) }));
-    const failures = checks.flatMap(c => c.findings.map(f => ({ width: c.width, route: c.route, ...f })));
+    const failures = checks.flatMap(c => c.findings.map(f => ({ viewport: c.width, route: c.route, ...f })));
+    failures.push(...errors.map(message => ({kind:'runtime',message})));
     fs.writeFileSync(path.join(output, 'design-audit.json'), JSON.stringify({ checkedAt: new Date().toISOString(), checks, metrics, failures }, null, 2));
     console.log(`${checks.length} routes/viewports; ${failures.length} findings.`);
     console.log(JSON.stringify({ metrics, failures }, null, 2));

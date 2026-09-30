@@ -49,7 +49,7 @@
     }
   ],
   "meta": {
-    "version": "0.4.0",
+    "version": "0.6.0",
     "lifecycle": "Trial",
     "item": "token-blur",
     "purpose": "유리 표면과 배경 흐림",

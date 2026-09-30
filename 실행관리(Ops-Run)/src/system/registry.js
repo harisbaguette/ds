@@ -1,6 +1,6 @@
 /* Representative implementations for validating the system structure, not the full dictionary. */
 (() => {
-  const version = '0.4.0';
+  const version = '0.6.0';
   const sections = [
     { id: 'all', name: '전체 보기', group: '' },
     { id: 'foundations', name: '색·글꼴·간격', group: '기초' },
@@ -27,6 +27,7 @@
   const block = (id, name, section, code, keywords, deps, extra = {}) => ({ id, browse: { shelf: 'block', kind: '모듈', code, fit: true }, name, section, layer: 'Module', keywords, deps, ...extra });
   // English name shown beside the title: the term the named design systems use for this structure.
   const english = {
+    'data-table':'Data Table', 'record-editor':'Record Editor', 'admin-shell':'Admin Layout', 'admin-page':'Admin Page',
     'icon': 'Icon',
     'icon-label': 'Label',
     'divider': 'Divider',
@@ -75,6 +76,10 @@
     'people-picker': 'User picker'
   };
   const items = [
+    block('data-table', '데이터 표', 'composition', 'DAT', '표 검색 필터 정렬 페이지 선택 table filter sort', ['button','field','checkbox', ...T('color','space','text','weight','border','radius','size')], { entry:'DAT-05', behavior:true }),
+    part('record-editor', '자료 편집', 'fields', 'Molecule', 'ACT', '대화상자 편집 저장 오류 복구 dialog editor', ['button','field', ...T('color','space','border','radius','shadow','container','text')], { entry:'ACT-07', behavior:true, browse:{shelf:'part',kind:'부품',code:'ACT',fit:true} }),
+    { id:'admin-shell', name:'관리 화면 틀', section:'page', layer:'Template', browse:{shelf:'template',kind:'템플릿',code:'LAY',fit:true}, keywords:'관리 화면 틀 사이드바 admin shell layout', entry:'LAY-03', deps:T('breakpoint','space','size','radius','color','text') },
+    { id:'admin-page', name:'자료 관리 화면', section:'page', layer:'Page', browse:{shelf:'template',kind:'페이지',code:'ADM',fit:true}, keywords:'관리자 자료 목록 상세 편집 저장 실패 재시도 admin CRUD', entry:'ADM-01', deps:['admin-shell','data-table','record-editor',...T('color','text')], behavior:true },
     { id: 'token-color', browse: { shelf: 'token', kind: '색', code: 'TOK' }, name: '색 토큰', section: 'foundations', layer: 'Token', keywords: '색 색상 컬러 배경 글자색 강조 color', deps: [], entry: 'TOK-01' },
     { id: 'token-gradient', browse: { shelf: 'token', kind: '그러데이션', code: 'TOK' }, name: '그러데이션 토큰', section: 'foundations', layer: 'Token', keywords: '그러데이션 그라디언트 배경 번짐 gradient', deps: T('color') },
     { id: 'token-typography', browse: { shelf: 'token', kind: '글꼴', code: 'TOK' }, name: '글꼴 토큰', section: 'foundations', layer: 'Token', keywords: '글꼴 서체 타이포 글자 설정 font typography', deps: T('text','weight','leading'), entry: 'TOK-62' },
@@ -232,6 +237,10 @@
     Object.assign(c, { values: g.list.map(v => [v.id, v.name]), default: g.default ?? g.list[0].id });
   }
   const contracts = {
+    'data-table':['자료를 검색·필터·정렬하고 쪽 단위로 선택', 'records의 id는 유일하고 안정적이어야 함. 검색·필터 변경 시 첫 쪽과 선택을 초기화. React는 TanStack React Table, HTML은 동봉한 Table Core 필요. Toolbar·Pagination은 table 인스턴스를 받아 따로 배치 가능.', ['records','statuses','titleLabel','ownerLabel','searchLabel','onEdit','onSelectionChange','loading','error','onRetry','actions'], ['onEdit(record)','onSelectionChange(records)']],
+    'record-editor':['상세 확인과 비동기 저장·실패 복구', '저장 중 중복 요청과 닫기를 막음. 실패하면 입력 유지. 변경 취소는 재확인. React는 record·onSave·onClose, HTML은 Pattove.admin.connectEditor(root, options).open(record, trigger)로 단독 사용. null이나 잘못된 저장 응답은 실패로 처리.', ['record','statuses','titleLabel','ownerLabel','onSave','onClose'], ['onSave(record)','onClose()']],
+    'admin-shell':['관리 메뉴와 본문 배치', 'navigation은 실제 목적지와 label을 제공. 작은 화면에서는 메뉴를 본문 위로 이동. 인증이나 권한 검사는 소비 프로젝트가 연결.', ['title','navigation','children','notice'], []],
+    'admin-page':['목록·상세·편집·저장·복귀 흐름', 'initialRecords로 초기 콘텐츠를 제공. onSave는 Promise 또는 저장된 record를 반환하며 실패 시 reject. 연결하지 않은 예제는 화면 안에서만 유지. loadRecords({signal})로 목록 읽기와 새로고침·실패 재시도를 연결. 늦은 응답은 폐기. initialRecords는 초기값이며 편집 중 목록 교체 금지.', ['title','initialRecords','statuses','titleLabel','ownerLabel','searchLabel','navigation','onSave','loadRecords'], ['onSave(record)','pattove:admin-saved']],
     'token-color': ['배경·글자·선·강조 색의 역할 이름', 'var(--p-*) 역할 이름으로만 참조. 새 색은 원시값에 추가하고 역할에 연결. 섞은 색(veil·wash·tint)도 색 역할끼리 섞어 만든 역할로 참조', [], []],
     'token-gradient': ['넓은 배경과 구분선에 쓰는 그러데이션', 'var(--p-gradient-*)로 참조. 색은 색 역할에서만 가져오고 각도·멈춤 위치는 원시값에서 가져옴', [], []],
     'token-typography': ['글꼴과 글자 설정 묶음', 'var(--p-font)·var(--p-display-font)·var(--p-type-*)로 참조. 글꼴 파일은 pattove-fonts 항목이 제공. 크기·굵기·줄 간격은 각 토큰 종류에서 가져옴', [], []],
@@ -317,7 +326,7 @@
     'confirm-row': ['confirm-row'], 'action-row': ['action-row'], 'icon-button': ['icon-button']
   };
   // Minimum inline size (px) at which a part still reads; wide blocks need more room than a single control.
-  const minInline = { 'bottom-nav': 224, template: 240, page: 240, card: 200, 'list-card': 240, 'media-card': 200, input: 160, field: 160, 'date-range': 200, 'search-bar': 240, tabs: 240, 'search-form': 240, 'result-grid': 240, 'result-list': 240, 'featured-results': 240, 'people-picker': 240, 'action-row': 240, 'action-bar': 240, 'inline-form': 240, 'check-list': 200, 'radio-list': 200, 'switch-list': 200, 'select-all-list': 200, 'stat-row': 240, toast: 224, notice: 200, 'progress-bar': 200, 'step-bar': 200 };
+  const minInline = { 'data-table':280, 'record-editor':240, 'admin-shell':280, 'admin-page':280, 'bottom-nav': 224, template: 240, page: 240, card: 200, 'list-card': 240, 'media-card': 200, input: 160, field: 160, 'date-range': 200, 'search-bar': 240, tabs: 240, 'search-form': 240, 'result-grid': 240, 'result-list': 240, 'featured-results': 240, 'people-picker': 240, 'action-row': 240, 'action-bar': 240, 'inline-form': 240, 'check-list': 200, 'radio-list': 200, 'switch-list': 200, 'select-all-list': 200, 'stat-row': 240, toast: 224, notice: 200, 'progress-bar': 200, 'step-bar': 200 };
   for (const item of items) {
     const [purpose, compatibility, inputs, events] = contracts[item.id];
     Object.assign(item, { purpose, compatibility, inputs, events, controls: controls[item.id] || [], gallery: galleries[item.id] || null,
@@ -328,6 +337,13 @@
       verification: { suite: 'tests/system-audit.cjs', evidence: 'test-results/system-audit/results.json' }
     });
   }
+  for (const id of ['data-table','record-editor','admin-shell','admin-page']) {
+    const item = items.find(i => i.id === id);
+    item.source = 'src/system/admin.js';
+    item.verification = { suite:'tests/admin.cjs', evidence:'test-results/admin/results.json' };
+    item.provenance = { repository:'https://github.com/satnaing/shadcn-admin', commit:'e16c87f213a5ba5e45964e9b67c792105ec74d26', license:'MIT', relationship:id === 'data-table' ? 'adapted' : 'reference', record:'src/system/upstream/shadcn-admin/provenance.json' };
+  }
+  items.find(i => i.id === 'data-table').publicParts = [{name:'TableToolbar', source:'src/system/react/table-toolbar.jsx', requires:'TanStack table instance'}, {name:'TablePagination', source:'src/system/react/table-pagination.jsx', requires:'TanStack table instance'}];
   indexOptions('icon').forEach(c => c.values.sort(([a],[b]) => a === 'search' ? -1 : b === 'search' ? 1 : a.localeCompare(b)));
   items.find(i => i.id === 'field').publicParts = [{ name: 'label', selector: '.ds-field > label', requires: 'input', relation: 'for → input.id' }, { name: 'help / error', selector: '.ds-help', requires: 'input', relation: 'input.aria-describedby → help.id' }];
   items.find(i => i.id === 'card').publicParts = [{ name: 'body', selector: '.ds-card-body', requires: 'card' }, { name: 'title', selector: '.ds-card h3', requires: 'card' }, { name: 'description', selector: '.ds-card-body > p', requires: 'card' }, { name: 'actions', selector: '.ds-card-actions', requires: 'card' }];
@@ -346,5 +362,6 @@
     return [...result].map(key => index.get(key));
   };
   const patterns = [{ id: 'search-filter-results', name: '검색·필터·결과', layer: 'Pattern', items: ['search-form', 'filter-chip-row', 'result-grid', 'result-list', 'empty-state', 'template', 'page'], rules: ['입력 필드와 상태 필터 뒤에 검색 동작을 둡니다.', '결과 개수는 바뀔 때마다 알리고, 결과가 없으면 전체 보기로 복구합니다.', '제목이 길어져도 카드의 행동은 같은 위치에 둡니다.'] }];
+  patterns.push({ id:'admin-edit-save', name:'관리 목록·편집·저장·복구', layer:'Pattern', items:['admin-shell','data-table','record-editor','admin-page'], rules:['검색과 필터를 바꾸면 첫 쪽으로 돌아갑니다.','저장이 실패하면 입력을 유지하고 다시 시도합니다.','저장 결과가 확인된 뒤 목록을 갱신하고 원래 위치로 초점을 돌립니다.'] });
   window.Pattove.systemRegistry = { sections, items, index, matching, dependencies, patterns, normalizeOptions, version };
 })();

@@ -39,10 +39,10 @@ async function inspect(page, label) {
     document.querySelectorAll('[data-preview-scene]').forEach(scene => contains(scene.parentElement, scene, 'fitted scene', scene.dataset.previewFit === 'both'));
     const buttons = [...document.querySelectorAll('.overview-actions > button')];
     if (buttons.length && buttons.some(b => Math.abs(b.getBoundingClientRect().top - buttons[0].getBoundingClientRect().top) > 1)) result.push('overview buttons wrap');
-    // In every grid the picture is square (the name under it is not part of the square): dictionary tiles, shape cards and style overview tiles alike.
-    document.querySelectorAll('.dict-thumb, .variant-card > .variant-frame, .overview-preview').forEach(art => {
-      const r = art.getBoundingClientRect(), cell = art.parentElement;
-      if (Math.abs(r.width - r.height) > 1) result.push({ name: 'square picture', cell: cell.dataset.variantCard || cell.dataset.overview || cell.textContent.trim().slice(0, 20), width: r.width, height: r.height });
+    // Compact controls use a bounded stage; only whole screens and icons need square canvases.
+    document.querySelectorAll('.dict[data-shelf="part"] .dict-thumb').forEach(art => {
+      const r = art.getBoundingClientRect();
+      if (r.height > 200 || r.height < 120) result.push({ name: 'part preview density', height: r.height });
     });
     if (document.documentElement.scrollWidth > innerWidth) result.push('page overflow');
     return result;

@@ -2,6 +2,7 @@ const { chromium, firefox, webkit } = require('playwright-core');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
+const sharp = require('sharp');
 const { pathToFileURL } = require('node:url');
 const base = process.env.PATTOVE_TEST_URL || 'http://127.0.0.1:4173/';
 const out = path.resolve(__dirname, '../test-results/menu-update');
@@ -126,9 +127,12 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       check(engineName + ' 아이콘 목록에는 구현 예시 카드가 없음', await page.locator('.dict-entry.is-built').count()===0);
       check(engineName + ' 홈 아이콘 카드는 일러스트 그림으로 표시', await page.locator('[data-library-entry="ICO-01"].is-illustrated .illustrated-icon').isVisible());
       await goto('dictionary?shelf=icon&p=99999');
-      check(engineName + ' 그림이 아직 없는 아이콘 카드는 미구현 표시', await page.locator('.dict-entry.is-todo .dict-todo').first().textContent()==='미구현');
-      await page.locator('.dict-entry.is-todo').first().click();
-      check(engineName + ' 미구현 아이콘 상세는 미구현 안내', await page.locator('dialog .detail-art.is-todo').count()===1);
+      check(engineName + ' 마지막 쪽 아이콘은 SVG로 대체하지 않음', await page.locator('.dict-entry').count()>0 && await page.locator('.dict-entry svg').count()===0);
+      await page.locator('.dict-entry .illustrated-icon').last().evaluate(img=>{img.loading='eager';return img.decode();});
+      const iconPixels = await sharp(await page.locator('.dict-entry .illustrated-icon').last().screenshot()).stats();
+      check(engineName + ' 마지막 쪽 일러스트가 실제로 그려짐', iconPixels.channels.slice(0,3).every(channel=>channel.stdev>10));
+      await page.locator('.dict-entry.is-illustrated').last().click();
+      check(engineName + ' 마지막 쪽 아이콘 상세에 일러스트와 다운로드 표시', await page.locator('dialog .illustrated-icon').count()===1 && await page.locator('dialog a[download]').count()===2 && await page.locator('dialog .detail-art svg, dialog [data-download-glyph], dialog .detail-art.is-todo').count()===0);
       await page.keyboard.press('Escape'); await page.waitForFunction(()=>!document.querySelector('dialog').open);
       await goto('system?detail=icon');
       check(engineName + ' 아이콘 부품은 부품 메뉴에 소속', await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1 && (await page.locator('#detail-title').innerText()).startsWith('아이콘 ('));
@@ -185,7 +189,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
           check(`${engineName} ${width} ${route} 가로 넘침 없음`, await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
           check(`${engineName} ${width} ${route} 주 메뉴 다섯 개가 상단에 보임`, await visibleNav());
         }
-        if (width<=760) {
+        if (width<=1100) {
           await goto('dictionary'); await page.locator('#menu-toggle').click();
           check(`${engineName} ${width} 모바일 서랍에도 전체 부품 분류 표시`, await page.locator('#secondary-nav .nav-subcategory').count()===await page.evaluate(()=>Pattove.library.groups.length) && await page.locator('#main').evaluate(e=>e.inert) && await page.locator('.app-top').evaluate(e=>e.inert));
           await page.locator('#secondary-nav a').last().focus(); await page.keyboard.press('Tab');

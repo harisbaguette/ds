@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   'use strict';
   const { catalog, views, previews, libraryUI: library, systemUI: system, systemRegistry, componentDocs } = window.Pattove;
   const isCollection = () => ['dictionary', 'components'].includes(state.page);
@@ -37,7 +37,7 @@
     return isCollection() ? library.readFilters(page, params) : {};
   }
   const cleared = filters => Object.fromEntries(Object.entries(filters).map(([key, value]) => [key, Array.isArray(value) ? [] : value]));
-  const phone = matchMedia(`(max-width: ${getComputedStyle(document.documentElement).getPropertyValue('--p-bp-lg').trim()})`);
+  const drawerMedia = matchMedia(`(max-width: ${getComputedStyle(document.documentElement).getPropertyValue('--p-bp-xl').trim()})`);
   function rememberLocation(focus = document.activeElement?.dataset.focus) {
     history.replaceState({...history.state,pattoveScroll:[scrollX,scrollY],pattoveFocus:focus},'',location.href);
   }
@@ -154,7 +154,7 @@
     else navigate({ query, filters: cleared(state.filters), detail: null, section: '', pageNo: 1 }, { replace: true });
     $('#main').focus({ preventScroll: true });
   }
-  // Phones use a navigation-only drawer. Closing by hand returns focus to the menu button.
+  // Narrow screens use a navigation drawer. Closing by hand returns focus to the menu button.
   function setMenu(open, returnFocus = true) {
     if (open && $('#app-menu').hidden) return;
     if (open === document.documentElement.classList.contains('menu-open')) return;
@@ -188,11 +188,20 @@
     $('#secondary-nav').innerHTML=subnav;
     $('#app-menu').hidden=!subnav;
     $('#menu-toggle').hidden=!subnav;
+    $('#catalog-categories').hidden=!subnav;
     if (!subnav) setMenu(false,false);
     document.body.classList.toggle('has-subnav',!!subnav);
     $('#top-title').textContent=$('#primary-nav [aria-current="page"]')?.textContent || '';
     $('.menu-body').scrollTop=oldShelf === $('#primary-nav [aria-current="page"]')?.dataset.focus ? subnavScroll : 0;
     $('#header-context').innerHTML = views.header(state);
+    const shelfName = $('#primary-nav [aria-current="page"]')?.textContent || '메뉴';
+    const currentCategory = $('#secondary-nav .nav-minor[aria-current="true"], #secondary-nav .nav-subcategory[aria-current="true"]')?.textContent.trim() || '전체 보기';
+    $('#category-label').textContent = shelfName === '스타일' ? '스타일 목록' : shelfName + ' 분류';
+    $('#category-current').textContent = currentCategory;
+    $('#menu-toggle').title = `${shelfName} 분류 열기 · ${currentCategory}`;
+    $('#preview-context').innerHTML = views.stylePicker(state);
+    $('#preview-context').hidden = !$('#preview-context').firstElementChild;
+    $('#catalog-toolbar').classList.toggle('has-location', !!$('#header-context .content-breadcrumb'));
     // The one active query shows as a chip beside the title; pressing it clears the search.
     const chip = $('#query-chip');
     chip.hidden = !state.query || state.page === 'system';
@@ -202,6 +211,7 @@
     $('#query').placeholder = searchLabel;
     $('#query').setAttribute('aria-label', searchLabel);
     $('#search-open').setAttribute('aria-label', searchLabel);
+    $('#search-label').textContent = searchLabel;
     $('#search-open').title = searchLabel + ' (/)';
     const nextMainKey = JSON.stringify([state.page, state.style, state.preview, state.filters, state.query, state.pageNo, state.page==='system'?[state.detail,state.options]:state.page==='styles'?state.detail:null]);
     if (mainRenderKey !== nextMainKey) {
@@ -323,9 +333,25 @@
   try { if (localStorage.getItem(railKey)) setRail(true); } catch {}
   $('#rail-toggle').addEventListener('click', () => setRail(!document.documentElement.classList.contains('rail')));
   $('#menu-toggle').addEventListener('click', () => setMenu(true));
-  $('#search-open').addEventListener('click', openSearch);
+  $('#search-open').addEventListener('click', () => {
+    $('#search-open').focus({ preventScroll:true });
+    openSearch();
+  });
   $('#menu-backdrop').addEventListener('click', () => setMenu(false));
-  phone.addEventListener('change', () => setMenu(false, false));
+  // Some browsers blur a newly hidden control before notifying matchMedia listeners.
+  let hiddenNavigationFocus = null;
+  document.addEventListener('focusout', event => {
+    if (!event.relatedTarget && event.target.closest('#app-menu, #menu-toggle') && !event.target.checkVisibility({ visibilityProperty:true })) hiddenNavigationFocus = event.target;
+  });
+  drawerMedia.addEventListener('change', () => {
+    const focused = document.activeElement === document.body && hiddenNavigationFocus?.isConnected ? hiddenNavigationFocus : document.activeElement;
+    hiddenNavigationFocus = null;
+    const focusInMenu = $('#app-menu').contains(focused);
+    const focusOnToggle = focused === $('#menu-toggle');
+    setMenu(false, false);
+    if (focusInMenu) (drawerMedia.matches ? $('#menu-toggle') : $('#main')).focus({ preventScroll:true });
+    else if (focusOnToggle && !drawerMedia.matches) $('#main').focus({ preventScroll:true });
+  });
   $('#search-clear').addEventListener('click', () => {
     $('#query').value = '';
     $('#search-clear').hidden = true;
@@ -364,6 +390,7 @@
     suggestionIndex = suggestionIndex < 0 ? (event.key === 'ArrowDown' ? 0 : suggestions.length - 1)
       : (suggestionIndex + (event.key === 'ArrowDown' ? 1 : -1) + suggestions.length) % suggestions.length;
     [...$('#search-suggestions').children].forEach((el, i) => el.setAttribute('aria-selected', String(i === suggestionIndex)));
+    $('#search-suggestions').children[suggestionIndex]?.scrollIntoView({ block:'nearest' });
     $('#query').setAttribute('aria-activedescendant', `suggestion-${suggestionIndex}`);
   });
   document.addEventListener('keydown', event => {

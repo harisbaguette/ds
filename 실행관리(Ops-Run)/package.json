@@ -5,7 +5,7 @@
   "description": "패토브 디자인 시스템 · HTML과 React 재사용 소스",
   "scripts": {
     "build:icons": "node scripts/build-illustrated-icons.mjs",
-    "test:icons": "node tests/illustrated-icons.cjs",
+    "test:icons": "node tests/illustrated-icons.cjs --complete && node tests/icon-catalog.cjs",
     "build:launcher": "node scripts/build-launcher-icon.cjs && powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-launcher.ps1",
     "test:launcher": "node tests/launcher.cjs",
     "build": "npm run build:system && npm run build:docs && npm run build:registry && npm run build:library",
@@ -20,6 +20,7 @@
     "test": "node tests/navigation.cjs",
     "test:visual": "node tests/visual.cjs",
     "test:preview-fit": "node tests/preview-fit.cjs",
+    "test:responsive": "node tests/responsive.cjs",
     "test:design": "node tests/design-audit.cjs",
     "test:outer": "node tests/outer-shell.cjs",
     "test:library": "node tests/library.cjs",

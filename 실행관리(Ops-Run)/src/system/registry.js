@@ -25,60 +25,28 @@
   const wide = ['text-divider','search-bar','progress-bar','step-bar'];
   const part = (id, name, section, layer, code, keywords, deps, extra = {}) => ({ id, browse: { shelf: 'part', kind: '부품', code, ...(wide.includes(id) ? { fit: true } : {}) }, name, section, layer, keywords, deps, ...extra });
   const block = (id, name, section, code, keywords, deps, extra = {}) => ({ id, browse: { shelf: 'block', kind: '모듈', code, fit: true }, name, section, layer: 'Module', keywords, deps, ...extra });
-  // English name shown beside the title: the term the named design systems use for this structure.
+  // English name beside the detail title for items with no linked dictionary term (a linked term's own English wins, so the card and the title say the same word).
   const english = {
-    'data-table':'Data Table', 'record-editor':'Record Editor', 'admin-shell':'Admin Layout', 'admin-page':'Admin Page',
     'icon': 'Icon',
     'icon-label': 'Label',
     'divider': 'Divider',
     'text-divider': 'Divider with title',
     'status-dot': 'Status light',
-    'avatar': 'Avatar',
-    'icon-button': 'Icon button',
-    'segmented-button': 'Segmented button',
     'input': 'Text field',
-    'clear-input': 'Text field with clear button',
-    'unit-input': 'Prefix / suffix',
-    'stepper': 'Stepper',
-    'password-input': 'Password input',
-    'field': 'Text input',
-    'date-range': 'Date range input',
-    'search-bar': 'Search field',
     'checkbox': 'Checkbox',
     'radio': 'Radio button',
     'switch': 'Switch',
-    'check-card': 'Multi-select tile',
-    'radio-card': 'Single-select tile',
-    'filter-chip': 'Filter chip',
-    'count-badge': 'Counter badge',
-    'bottom-nav': 'Tab bar',
-    'notice': 'Inline notification',
-    'toast': 'Snackbar',
     'progress-bar': 'Progress bar',
-    'progress-ring': 'Circular progress indicator',
-    'step-bar': 'Step indicator',
     'list-card': 'Horizontal card',
     'media-card': 'Card with cover',
-    'button': 'Button',
-    'badge': 'Badge',
-    'tabs': 'Tabs',
-    'card': 'Card',
-    'action-row': 'Button group',
     'confirm-row': 'Confirm / dismiss buttons',
-    'action-bar': 'Fixed bottom CTA',
-    'inline-form': 'Side label',
-    'check-list': 'Checkbox group',
     'select-all-list': 'Check all',
-    'radio-list': 'Radio group',
-    'switch-list': 'Switch in a list row',
-    'filter-chip-row': 'Filter chips',
-    'result-grid': 'Feed',
-    'people-picker': 'User picker'
+    'radio-list': 'Radio group'
   };
   const items = [
-    block('data-table', '데이터 표', 'composition', 'DAT', '표 검색 필터 정렬 페이지 선택 table filter sort', ['button','field','checkbox', ...T('color','space','text','weight','border','radius','size')], { entry:'DAT-05', behavior:true }),
+    block('data-table', '데이터 표', 'composition', 'DAT', '표 검색 필터 정렬 페이지 선택 table filter sort', ['button','field','checkbox', ...T('color','space','text','weight','border','radius','size','breakpoint')], { entry:'DAT-05', behavior:true }),
     part('record-editor', '자료 편집', 'fields', 'Molecule', 'ACT', '대화상자 편집 저장 오류 복구 dialog editor', ['button','field', ...T('color','space','border','radius','shadow','container','text')], { entry:'ACT-07', behavior:true, browse:{shelf:'part',kind:'부품',code:'ACT',fit:true} }),
-    { id:'admin-shell', name:'관리 화면 틀', section:'page', layer:'Template', browse:{shelf:'template',kind:'템플릿',code:'LAY',fit:true}, keywords:'관리 화면 틀 사이드바 admin shell layout', entry:'LAY-03', deps:T('breakpoint','space','size','radius','color','text') },
+    { id:'admin-shell', name:'관리 화면 틀', section:'page', layer:'Template', browse:{shelf:'template',kind:'템플릿',code:'LAY',fit:true}, keywords:'관리 화면 틀 사이드바 admin shell layout', entry:'LAY-03', deps:T('breakpoint','space','size','radius','color','text','border','stroke') },
     { id:'admin-page', name:'자료 관리 화면', section:'page', layer:'Page', browse:{shelf:'template',kind:'페이지',code:'ADM',fit:true}, keywords:'관리자 자료 목록 상세 편집 저장 실패 재시도 admin CRUD', entry:'ADM-01', deps:['admin-shell','data-table','record-editor',...T('color','text')], behavior:true },
     { id: 'token-color', browse: { shelf: 'token', kind: '색', code: 'TOK' }, name: '색 토큰', section: 'foundations', layer: 'Token', keywords: '색 색상 컬러 배경 글자색 강조 color', deps: [], entry: 'TOK-01' },
     { id: 'token-gradient', browse: { shelf: 'token', kind: '그러데이션', code: 'TOK' }, name: '그러데이션 토큰', section: 'foundations', layer: 'Token', keywords: '그러데이션 그라디언트 배경 번짐 gradient', deps: T('color') },
@@ -145,7 +113,7 @@
     block('switch-list', '목록 행의 스위치', 'selection', 'ATM', '스위치 목록 켜기 끄기 설정 switch list', ['switch', ...T('color','text','weight','space','border')], { entry: 'ATM-203' }),
     block('search-form', '검색 양식', 'composition', 'DAT', '검색 입력 상태 필터 검색 단추 search form', ['field', 'button', ...T('space','breakpoint')], { entry: 'DAT-01', behavior: true }),
     block('filter-chip-row', '필터 칩', 'composition', 'ATM', '필터 칩 줄 상태 거르기 chips', ['filter-chip', ...T('space','size')], { entry: 'ATM-120' }),
-    block('result-grid', '피드', 'composition', 'LAY', '결과 격자 카드 목록 grid results', ['card', ...T('color','text','space')], { entry: 'LAY-49' }),
+    block('result-grid', '결과 격자', 'composition', 'LAY', '결과 격자 카드 목록 grid results', ['card', ...T('color','text','space')], { entry: 'LAY-49' }),
     block('result-list', '결과 목록', 'composition', 'LAY', '결과 목록 행 이름 비교 list results', ['card', ...T('color','text','space','border')], { entry: 'LAY-27' }),
     block('featured-results', '큰 첫 결과', 'composition', 'LAY', '추천 대표 첫 결과 featured', ['card', 'media-card', ...T('color','text','leading','space')], { entry: 'LAY-12' }),
     block('people-picker', '사용자 선택', 'composition', 'INP', '사람 고르기 얼굴 목록 검색 people picker', ['field', 'list-card', 'empty-state', ...T('color','text','space','size','radius','border')], { entry: 'INP-69', behavior: true }),
@@ -326,7 +294,7 @@
     'confirm-row': ['confirm-row'], 'action-row': ['action-row'], 'icon-button': ['icon-button']
   };
   // Minimum inline size (px) at which a part still reads; wide blocks need more room than a single control.
-  const minInline = { 'data-table':280, 'record-editor':240, 'admin-shell':280, 'admin-page':280, 'bottom-nav': 224, template: 240, page: 240, card: 200, 'list-card': 240, 'media-card': 200, input: 160, field: 160, 'date-range': 200, 'search-bar': 240, tabs: 240, 'search-form': 240, 'result-grid': 240, 'result-list': 240, 'featured-results': 240, 'people-picker': 240, 'action-row': 240, 'action-bar': 240, 'inline-form': 240, 'check-list': 200, 'radio-list': 200, 'switch-list': 200, 'select-all-list': 200, 'stat-row': 240, toast: 224, notice: 200, 'progress-bar': 200, 'step-bar': 200 };
+  const minInline = { 'data-table':280, 'record-editor':240, 'admin-shell':280, 'admin-page':280, 'bottom-nav': 224, template: 240, page: 240, card: 200, 'list-card': 240, 'media-card': 200, input: 160, field: 160, 'date-range': 200, 'search-bar': 288, tabs: 240, 'search-form': 240, 'result-grid': 240, 'result-list': 240, 'featured-results': 240, 'people-picker': 240, 'action-row': 240, 'action-bar': 240, 'inline-form': 240, 'check-list': 200, 'radio-list': 200, 'switch-list': 200, 'select-all-list': 200, 'stat-row': 240, toast: 224, notice: 200, 'progress-bar': 200, 'step-bar': 200 };
   for (const item of items) {
     const [purpose, compatibility, inputs, events] = contracts[item.id];
     Object.assign(item, { purpose, compatibility, inputs, events, controls: controls[item.id] || [], gallery: galleries[item.id] || null,

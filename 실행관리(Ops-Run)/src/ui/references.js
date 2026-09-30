@@ -3,7 +3,7 @@
   const esc = parts.esc;
   const entries = new Map([...library.entries, ...library.components].map(item => [item.id, item]));
   const implementations = new Map(registry.items.filter(item => item.entry).map(item => [item.entry, item]));
-  const glyphs = new Map(library.glyphs.map(([id, name]) => [id, { id, name, shelf: 'icon', kind: '세트 그림', glyph: [id] }]));
+  const glyphs = new Map(library.glyphs.map(([id, name]) => [id, { id, name, shelf: 'icon', kind: '세트 그림', glyph: [id], ...(library.glyphIllustrations?.[id] && { art: library.glyphIllustrations[id] }) }]));
   const styles = new Map(catalog.styles.map(style => [style.id, style]));
   const shapeID = (item, value) => `${item.id}/${item.gallery.key}/${value}`;
   const shapes = new Map(registry.items.flatMap(item => (item.gallery?.list || []).map(shape => [shapeID(item, shape.id), { item, shape }])));
@@ -58,14 +58,16 @@
       Object.assign(result, { status: 'preview-only', dictionaryId: item.entry, source: 'src/ui/previews.js', url: absolute(route('patterns', { style: style.id, detail: item.id })), instructions: '이 항목은 패턴 미리보기입니다. 연결된 사전과 실제 구현을 확인한 뒤 사용하세요.' });
     } else {
       const chapter = library.categories.find(category => category.id === item.category);
+      const referenceGlyph = glyphs.has(item.id);
+      const guideline = item.category === 'ICO' && item.kind === '기준';
       Object.assign(result, {
-        status: item.art ? 'asset-ready' : 'not-implemented',
+        status: item.art ? 'asset-ready' : guideline ? 'guideline' : 'not-implemented',
         term: item.term, kind: item.kind, purpose: item.usage || item.examples,
         source: chapter?.source || (glyphs.has(item.id) ? '문서/아이콘 그림 분류.json' : '문서/구성요소 계층표.md'),
         ...(item.art && { assets: { webp: item.art.src, png: item.art.png } }),
         ...(item.glyph && { referenceGlyphs: item.glyph }),
         url: absolute(route(item.shelf ? 'dictionary' : 'components', { ...(item.shelf && { shelf: item.shelf }), detail: item.id })),
-        instructions: item.art ? 'assets의 완성된 이미지 파일을 그대로 사용하세요. referenceGlyphs는 참고 그림이며 완성 자산을 대신하지 않습니다.' : '아직 구현되지 않은 사전 항목입니다. 기존 완성 부품처럼 사용하지 말고, 위 정의와 원문을 확인해 구현이 필요하다고 알려 주세요.'
+        instructions: item.art ? 'assets의 완성된 이미지 파일을 그대로 사용하세요. referenceGlyphs는 참고 그림이며 완성 자산을 대신하지 않습니다.' : referenceGlyph ? '이 아이콘의 일러스트는 아직 제작 중입니다. referenceGlyphs는 참고용이며 SVG로 대신하지 마세요.' : guideline ? '이 항목은 아이콘 사용 기준입니다. purpose와 source의 규칙을 적용하세요.' : '아직 구현되지 않은 사전 항목입니다. 기존 완성 부품처럼 사용하지 말고, 위 정의와 원문을 확인해 구현이 필요하다고 알려 주세요.'
       });
     }
     return result;
@@ -77,12 +79,15 @@
   const control = id => `<div class="element-reference ds-surface"><div class="reference-identity"><div class="reference-caption"><span class="reference-kind">${shapes.has(id) ? '모양 ID' : '요소 ID'}</span><span class="reference-status sr-only" role="status" aria-live="polite"></span></div>${label(id)}</div><button type="button" class="reference-copy ds-button" data-variant="outline" data-size="sm" data-icon-only data-copy-reference="${esc(id)}" data-focus="copy-${esc(id)}" aria-label="${esc(id)} AI용 정보 복사" title="AI용 정보 복사">${copyIcon}${checkIcon}</button></div>`;
   const feedbackTimers = new WeakMap();
   async function copy(button, state) {
+    if (button.getAttribute('aria-disabled') === 'true') return;
     const value = text(button.dataset.copyReference, state);
     const panel = button.parentElement, status = panel.querySelector('.reference-status');
     clearTimeout(feedbackTimers.get(panel));
     panel.removeAttribute('data-copied');
     status.textContent = '';
-    button.disabled = true;
+    // Native disabled blurs a focused button. Keep focus while blocking repeated writes.
+    button.setAttribute('aria-disabled', 'true');
+    button.setAttribute('aria-busy', 'true');
     try {
       await navigator.clipboard.writeText(value);
       status.textContent = '복사됨';
@@ -91,14 +96,14 @@
     } catch {
       const dialog = document.getElementById('reference-dialog'), textarea = dialog.querySelector('textarea');
       textarea.value = value;
-      button.disabled = false;
       dialog.addEventListener('close', () => { if (button.isConnected) button.focus({ preventScroll: true }); }, { once: true });
       dialog.showModal();
       textarea.focus();
       textarea.select();
       status.textContent = '';
     } finally {
-      button.disabled = false;
+      button.removeAttribute('aria-disabled');
+      button.removeAttribute('aria-busy');
     }
   }
   window.Pattove.references = { shapeID, resolve, payload, text, label, control, copy };

@@ -10,7 +10,7 @@ window.Pattove.catalog = Object.freeze({
     { id: 'recover', name: '복구' }
   ],
   styles: [
-    { id: 'main', name: '메인 스타일', description: '둥근 표면, 명확한 행동', origin: '사용자 제공 레퍼런스 4장 · 2026-09-26',
+    { id: 'main', name: '메인 스타일', description: '밝은 바탕과 둥근 표면, 짙은 색으로 강조한 주요 행동', origin: '사용자 제공 레퍼런스 4장 · 2026-09-26',
       rules: '흰 바탕과 둥근 양각, 입력 영역의 음각을 사용합니다. 주요 행동은 짙은 색, 선택은 채움과 체크, 초점은 보라색 링으로 구분합니다. 유리 효과는 떠 있는 탐색 영역에만 적용하고 본문 표면은 불투명하게 유지합니다.',
       references: [],
       specification: '문서/메인 스타일 명세.md',

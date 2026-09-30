@@ -73,9 +73,9 @@
 <body class="ds theme-main">
   <a class="skip-link" href="#main">본문으로</a>
   <header class="app-top">
-    <a class="top-brand" href="#/styles" aria-label="스타일" data-focus="home"><img src="assets/mark.svg" alt="" width="32" height="32"></a>
+    <a class="top-brand" href="#/styles" aria-label="패토브 홈" data-focus="home"><img src="assets/mark.svg" alt="" width="32" height="32"><span>패토브</span></a>
     <nav id="primary-nav" class="primary-nav ds-tablist" aria-label="주 메뉴"></nav>
-    <button type="button" id="search-open" class="search-open ds-button" data-variant="outline" data-size="sm" data-icon-only aria-label="검색" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/" data-focus="search-open"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg></button>
+    <button type="button" id="search-open" class="search-open ds-button" data-variant="outline" data-size="sm" aria-label="검색" aria-haspopup="dialog" aria-controls="search-dialog" aria-keyshortcuts="/" data-focus="search-open"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg><span id="search-label">검색</span><kbd aria-hidden="true">/</kbd></button>
   </header>
   <div class="menu-backdrop" id="menu-backdrop"></div>
   <aside class="app-menu" id="app-menu" aria-label="하위 분류" hidden>
@@ -92,8 +92,12 @@
   </aside>
   <main id="main" tabindex="-1">
     <div id="catalog-toolbar" class="catalog-toolbar">
-      <button type="button" id="menu-toggle" class="menu-toggle ds-button" data-variant="outline" data-size="sm" data-icon-only aria-label="하위 분류 열기" title="하위 분류 열기" aria-expanded="false" aria-controls="app-menu" data-focus="menu-toggle"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><path d="M4 7h16M4 12h16M4 17h16"></path></svg></button>
       <div id="header-context" class="header-context"></div>
+      <div id="catalog-categories" class="catalog-categories">
+        <span id="category-label" class="toolbar-label">분류</span>
+        <button type="button" id="menu-toggle" class="menu-toggle ds-button" data-variant="outline" data-size="sm" aria-labelledby="category-label category-current" aria-expanded="false" aria-controls="app-menu" data-focus="menu-toggle"><svg viewBox="0 0 24 24" class="icon" aria-hidden="true" data-src="self:diagram"><path d="M4 7h16M4 12h16M4 17h16"></path></svg><span id="category-current">전체 보기</span></button>
+      </div>
+      <div id="preview-context" class="preview-context" hidden></div>
       <button type="button" id="query-chip" class="query-chip ds-button" data-variant="outline" data-size="sm" data-action="clear-query" data-focus="query-chip" hidden></button>
     </div>
     <div id="content"></div>

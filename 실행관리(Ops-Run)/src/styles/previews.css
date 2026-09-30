@@ -7,10 +7,9 @@
 .sample-pagination { display:flex; justify-content:center; gap:var(--p-space-xs); }
 .sample-menu { display:grid; gap:var(--p-space-2xs); }
 @media (max-width:760px) {
-  .preview { height:calc(var(--p-space-unit) * 42); padding:var(--p-space-md); }
+  .preview { padding:var(--p-space-md); }
   .preview-large { height:calc(var(--p-space-unit) * 75); }
 }
 @media (max-width:360px) {
-  .preview { height:calc(var(--p-space-unit) * 38); }
   .preview-large { height:calc(var(--p-space-unit) * 68); }
 }

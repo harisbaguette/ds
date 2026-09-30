@@ -1,6 +1,6 @@
 {
   "version": "0.6.0",
-  "revision": "24b661bb7a812d1ae4acb3aeb48ef6b87872489825cf75d21b61467f74832cca",
+  "revision": "d3b7a413e911143a7df1c36cfd1b38075ba49373d751bfc4c848738f4a69cb6d",
   "sources": [
     "src/system/react/admin-records.jsx",
     "src/system/react/table-toolbar.jsx",
@@ -131,11 +131,11 @@
         "token-weight",
         "token-border",
         "token-radius",
-        "token-size"
+        "token-size",
+        "token-breakpoint"
       ],
       "entry": "DAT-05",
       "behavior": true,
-      "english": "Data Table",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -227,7 +227,6 @@
       ],
       "entry": "ACT-07",
       "behavior": true,
-      "english": "Record Editor",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -296,9 +295,10 @@
         "token-size",
         "token-radius",
         "token-color",
-        "token-text"
+        "token-text",
+        "token-border",
+        "token-stroke"
       ],
-      "english": "Admin Layout",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -365,7 +365,6 @@
         "token-text"
       ],
       "behavior": true,
-      "english": "Admin Page",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -1763,7 +1762,6 @@
         "token-border"
       ],
       "entry": "SOC-01",
-      "english": "Avatar",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -1827,7 +1825,6 @@
         "token-motion"
       ],
       "entry": "ACT-01",
-      "english": "Button",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -2014,7 +2011,6 @@
         "token-space"
       ],
       "entry": "ATM-08",
-      "english": "Icon button",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -2193,7 +2189,6 @@
         "token-layer"
       ],
       "entry": "NAV-07",
-      "english": "Segmented button",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -2416,7 +2411,6 @@
         "token-shadow"
       ],
       "entry": "INP-92",
-      "english": "Text field with clear button",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -2500,7 +2494,6 @@
         "token-shadow"
       ],
       "entry": "INP-34",
-      "english": "Prefix / suffix",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -2585,7 +2578,6 @@
         "token-shadow"
       ],
       "entry": "INP-10",
-      "english": "Stepper",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -2669,7 +2661,6 @@
         "token-shadow"
       ],
       "entry": "INP-15",
-      "english": "Password input",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -2750,7 +2741,6 @@
         "token-border"
       ],
       "entry": "INP-47",
-      "english": "Text input",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -2860,7 +2850,6 @@
         "token-shadow"
       ],
       "entry": "INP-11",
-      "english": "Date range input",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -2956,7 +2945,6 @@
         "token-breakpoint"
       ],
       "entry": "ATM-89",
-      "english": "Search field",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -2984,7 +2972,7 @@
       "styles": [
         "main"
       ],
-      "minInlineSize": 240,
+      "minInlineSize": 288,
       "support": {
         "html": "implemented",
         "react": "implemented",
@@ -3272,7 +3260,6 @@
         "token-border"
       ],
       "entry": "INP-77",
-      "english": "Multi-select tile",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -3355,7 +3342,6 @@
         "token-border"
       ],
       "entry": "INP-78",
-      "english": "Single-select tile",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -3438,7 +3424,6 @@
         "token-border"
       ],
       "entry": "ACT-36",
-      "english": "Filter chip",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -3524,7 +3509,6 @@
         "token-stroke"
       ],
       "entry": "STA-01",
-      "english": "Badge",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -3643,7 +3627,6 @@
         "token-border"
       ],
       "entry": "NAV-25",
-      "english": "Counter badge",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -3723,7 +3706,6 @@
         "token-shadow"
       ],
       "entry": "NAV-06",
-      "english": "Tabs",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -3857,7 +3839,6 @@
         "token-layer"
       ],
       "entry": "NAV-05",
-      "english": "Tab bar",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -3987,7 +3968,6 @@
         "token-shadow"
       ],
       "entry": "STA-02",
-      "english": "Inline notification",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -4046,7 +4026,6 @@
         "token-shadow"
       ],
       "entry": "STA-03",
-      "english": "Snackbar",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -4170,7 +4149,6 @@
         "token-aspect"
       ],
       "entry": "STA-49",
-      "english": "Circular progress indicator",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -4226,7 +4204,6 @@
         "token-size"
       ],
       "entry": "ATM-123",
-      "english": "Step indicator",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -4290,7 +4267,6 @@
         "token-shadow"
       ],
       "entry": "LAY-15",
-      "english": "Card",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -4544,7 +4520,6 @@
         "token-size"
       ],
       "entry": "ACT-03",
-      "english": "Button group",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -4658,7 +4633,6 @@
         "token-border"
       ],
       "entry": "ACT-49",
-      "english": "Fixed bottom CTA",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -4713,7 +4687,6 @@
         "token-space"
       ],
       "entry": "INP-67",
-      "english": "Side label",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -4773,7 +4746,6 @@
         "token-border"
       ],
       "entry": "ATM-153",
-      "english": "Checkbox group",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -5007,7 +4979,6 @@
         "token-border"
       ],
       "entry": "ATM-203",
-      "english": "Switch in a list row",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -5137,7 +5108,6 @@
         "token-size"
       ],
       "entry": "ATM-120",
-      "english": "Filter chips",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -5185,7 +5155,7 @@
         "code": "LAY",
         "fit": true
       },
-      "name": "피드",
+      "name": "결과 격자",
       "section": "composition",
       "layer": "Module",
       "keywords": "결과 격자 카드 목록 grid results",
@@ -5196,7 +5166,6 @@
         "token-space"
       ],
       "entry": "LAY-49",
-      "english": "Feed",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [
@@ -5379,7 +5348,6 @@
       ],
       "entry": "INP-69",
       "behavior": true,
-      "english": "User picker",
       "version": "0.6.0",
       "lifecycle": "Trial",
       "environments": [

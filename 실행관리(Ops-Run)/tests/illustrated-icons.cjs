@@ -31,10 +31,10 @@ fs.mkdirSync(out, { recursive: true });
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.goto('http://127.0.0.1:4173/#/dictionary?shelf=icon');
-    const artwork = await page.evaluate(() => Pattove.library.entries.filter(e => e.art));
+    const artwork = await page.evaluate(() => { const ui=Pattove.libraryUI;return ui.currentItems({page:'dictionary',filters:ui.readFilters('dictionary',new URLSearchParams('shelf=icon')),query:''}).filter(e=>e.art); });
     if (process.argv.includes('--complete')) {
-      const missing = await page.evaluate(() => Pattove.library.entries.filter(e => e.category === 'ICO' && e.kind !== '기준' && !e.art).map(e => e.id));
-      assert.deepEqual(missing, [], 'Every drawable dictionary meaning has an illustration');
+      const missing = await page.evaluate(() => { const ui=Pattove.libraryUI;return ui.currentItems({page:'dictionary',filters:ui.readFilters('dictionary',new URLSearchParams('shelf=icon')),query:''}).filter(e=>e.kind!=='기준'&&!e.art).map(e=>e.id); });
+      assert.deepEqual(missing, [], 'Every catalog icon has an illustration');
       const queue = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../assets/icons/illustrated/production.json'), 'utf8'));
       assert.ok(queue.jobs.every(job => job.status === 'imported'), 'Every production sheet is imported');
     }
@@ -43,7 +43,7 @@ fs.mkdirSync(out, { recursive: true });
     assert.equal(await page.locator('.is-illustrated').count(), visibleCount);
     await page.locator('.is-illustrated img').evaluateAll(images => Promise.all(images.map(img => { img.loading='eager'; return img.decode(); })));
     assert.ok(await page.locator('.is-illustrated img').evaluateAll(images => images.every(img => { const r=img.getBoundingClientRect(), p=img.parentElement.getBoundingClientRect(); return r.top>=p.top && r.bottom<=p.bottom+1; })), 'Thumbnails fit without clipping');
-    assert.ok(await page.locator('.is-illustrated').evaluateAll(els => els.every(el => { const r=el.getBoundingClientRect(); return Math.abs(r.width-r.height)<1.5; })), 'Icon tiles are square (1:1)');
+    assert.ok(await page.locator('.is-illustrated .dict-thumb').evaluateAll(els => els.every(el => { const r=el.getBoundingClientRect(); return Math.abs(r.width-r.height)<1.5; })), 'Icon picture frames are square (1:1)');
     await page.screenshot({ path: path.join(out, 'desktop.png'), fullPage: true });
     await page.locator('.dict-entries').screenshot({ path: path.join(out, 'collection.png') });
     const samples=artwork.length<=48?artwork:[artwork[0],...new Map(artwork.map(e=>[e.sub,e])).values()];

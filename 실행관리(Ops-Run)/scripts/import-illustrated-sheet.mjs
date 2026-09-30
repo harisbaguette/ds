@@ -39,6 +39,7 @@ const icons=job.icons.map((item,i)=>{
   const left=Math.max(0,b.x0-3),top=Math.max(0,b.y0-3);
   return {entry:item.entry,name:item.name,crop:{left,top,width:Math.min(w,b.x1+4)-left,height:Math.min(h,b.y1+4)-top}};
 });
+while(icons.length<job.columns*job.rows)icons.push(null);
 manifest.batches.push({job:id,source,columns:3,rows:3,normalized:true,icons});
 manifest.aliases||={};
 for(const item of job.icons)for(const alias of item.aliases)manifest.aliases[alias]=item.entry;

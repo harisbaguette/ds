@@ -37,7 +37,7 @@ const parse = text => JSON.parse(text.slice(text.indexOf('{')));
     }
     for (const shelf of ['token', 'icon', 'part', 'block', 'template']) {
       await goto('dictionary?shelf=' + shelf);
-      check(shelf + ' 목록의 모든 카드에 해당 항목 ID 표시', await page.locator('.dict-entry').evaluateAll(cards => cards.length > 0 && cards.every(card => card.querySelector('.element-id')?.textContent === (card.dataset.libraryEntry || card.querySelector('[data-library-entry]')?.dataset.libraryEntry))));
+      check(shelf + ' 목록 카드에 ID 코드를 표시하지 않음', await page.locator('.dict-entry').evaluateAll(cards => cards.length > 0 && cards.every(card => !card.querySelector('.element-id'))));
     }
     await goto('system?detail=button&option-variant=primary');
     const before = page.url();
@@ -62,6 +62,13 @@ const parse = text => JSON.parse(text.slice(text.indexOf('{')));
     await goto('dictionary?shelf=icon&detail=ICO-01');
     const art = await copy('ICO-01');
     check('완성된 아이콘은 실제 그림 파일 경로로 전달', art.status === 'asset-ready' && Object.values(art.assets).every(file => fs.existsSync(path.join(root, file))));
+    const glyphSamples = await page.evaluate(() => Pattove.library.glyphSets.map(set => Pattove.library.glyphs.find(([id]) => id.startsWith(set.id + ':'))[0]));
+    for (const key of glyphSamples) {
+      const glyph = await page.evaluate(key => Pattove.references.payload(key), key);
+      check(key + ' 완성 일러스트 또는 제작 중 상태를 전달하고 SVG로 대체하지 않음', !glyph.html && !glyph.assets?.svg && (glyph.status === 'not-implemented' || (glyph.status === 'asset-ready' && ['png','webp'].every(ext => fs.existsSync(path.join(root,glyph.assets[ext]))))));
+    }
+    const guideline = await page.evaluate(() => Pattove.references.payload('ICO-497'));
+    check('아이콘 기준은 사용 규칙으로 전달', guideline.status === 'guideline' && guideline.purpose && !guideline.instructions.includes('미구현'));
     // Browser-denied clipboard access must leave the full text selectable, including inside a detail dialog.
     await page.evaluate(() => Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async () => { throw new Error('denied'); } } }));
     await page.locator('[data-copy-reference="ICO-01"]').click();

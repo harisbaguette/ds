@@ -1,5 +1,5 @@
 ﻿/* Library tiles and the dictionary detail. */
-.catalog-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: calc(var(--p-space-unit) * 5); }
+.catalog-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(min(100%,var(--p-container-2xs)),1fr)); gap: calc(var(--p-space-unit) * 5); }
 .catalog-tile { min-width: 0; min-height: calc(var(--p-space-unit) * 32); display: flex; flex-direction: column; align-items: flex-start; padding: calc(var(--p-space-unit) * 5); text-align: left; }
 .record-code { margin-bottom:var(--p-space-md); }
 .catalog-tile h3 { font-size: var(--p-text-md); line-height: var(--p-leading-normal); font-weight: var(--p-weight-extrabold); overflow-wrap: anywhere; }
@@ -40,11 +40,12 @@
 .glyph-keys span { color: var(--p-muted); font-size: var(--p-text-sm); }
 .glyph-mini { width: var(--p-icon-lg); height: var(--p-icon-lg); color: var(--p-ink); flex-shrink: 0; }
 .glyph-mini.is-emoji { font-size: var(--p-text-title); }
+.dict[data-shelf='icon'] .dict-entry.is-guideline { gap:var(--p-space-sm); padding:var(--p-space-md); }
+.dict[data-shelf='icon'] .is-guideline strong { white-space:normal; text-align:left; font-weight:var(--p-weight-semibold); }
+.guideline-label { font-size:var(--p-text-sm); color:var(--p-muted); }
+.guideline-summary { font-size:var(--p-text-sm); line-height:var(--p-leading-normal); overflow-wrap:anywhere; }
 .search-suggestion > span { overflow-wrap: anywhere; }
 .search-suggestion small { flex-shrink: 0; }
-@media (max-width: 1200px) {
-  .catalog-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-}
 @media (max-width: 760px) {
   .catalog-grid { gap: var(--p-space-md); }
   .catalog-tile { min-height: calc(var(--p-space-unit) * 38); padding: var(--p-space-md); }

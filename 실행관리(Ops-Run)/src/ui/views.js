@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const { catalog, previews } = window.Pattove;
   const { preview, icon } = previews;
   const escape = value => String(value).replace(/[&<>"']/g, char => ({
@@ -19,10 +19,10 @@
     const shelf = ['dictionary','system'].includes(state.page) ? window.Pattove.libraryUI.shelfFor(state)?.id : null;
     if (!['token','part','block','template'].includes(shelf)) return '';
     const current = previewStyle(state);
-    return `<div class="preview-style"><span class="preview-style-field"><select class="ds-input" data-preview-select data-focus="preview-style" aria-label="미리보기 스타일" title="미리보기 스타일">${styles.map(s => `<option value="${escape(s.id)}"${s.id === current ? ' selected' : ''}>${escape(s.name)}${styles.length > 1 && s.id === state.style ? ' (사용 중)' : ''}</option>`).join('')}</select>${icon('chevron-down')}</span></div>`;
+    return `<label class="preview-style"><span class="toolbar-label">미리보기 스타일</span><span class="preview-style-field"><select class="ds-input" data-preview-select data-focus="preview-style">${styles.map(s => `<option value="${escape(s.id)}"${s.id === current ? ' selected' : ''}>${escape(s.name)}${styles.length > 1 && s.id === state.style ? ' (사용 중)' : ''}</option>`).join('')}</select></span></label>`;
   }
   function header(state) {
-    return headline(state) + stylePicker(state);
+    return headline(state);
   }
   function headline(state) {
     const library = window.Pattove.libraryUI;
@@ -68,7 +68,11 @@
   function styleGallery(state) {
     return `<section class="atlas dict" data-shelf="style" aria-labelledby="page-title"><div class="dict-grid dict-entries">${styles.map(s => `<div class="dict-entry ds-surface is-built style-card${s.id === state.style ? ' is-active' : ''}" data-style-card="${s.id}">
       <span class="dict-thumb atlas-preview" inert aria-hidden="true">${window.Pattove.componentDocs.live('page', {}, s.id, 'style-card-' + s.id)}</span>
-      <a class="dict-hit" href="#/styles?detail=${encodeURIComponent(s.id)}" data-focus="style-card-${escape(s.id)}"><strong>${escape(s.name)}</strong><span class="dict-term">${escape(s.description)}</span>${window.Pattove.references.label('style/'+s.id)}${s.id === state.style ? inUse : ''}</a>
+      <a class="dict-hit" href="#/styles?detail=${encodeURIComponent(s.id)}" data-focus="style-card-${escape(s.id)}" aria-labelledby="style-name-${escape(s.id)} style-open-${escape(s.id)}" aria-describedby="style-description-${escape(s.id)}${s.id === state.style ? ' style-status-' + escape(s.id) : ''}">
+        <span class="style-card-heading"><strong id="style-name-${escape(s.id)}">${escape(s.name)}</strong>${s.id === state.style ? `<span class="variant-kept style-card-status" id="style-status-${escape(s.id)}">${icon('check')}<span>사용 중</span></span>` : ''}</span>
+        <span class="dict-term" id="style-description-${escape(s.id)}">${escape(s.description)}</span>
+        <span class="style-card-footer">${window.Pattove.references.label('style/'+s.id)}<span class="style-card-open" id="style-open-${escape(s.id)}">자세히 보기 ${icon('arrow')}</span></span>
+      </a>
     </div>`).join('')}</div></section>`;
   }
   // One style's page: its real parts and a composed screen in that style, what it is for, and the switch.
@@ -95,5 +99,5 @@
       </section>
     </article>`;
   }
-  window.Pattove.views = { escape, styleName, previewStyle, styleReferences, header, patterns, detail, styleGallery, styleDetail };
+  window.Pattove.views = { escape, styleName, previewStyle, stylePicker, styleReferences, header, patterns, detail, styleGallery, styleDetail };
 })();

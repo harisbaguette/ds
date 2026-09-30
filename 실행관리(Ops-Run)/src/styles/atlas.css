@@ -1,32 +1,41 @@
-﻿/* Application and specimens share the single main style's material tokens. */
+/* Application and specimens share the single main style's material tokens. */
 
 .atlas { max-width:var(--p-container-2xl); margin:auto; }
 .atlas-preview { height:calc(var(--p-space-unit) * 52); overflow:hidden; display:grid; align-items:center; background:var(--p-bg); }
 .atlas-sample { width:100%; height:100%; padding:var(--p-space-xl) var(--p-space-lg); display:flex; gap:var(--p-space-sm); align-items:center; justify-content:center; flex-wrap:wrap; }
 .atlas-sample[data-kind='icon'] { display:grid; grid-template-columns:repeat(4,var(--p-size-lg)); gap:var(--p-space-lg); justify-content:center; }
 .atlas-sample[data-kind='icon'] .ui-icon { width:var(--p-icon-lg); height:var(--p-icon-lg); }
-.atlas-sample[data-kind^='token-'] { justify-content:flex-start; }
-.atlas-sample[data-kind='tabs'] { display:block; padding-top:var(--p-space-2xl); }
-.atlas-sample:is([data-kind='input'],[data-kind='field']) { display:block; padding-top:calc(var(--p-space-unit) * 11); }
+.atlas-sample[data-kind='button'] { flex-wrap:nowrap; gap:var(--p-space-xs); }
+/* Full-width parts fill the row and sit in the middle of the picture like every other sample. */
+.atlas-sample:is([data-kind='tabs'],[data-kind='input'],[data-kind='field'])>* { width:100%; }
 @media(max-width:760px) {.atlas-preview { height:calc(var(--p-space-unit) * 45); }.atlas-sample { padding:calc(var(--p-space-unit) * 5) var(--p-space-md); }
 }
 @media(max-width:440px) {.atlas-preview { height:calc(var(--p-space-unit) * 52); }.atlas-sample { padding:calc(var(--p-space-unit) * 7); } }
 /* 부품사전 격자: 그림이 뜻을 싣고, 이름은 짧은 한 줄이다. */
 .dict-grid { display:grid; gap:calc(var(--p-space-unit) * 5); }
-.dict-entries { grid-template-columns:repeat(auto-fill,minmax(var(--p-container-2xs),1fr)); }
-.dict-entry { min-width:0; display:grid; align-content:start; align-items:start; justify-items:stretch; gap:var(--p-space-xs); padding:var(--p-space-xs) var(--p-space-xs) var(--p-space-md); text-align:left; transition:border-color var(--p-duration),box-shadow var(--p-duration); }
+.dict-entries { grid-template-columns:repeat(auto-fill,minmax(min(100%,calc(var(--p-space-unit) * 72)),1fr)); }
+/* One card, one frame: the picture runs edge to edge on top, a hairline, then the name block. */
+.ds .dict-entry { min-width:0; display:flex; flex-direction:column; gap:0; padding:0; overflow:hidden; border-radius:var(--p-radius-xl); background:var(--p-bg); text-align:left; transition:border-color var(--p-duration),box-shadow var(--p-duration); }
 .dict-entry:hover { border-color:var(--p-control-border); box-shadow:var(--p-raised); }
-.dict-entry strong { font-size:var(--p-text-sm); padding:0 var(--p-space-xs); font-weight:var(--p-weight-semibold); line-height:var(--p-leading-snug); overflow-wrap:anywhere; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-.dict-thumb { width:100%; height:auto; min-height:0; display:grid; place-items:center; border-radius:var(--p-radius-xl); background:var(--p-bg); overflow:hidden; }
-/* In every grid the picture is square; the name and the rest sit under it. */
-.dict-thumb, .dict-thumb.atlas-preview { aspect-ratio:var(--p-aspect-square); height:auto; }
+.dict-entry strong { font-size:var(--p-text-md); font-weight:var(--p-weight-semibold); line-height:var(--p-leading-snug); overflow-wrap:anywhere; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.dict-thumb { width:100%; height:auto; min-height:0; display:grid; place-items:center; border-bottom:var(--p-border-width) solid var(--p-line); background:var(--p-bg); overflow:hidden; }
+/* Parts, blocks and tokens are wider than tall, so their picture is landscape; icons and whole screens stay square. */
+.dict-thumb, .dict-thumb.atlas-preview { aspect-ratio:auto; height:calc(var(--p-space-unit) * 42); }
+:is(.dict[data-shelf='icon'],.dict[data-shelf='template']) .is-built .dict-thumb, .dict[data-shelf='icon'] .dict-thumb { aspect-ratio:var(--p-aspect-square); height:auto; }
+/* The name block: name and the industry word share one left edge. */
+.dict-entry>strong, .dict-hit { padding:var(--p-space-sm) var(--p-space-md) 0; }
+.dict-entry>strong:last-child, .dict-entry>.dict-term:last-child { padding-bottom:var(--p-space-md); }
+.dict-hit>strong { padding:0; }
+.dict-hit { padding-bottom:var(--p-space-md); }
 .dict-thumb>.variant-frame[data-frame] { height:100%; min-height:0; }
-.dict-thumb .atlas-sample { padding:calc(var(--p-space-unit) * 5) var(--p-space-md); }
-.is-todo .dict-thumb { border:var(--p-border-width) var(--p-stroke-dashed) var(--p-control-border); background:none; }
+.dict-thumb .atlas-sample { padding:var(--p-space-md); }
+.dict-thumb .atlas-sample[data-kind="button"] { flex-wrap:wrap; }
+.dict-thumb .atlas-sample[data-kind="button"] > .ds-button { flex-shrink:0; white-space:nowrap; }
+.is-todo .dict-thumb { margin:var(--p-space-xs) var(--p-space-xs) 0; width:auto; border:var(--p-border-width) var(--p-stroke-dashed) var(--p-control-border); border-radius:var(--p-radius-lg); background:none; }
 .dict-todo,.detail-todo { color:var(--p-muted); font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); }
 .is-todo strong { color:var(--p-muted); }
 /* 통용 용어: the industry name under the dictionary name. Icon tiles already carry their English name, so they skip it. */
-.dict-term { display:block; padding:0 var(--p-space-xs); font-size:var(--p-text-sm); line-height:var(--p-leading-snug); color:var(--p-muted); overflow-wrap:anywhere; }
+.dict-term { display:block; overflow:hidden; padding:var(--p-space-2xs) var(--p-space-md) 0; font-size:var(--p-text-sm); line-height:var(--p-leading-snug); color:var(--p-muted); text-overflow:ellipsis; white-space:nowrap; }
 .dict-hit .dict-term { padding:0; }
 .dict[data-shelf='icon'] .dict-term { display:none; }
 /* Icon-set pictures carry no paint of their own: outline sets draw with a stroke, filled sets with a fill, both in the ink color. */
@@ -34,16 +43,21 @@
 .paint-fill { fill:currentColor; }
 .is-emoji { display:grid; place-items:center; font-size:calc(var(--p-space-unit) * 12); line-height:var(--p-leading-none); width:auto; height:auto; }
 .dict-entry.is-built { position:relative; }
-.dict-hit { flex:1; width:100%; display:flex; flex-direction:column; gap:var(--p-space-xs); text-align:left; color:inherit; }
-.dict-hit::after { content:''; position:absolute; inset:0; border-radius:var(--p-radius-2xl); }
-.dict-hit:focus-visible { outline:none; }.dict-hit:focus-visible::after { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
+.dict-hit { flex:1; width:100%; display:flex; flex-direction:column; gap:var(--p-space-2xs); text-align:left; color:inherit; }
+/* The whole card is the link; its focus ring follows the card's own corners. */
+.dict-hit::after { content:''; position:absolute; inset:0; border-radius:inherit; }
+.dict-entry.is-built { border-radius:var(--p-radius-xl); }
+.ds .dict-hit:focus-visible { outline:none; }.dict-hit:focus-visible::after { border-radius:var(--p-radius-xl); outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
+/* Paint the library focus ring on the card, outside its clipped specimen. */
+.dict:not([data-shelf='style']) .dict-hit:focus-visible::after { outline:none; }
+.dict:not([data-shelf='style']) .dict-entry:has(.dict-hit:focus-visible) { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
 /* Compact glyphs, legible parts and complete screens each get an appropriate canvas. */
 .dict[data-shelf='icon'] .dict-entries { grid-template-columns:repeat(auto-fill,minmax(calc(var(--p-space-unit) * 32),1fr)); gap:var(--p-space-sm); }
 /* Icons are square, so every icon tile is 1:1: the picture fills the top, the name sits on one line under it. */
-.dict[data-shelf='icon'] .dict-entry { align-items:stretch; gap:var(--p-space-2xs); padding:var(--p-space-sm); }
+.ds .dict[data-shelf='icon'] .dict-entry { gap:var(--p-space-2xs); padding:var(--p-space-sm) var(--p-space-sm) var(--p-space-xs); }
 .dict[data-shelf='icon'] .dict-entry:hover { box-shadow:none; }
-.dict[data-shelf='icon'] .dict-thumb { display:flex; align-items:center; justify-content:center; height:auto; min-height:0; background:none; }
-.dict[data-shelf='icon'] .dict-entry strong { display:block; padding:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; font-size:var(--p-text-sm); font-weight:var(--p-weight-medium); }
+.dict[data-shelf='icon'] .dict-thumb { display:flex; align-items:center; justify-content:center; height:auto; min-height:0; padding:var(--p-space-xs); border-bottom:0; background:none; }
+.dict[data-shelf='icon'] .dict-entry strong { display:block; padding:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:center; font-size:var(--p-text-body); font-weight:var(--p-weight-medium); }
 .illustrated-icon { display:block; width:100%; height:100%; object-fit:contain; }
 .detail-art.illustrated-detail { width:min(calc(100% - var(--p-space-xl)),calc(var(--p-space-unit) * 80)); aspect-ratio:var(--p-aspect-square); min-height:0; margin-inline:auto; background:transparent; }
 .illustrated-detail .illustrated-icon { width:100%; height:auto; }
@@ -57,16 +71,26 @@
 /* One style's page: name and the switch on one line, its preview tiles, then what it is for. */
 .style-heading { display:flex; align-items:flex-start; justify-content:space-between; gap:var(--p-space-md); flex-wrap:wrap; }
 .style-heading>.variant-kept { margin-top:var(--p-space-xs); }
-.style-card .dict-hit .variant-kept { align-self:flex-start; margin-inline:var(--p-space-xs); }
-.style-card .dict-thumb .variant-frame[data-frame='phone'] { width:100%; height:100%; padding:var(--p-space-md) var(--p-space-sm); border:0; background:none; }
+.dict[data-shelf='style'] .dict-entries { grid-template-columns:repeat(auto-fill,minmax(min(100%,calc(var(--p-space-unit) * 80)),1fr)); gap:var(--p-space-lg); }
+.style-card .dict-thumb, .dict[data-shelf='style'] .dict-thumb { aspect-ratio:auto; height:calc(var(--p-space-unit) * 104); background:var(--p-surface); }
+.style-card .dict-thumb .variant-frame[data-frame='phone'] { grid-area:auto; width:100%; height:100%; padding:var(--p-space-md) var(--p-space-sm); border:0; background:none; }
 .style-card .dict-thumb .preview-viewport[data-phone] { max-width:var(--p-container-2xs); }
+.style-card .dict-hit { padding:var(--p-space-lg); gap:var(--p-space-xs); }
+.style-card-heading { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:var(--p-space-xs); }
+.style-card-heading strong { display:block; padding:0; font-size:var(--p-text-title-sm); line-height:var(--p-leading-snug); }
+.style-card .style-card-status { width:auto; height:auto; gap:var(--p-space-2xs); padding:var(--p-space-2xs) var(--p-space-xs); border-radius:var(--p-radius-full); background:var(--p-success-soft); color:var(--p-success); font-size:var(--p-text-sm); font-weight:var(--p-weight-medium); line-height:var(--p-leading-normal); white-space:nowrap; }
+.style-card .dict-term { white-space:normal; font-size:var(--p-text-body); line-height:var(--p-leading-relaxed); }
+.style-card-footer { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:var(--p-space-xs) var(--p-space-md); margin-top:var(--p-space-xs); padding-top:var(--p-space-sm); border-top:var(--p-border-width) solid var(--p-line); }
+.style-card-open { display:inline-flex; align-items:center; gap:var(--p-space-xs); margin-left:auto; font-size:var(--p-text-body); font-weight:var(--p-weight-semibold); white-space:nowrap; }
+.style-card-open .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); }
+.style-card .dict-hit:is(:hover,:focus-visible) .style-card-open { text-decoration:underline; text-underline-offset:var(--p-underline-offset); }
 .style-facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--p-container-2xs)),1fr)); gap:var(--p-space-lg); max-width:var(--p-container-2xl); margin:calc(var(--p-space-unit) * 8) auto 0; padding-top:var(--p-space-lg); border-top:var(--p-border-width) solid var(--p-line); }
 .style-fact h3 { font-size:var(--p-text-sm); font-weight:var(--p-weight-semibold); margin-bottom:var(--p-space-xs); }
 .style-fact p, .style-fact li { font-size:var(--p-text-sm); line-height:var(--p-leading-relaxed); color:var(--p-muted); }
 .style-fact ul { display:grid; gap:var(--p-space-2xs); padding-left:var(--p-space-md); list-style:disc; }
-.style-overview { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--p-space-lg); max-width:var(--p-container-2xl); margin:auto; }
+.style-overview { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(100%,calc(var(--p-space-unit) * 80)),1fr)); gap:var(--p-space-lg); max-width:var(--p-container-2xl); margin:auto; }
 .overview-tile { position:relative; display:flex; flex-direction:column; min-width:0; }
-.overview-preview { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:var(--p-space-sm); flex:none; width:100%; aspect-ratio:var(--p-aspect-square); min-height:0; padding:var(--p-space-lg); border-radius:inherit; background:var(--p-bg); overflow:clip; }
+.overview-preview { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:var(--p-space-sm); flex:none; width:100%; height:calc(var(--p-space-unit) * 60); min-height:0; padding:var(--p-space-lg); border-radius:inherit; background:var(--p-bg); overflow:clip; }
 .overview-link { display:flex; align-items:center; justify-content:space-between; gap:var(--p-space-sm); min-height:var(--p-control-size-sm); padding:var(--p-space-sm) var(--p-space-md); }
 .overview-link h2 { font-size:var(--p-text-sm); font-weight:var(--p-weight-medium); }
 .overview-link .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); color:var(--p-muted); }
@@ -83,9 +107,13 @@
 .preview-viewport > [data-preview-scene] { position:absolute; top:0; left:0; transform:scale(var(--preview-scale)); transform-origin:top left; }
 .preview-scene { flex:none; width:var(--p-container-xs); }
 .overview-actions { display:flex; align-items:center; gap:var(--p-space-sm); width:max-content; }
-.dict-thumb .atlas-sample[data-preview-scene] { width:var(--p-container-sm); height:auto; padding:var(--p-space-lg); display:block; }
-.dict-thumb .atlas-sample[data-kind='bottom-nav'] { width:var(--p-container-xs); padding:var(--p-space-sm); }
-.dict-thumb .atlas-sample[data-kind='search-module'] { width:var(--p-container-md); }
+/* A shrunk scene: parts and blocks get their narrowest width from sample(); screens keep this wider one.
+   The scene is the container its parts measure, as the search module is on a real screen. */
+.dict-thumb .atlas-sample[data-preview-scene] { width:var(--p-container-sm); height:auto; padding:var(--p-space-md); display:block; container-type:inline-size; }
+.dict-thumb .atlas-sample[data-kind='record-editor'] { display:flex; justify-content:center; }
+/* Bottom bars sit on the picture's lower edge, where they live on a screen. */
+.dict-thumb .atlas-sample:is([data-kind='action-bar'],[data-kind='bottom-nav']) { align-items:flex-end; padding:0; }
+.dict-thumb .atlas-sample:is([data-kind='action-bar'],[data-kind='bottom-nav'])>* { width:100%; }
 .overview-tile[data-overview='input'] .ds-field, .overview-tile[data-overview='card'] .ds-card { width:100%; }
 .overview-tile[data-overview='selection'] .overview-preview { flex-direction:column; align-items:flex-start; padding-inline:var(--p-space-xl); }
 .overview-tile[data-overview='bottom-nav'] .overview-preview { padding-inline:var(--p-space-sm); }
@@ -99,15 +127,21 @@
 .overview-surfaces i { width:var(--p-control-size-sm); height:var(--p-control-size-sm); border-radius:var(--p-radius-md); background:var(--p-surface); box-shadow:var(--p-raised); }
 .overview-surfaces i:nth-child(2) { box-shadow:var(--p-inset); }
 .overview-surfaces i:nth-child(3) { box-shadow:none; border:var(--p-border-width) solid var(--p-line); }
+@media not all and (max-width:1100px) {
+  .style-card:only-child { grid-column:1 / -1; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); max-width:var(--p-container-xl); }
+  .style-card:only-child .dict-thumb { border-bottom:0; border-right:var(--p-border-width) solid var(--p-line); }
+  .style-card:only-child .dict-hit { justify-content:center; padding:var(--p-space-xl); }
+    .style-card:only-child .style-card-footer { margin-top:var(--p-space-lg); }
+}
 @media(max-width:1100px) {
-  .style-overview { grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--p-space-md); }
+  .style-overview { gap:var(--p-space-md); }
   .overview-tile[data-overview='card'] .ds-card { max-width:var(--p-container-sm); }
 }
 @media(max-width:760px) {
-  .dict-entries { grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .dict-grid { gap:var(--p-space-sm); }
+  .dict-grid { gap:var(--p-space-md); }
+  .dict:not([data-shelf="icon"]) .dict-entries { grid-template-columns:minmax(0,1fr); }
+  .dict[data-shelf="part"] .dict-thumb { height:calc(var(--p-space-unit) * 36); }
   .dict[data-shelf='icon'] .dict-entries { grid-template-columns:repeat(3,minmax(0,1fr)); gap:var(--p-space-xs); }
   .dict[data-shelf='icon'] .dict-entry { padding:var(--p-space-xs); }
-  .style-overview { grid-template-columns:minmax(0,1fr); }
   .overview-tile[data-overview='page'] .overview-preview { padding:var(--p-space-lg) var(--p-space-xs); }
 }

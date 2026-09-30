@@ -214,7 +214,8 @@
   function renderItem(id, prefix = uid('example'), options = {}) {
     if (id === 'data-table') return window.Pattove.admin.renderTable(prefix, options);
     if (id === 'record-editor') return window.Pattove.admin.renderEditorDemo(prefix);
-    if (id === 'admin-shell') return window.Pattove.admin.renderShell(prefix, {body:'<p>본문과 작업 블록을 이 자리에 놓습니다.</p>',...options});
+    // The shell's example: side menu, heading band and the slot where the table and editor blocks go.
+    if (id === 'admin-shell') return window.Pattove.admin.renderShell(prefix, { navigation: ['자료', '사용자', '설정'].map((label, i) => ({ label, href: '#', current: i === 0 })), body: '<div class="ds-admin-slot">본문 자리</div>', ...options });
     if (id === 'admin-page') return window.Pattove.admin.renderPage(prefix, options);
     const off = options.state === 'disabled';
     const picked = options.state !== 'unchecked';

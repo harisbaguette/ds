@@ -129,15 +129,18 @@ writeSprites(root,glyphSets);
 const illustratedDir='assets/icons/illustrated';
 const illustrated=JSON.parse(fs.readFileSync(path.join(root,illustratedDir,'manifest.json'),'utf8'));
 const illustratedIDs=new Set();
+const linkedGlyphs=new Set(entries.flatMap(e=>e.glyph||[]));
+const glyphIllustrations={};
 for(const batch of illustrated.batches) for(const item of batch.icons){
   if(item===null)continue;
   const entry=entries.find(e=>e.id===item.entry&&e.category==='ICO');
-  if(!entry||illustratedIDs.has(item.entry)||!/^[a-z][a-z0-9-]*$/.test(item.name))throw new Error('Invalid illustrated icon: '+item.entry);
+  if((!entry&&(!glyphKeys.has(item.entry)||linkedGlyphs.has(item.entry)))||illustratedIDs.has(item.entry)||!/^[a-z][a-z0-9-]*$/.test(item.name))throw new Error('Invalid illustrated icon: '+item.entry);
   illustratedIDs.add(item.entry);
   const base=illustratedDir+'/'+item.name;
   const art={style:illustrated.style,src:base+'.webp',thumb:base+'-192.webp',png:base+'.png',width:512,height:512};
   for(const file of [art.src,art.thumb,art.png])if(!fs.existsSync(path.join(root,file)))throw new Error('Missing illustrated asset: '+file+'; run npm run build:icons');
-  entry.art=art;
+  if(entry)entry.art=art;
+  else glyphIllustrations[item.entry]=art;
 }
 // Only dictionary entries that cite exactly the same reference glyphs may share a picture.
 for(const [id,target] of Object.entries(illustrated.aliases||{})){
@@ -146,7 +149,7 @@ for(const [id,target] of Object.entries(illustrated.aliases||{})){
   if(!entry||!original?.art||entry.art||entry.glyph.join('|')!==original.glyph.join('|'))throw new Error('Invalid illustrated alias: '+id+' -> '+target);
   entry.art={...original.art,sharedWith:target};
 }
-// Pictures no meaning entry points at still show in the icon tab as their own kind.
+// The full catalog includes every separately listed subject, now delivered as illustrations.
 shelves.find(s=>s.codes?.includes('ICO')).kinds.push('세트 그림');
 const layerDoc=read('문서/구성요소 계층표.md');
 const table=layerDoc.tokens.find(t=>t.type==='table' && text(t.header[0])==='레벨');
@@ -161,7 +164,7 @@ for(const row of table.rows) {
   components.push({id,layer:layer.id,name,examples});
 }
 for(const l of layers)l.count=components.filter(c=>c.layer===l.id).length;
-const payload={categories,groups,layers,uses,shelves,places,roleOrder,iconGroups,entries,components,
+const payload={categories,groups,layers,uses,shelves,places,roleOrder,iconGroups,entries,components,glyphIllustrations,
   glyphSets:glyphSets.map(({symbols,pkg,...s})=>s),glyphs:glyphs.map(g=>[g.key,...glyphNames[g.key]])};
 fs.writeFileSync(path.join(out,'library.js'),'/* Generated from repository Markdown by scripts/build-library.mjs. */\nwindow.Pattove=window.Pattove||{};\nwindow.Pattove.library='+JSON.stringify(payload)+';\n');
 fs.mkdirSync(path.join(root,'test-results/library'),{recursive:true});

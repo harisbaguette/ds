@@ -31,7 +31,7 @@ npx shadcn@4.21.0 add http://127.0.0.1:4173/src/registry/r/pattove-main-admin-pa
 파일은 프로젝트의 `design/`에 들어간다. HTML은 `design/examples/main/button.html`, React는 해당 `design/examples/main/admin-page.jsx` 예시에서 시작한다. React 프로젝트는 React 런타임을 제공하며 Next.js의 상호작용 부품에는 client 경계가 포함되어 있다. 서버 저장·인증은 포함하지 않는다. React 검색 모듈은 `id`, `title`, `description`, `tag`를 가진 레코드와 `onSave(record)`를 받아 연결한다. HTML 예시는 `data-record-id`와 `pattove:save` 이벤트로 선택한 레코드를 전달하며, 화면 안의 보관 상태만 바꾼다. 영구 저장 성공·실패는 소비 프로젝트에서 연결한다.
 
 - 버튼·입력창부터 검색·결과 블록·페이지까지 선택한 단위와 의존성만 가져온다.
-- 아이콘은 개별 SVG 또는 React 컴포넌트로 받는다. SVG 하나에 React나 글꼴 전체가 따라오지 않는다.
+- 아이콘 탭에서는 필요한 일러스트를 PNG·WebP 파일로 개별 다운로드한다.
 - 카드의 제목·본문·행동 영역, 필드의 라벨·설명도 공개한다. 필드는 라벨의 `for`와 입력의 `id`, 설명의 `aria-describedby` 연결을 유지한다.
 - 공통 CSS·아이콘 원본·스타일 토큰을 HTML과 React가 공유한다. 환경별 동작은 별도 구현이다.
 - `design/manifests/`에 시스템·부품 버전, 원본 경로와 파일 해시를 남긴다. 프로젝트에서 고친 파일을 자동 병합하거나 갱신하지 않는다.

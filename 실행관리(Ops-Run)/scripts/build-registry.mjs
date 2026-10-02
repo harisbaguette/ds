@@ -4,12 +4,18 @@ import vm from 'node:vm';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { loadTokens, tokenFiles, kinds } from './tokens.mjs';
+import { asset as illustrationAsset } from './lib/illustration-store.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 const write = (file, content) => { fs.mkdirSync(path.dirname(path.join(root, file)), { recursive: true }); fs.writeFileSync(path.join(root, file), content); };
 const ctx = vm.createContext({ window: {} });
 for (const file of ['src/data/catalog.js','src/ui/icons.js','src/system/registry.js','src/system/parts.js','src/system/admin.js','src/system/behaviors.js','src/data/system-source.js','src/data/system-fonts.js']) vm.runInContext(read(file), ctx);
-const { catalog, systemRegistry: registry, parts, systemSource: css, systemFonts: fonts, iconMarkup } = ctx.window.Pattove;
+const { catalog, systemRegistry: registry, parts, systemSource: css, systemFonts: fonts, iconMarkup, iconAssets } = ctx.window.Pattove;
+// Installed HTML and React keep the selected illustration without a running Pattove server.
+for (const [name, asset] of Object.entries(iconAssets)) {
+  const data = 'data:image/webp;base64,' + (await illustrationAsset(asset.entry, { size: 192 })).bytes.toString('base64');
+  iconMarkup[name] = iconMarkup[name].replace(asset.src, data);
+}
 const { styleCSS, kindsIn } = loadTokens(root);
 // Distributed base.css = default raw values (main style) of only the role kinds the shared rules read,
 // then the shared rules. Same content for every item and style, so installs never fight over it.
@@ -17,7 +23,7 @@ const sharedKinds = kindsIn(css.shared, 'shared');
 const baseCSS = styleCSS('main', sharedKinds, '.ds') + css.shared;
 const base = (process.env.REGISTRY_URL || 'http://127.0.0.1:4173/src/registry/r').replace(/\/$/, '');
 const cliVersion = JSON.parse(read('node_modules/shadcn/package.json')).version;
-const sourceHash = crypto.createHash('sha256').update(['src/system/parts.css','src/system/parts.js','src/system/admin.js','src/system/behaviors.js',...tokenFiles(),...fs.readdirSync(path.join(root,'src/system/react')).map(file=>'src/system/react/'+file)].map(read).join('\0')).digest('hex');
+const sourceHash = crypto.createHash('sha256').update(['src/system/parts.css','src/system/parts.js','src/system/admin.js','src/system/behaviors.js','src/ui/icons.js','src/data/ui-icons.json',...tokenFiles(),...fs.readdirSync(path.join(root,'src/system/react')).map(file=>'src/system/react/'+file)].map(read).join('\0') + JSON.stringify(iconMarkup)).digest('hex');
 const file = (name, content) => ({ path: `design/${name}`, type: 'registry:file', target: `~/design/${name}`, content });
 const items = [];
 function emit(name, title, files, meta = {}, dependencies = [], npmDependencies = []) {
@@ -41,13 +47,13 @@ const componentNames = {
 };
 const exampleUses = { card:['button'], 'list-card':['button'], 'media-card':['button'] };
 const records = '[{id:"spring",title:"봄의 색",description:"연한 초록과 따뜻한 노랑",tag:"진행 중"},{id:"weekend",title:"주말의 기록",description:"산책하며 모은 장면들",tag:"완료"}]';
-const svg = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" className="ui-icon" width="20" height="20" aria-hidden="true"><path d="${d}" /></svg>`;
-const bell = svg('M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20h4');
+const jsxIcon = name => iconMarkup[name].replace('class=', 'className=').replace(/>$/, ' />');
+const bell = jsxIcon('bell');
 const cardInside = '<CardBody><CardTitle>브랜드 리뉴얼</CardTitle><CardDescription>색과 서체, 첫인상을 모아 둔 컬렉션</CardDescription></CardBody><CardActions><Button onClick={() => alert("선택했어요.")} variant="outline">선택하기</Button></CardActions>';
 const jsxExamples = {
   'data-table':'<DataTable />', 'record-editor':'<RecordEditorDemo />', 'admin-shell':'<AdminShell title="자료 관리"><p>표나 편집 부품을 이 자리에 넣습니다.</p></AdminShell>', 'admin-page':'<AdminPage />',
-  button:'<Button onClick={() => alert("실행했어요.")}>계속하기</Button>', 'icon-button':`<IconButton label="검색" onClick={() => alert("검색해요.")}>${svg('m20 20-4-4M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14z')}</IconButton>`,
-  'action-row':`<ActionRow label="보내기" count={3} onClick={() => alert("보냈어요.")} actions={[{label:"보관",icon:${svg('M7 4h10v16l-5-4-5 4z')}}]} />`,
+  button:'<Button onClick={() => alert("실행했어요.")}>계속하기</Button>', 'icon-button':`<IconButton label="검색" onClick={() => alert("검색해요.")}>${jsxIcon('search')}</IconButton>`,
+  'action-row':`<ActionRow label="보내기" count={3} onClick={() => alert("보냈어요.")} actions={[{label:"보관",icon:${jsxIcon('bookmark')}}]} />`,
   'confirm-row':'<ConfirmRow onConfirm={() => alert("삭제했어요.")} onCancel={() => alert("취소했어요.")} />', 'action-bar':'<ActionBar label="3개 담기" onClick={() => alert("담았어요.")} />',
   'segmented-button':'<SegmentedButton />',
   input:'<label>이름<Input name="name" placeholder="이름을 입력하세요" /></label>', 'clear-input':'<label>검색어<ClearInput defaultValue="봄의 색" /></label>', 'unit-input':'<label>금액<UnitInput defaultValue="12,000" /></label>', stepper:'<label>수량<Stepper /></label>', 'password-input':'<label>비밀번호<PasswordInput placeholder="8자 이상" /></label>',
@@ -65,21 +71,21 @@ const jsxExamples = {
   tabs:'<Tabs />', 'bottom-nav':'<BottomNav current="#home" items={[{href:"#home",label:"홈"},{href:"#search",label:"탐색"},{href:"#saved",label:"저장"}]} />', template:'<Template title="나의 기록" count="1개"><p>본문이나 다른 블록을 이 자리에 넣습니다.</p></Template>', page:'<CollectionPage />'
 };
 const allReact = new Map();
-for (const id of [...Object.keys(componentNames),'table-toolbar','table-pagination','admin-records']) allReact.set(id, read(`src/system/react/${id}.jsx`));
+for (const id of [...Object.keys(componentNames),'table-toolbar','table-pagination','admin-records','ui-icon-plus','ui-icon-minus','ui-icon-close','ui-icon-image']) allReact.set(id, read(`src/system/react/${id}.jsx`));
 function reactClosure(id, result = new Set()) {
   if (result.has(id)) return result; result.add(id);
   for (const match of allReact.get(id).matchAll(/from '\.\/([\w-]+)\.jsx'/g)) reactClosure(match[1], result);
   return result;
 }
 for (const [name, markup] of Object.entries(iconMarkup)) {
-  const svg = read(`assets/icons/${name}.svg`);
-  emit(`pattove-icon-${name}-html`, `${name} · SVG`, [file(`icons/${name}.svg`, svg)], { item:'icon', icon:name, environment:'html', source:`assets/icons/${name}.svg` });
-  const jsx = svg.replace(/<svg[^>]*>/, '<svg {...props} viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">');
-  emit(`pattove-icon-${name}-react`, `${name} · React`, [file(`icons/${name}.jsx`, `import React from 'react';\nexport function Icon(props){return (${jsx.trim()});}\n`)], { item:'icon', icon:name, environment:'react', source:`assets/icons/${name}.svg` });
+  const meta = { item:'icon', icon:name, illustration:iconAssets[name].entry, source:iconAssets[name].src };
+  emit(`pattove-icon-${name}-html`, `${name} · 일러스트 HTML`, [file(`icons/${name}.html`, markup + '\n')], { ...meta, environment:'html' });
+  const jsx = jsxIcon(name).replace(' />', ' {...props} />');
+  emit(`pattove-icon-${name}-react`, `${name} · 일러스트 React`, [file(`icons/${name}.jsx`, `import React from 'react';\nexport function Icon(props){return (${jsx});}\n`)], { ...meta, environment:'react' });
 }
 // A part's css/<block>.css carries only its rules; they read --p-* roles shipped by styles/<style>/<kind>.css.
 const partCSS = block => css[block];
-// Token kinds and icons ship as their own items, never inside a part's closure.
+// Standalone icon items are installed separately; parts embed only the illustrations they use.
 const standalone = id => id.startsWith('token-') || id === 'icon';
 for (const style of catalog.styles.filter(s => s.id !== 'base')) {
   // One semantic file per token kind; an install gets only the kinds its CSS reads (a token item also gets the kinds its swatches read).

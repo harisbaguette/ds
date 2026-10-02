@@ -44,7 +44,7 @@
   const unitInput = ({ id = uid('unit'), label = '금액', value = '12,000', placeholder = '0', disabled = false, units = ['원','달러'] } = {}) =>
     `<span class="ds-input-group ds-unit-input">${input({ id, value, placeholder, disabled, extra: ' inputmode="numeric"' })}<select class="ds-input-unit" aria-label="${esc(label)} 단위"${disabled ? ' disabled' : ''}>${units.map(unit => `<option>${esc(unit)}</option>`).join('')}</select></span>`;
   const stepper = ({ id = uid('stepper'), value = '1', min = 0, disabled = false } = {}) =>
-    `<span class="ds-input-group ds-stepper">${tool('step', '하나 빼기', '<span aria-hidden="true">−</span>', disabled, ' data-step="-1"')}${input({ id, value, type: 'number', placeholder: '', disabled, extra: ` min="${Number(min)}" inputmode="numeric"` })}${tool('step', '하나 더하기', icon('plus'), disabled, ' data-step="1"')}</span>`;
+    `<span class="ds-input-group ds-stepper">${tool('step', '하나 빼기', icon('minus'), disabled, ' data-step="-1"')}${input({ id, value, type: 'number', placeholder: '', disabled, extra: ` min="${Number(min)}" inputmode="numeric"` })}${tool('step', '하나 더하기', icon('plus'), disabled, ' data-step="1"')}</span>`;
   // The show button flips the typed secret to plain text in place, so a typo is seen instead of retyped.
   const passwordInput = ({ id = uid('password'), label = '비밀번호', value = '', placeholder = '8자 이상', disabled = false } = {}) =>
     `<span class="ds-input-group ds-password-input">${input({ id, value, placeholder, disabled, type: 'password' })}${tool('reveal', label + ' 보기', '보기', disabled)}</span>`;
@@ -74,8 +74,8 @@
     return `<article class="ds-card" data-look="${look}">${cardInside({ ...cardSample, ...content })}</article>`;
   }
   // A picture well on the left (the first letter when there is no picture), words on the right.
-  const listCard = ({ initial = '', ...content } = {}) => `<article class="ds-card ds-list-card"><div class="ds-card-media" aria-hidden="true">${esc(initial)}</div>${cardInside({ ...cardSample, ...content })}</article>`;
-  const mediaCard = (content = {}) => `<article class="ds-card ds-media-card"><div class="ds-card-media" aria-hidden="true"></div>${cardInside({ ...cardSample, ...content })}</article>`;
+  const listCard = ({ initial = '', ...content } = {}) => `<article class="ds-card ds-list-card"><div class="ds-card-media" aria-hidden="true">${initial ? esc(initial) : icon('image')}</div>${cardInside({ ...cardSample, ...content })}</article>`;
+  const mediaCard = (content = {}) => `<article class="ds-card ds-media-card"><div class="ds-card-media" aria-hidden="true">${icon('image')}</div>${cardInside({ ...cardSample, ...content })}</article>`;
   // ── Selection ────────────────────────────────────────────
   function choice({ kind = 'checkbox', label = '선택하기', detail = '', checked = false, disabled = false, indeterminate = false, name = 'visibility', value = label, part = '', className = '' } = {}) {
     kind = option(kind, ['checkbox','radio','switch'], 'checkbox');

@@ -6,12 +6,14 @@
 | 파일 | 출처 | 사용·권리 정보 | 비고 |
 |---|---|---|---|
 | `assets/mark.svg` | 기존 패토브 브랜드 정본 | 프로젝트 기존 자산 | 로고 형태 유지 |
-| `assets/icons/*.svg` | 기존 실행 시안의 SVG와 이번 UI 작업 | 프로젝트 내 제작·수정 자산. 외부 아이콘 팩으로 표시하지 않음 | 29개, 24px 기준·1.65px 선. 원본을 묶어 인라인 SVG로 사용 |
+| `assets/icons/objects/*.webp` | 프로젝트에서 생성·검수한 일러스트 원본 시트 | 생성 자산. 브랜드 형태는 사용 지침 별도 확인 | 무손실 압축·내용 해시로 관리 |
+| `assets/icons/illustrated/manifest.json` | 원본 시트와 사전 ID 연결 | 같은 의미의 ID는 aliases로 공유 | 배포 이미지는 PNG·WebP로 요청 시 생성 |
+| `assets/icons/ui/*.webp` | 위 일러스트의 소형 배포본 | 현재 프런트엔드의 기능 아이콘 | 빌드로 갱신 |
 | `assets/illustrations/seascape.svg` | 기존 `패토브-재설계/style-lab.js` | 프로젝트 기존 자산 | 해·배·수평선, 제목과 겹침 조정 |
 | `assets/illustrations/seascape-banner.svg` | 위 풍경의 가로 폼 변형 | 프로젝트 내 수정 | 같은 색과 도형 사용 |
 | `assets/illustrations/empty-box.svg` | 이전 뼈대 작업 | 프로젝트 내 제작 | 컬러블록·풍경의 빈 상태 |
 | `assets/illustrations/neumorphic-app-icons.png` | 이번 `imagegen` 생성 | 생성 자산. 외부 아이콘 팩으로 표시하지 않음 | 512×512 RGBA. 참조 이미지의 뉴모픽 타일·굵은 먹선·파스텔 색을 맞춘 레이어·저장·문서·검색 스프라이트 |
-| `assets/illustrations/nav-styles.svg` | 이번 UI 작업 | 프로젝트 내 제작 | 스타일 탭용 뉴모픽 SVG 아이콘 |
+| `assets/illustrations/nav-styles.svg` | 이전 UI 시안 | 프로젝트 내 제작 | 시안 참고용 |
 | `assets/illustrations/cat-resting-alpha.png` | 이번 `imagegen` 생성·편집 | 생성 자산. 외부 작가 작품으로 표시하지 않음 | 1536×1024 RGBA, 827,910 bytes |
 | `assets/illustrations/cat-resting-v2.png` | 위 생성 과정 | 중간본, 실행 화면에서 사용하지 않음 | 최종 투명 배경 적용 전 기록 |
 | `assets/fonts/PretendardVariable.woff2` | 로컬 기존 자산 / [Pretendard](https://github.com/orioncactus/pretendard) | 동봉 `Pretendard-LICENSE.txt`, SIL OFL | 원본 글리프 유지 |

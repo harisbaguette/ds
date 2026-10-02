@@ -1,6 +1,6 @@
 {
   "version": "0.6.0",
-  "revision": "d3b7a413e911143a7df1c36cfd1b38075ba49373d751bfc4c848738f4a69cb6d",
+  "revision": "8f469794f7d0d9dc44dc13d7ae3449831618b896cabd0ed9a06b7ef5476d75f5",
   "sources": [
     "src/system/react/admin-records.jsx",
     "src/system/react/table-toolbar.jsx",
@@ -15,6 +15,8 @@
     "src/system/behaviors.js",
     "src/system/registry.js",
     "src/data/catalog.js",
+    "src/ui/icons.js",
+    "src/data/ui-icons.json",
     "src/tokens/primitive/color.css",
     "src/tokens/primitive/gradient.css",
     "src/tokens/primitive/typography.css",
@@ -1339,7 +1341,7 @@
       "name": "아이콘",
       "section": "primitives",
       "layer": "Primitive",
-      "keywords": "검색 닫기 화살표 svg icon",
+      "keywords": "검색 닫기 화살표 일러스트 WebP icon",
       "deps": [],
       "english": "Icon",
       "version": "0.6.0",
@@ -1393,6 +1395,10 @@
               "chevron-down"
             ],
             [
+              "chevron-left",
+              "chevron-left"
+            ],
+            [
               "close",
               "close"
             ],
@@ -1401,12 +1407,24 @@
               "compass"
             ],
             [
+              "copy",
+              "copy"
+            ],
+            [
+              "download",
+              "download"
+            ],
+            [
               "edit",
               "edit"
             ],
             [
               "file",
               "file"
+            ],
+            [
+              "first",
+              "first"
             ],
             [
               "folder",
@@ -1449,8 +1467,16 @@
               "group-work"
             ],
             [
+              "image",
+              "image"
+            ],
+            [
               "info",
               "info"
+            ],
+            [
+              "last",
+              "last"
             ],
             [
               "layers",
@@ -1459,6 +1485,10 @@
             [
               "menu",
               "menu"
+            ],
+            [
+              "minus",
+              "minus"
             ],
             [
               "plus",
@@ -3505,8 +3535,7 @@
         "token-space",
         "token-size",
         "token-radius",
-        "token-border",
-        "token-stroke"
+        "token-border"
       ],
       "entry": "STA-01",
       "version": "0.6.0",
@@ -3702,7 +3731,6 @@
         "token-size",
         "token-radius",
         "token-border",
-        "token-stroke",
         "token-shadow"
       ],
       "entry": "NAV-06",
@@ -3833,7 +3861,6 @@
         "token-size",
         "token-radius",
         "token-border",
-        "token-stroke",
         "token-shadow",
         "token-blur",
         "token-layer"

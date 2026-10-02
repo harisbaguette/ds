@@ -42,14 +42,15 @@ const appearance = ['backgroundColor', 'color', 'borderRadius', 'borderColor', '
     await same('현재 주 메뉴가 메인 선택 탭과 동일', '#primary-nav [aria-current]', '<button class="ds-tab" aria-selected="true">현재</button>');
     await same('현재 하위 메뉴가 메인 선택 탭과 동일', '#secondary-nav [aria-current]', '<button class="ds-tab" aria-selected="true">현재</button>');
     await same('스타일 설명 카드가 공통 표면을 사용', '.overview-tile', '<div class="ds-surface"></div>', appearance.slice(0, 6));
-    check('아이콘 선 굵기가 셸·복사 버튼·실제 부품에 함께 적용', await page.evaluate(() => {
-      const sheet = [...document.styleSheets].find(sheet => sheet.href?.endsWith('/src/tokens/semantic/stroke.css'));
-      const rule = [...sheet.cssRules].find(rule => rule.style?.getPropertyValue('--p-icon-stroke'));
-      const old = rule.style.getPropertyValue('--p-icon-stroke');
-      rule.style.setProperty('--p-icon-stroke', '3');
-      const nodes = [...document.querySelectorAll('#search-open .icon, .reference-icon-copy, .overview-tile[data-overview="button"] .ui-icon')];
-      const follows = nodes.length >= 3 && nodes.every(node => getComputedStyle(node).strokeWidth === '3px');
-      rule.style.setProperty('--p-icon-stroke', old);
+    check('셸·복사 버튼·실제 부품이 같은 일러스트 크기 토큰 사용', await page.evaluate(async () => {
+      const nodes = [...document.querySelectorAll('#search-open .ui-icon, .reference-icon-copy, .overview-tile[data-overview="button"] .ds-button .ui-icon')];
+      await Promise.all(nodes.map(node => node.decode()));
+      const sheet = [...document.styleSheets].find(sheet => sheet.href?.endsWith('/src/tokens/semantic/size.css'));
+      const rule = [...sheet.cssRules].find(rule => rule.style?.getPropertyValue('--p-icon-lg'));
+      const old = rule.style.getPropertyValue('--p-icon-lg');
+      rule.style.setProperty('--p-icon-lg', '32px');
+      const follows = nodes.length >= 3 && nodes.every(node => node.tagName === 'IMG' && node.naturalWidth === 192 && getComputedStyle(node).width === '32px' && getComputedStyle(node).height === '32px');
+      rule.style.setProperty('--p-icon-lg', old);
       return follows;
     }));
     for (const state of ['hover', 'pressed']) {
@@ -71,7 +72,7 @@ const appearance = ['backgroundColor', 'color', 'borderRadius', 'borderColor', '
 
     await goto('dictionary?shelf=part');
     await same('미리보기 선택이 메인 입력과 동일', '[data-preview-select]', '<select class="ds-input"><option>메인</option></select>');
-    await same('사전 카드가 공통 표면을 사용', '.dict-entry', '<div class="ds-surface"></div>', appearance.slice(0, 6));
+    await same('사전 카드가 공통 표면과 사전의 배경·모서리 토큰을 사용', '.dict-entry', '<div class="ds-surface" style="background:var(--p-bg);border-radius:var(--p-radius-xl)"></div>', appearance.slice(0, 6));
     await goto('dictionary?shelf=icon');
     await same('페이지 이동은 메인 보조 버튼', '.page-step:not(:disabled)', outline);
     await same('페이지 이동 비활성도 메인 버튼과 동일', '.page-step:disabled', await referenceButton({ variant: 'outline', size: 'sm', state: 'disabled' }));
@@ -90,6 +91,8 @@ const appearance = ['backgroundColor', 'color', 'borderRadius', 'borderColor', '
           const nodes = [...document.querySelectorAll(selector)].filter(node =>
             (!node.closest('[inert]') || node.closest('.preview')) &&
             !(node.matches('.ds-input') && node.closest('.ds-input-group')) &&
+            // Dictionary cards use their own radius token for the picture frame.
+            !(selector === '.ds .ds-surface' && node.matches('.dict-entry')) &&
             // The search bar has its own shared shape rules, checked separately below.
             !(selector === '.ds .ds-button' && node.matches('.ds-search-bar > .ds-button')) &&
             !(selector === '.ds .ds-input' && node.matches('.ds-search-bar select.ds-input')));

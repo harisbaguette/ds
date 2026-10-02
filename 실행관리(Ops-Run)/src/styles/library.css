@@ -4,13 +4,13 @@
 .record-code { margin-bottom:var(--p-space-md); }
 .catalog-tile h3 { font-size: var(--p-text-md); line-height: var(--p-leading-normal); font-weight: var(--p-weight-extrabold); overflow-wrap: anywhere; }
 .tile-foot { width: 100%; display: flex; align-items: center; padding-top: var(--p-space-md); margin-top: auto; color: var(--p-muted); font-size: var(--p-text-sm); font-weight: var(--p-weight-bold); }
-.tile-foot .ui-icon { width: var(--p-icon-sm); height: var(--p-icon-sm); margin-left: auto; }
+.tile-foot .ui-icon { width: var(--p-icon-md); height: var(--p-icon-md); margin-left: auto; }
 /* Numbered pages: arrows and numbers in one row, the open page filled, and a jump box for long lists. */
 .pagination { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:var(--p-space-md) calc(var(--p-space-unit) * 8); margin-top:calc(var(--p-space-unit) * 10); }
 .page-list, .page-jump { display:flex; align-items:center; gap:var(--p-space-2xs); }
 .page-num, .page-step { font-variant-numeric:tabular-nums; }
 
-.page-step .icon { width:var(--p-icon-sm); height:var(--p-icon-sm); }
+.page-step .ui-icon { width:var(--p-icon-md); height:var(--p-icon-md); }
 .page-gap { display:inline-grid; place-items:center; min-width:var(--p-control-size-sm); color:var(--p-muted); }
 .page-status { display:none; padding-inline:var(--p-space-sm); font-variant-numeric:tabular-nums; white-space:nowrap; }
 .page-jump { gap:var(--p-space-xs); }
@@ -55,3 +55,8 @@
   .glyph-ref h3 { margin-inline: var(--p-space-md); }
   .glyph-keys { margin: 0 var(--p-space-md) var(--p-space-md); }
 }
+
+.illustration-tools { display:flex; align-items:center; flex-wrap:wrap; gap:var(--p-space-sm); margin-bottom:var(--p-space-lg); }
+.illustration-tools label { display:flex; align-items:center; gap:var(--p-space-xs); }
+.illustration-tools select { max-width:calc(var(--p-space-unit) * 52); }
+.illustration-tools [role="status"] { color:var(--p-muted); font-size:var(--p-text-sm); }

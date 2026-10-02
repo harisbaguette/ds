@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import sharp from 'sharp';
+import {createHash} from 'node:crypto';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const dir=path.join(root,'assets/icons/illustrated');
@@ -10,10 +11,10 @@ const manifest=JSON.parse(await fs.readFile(path.join(dir,'manifest.json'),'utf8
 const id=process.argv[2],job=production.jobs.find(j=>j.id===id);
 if(!job)throw new Error('Unknown production job: '+id);
 if(manifest.batches.some(b=>b.job===id)){console.log(id+' already imported');process.exit(0);}
-const source='source/'+id+'.png';
-const metadata=await sharp(path.join(dir,source)).metadata();
+const input=process.argv[3]?path.resolve(process.argv[3]):path.join(dir,'source',id+'.png');
+const metadata=await sharp(input,{limitInputPixels:25000000}).metadata();
 if(!metadata.hasAlpha)throw new Error(id+': source needs a transparent background');
-const {data,info}=await sharp(path.join(dir,source)).ensureAlpha().raw().toBuffer({resolveWithObject:true});
+const {data,info}=await sharp(input,{limitInputPixels:25000000}).ensureAlpha().raw().toBuffer({resolveWithObject:true});
 const w=info.width,h=info.height;
 if(w!==h)throw new Error(id+': source must be square');
 const seen=new Uint8Array(w*h),queue=new Int32Array(w*h),bounds=Array(9).fill(null);
@@ -40,7 +41,15 @@ const icons=job.icons.map((item,i)=>{
   return {entry:item.entry,name:item.name,crop:{left,top,width:Math.min(w,b.x1+4)-left,height:Math.min(h,b.y1+4)-top}};
 });
 while(icons.length<job.columns*job.rows)icons.push(null);
-manifest.batches.push({job:id,source,columns:3,rows:3,normalized:true,icons});
+const bytes=await sharp(input).webp({lossless:true,effort:4}).toBuffer();
+const decoded=await sharp(bytes).ensureAlpha().raw().toBuffer();
+for(let i=0;i<data.length;i+=4)if(data[i+3]!==decoded[i+3]||(data[i+3]&&[0,1,2].some(k=>data[i+k]!==decoded[i+k])))throw Error('Lossless source verification failed');
+const sha256=createHash('sha256').update(bytes).digest('hex');
+const source='assets/icons/objects/'+sha256+'.webp';
+await fs.mkdir(path.join(root,'assets/icons/objects'),{recursive:true});
+await fs.writeFile(path.join(root,source),bytes);
+manifest.schemaVersion=2;
+manifest.batches.push({job:id,source,sha256,columns:3,rows:3,normalized:true,icons});
 manifest.aliases||={};
 for(const item of job.icons)for(const alias of item.aliases)manifest.aliases[alias]=item.entry;
 job.status='imported';

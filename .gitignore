@@ -8,3 +8,8 @@
 
 # graft's local graph cache — regenerable, not committed (run `graft build`).
 /graft/
+
+# Reproducible illustration delivery files and bounded local caches.
+/실행관리(Ops-Run)/.cache/
+/실행관리(Ops-Run)/assets/icons/illustrated/*.png
+/실행관리(Ops-Run)/assets/icons/illustrated/*.webp

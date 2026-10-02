@@ -10,6 +10,10 @@
   const route = (page, params) => '#/' + page + '?' + new URLSearchParams(params);
   const absolute = href => new URL(href, location.href).href;
   function resolve(id) {
+    if (id.startsWith('motion/')) {
+      const item = window.Pattove.motionUI?.index.get(id.slice(7));
+      if (item) return { type:'motion', item };
+    }
     if (shapes.has(id)) return { type: 'implementation', ...shapes.get(id) };
     const item = registry.index.get(id) || implementations.get(id);
     if (item) return { type: 'implementation', item };
@@ -25,6 +29,7 @@
     const ref = resolve(id);
     if (!ref) throw new Error('알 수 없는 고유 ID: ' + id);
     const { item, shape, type } = ref;
+    if (type === 'motion') return { ...window.Pattove.motionUI.payload(item), url:absolute('#/motion?detail=' + item.id) };
     const style = styles.get(type === 'style' ? item.id : state.preview || state.style || 'main');
     const result = {
       system: 'Pattove', systemVersion: registry.version, sourceRoot: '실행관리(Ops-Run)', id,
@@ -64,7 +69,10 @@
         status: item.art ? 'asset-ready' : guideline ? 'guideline' : 'not-implemented',
         term: item.term, kind: item.kind, purpose: item.usage || item.examples,
         source: chapter?.source || (glyphs.has(item.id) ? '문서/아이콘 그림 분류.json' : '문서/구성요소 계층표.md'),
-        ...(item.art && { assets: { webp: item.art.src, png: item.art.png } }),
+        ...(item.art && { assets: { webp: item.art.src, png: item.art.png },
+          api: { metadata:absolute('/api/illustrations/get?id='+encodeURIComponent(item.id)), search:absolute('/api/illustrations/search?q=') },
+          exportCommand: 'npm run icons -- export --id '+item.id+' --out ./pattove-icons',
+          mcp: { server:'pattove-illustrations', tools:['search_illustrations','preview_illustration','export_illustrations'] } }),
         ...(item.glyph && { referenceGlyphs: item.glyph }),
         url: absolute(route(item.shelf ? 'dictionary' : 'components', { ...(item.shelf && { shelf: item.shelf }), detail: item.id })),
         instructions: item.art ? 'assets의 완성된 이미지 파일을 그대로 사용하세요. referenceGlyphs는 참고 그림이며 완성 자산을 대신하지 않습니다.' : referenceGlyph ? '이 아이콘의 일러스트는 아직 제작 중입니다. referenceGlyphs는 참고용이며 SVG로 대신하지 마세요.' : guideline ? '이 항목은 아이콘 사용 기준입니다. purpose와 source의 규칙을 적용하세요.' : '아직 구현되지 않은 사전 항목입니다. 기존 완성 부품처럼 사용하지 말고, 위 정의와 원문을 확인해 구현이 필요하다고 알려 주세요.'
@@ -74,8 +82,8 @@
   }
   const text = (id, state) => '아래 패토브 요소를 사용해 주세요. 고유 ID와 지정한 모양·스타일을 기준으로 적용하세요.\n\n' + JSON.stringify(payload(id, state), null, 2);
   const label = id => `<code class="element-id" title="고유 ID: ${esc(id)}">${esc(id)}</code>`;
-  const copyIcon = '<svg class="ui-icon reference-icon reference-icon-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="3"/><path d="M15 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h2"/></svg>';
-  const checkIcon = '<svg class="ui-icon reference-icon reference-icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>';
+  const copyIcon = window.Pattove.uiIcon('copy', 'reference-icon reference-icon-copy');
+  const checkIcon = window.Pattove.uiIcon('check', 'reference-icon reference-icon-check');
   const control = id => `<div class="element-reference ds-surface"><div class="reference-identity"><div class="reference-caption"><span class="reference-kind">${shapes.has(id) ? '모양 ID' : '요소 ID'}</span><span class="reference-status sr-only" role="status" aria-live="polite"></span></div>${label(id)}</div><button type="button" class="reference-copy ds-button" data-variant="outline" data-size="sm" data-icon-only data-copy-reference="${esc(id)}" data-focus="copy-${esc(id)}" aria-label="${esc(id)} AI용 정보 복사" title="AI용 정보 복사">${copyIcon}${checkIcon}</button></div>`;
   const feedbackTimers = new WeakMap();
   async function copy(button, state) {

@@ -61,11 +61,12 @@ const parse = text => JSON.parse(text.slice(text.indexOf('{')));
     check('미구현 항목은 사전 정의만 전달하고 구현 코드·설치 경로를 만들지 않음', pending.status === 'not-implemented' && pending.purpose && typeof pending.source === 'string' && !pending.html && !pending.reactProps && pending.instructions.includes('아직 구현되지 않은'));
     await goto('dictionary?shelf=icon&detail=ICO-01');
     const art = await copy('ICO-01');
-    check('완성된 아이콘은 실제 그림 파일 경로로 전달', art.status === 'asset-ready' && Object.values(art.assets).every(file => fs.existsSync(path.join(root, file))));
+    const available = async assets => (await Promise.all(Object.values(assets).map(file => page.request.get(new URL(file, page.url()).href)))).every(response => response.ok());
+    check('완성된 아이콘은 가져올 수 있는 PNG·WebP와 AI 사용 경로를 전달', art.status === 'asset-ready' && await available(art.assets) && art.api.metadata && art.exportCommand && art.mcp.tools.includes('export_illustrations'));
     const glyphSamples = await page.evaluate(() => Pattove.library.glyphSets.map(set => Pattove.library.glyphs.find(([id]) => id.startsWith(set.id + ':'))[0]));
     for (const key of glyphSamples) {
       const glyph = await page.evaluate(key => Pattove.references.payload(key), key);
-      check(key + ' 완성 일러스트 또는 제작 중 상태를 전달하고 SVG로 대체하지 않음', !glyph.html && !glyph.assets?.svg && (glyph.status === 'not-implemented' || (glyph.status === 'asset-ready' && ['png','webp'].every(ext => fs.existsSync(path.join(root,glyph.assets[ext]))))));
+      check(key + ' 완성 일러스트 또는 제작 중 상태를 전달하고 SVG로 대체하지 않음', !glyph.html && !glyph.assets?.svg && (glyph.status === 'not-implemented' || (glyph.status === 'asset-ready' && await available(glyph.assets))));
     }
     const guideline = await page.evaluate(() => Pattove.references.payload('ICO-497'));
     check('아이콘 기준은 사용 규칙으로 전달', guideline.status === 'guideline' && guideline.purpose && !guideline.instructions.includes('미구현'));

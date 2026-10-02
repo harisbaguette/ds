@@ -65,7 +65,7 @@
       : kind === 'typography' ? ` data-font="${/font$/.test(role) ? 'family' : 'type'}"`
       : kind === 'stroke' ? ` data-stroke="${/icon/.test(role) ? 'icon' : /slant/.test(role) ? 'slant' : 'line'}"`
       : kind === 'border' ? ` data-border="${/underline/.test(role) ? 'underline' : /offset/.test(role) ? 'offset' : 'width'}"` : '';
-    const inner = sampleText[kind] || (/underline/.test(role) ? '가나 Aa' : '') || (kind === 'stroke' && /icon/.test(role) ? p.icon('check') : kind === 'motion' ? '<i></i>' : '');
+    const inner = sampleText[kind] || (/underline/.test(role) ? '가나 Aa' : '') || (kind === 'motion' ? '<i></i>' : '');
     return kind === 'layer' ? '' : `<span class="token-swatch" data-kind="${kind}"${detail} style="--token-value:var(${role})${kind === 'typography' && /font$/.test(role) ? `;font-family:var(${role})` : ''}">${inner}</span>`;
   }
   function tokenTable(item, style) {

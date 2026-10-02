@@ -8,23 +8,28 @@ const manifest = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../assets/i
 const expected = [...manifest.batches.flatMap(batch => batch.icons.filter(Boolean).map(icon => icon.entry)),...Object.keys(manifest.aliases||{})];
 fs.mkdirSync(out, { recursive: true });
 (async () => {
-  for (const item of manifest.batches.flatMap(batch => batch.icons.filter(Boolean))) {
-    const file = path.resolve(__dirname, '../assets/icons/illustrated', item.name + '.png');
+  const { asset } = await import('../scripts/lib/illustration-store.mjs');
+  const items = manifest.batches.flatMap(batch => batch.icons.filter(Boolean));
+  let next = 0, complete = 0;
+  await Promise.all(Array.from({ length: 4 }, async () => {
+  while (next < items.length) {
+    const item = items[next++];
+    const file = (await asset(item.entry, { format: 'png', size: 512 })).bytes;
     const { data, info } = await sharp(file).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     assert.equal(info.width, info.height, item.name + ': square export');
     assert.equal(info.width, 512, item.name + ': PNG size');
     for (const [suffix, size] of [['.webp', 512], ['-192.webp', 192]]) {
-      const meta = await sharp(path.resolve(__dirname, '../assets/icons/illustrated', item.name + suffix)).metadata();
+      const meta = await sharp((await asset(item.entry, { format: 'webp', size })).bytes).metadata();
       assert.equal(meta.width, size, item.name + suffix + ': width');
       assert.equal(meta.height, size, item.name + suffix + ': height');
       assert.ok(meta.hasAlpha, item.name + suffix + ': transparency');
     }
     let edgePixels = 0;
-    for (let y=0; y<info.height; y++) for (let x=0; x<info.width; x++) {
-      if ((x<2 || y<2 || x>=info.width-2 || y>=info.height-2) && data[(y*info.width+x)*4+3]>128) edgePixels++;
-    }
+    for (let y=0; y<info.height; y++) for (const x of (y<2 || y>=info.height-2 ? Array.from({length:info.width},(_,x)=>x) : [0,1,info.width-2,info.width-1])) if(data[(y*info.width+x)*4+3]>128)edgePixels++;
     assert.equal(edgePixels, 0, item.name + ': no cropped silhouette or neighboring icon at canvas edge');
+    complete++; if (complete % 1000 === 0) console.log('Verified image formats: ' + complete + '/' + items.length);
   }
+  }));
   const browser = await chromium.launch({ headless: true });
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1050 } });

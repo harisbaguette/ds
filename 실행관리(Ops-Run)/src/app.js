@@ -1,8 +1,11 @@
 (() => {
   'use strict';
-  const { catalog, views, previews, libraryUI: library, systemUI: system, systemRegistry, componentDocs } = window.Pattove;
+  const { catalog, views, previews, libraryUI: library, systemUI: system, systemRegistry, componentDocs, motionUI: motion } = window.Pattove;
   const isCollection = () => ['dictionary', 'components'].includes(state.page);
   const $ = selector => document.querySelector(selector);
+  document.querySelectorAll('[data-ui-icon-slot]').forEach(node => {
+    node.outerHTML = window.Pattove.uiIcon(node.dataset.uiIconSlot);
+  });
   const validPattern = id => catalog.patterns.some(p => p.id === id);
   const validStyle = id => catalog.styles.some(s => s.id === id);
   // 스타일 화면에서 고른 디자인 스타일은 앱 전체에 입혀지고 다음 방문에도 유지된다.
@@ -33,6 +36,7 @@
   }
   const list = value => [...new Set(String(value || '').split(',').filter(Boolean))];
   function readFilters(page, params) {
+    if (page === 'motion') return motion.filters(params);
     if (page === 'patterns') return { category: list(params.get('category')).filter(id => id !== 'all' && catalog.categories.some(c => c.id === id)) };
     return isCollection() ? library.readFilters(page, params) : {};
   }
@@ -47,6 +51,7 @@
     if (next.page === 'patterns') params.set('style', next.style);
     if (next.page === 'patterns' && next.filters.category?.length) params.set('category', next.filters.category.join(','));
     if (library.pages.includes(next.page)) library.writeFilters(next, params);
+    if (next.page === 'motion') motion.writeFilters(next, params);
     if (next.query && !['styles'].includes(next.page)) params.set('q', next.query);
     if (['dictionary', 'components'].includes(next.page) && next.pageNo > 1) params.set('p', next.pageNo);
     if (next.detail) params.set('detail', next.detail);
@@ -63,14 +68,14 @@
     const [path, query = ''] = location.hash.slice(1).split('?');
     const params = new URLSearchParams(query);
     const page = path.replace(/^\//, '');
-    state.page = ['styles', 'patterns', 'system', ...library.pages].includes(page) ? page : 'styles';
+    state.page = ['styles', 'patterns', 'system', 'motion', ...library.pages].includes(page) ? page : 'styles';
     state.filters = readFilters(state.page, params);
     state.query = ['styles'].includes(state.page) ? '' : (params.get('q') || '').slice(0, 100);
     state.section = (params.get('section') || '').slice(0, 250);
     state.pageNo = Math.min(9999, Math.max(1, Number.parseInt(params.get('p'), 10) || 1));
     if (validStyle(params.get('style'))) state.style = params.get('style');
     if (validStyle(params.get('preview'))) state.preview = params.get('preview');
-    state.detail = (state.page === 'styles' ? validStyle(params.get('detail')) && params.get('detail') !== 'base' : state.page === 'system' ? systemRegistry.index.has(params.get('detail')) : isCollection() ? library.validDetail(state.page, params.get('detail')) : state.page === 'patterns' && validPattern(params.get('detail'))) ? params.get('detail') : null;
+    state.detail = (state.page === 'motion' ? motion.index.has(params.get('detail')) : state.page === 'styles' ? validStyle(params.get('detail')) && params.get('detail') !== 'base' : state.page === 'system' ? systemRegistry.index.has(params.get('detail')) : isCollection() ? library.validDetail(state.page, params.get('detail')) : state.page === 'patterns' && validPattern(params.get('detail'))) ? params.get('detail') : null;
     if (state.page === 'system' && !state.detail) { state.detail = (systemRegistry.matching(state.query)[0] || systemRegistry.items[0]).id; state.query = ''; }
     state.options = state.page === 'system' && state.detail ? systemRegistry.normalizeOptions(state.detail, { ...componentDocs.defaults(state.detail), ...Object.fromEntries([...params].filter(([key]) => key.startsWith('option-')).map(([key,value]) => [key.slice(7),value])) }) : {};
     if (isCollection()) state.pageNo = Math.min(state.pageNo, library.pageCount(state));
@@ -114,6 +119,15 @@
   function showSuggestions() {
     const query = $('#query').value.trim();
     if (!query) { hideSuggestions(); return; }
+    if (state.page === 'motion') {
+      suggestions = state.filters.sources ? [] : motion.matching(query).slice(0, 6);
+      suggestionIndex = -1;
+      $('#search-suggestions').innerHTML = suggestions.length ? suggestions.map((item,i) => `<button type="button" role="option" aria-selected="false" tabindex="-1" class="search-suggestion ds-tab" id="suggestion-${i}" data-suggest-open="${item.id}"><span>${views.escape(item.name)}</span><small>${views.escape(item.english)}</small></button>`).join('') : '<p class="search-no-match">Enter를 눌러 검색 결과 보기</p>';
+      $('#search-popover').hidden = false;
+      $('#query').setAttribute('aria-expanded', 'true');
+      $('#query').removeAttribute('aria-activedescendant');
+      return;
+    }
     suggestions = state.page === 'styles' ? library.searchAll(query) : state.page === 'system' ? systemRegistry.matching(query).filter(i=>library.itemShelf(i)===library.shelfFor(state).id).slice(0, 6) : isCollection() ? library.suggestions(state, query) : catalog.patterns.filter(p => matches(p, query)).slice(0, 6);
     suggestionIndex = -1;
     $('#search-suggestions').innerHTML = suggestions.length ? suggestions.map((p, i) => `<button type="button" role="option" aria-selected="false" tabindex="-1" class="search-suggestion ds-tab" id="suggestion-${i}" data-suggest-open="${p.id}"><span>${views.escape(p.name)}</span><small>${views.escape(state.page === 'styles' ? library.suggestionGroup('dictionary',p) : state.page === 'system' ? p.layer : isCollection() ? library.suggestionGroup(state.page, p) : catalog.categories.find(c => c.id === p.category).name)}</small></button>`).join('') : '<p class="search-no-match">일치하는 항목이 없어요</p>';
@@ -138,6 +152,15 @@
     const query = $('#query').value.trim();
     closeSearch();
     setMenu(false, false);
+    if (state.page === 'motion') {
+      if (query.startsWith('motion/') && motion.index.has(query.slice(7))) {
+        navigate({detail:query.slice(7),query:'',filters:{category:'',sources:''}});
+        return;
+      }
+      navigate({query, filters:{category:'',sources:state.filters.sources},detail:null}, {replace:true});
+      $('#main').focus({preventScroll:true});
+      return;
+    }
     // A complete shape ID opens that exact shape, independent of a previously kept choice.
     if (query.includes('/') && window.Pattove.references.resolve(query)) {
       rememberLocation();
@@ -180,7 +203,7 @@
     document.body.dataset.page = state.page;
     document.body.className = 'ds theme-' + state.style;
     document.querySelector('meta[name="theme-color"]').content = getComputedStyle(document.body).backgroundColor;
-    document.title = `${state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : state.page === 'styles' && state.detail ? views.styleName(state.detail) : state.page === 'patterns' ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
+    document.title = `${state.page==='motion' ? (motion.index.get(state.detail)?.name || '모션') : state.page==='system' && state.detail ? systemRegistry.index.get(state.detail).name : state.page === 'styles' && state.detail ? views.styleName(state.detail) : state.page === 'patterns' ? views.styleName(state.style) : ({ styles: '스타일', components: '구성요소', dictionary: '사전' })[state.page]}`;
     const oldShelf = $('#primary-nav [aria-current="page"]')?.dataset.focus;
     const subnavScroll = $('.menu-body').scrollTop;
     $('#primary-nav').innerHTML = library.navigation(state);
@@ -207,18 +230,18 @@
     chip.hidden = !state.query || state.page === 'system';
     chip.innerHTML = state.query ? `‘${views.escape(state.query)}’ 검색${previews.icon('close')}` : '';
     chip.setAttribute('aria-label', `검색어 ${state.query} 지우기`);
-    const searchLabel = ['dictionary','system'].includes(state.page) ? library.shelfFor(state).name+' 검색' : ['styles','components'].includes(state.page) ? '구성요소 검색' : '패턴 검색';
+    const searchLabel = state.page === 'motion' ? (state.filters.sources ? '레퍼런스 검색' : '모션 검색') : ['dictionary','system'].includes(state.page) ? library.shelfFor(state).name+' 검색' : ['styles','components'].includes(state.page) ? '구성요소 검색' : '패턴 검색';
     $('#query').placeholder = searchLabel;
     $('#query').setAttribute('aria-label', searchLabel);
     $('#search-open').setAttribute('aria-label', searchLabel);
     $('#search-label').textContent = searchLabel;
     $('#search-open').title = searchLabel + ' (/)';
-    const nextMainKey = JSON.stringify([state.page, state.style, state.preview, state.filters, state.query, state.pageNo, state.page==='system'?[state.detail,state.options]:state.page==='styles'?state.detail:null]);
+    const nextMainKey = JSON.stringify([state.page, state.style, state.preview, state.filters, state.query, state.pageNo, state.page==='system'?[state.detail,state.options]:['styles','motion'].includes(state.page)?state.detail:null]);
     if (mainRenderKey !== nextMainKey) {
-      $('#content').innerHTML = state.page === 'styles' ? (state.detail ? views.styleDetail(state) : views.styleGallery(state)) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
+      $('#content').innerHTML = state.page === 'motion' ? (state.detail ? motion.detail(state) : motion.collection(state)) : state.page === 'styles' ? (state.detail ? views.styleDetail(state) : views.styleGallery(state)) : state.page === 'system' ? system.detail(state) : isCollection() ? library.collection(state) : views.patterns(state, results());
       mainRenderKey = nextMainKey;
     }
-    if (state.detail && !['system','styles'].includes(state.page)) {
+    if (state.detail && !['system','styles','motion'].includes(state.page)) {
       const scroll = dialog.scrollTop;
       dialog.innerHTML = state.page === 'system' ? system.detail(state) : isCollection() ? library.detail(state) : views.detail(state, catalog.patterns.find(p => p.id === state.detail));
       if (!dialog.open) dialog.showModal();
@@ -227,7 +250,7 @@
     } else {
       if (dialog.open) dialog.close();
       dialog.replaceChildren();
-      if (['system','styles'].includes(state.page) && state.detail) {
+      if (['system','styles','motion'].includes(state.page) && state.detail) {
         if (previousDetail !== state.detail) $('#detail-title').focus({preventScroll:true});
         else focusKey(focus);
       } else if (previousDetail) {
@@ -236,6 +259,7 @@
       } else focusKey(focus);
     }
     system.hydrate(document);
+    motion.hydrate();
     updateChromeOffset();
   }
   function renderRoute({ restore = false } = {}) {
@@ -254,7 +278,7 @@
     render(previousDetail, focus);
     renderedHash = location.hash;
     // A new page or tab moves focus to the content; a filter change only returns to the top and leaves focus where it was.
-    if (previousPage !== state.page || (['system','styles'].includes(state.page) && previousDetail!==state.detail) || (!state.detail && (previousStyle !== state.style || previousShelf !== state.filters.shelf || previousPageNo !== state.pageNo))) {
+    if (previousPage !== state.page || (['system','styles','motion'].includes(state.page) && previousDetail!==state.detail) || (!state.detail && (previousStyle !== state.style || previousShelf !== state.filters.shelf || previousPageNo !== state.pageNo))) {
       window.scrollTo(0, 0);
       if (!state.detail) $('#main').focus({ preventScroll: true });
     } else if (!state.detail && previousFilters !== JSON.stringify(state.filters)) window.scrollTo(0, 0);
@@ -266,7 +290,7 @@
       focusKey(history.state?.pattoveFocus);
       if (history.state?.pattoveScroll) window.scrollTo(...history.state.pattoveScroll);
     }
-    $('#announcer').textContent = state.page === 'styles' ? (state.detail ? views.styleName(state.detail) : `스타일 ${catalog.styles.filter(s => s.id !== 'base').length}개 · ${views.styleName(state.style)} 사용 중`) : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개${isCollection() && library.pageCount(state) > 1 ? ` · ${state.pageNo} / ${library.pageCount(state)}쪽` : ''}`;
+    $('#announcer').textContent = state.page === 'motion' ? (motion.index.get(state.detail)?.name || (state.filters.sources ? '외부 레퍼런스' : `모션 ${motion.currentItems(state).length}개`)) : state.page === 'styles' ? (state.detail ? views.styleName(state.detail) : `스타일 ${catalog.styles.filter(s => s.id !== 'base').length}개 · ${views.styleName(state.style)} 사용 중`) : state.page === 'system' ? systemRegistry.index.get(state.detail).name : `${isCollection() ? '항목' : '패턴'} ${isCollection() ? library.currentItems(state).length : results().length}개${isCollection() && library.pageCount(state) > 1 ? ` · ${state.pageNo} / ${library.pageCount(state)}쪽` : ''}`;
   }
   document.addEventListener('click', event => {
     if (!event.target.closest('.search-area, #search-open')) hideSuggestions();

@@ -138,7 +138,8 @@ for(const batch of illustrated.batches) for(const item of batch.icons){
   illustratedIDs.add(item.entry);
   const base=illustratedDir+'/'+item.name;
   const art={style:illustrated.style,src:base+'.webp',thumb:base+'-192.webp',png:base+'.png',width:512,height:512};
-  for(const file of [art.src,art.thumb,art.png])if(!fs.existsSync(path.join(root,file)))throw new Error('Missing illustrated asset: '+file+'; run npm run build:icons');
+  const source=illustrated.schemaVersion===2?path.join(root,batch.source):path.join(root,illustratedDir,batch.source);
+  if(!fs.existsSync(source))throw new Error('Missing illustration source: '+source);
   if(entry)entry.art=art;
   else glyphIllustrations[item.entry]=art;
 }

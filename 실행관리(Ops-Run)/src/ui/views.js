@@ -22,6 +22,7 @@
     return `<label class="preview-style"><span class="toolbar-label">미리보기 스타일</span><span class="preview-style-field"><select class="ds-input" data-preview-select data-focus="preview-style">${styles.map(s => `<option value="${escape(s.id)}"${s.id === current ? ' selected' : ''}>${escape(s.name)}${styles.length > 1 && s.id === state.style ? ' (사용 중)' : ''}</option>`).join('')}</select></span></label>`;
   }
   function header(state) {
+    if (state.page === 'motion') return window.Pattove.motionUI.header(state);
     return headline(state);
   }
   function headline(state) {

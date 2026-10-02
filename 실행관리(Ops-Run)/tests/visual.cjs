@@ -33,8 +33,8 @@ fs.mkdirSync(output, { recursive: true });
       }
       if (document.documentElement.scrollWidth > innerWidth) out.push('page overflow');
       if ([...document.images].filter(img => !img.closest('details:not([open])')).some(img => !img.complete || !img.naturalWidth)) out.push('image missing');
-      const icons = [...document.querySelectorAll('svg.ui-icon')];
-      if (!icons.length || icons.some(icon => !icon.querySelector('path, circle, rect, polyline, line, polygon'))) out.push('icon artwork missing');
+      const icons = [...document.querySelectorAll('img.ui-icon')];
+      if (!icons.length || icons.some(icon => !icon.complete || !icon.naturalWidth)) out.push('icon artwork missing');
       if (![...document.fonts].some(font => font.family === 'Pretendard' && font.status === 'loaded')) out.push('body font missing');
       return out;
     });

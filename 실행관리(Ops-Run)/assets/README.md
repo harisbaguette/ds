@@ -1,17 +1,13 @@
 # 패토브 시각 자산
 
-- `mark.svg`: 기존 패토브 로고 정본. 형태·색 유지.
-- `icons/*.svg`: 기존 `시안/2026-09-23/패토브-재설계/app.js`의 SVG 경로 분리.
-- `illustrations/cat.svg`, `seascape.svg`: 기존 `style-lab.js`의 선화·풍경 SVG 분리.
-- 풍경의 해 위치는 제목과 겹치지 않게 조정했다. `seascape-banner.svg`는 같은 팔레트·배를 가로 폼 머리말에 맞게 재구성했다.
-- `icons/check.svg`는 성공 표시의 원과 중복되지 않도록 바깥 원을 제거했다.
-- `illustrations/empty-box.svg`: 빈 상태를 설명하는 상자 도형.
-- `illustrations/cat-resting-alpha.png`: `imagegen`으로 제작한 최종 선화. [생성 기록·재생성 지시](illustrations/generation.md).
-- `fonts/PretendardVariable.woff2`: 기존 로컬 자산 재사용. 동봉한 SIL OFL 라이선스 적용.
-- `fonts/Outfit-Variable.woff2`: Google Fonts의 [Outfit 원본](https://github.com/google/fonts/tree/main/ofl/outfit)을
-  WOFF2 컨테이너로 변환. 글리프 변경 없음. 동봉한 SIL OFL 라이선스 적용.
+- icons/objects/: 내용 해시로 관리하는 무손실 일러스트 원본.
+- icons/styles.json: 설치된 스타일 목록.
+- icons/illustrated/manifest.json: ID·원본·분리 좌표·공유 관계.
+- icons/ui/: 현재 앱의 메뉴와 버튼용 WebP.
+- mark.svg: 패토브 브랜드 로고.
+- fonts/: Pretendard·Outfit과 동봉 라이선스.
+- illustrations/: 개별 시안과 스타일 참고 자산. 출처는 [자산 장부](../ASSETS.md)에 있습니다.
 
-폰트와 SVG를 로컬에 포함하므로 외부 CDN 연결과 OS에 설치된 폰트에 의존하지 않는다.
+일러스트 검색·팩·AI 도구·저장 구조는 [일러스트 사용과 관리](../문서/일러스트%20사용과%20관리.md)를 따릅니다.
 
-전체 출처는 [ASSETS.md](../ASSETS.md)에 기록한다. 아이콘 변경 후 `python scripts/build-icons.py`를 실행하면
-`src/ui/icons.js`가 갱신된다. 파일 실행에서도 스타일의 색상을 정확히 따르도록 인라인 SVG로 묶는다.
+원본이나 UI 매핑을 바꾼 뒤 npm run build를 실행합니다. PNG·WebP 다운로드는 원본에서 필요할 때 생성하며, 배포 이미지 캐시는 Git에 저장하지 않습니다.

@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "defaultStyle": "mint-ceramic-shadowless",
+  "styles": [
+    { "id": "mint-ceramic-shadowless", "name": "민트 세라믹", "manifest": "assets/icons/illustrated/manifest.json" }
+  ]
+}

@@ -123,7 +123,7 @@
       +['token','icon','part','block','template'].map(id=>{
         const s=shelves.get(id);
         return '<a class="nav-shelf-link ds-tab" href="#/dictionary?shelf='+id+q+'" data-focus="tab-'+id+'"'+(open===id?' aria-current="page"':'')+'><span>'+s.name+'</span></a>';
-      }).join('');
+      }).join('') + '<a class="nav-shelf-link ds-tab" href="#/motion" data-focus="tab-motion"'+(state.page==='motion'?' aria-current="page"':'')+'><span>모션</span></a>';
   }
   // The 55 icon categories are too many for one list, so eight 중 bundles hold them; a category the table forgets falls into 기타.
   const iconBundles=(()=>{
@@ -161,6 +161,7 @@
       '<a class="nav-subcategory ds-tab" href="#/styles?detail='+encodeURIComponent(s.id)+'" data-focus="style-'+escape(s.id)+'" title="'+escape(s.description)+'"'+(state.detail===s.id?' aria-current="true"':'')+'><span>'+escape(s.name)+'</span></a>').join('')+'</div></div>';
   }
   function subnavigation(state) {
+    if (state.page==='motion') return window.Pattove.motionUI.subnavigation(state);
     if (state.page==='styles') return styleMenu(state);
     const id=activeShelf(state);
     if (!id) return '';
@@ -225,7 +226,6 @@
     return {size,pages,n:Math.min(Math.max(1,state.pageNo||1),pages)};
   }
   const pageCount=state=>paging(state,currentItems(state).length).pages;
-  const pathIcon=d=>'<svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><path d="'+d+'"/></svg>';
   // 1 … 4 5 6 … 30: the ends and the neighbours of the current page; a gap of one number is written out, longer gaps become an ellipsis.
   // On phones the numbers give way to a single "n / total" so the row still fits (see .page-status).
   function pageNumbers(n,pages) {
@@ -243,12 +243,12 @@
   }
   function pagination(state,{n,pages}) {
     if (pages<2) return '';
-    const step=(to,label,d)=>'<button type="button" class="page-step ds-button" data-variant="outline" data-size="sm" data-icon-only data-page-go="'+to+'" data-focus="page-'+label+'" aria-label="'+label+'" title="'+label+'"'+(to<1||to>pages||to===n?' disabled':'')+'>'+pathIcon(d)+'</button>';
+    const step=(to,label,name)=>'<button type="button" class="page-step ds-button" data-variant="outline" data-size="sm" data-icon-only data-page-go="'+to+'" data-focus="page-'+label+'" aria-label="'+label+'" title="'+label+'"'+(to<1||to>pages||to===n?' disabled':'')+'>'+icon(name)+'</button>';
     const numbers=pageNumbers(n,pages).map(i=>i==='…'?'<span class="page-gap" aria-hidden="true">…</span>'
       :'<button type="button" class="page-num ds-button'+(i===n?' is-current':'')+'" data-page-go="'+i+'" data-focus="page-'+i+'"'+(i===n?' aria-current="page"':'')+' data-size="sm" data-variant="'+(i===n?'primary':'outline')+'" aria-label="'+i+'쪽">'+i+'</button>').join('');
     const jump=pages>7?'<form class="page-jump" data-page-jump><label><span class="sr-only">이동할 쪽</span><input class="ds-input" type="number" inputmode="numeric" min="1" max="'+pages+'" placeholder="'+n+'" data-focus="page-jump"></label><span class="page-total">/ '+pages+'</span><button type="submit" class="secondary ds-button" data-variant="outline" data-size="sm" data-icon-only data-focus="page-jump-go" aria-label="입력한 쪽으로 이동" title="입력한 쪽으로 이동">'+icon('arrow')+'</button></form>':'';
     return '<nav class="pagination" aria-label="쪽 이동">'+
-      '<div class="page-list">'+(pages>7?step(1,'처음','m11 17-5-5 5-5m7 10-5-5 5-5'):'')+step(n-1,'이전','m15 6-6 6 6 6')+numbers+'<span class="page-status">'+n+' / '+pages+'</span>'+step(n+1,'다음','m9 6 6 6-6 6')+(pages>7?step(pages,'마지막','m13 17 5-5-5-5M6 17l5-5-5-5'):'')+'</div>'+jump+'</nav>';
+      '<div class="page-list">'+(pages>7?step(1,'처음','first'):'')+step(n-1,'이전','chevron-left')+numbers+'<span class="page-status">'+n+' / '+pages+'</span>'+step(n+1,'다음','chevron')+(pages>7?step(pages,'마지막','last'):'')+'</div>'+jump+'</nav>';
   }
   // The tabs and the left tree say where you are; main carries only pictures.
   function collection(state) {
@@ -256,15 +256,16 @@
     if (!items.length) return '<section aria-labelledby="page-title">'+empty+'</section>';
     const page=paging(state,items.length), shown=items.slice((page.n-1)*page.size,page.n*page.size);
     if (state.page==='components') return '<section aria-labelledby="page-title"><div class="catalog-grid">'+shown.map(e=>entryCard(state,e)).join('')+'</div>'+pagination(state,page)+'</section>';
-    return '<section class="atlas dict" data-shelf="'+state.filters.shelf+'" aria-labelledby="page-title"><div class="dict-grid dict-entries">'+shown.map(e=>dictEntry(state,e)).join('')+'</div>'+pagination(state,page)+'</section>';
+    const tools=state.filters.shelf===iconShelf?window.Pattove.illustrationTools.toolbar(data.iconGroups,shown.filter(e=>e.art).map(e=>e.id)):'';
+    return '<section class="atlas dict" data-shelf="'+state.filters.shelf+'" aria-labelledby="page-title">'+tools+'<div class="dict-grid dict-entries">'+shown.map(e=>dictEntry(state,e)).join('')+'</div>'+pagination(state,page)+'</section>';
   }
   function detail(state) {
     // A hierarchy component opened from the 토큰 shelf reads like its components-page record.
     const e=state.page==='dictionary'&&entries.get(state.detail)||components.get(state.detail);
     const dict=!!e.category, category=dict?null:data.layers.find(l=>l.id===e.layer);
-    const downloadIcon=pathIcon('M12 3v12m-5-5 5 5 5-5M5 16v4h14v-4');
+    const downloadIcon=icon('download');
     return '<header class="dialog-header"><div><span class="dialog-category">'+escape(dict?[shelves.get(shelfOf(e))?.name,e.sub?'':short(categoryById.get(e.category)?.name||''),places.get(placeOf.get(e.category))?.name,iconGroups.get(e.sub)?.name].filter(Boolean).join(' · '):category.english)+'</span><h2 id="detail-title" tabindex="-1">'+escape(e.name)+'</h2>'+(e.term?'<p class="detail-term"><span>통용 용어</span>'+escape(e.term)+'</p>':'')+window.Pattove.references.control(e.id)+'</div><button class="icon-button ds-button" data-variant="outline" data-icon-only data-action="close-dialog" aria-label="상세 닫기">'+icon('close')+'</button></header>'+
-      (dict?(e.art?'<div class="detail-art illustrated-detail">'+illustration(e,true)+'</div><div class="illustrated-downloads"><p>'+escape(e.usage||'')+'</p><a class="secondary ds-button" data-variant="outline" href="'+escape(e.art.png)+'" download aria-label="PNG 다운로드" title="PNG 다운로드">'+downloadIcon+'<span>PNG</span></a><a class="secondary ds-button" data-variant="outline" href="'+escape(e.art.src)+'" download aria-label="WebP 다운로드" title="WebP 다운로드">'+downloadIcon+'<span>WebP</span></a></div>':isGuideline(e)?'':'<div class="detail-art is-todo">'+todoArt('detail-todo')+'<p>'+(e.glyph?'아직 그리지 않았어요':'아직 견본이 없어요')+'</p></div>')
+      (dict?(e.art?'<div class="detail-art illustrated-detail">'+illustration(e,true)+'</div><div class="illustrated-downloads"><p>'+escape(e.usage||'')+'</p><a class="secondary ds-button" data-variant="outline" href="'+escape(e.art.png)+'" download aria-label="PNG 다운로드" title="PNG 다운로드">'+downloadIcon+'<span>PNG</span></a><a class="secondary ds-button" data-variant="outline" href="'+escape(e.art.src)+'" download aria-label="WebP 다운로드" title="WebP 다운로드">'+downloadIcon+'<span>WebP</span></a>'+window.Pattove.illustrationTools.pick(e.id)+'</div>':isGuideline(e)?'':'<div class="detail-art is-todo">'+todoArt('detail-todo')+'<p>'+(e.glyph?'아직 그리지 않았어요':'아직 견본이 없어요')+'</p></div>')
         +(!e.art&&e.usage?'<div class="record-detail"><p class="record-kind">'+escape(e.id)+' · '+escape(e.kind)+'</p><section><h3>쓰임</h3><p>'+escape(e.usage)+'</p></section></div>':'')
         +(e.glyph?'<section class="glyph-ref"><h3>참고 출처</h3><ul class="glyph-keys">'+e.glyph.map(g=>'<li><code>'+escape(g)+'</code><span>'+escape(glyphSource(g))+'</span></li>').join('')+'</ul></section>':'')
         :'<div class="record-detail"><p class="record-kind">'+escape(category.name)+'</p><section><h3>대표 항목</h3><p>'+escape(e.examples)+'</p></section></div>');

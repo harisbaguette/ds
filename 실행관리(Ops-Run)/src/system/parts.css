@@ -11,7 +11,7 @@
 .ds button { cursor:pointer; touch-action:manipulation; }
 .ds button:disabled { cursor:not-allowed; }
 .ds :is(button,input,select,textarea,a,[tabindex]):focus-visible { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }
-.ds .ui-icon { display:inline-block; width:var(--p-icon-md); height:var(--p-icon-md); stroke-width:var(--p-icon-stroke); flex-shrink:0; vertical-align:middle; }
+.ds .ui-icon { display:inline-block; width:var(--p-icon-lg); height:var(--p-icon-lg); object-fit:contain; flex-shrink:0; vertical-align:middle; }
 .ds .ds-demo-note { font-size:var(--p-text-sm); margin-top:var(--p-space-sm); min-height:calc(var(--p-space-unit) * 5); color:var(--p-muted); }
 .ds .ds-surface { border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius); background:var(--p-surface); }
 .ds .ds-surface[data-material="raised"] { box-shadow:var(--p-shadow); border-color:var(--p-edge); }
@@ -329,7 +329,7 @@
 .ds .ds-badge[data-tone="warning"] { background:var(--p-warning-soft); border-color:var(--p-warning-line); color:var(--p-warning); }
 /* looks: tone keeps the color, look changes the surface */
 .ds .ds-badge[data-look="icon"] { gap:var(--p-space-2xs); padding-left:var(--p-space-xs); }
-.ds .ds-badge[data-look="icon"] .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); stroke-width:var(--p-icon-stroke-heavy); }
+.ds .ds-badge[data-look="icon"] .ui-icon { width:var(--p-icon-sm); height:var(--p-icon-sm); }
 /* @part count-badge */
 /* a number pinned to the icon corner, so nobody opens the box to count what piled up */
 .ds .ds-count-badge { position:relative; display:inline-grid; place-items:center; width:var(--p-control-size-sm); height:var(--p-control-size-sm); flex-shrink:0; color:var(--p-ink); }
@@ -354,7 +354,7 @@
 .ds .ds-tabs[data-look="icon"] .ds-tab { flex-direction:column; gap:var(--p-space-2xs); min-height:var(--p-control-size-xl); padding:var(--p-space-xs); border-radius:0; font-size:var(--p-text-sm); }
 .ds .ds-tabs[data-look="icon"] .ds-tab .ui-icon { box-sizing:content-box; padding:var(--p-space-2xs) var(--p-space-md); border-radius:var(--p-radius-full); }
 .ds .ds-tabs[data-look="icon"] .ds-tab[aria-selected="true"] { background:transparent; color:var(--p-ink); box-shadow:none; }
-.ds .ds-tabs[data-look="icon"] .ds-tab[aria-selected="true"] .ui-icon { background:var(--p-soft); stroke-width:var(--p-icon-stroke-heavy); }
+.ds .ds-tabs[data-look="icon"] .ds-tab[aria-selected="true"] .ui-icon { background:var(--p-soft); }
 /* 07 vertical: list on the left, a side bar on the chosen row; arrows go up and down */
 .ds .ds-tabs[data-look="vertical"] { display:grid; grid-template-columns:minmax(calc(var(--p-space-unit) * 24),auto) minmax(0,1fr); align-items:start; }
 .ds .ds-tabs[data-look="vertical"] .ds-tablist { flex-direction:column; padding:0 var(--p-space-xs) 0 0; gap:var(--p-space-3xs); border:0; border-right:var(--p-border-width) solid var(--p-line); border-radius:0; background:transparent; box-shadow:none; }
@@ -378,7 +378,7 @@
 .ds .ds-bottom-nav > :is([aria-pressed="true"],[aria-current="page"]) { color:var(--p-ink); font-weight:var(--p-weight-extrabold); }
 .ds .ds-bottom-nav > :not(.ds-bottom-nav-create)::before,.ds .ds-bottom-nav > :not(.ds-bottom-nav-create)::after { content:''; position:absolute; pointer-events:none; }
 .ds .ds-bottom-nav > .ds-bottom-nav-create { display:grid; place-items:center; flex:none; width:var(--p-control-size-md); height:var(--p-control-size-md); padding:0; border:0; border-radius:var(--p-radius-circle); color:var(--p-on-accent); background:var(--p-accent); box-shadow:var(--p-raised); }
-.ds .ds-bottom-nav > .ds-bottom-nav-create .ui-icon { width:var(--p-icon-lg); height:var(--p-icon-lg); stroke-width:var(--p-icon-stroke-heavy); }
+.ds .ds-bottom-nav > .ds-bottom-nav-create .ui-icon { width:var(--p-icon-lg); height:var(--p-icon-lg); }
 /* 05 line: top bar (also the look without a variant) */
 .ds .ds-bottom-nav:is(:not([data-variant]),[data-variant="line"]) > :is([aria-pressed="true"],[aria-current="page"])::before { top:calc(var(--p-space-xs) * -1); left:calc(100% / 6); right:calc(100% / 6); height:var(--p-size-2xs); border-radius:0 0 var(--p-radius-sm) var(--p-radius-sm); background:var(--p-accent); }
 /* 01 minimal: flat, dot under the label */
@@ -441,7 +441,7 @@
 .ds .ds-card:where([data-look="outlined"]) { background:var(--p-bg); box-shadow:none; }
 /* @part card-media */
 .ds .ds-card-media { height:calc(var(--p-space-unit) * 24); flex:none; position:relative; background:var(--p-soft); }
-.ds .ds-card-media:empty::after { content:''; position:absolute; inset:50% auto auto 50%; width:calc(var(--p-space-unit) * 7); height:calc(var(--p-space-unit) * 7); translate:-50% -50%; background:var(--p-muted); opacity:var(--p-opacity-placeholder); -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2.5'/%3E%3Ccircle cx='8.5' cy='10' r='1.5'/%3E%3Cpath d='m21 15-4.5-4.5L7 19'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2.5'/%3E%3Ccircle cx='8.5' cy='10' r='1.5'/%3E%3Cpath d='m21 15-4.5-4.5L7 19'/%3E%3C/svg%3E") center/contain no-repeat; }
+.ds .ds-card-media > .ui-icon { position:absolute; inset:50% auto auto 50%; width:calc(var(--p-space-unit) * 9); height:calc(var(--p-space-unit) * 9); translate:-50% -50%; opacity:var(--p-opacity-placeholder); }
 /* @part list-card */
 /* picture well on the left, words on the right; the divider and actions run under both */
 .ds .ds-list-card { display:grid; grid-template-columns:calc(var(--p-space-unit) * 22) minmax(0,1fr); align-content:start; }

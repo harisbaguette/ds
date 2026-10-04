@@ -4,6 +4,7 @@ import path from 'node:path';
 import { spawn, execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import http from 'node:http';
+import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
@@ -68,6 +69,10 @@ const port=4191,origin='http://127.0.0.1:'+port;
 const server=spawn(process.execPath,['scripts/serve.cjs'],{cwd:root,env:{...process.env,PORT:String(port)},stdio:['ignore','pipe','pipe']});
 const logs=[];server.stderr.on('data',d=>logs.push(String(d)));
 let browser;const symlink=path.join(root,'src/icon-safety-test-link');
+const outside=await fs.mkdtemp(path.join(os.tmpdir(),'pattove-safety-'));
+await fs.writeFile(path.join(outside,'private.txt'),'outside fixture');
+const linkType=process.platform==='win32'?'junction':'dir';
+const unlink=async()=>{if(process.platform==='win32')await fs.rmdir(symlink);else await fs.unlink(symlink);};
 try {
   let ready=false;for(let i=0;i<80;i++){try{if((await fetch(origin+'/__pattove/status')).ok){ready=true;break;}}catch{}await new Promise(r=>setTimeout(r,100));}ok(ready,'Local server starts');
   let response=await fetch(origin+'/api/illustrations/search?q=검색');ok(response.ok&&(await response.json()).total>0,'HTTP search');
@@ -80,13 +85,13 @@ try {
   ok((await fetch(origin+'/api/illustrations/search',{headers:{Origin:'https://attacker.example'}})).status===403,'Cross-origin API denied');
   const badHostStatus=await new Promise((resolve,reject)=>{http.get(origin+'/api/illustrations/search',{headers:{Host:'attacker.example'}},response=>{response.resume();resolve(response.statusCode);}).on('error',reject);});
   ok(badHostStatus===403,'DNS rebinding host denied');
-  await fs.symlink('/etc/hosts',symlink);
-  ok((await fetch(origin+'/src/icon-safety-test-link')).status===403,'Symlink escape denied');
+  await fs.symlink(outside,symlink,linkType);
+  ok((await fetch(origin+'/src/icon-safety-test-link/private.txt')).status===403,'Symlink escape denied');
   ok((await fetch(origin+'/assets/icons/illustrated/production.json')).status===404,'Production metadata not published');
   const source=JSON.parse(await fs.readFile(path.join(root,'assets/icons/illustrated/manifest.json'))).batches[0].source;
   ok((await fetch(origin+'/'+source)).status===404,'Original source objects not published');
-  await fs.unlink(symlink);await fs.symlink(path.join(root,source),symlink);
-  ok((await fetch(origin+'/src/icon-safety-test-link')).status===403,'Symlink to private source object denied');
+  await unlink();await fs.symlink(path.dirname(path.join(root,source)),symlink,linkType);
+  ok((await fetch(origin+'/src/icon-safety-test-link/'+path.basename(source))).status===403,'Symlink to private source object denied');
   response=await fetch(origin+'/src/data/library.js');
   ok(response.headers.get('content-encoding')==='gzip','Browser catalog is compressed in transit');
   const searchBytes=Buffer.byteLength(JSON.stringify(search({query:'검색',limit:10})));
@@ -107,6 +112,6 @@ try {
   const offline=await browser.newPage();await offline.route('http**',route=>route.abort());await offline.goto(new URL('index.html',new URL('file://'+folder+'/')).href);
   ok(await offline.locator('img').evaluateAll(async nodes=>{await Promise.all(nodes.map(n=>n.decode()));return nodes.length===2&&nodes.every(n=>n.naturalWidth===512);}), 'Exported images work offline');
   assert.deepEqual(errors,[]);checks++;
-} finally {await browser?.close();server.kill();await fs.unlink(symlink).catch(()=>{});await fs.writeFile(path.join(out,'server.log'),logs.join(''));}
+} finally {await browser?.close();server.kill();await unlink().catch(()=>{});await fs.unlink(path.join(outside,'private.txt'));await fs.rmdir(outside);await fs.writeFile(path.join(out,'server.log'),logs.join(''));}
 await fs.writeFile(path.join(out,'results.json'),JSON.stringify({checks,...report},null,2));
 console.log(checks+' illustration management checks passed; all '+ids.length+' IDs covered.');

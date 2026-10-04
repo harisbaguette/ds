@@ -76,6 +76,12 @@ async function stopOwnServer(expectedRoot) {
     fixtureRoot = path.join(fixture, '실행관리(Ops-Run)');
     fs.mkdirSync(path.join(fixtureRoot, 'scripts'), { recursive: true });
     fs.copyFileSync(path.join(root, 'scripts/serve.cjs'), path.join(fixtureRoot, 'scripts/serve.cjs'));
+    // The server now includes the illustration service. A relocated checkout
+    // must carry its startup modules and catalogs as well as serve.cjs.
+    const support=['scripts/lib/illustration-http.mjs','scripts/lib/illustration-store.mjs','scripts/lib/illustration-export.mjs','src/data/illustrations.json','assets/icons/styles.json'];
+    const styles=JSON.parse(fs.readFileSync(path.join(root,'assets/icons/styles.json'),'utf8'));
+    support.push(...styles.styles.map(style=>style.manifest));
+    for(const relative of support){const destination=path.join(fixtureRoot,relative);fs.mkdirSync(path.dirname(destination),{recursive:true});fs.copyFileSync(path.join(root,relative),destination);}
     fs.writeFileSync(path.join(fixtureRoot, 'index.html'), '<!doctype html><title>Relocated launcher</title>');
     const movedExecutable = path.join(fixture, launcherName);
     fs.copyFileSync(executable, movedExecutable);

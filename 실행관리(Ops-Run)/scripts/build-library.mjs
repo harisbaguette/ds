@@ -167,7 +167,14 @@ for(const row of table.rows) {
 for(const l of layers)l.count=components.filter(c=>c.layer===l.id).length;
 const payload={categories,groups,layers,uses,shelves,places,roleOrder,iconGroups,entries,components,glyphIllustrations,
   glyphSets:glyphSets.map(({symbols,pkg,...s})=>s),glyphs:glyphs.map(g=>[g.key,...glyphNames[g.key]])};
-fs.writeFileSync(path.join(out,'library.js'),'/* Generated from repository Markdown by scripts/build-library.mjs. */\nwindow.Pattove=window.Pattove||{};\nwindow.Pattove.library='+JSON.stringify(payload)+';\n');
+// The public object stays compatible; reconstruct predictable URLs instead of transmitting them three times per image.
+const compactGlyphs=Object.fromEntries(Object.entries(glyphIllustrations).map(([id,art])=>{
+  const base=art.src.slice(0,-5);
+  if(art.png!==base+'.png'||art.thumb!==base+'-192.webp'||art.width!==512||art.height!==512||art.style!==illustrated.style)throw Error('Unexpected illustration delivery shape: '+id);
+  return [id,base.slice((illustratedDir+'/').length)];
+}));
+const expand=`\n(()=>{const library=window.Pattove.library;for(const [id,name]of Object.entries(library.glyphIllustrations)){const base=${JSON.stringify(illustratedDir+'/')}+name;library.glyphIllustrations[id]={style:${JSON.stringify(illustrated.style)},src:base+'.webp',thumb:base+'-192.webp',png:base+'.png',width:512,height:512};}})();\n`;
+fs.writeFileSync(path.join(out,'library.js'),'/* Generated from repository Markdown by scripts/build-library.mjs. */\nwindow.Pattove=window.Pattove||{};\nwindow.Pattove.library='+JSON.stringify({...payload,glyphIllustrations:compactGlyphs})+';'+expand);
 fs.mkdirSync(path.join(root,'test-results/library'),{recursive:true});
 fs.writeFileSync(path.join(root,'test-results/library/source-audit.json'),JSON.stringify({categories:categories.length,entries:entries.length,layers:layers.length,components:components.length,glyphs:glyphs.length},null,2));
 console.log(JSON.stringify({categories:categories.length,entries:entries.length,layers:layers.length,components:components.length,glyphs:Object.fromEntries(glyphSets.map(s=>[s.id,s.count]))}));

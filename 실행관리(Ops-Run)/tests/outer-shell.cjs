@@ -39,7 +39,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
         });
         check(width + ' ' + route + ' 메뉴 이름이 화면에 보임: ' + navigation.unnamed.join(', '), navigation.unnamed.length === 0);
         check(width + ' ' + route + ' 메뉴 클릭 영역 가림 없음: ' + navigation.covered.join(', '), navigation.covered.length === 0);
-        check(width + ' ' + route + ' 제목은 공통 글자 크기 사용', await page.locator('#page-title').evaluate(e => { const s=getComputedStyle(e); return s.fontSize===s.getPropertyValue(e.classList.contains('collection-title')?'--p-text-body':'--p-text-md').trim(); }));
+        check(width + ' ' + route + ' 제목은 공통 글자 크기 사용', await page.locator('#page-title').evaluate(e => { const s=getComputedStyle(e); return s.fontSize===s.getPropertyValue(e.classList.contains('collection-title')?'--p-text-title':'--p-text-md').trim(); }));
         check(width + ' ' + route + ' 불필요 조작 제거', await page.locator('[data-view], [data-compare], [data-action="compare-mode"], [data-filter="sort"], .compare-tray, .mobile-nav, .brand span').count() === 0);
         if (route === 'styles') {
           check(width + ' 스타일 진입에서 스타일 카드 격자 표시', await page.locator('.style-card').first().isVisible() && await page.locator('.component-page').count() === 0);

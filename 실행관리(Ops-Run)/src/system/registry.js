@@ -1,6 +1,6 @@
 /* Representative implementations for validating the system structure, not the full dictionary. */
 (() => {
-  const version = '0.6.0';
+  const version = '0.7.0';
   const sections = [
     { id: 'all', name: '전체 보기', group: '' },
     { id: 'foundations', name: '색·글꼴·간격', group: '기초' },
@@ -121,7 +121,398 @@
     block('stat-row', '요약 숫자 줄', 'composition', 'DAT', '요약 숫자 개수 지표 stat', T('color','typography','text','weight','leading','tracking','space','radius','border'), { entry: 'DAT-16' }),
     { id: 'template', browse: { shelf: 'template', kind: '구성', code: 'LAY' }, name: '목록 레이아웃', section: 'page', layer: 'Template', keywords: 'template layout 틀 레이아웃 배치 슬롯', deps: ['badge', 'bottom-nav', 'stat-row', ...T('color','text','weight','leading','tracking','space','container','radius','border','stroke')] },
     { id: 'page', browse: { shelf: 'template', kind: '구성', code: 'LAY' }, name: '컬렉션 화면', section: 'page', layer: 'Page', keywords: 'page layout template 레이아웃 템플릿 화면 흐름 검색 결과', deps: ['template', 'search-form', 'search-bar', 'filter-chip-row', 'result-grid', 'result-list', 'empty-state', ...T('color','text','weight','space','radius','border')], behavior: true }
-  ].map(item => ({ ...item, english: english[item.id], version, lifecycle: 'Trial', environments: ['HTML','React'], behavior: item.behavior || interactive.includes(item.id) }));
+  ].concat([{"id":"settings-form","name":"프로필 설정","english":"SettingsForm","reactExport":"SettingsForm","section":"composition","layer":"Module","browse":{"shelf":"block","kind":"모듈","code":"ACC","fit":true},"keywords":"SettingsForm 프로필을 수정하고 저장 실패 후 재시도","deps":["field","textarea","select","switch","button","token-color","token-text","token-space","token-container"],"behavior":true},{"id":"login-form","name":"로그인","english":"LoginForm","reactExport":"LoginForm","section":"composition","layer":"Module","browse":{"shelf":"block","kind":"모듈","code":"ACC","fit":true},"entry":"ACC-01","keywords":"LoginForm 인증 서비스에 연결하는 로그인 폼","deps":["field","button","settings-form"],"behavior":true},{"id":"input-result","name":"입력과 계산 결과","english":"InputResult","reactExport":"InputResult","section":"composition","layer":"Module","browse":{"shelf":"block","kind":"모듈","code":"TOO","fit":true},"keywords":"InputResult 입력값을 검증하고 계산 결과 표시","deps":["field","button","settings-form","token-text","token-weight"],"behavior":true},{"id":"comparison","name":"비교와 선택","english":"Comparison","reactExport":"Comparison","section":"composition","layer":"Module","browse":{"shelf":"block","kind":"모듈","code":"COM","fit":true},"keywords":"Comparison 대상의 차이를 비교한 뒤 하나 선택","deps":["button","token-color","token-space","token-container","token-radius","token-border"],"behavior":true},{"id":"article-page","name":"본문과 목차","english":"ArticlePage","reactExport":"ArticlePage","section":"page","layer":"Page","browse":{"shelf":"template","kind":"페이지","code":"BLG","fit":true},"keywords":"ArticlePage 목차에서 긴 본문으로 이동해 읽기","deps":["token-color","token-text","token-leading","token-space","token-size","token-container"],"behavior":false}]).concat([
+  {
+    "id": "textarea",
+    "name": "여러 줄 입력",
+    "section": "fields",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "INP",
+      "fit": false
+    },
+    "entry": "INP-03",
+    "english": "Textarea",
+    "reactExport": "Textarea",
+    "keywords": "Textarea 긴 글을 입력하고 수정",
+    "deps": [
+      "input",
+      "field",
+      "token-space"
+    ],
+    "behavior": true
+  },
+  {
+    "id": "select",
+    "name": "선택 상자",
+    "section": "fields",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "INP",
+      "fit": false
+    },
+    "entry": "INP-06",
+    "english": "Select",
+    "reactExport": "Select",
+    "keywords": "Select 정해진 값 중 하나 선택",
+    "deps": [
+      "input",
+      "field",
+      "token-size"
+    ],
+    "behavior": true
+  },
+  {
+    "id": "combobox",
+    "name": "검색 가능한 선택",
+    "section": "fields",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "INP",
+      "fit": false
+    },
+    "entry": "INP-07",
+    "english": "Combobox",
+    "reactExport": "Combobox",
+    "keywords": "Combobox 입력으로 후보를 좁혀 선택",
+    "deps": [
+      "input",
+      "field",
+      "token-color",
+      "token-space",
+      "token-size",
+      "token-radius",
+      "token-border",
+      "token-layer"
+    ],
+    "behavior": true
+  },
+  {
+    "id": "file-upload",
+    "name": "파일 선택",
+    "section": "fields",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "INP",
+      "fit": false
+    },
+    "entry": "INP-12",
+    "english": "FileUpload",
+    "reactExport": "FileUpload",
+    "keywords": "FileUpload 파일 형식과 크기를 확인하고 전달",
+    "deps": [
+      "field",
+      "token-color",
+      "token-space",
+      "token-size",
+      "token-radius",
+      "token-border"
+    ],
+    "behavior": true
+  },
+  {
+    "id": "dialog",
+    "name": "대화상자",
+    "section": "feedback",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "ACT",
+      "fit": false
+    },
+    "entry": "ACT-07",
+    "english": "Dialog",
+    "reactExport": "Dialog",
+    "keywords": "Dialog 배경을 잠그고 내용을 확인",
+    "deps": [
+      "button",
+      "confirm-row",
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-container",
+      "token-radius",
+      "token-border"
+    ],
+    "behavior": true
+  },
+  {
+    "id": "confirmation-dialog",
+    "name": "실행 전 확인",
+    "section": "feedback",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "ACT",
+      "fit": false
+    },
+    "entry": "ACT-08",
+    "english": "ConfirmationDialog",
+    "reactExport": "ConfirmationDialog",
+    "keywords": "ConfirmationDialog 취소 가능한 확인 뒤 행동 실행",
+    "deps": [
+      "dialog"
+    ],
+    "behavior": true
+  },
+  {
+    "id": "drawer",
+    "name": "옆에서 열리는 창",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "ACT",
+      "fit": false
+    },
+    "english": "Drawer",
+    "reactExport": "Drawer",
+    "keywords": "Drawer 보조 작업을 별도 창에서 처리",
+    "deps": [
+      "dialog"
+    ],
+    "behavior": true
+  },
+  {
+    "id": "popover",
+    "name": "팝오버",
+    "section": "feedback",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "ACT",
+      "fit": false
+    },
+    "entry": "ACT-09",
+    "english": "Popover",
+    "reactExport": "Popover",
+    "keywords": "Popover 필요한 부가 정보를 열어 확인",
+    "deps": [
+      "button",
+      "token-color",
+      "token-space",
+      "token-container",
+      "token-radius",
+      "token-border"
+    ],
+    "behavior": true
+  },
+  {
+    "id": "tooltip",
+    "name": "툴팁",
+    "section": "feedback",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "ACT",
+      "fit": false
+    },
+    "entry": "ACT-10",
+    "english": "Tooltip",
+    "reactExport": "Tooltip",
+    "keywords": "Tooltip 행동의 짧은 부가 설명",
+    "deps": [
+      "button",
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-container",
+      "token-radius",
+      "token-layer"
+    ],
+    "behavior": false
+  },
+  {
+    "id": "accordion",
+    "name": "접고 펼치기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "english": "Accordion",
+    "reactExport": "Accordion",
+    "keywords": "Accordion 필요한 설명을 선택해서 읽기",
+    "deps": [
+      "token-color",
+      "token-space",
+      "token-size",
+      "token-border"
+    ],
+    "behavior": true
+  },
+  {
+    "id": "breadcrumb",
+    "name": "현재 위치 경로",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": false
+    },
+    "entry": "NAV-08",
+    "english": "Breadcrumb",
+    "reactExport": "Breadcrumb",
+    "keywords": "Breadcrumb 상위 위치로 돌아가기",
+    "deps": [
+      "token-color",
+      "token-space",
+      "token-size"
+    ],
+    "behavior": false
+  },
+  {
+    "id": "pagination",
+    "name": "페이지 이동",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": false
+    },
+    "entry": "NAV-10",
+    "english": "Pagination",
+    "reactExport": "Pagination",
+    "keywords": "Pagination 결과를 쪽 단위로 탐색",
+    "deps": [
+      "button",
+      "token-space"
+    ],
+    "behavior": true
+  },
+  {
+    "id": "side-nav",
+    "name": "사이드 탐색",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "english": "SideNav",
+    "reactExport": "SideNav",
+    "keywords": "SideNav 주요 작업 화면 사이 이동",
+    "deps": [
+      "token-color",
+      "token-space",
+      "token-size",
+      "token-radius"
+    ],
+    "behavior": false
+  },
+  {
+    "id": "spinner",
+    "name": "로딩 표시",
+    "section": "feedback",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "STA",
+      "fit": false
+    },
+    "english": "Spinner",
+    "reactExport": "Spinner",
+    "keywords": "Spinner 진행 중인 작업을 알림",
+    "deps": [
+      "button",
+      "token-space"
+    ],
+    "behavior": false
+  },
+  {
+    "id": "skeleton",
+    "name": "로딩 자리 표시",
+    "section": "feedback",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "STA",
+      "fit": true
+    },
+    "english": "Skeleton",
+    "reactExport": "Skeleton",
+    "keywords": "Skeleton 불러올 콘텐츠 위치를 표시",
+    "deps": [
+      "token-color",
+      "token-space",
+      "token-size",
+      "token-radius"
+    ],
+    "behavior": false
+  },
+  {
+    "id": "error-state",
+    "name": "오류와 재시도",
+    "section": "feedback",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "STA",
+      "fit": false
+    },
+    "english": "ErrorState",
+    "reactExport": "ErrorState",
+    "keywords": "ErrorState 실패 원인과 재시도 행동 제공",
+    "deps": [
+      "button",
+      "token-color",
+      "token-space",
+      "token-radius",
+      "token-border"
+    ],
+    "behavior": true
+  },
+  {
+    "id": "offline-state",
+    "name": "연결 끊김 안내",
+    "section": "feedback",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "STA",
+      "fit": false
+    },
+    "english": "OfflineState",
+    "reactExport": "OfflineState",
+    "keywords": "OfflineState 연결을 회복하고 다시 시도",
+    "deps": [
+      "error-state",
+      "token-color"
+    ],
+    "behavior": true
+  }
+]).map(item => ({ ...item, english: item.english || english[item.id], version:item.version || version, lifecycle: item.lifecycle || 'Trial', environments: ['HTML','React'], behavior: item.behavior || interactive.includes(item.id) }));
+  // A dictionary concept and its reusable implementation must resolve identically.
+  const dictionaryLinks = { input:'INP-02', checkbox:'INP-04', 'radio-list':'INP-05', switch:'INP-08' };
+  for (const [id, entry] of Object.entries(dictionaryLinks)) items.find(item => item.id === id).entry = entry;
+  // A record editor is a use of a dialog, not the generic dialog contract.
+  delete items.find(item => item.id === 'record-editor').entry;
   const control = (key, label, values) => ({ key, label, values });
   const choiceStates = [['checked','선택됨'],['unchecked','선택 안 됨'],['disabled','사용 불가']];
   const plainStates = [['','기본'],['disabled','사용 불가']];
@@ -283,6 +674,209 @@
     template: ['제목·본문·하단 탐색의 배치', 'body에는 신뢰할 수 있는 부품 마크업만 전달', ['title','eyebrow','count','body','look'], []],
     page: ['실제 콘텐츠가 들어간 조합', '템플릿과 검색 양식·결과 블록을 재사용. HTML은 화면 안의 보관 상태를 바꾸고 pattove:save로 알림. React는 onSave(record)의 성공·실패와 대기 상태를 처리. 서버·로그인 없이 예시 데이터로 실행', ['prefix','look','records','onSave (React)'], ['pattove:save (HTML)','onSave(record) (React)']]
   };
+  Object.assign(contracts, {
+  "textarea": [
+    "긴 글을 입력하고 수정",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "label",
+      "value",
+      "name",
+      "help",
+      "error",
+      "required",
+      "disabled"
+    ],
+    [
+      "input",
+      "change"
+    ]
+  ],
+  "select": [
+    "정해진 값 중 하나 선택",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "label",
+      "items",
+      "value",
+      "name",
+      "required",
+      "error",
+      "disabled"
+    ],
+    [
+      "change"
+    ]
+  ],
+  "combobox": [
+    "입력으로 후보를 좁혀 선택",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "label",
+      "items",
+      "value",
+      "name",
+      "disabled"
+    ],
+    [
+      "pattove:select",
+      "change"
+    ]
+  ],
+  "file-upload": [
+    "파일 형식과 크기를 확인하고 전달",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "label",
+      "accept",
+      "multiple",
+      "maxBytes",
+      "disabled"
+    ],
+    [
+      "pattove:files"
+    ]
+  ],
+  "dialog": [
+    "배경을 잠그고 내용을 확인",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "title",
+      "body",
+      "trigger",
+      "confirmLabel"
+    ],
+    [
+      "pattove:dialogclose"
+    ]
+  ],
+  "confirmation-dialog": [
+    "취소 가능한 확인 뒤 행동 실행",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "title",
+      "body",
+      "trigger",
+      "confirmLabel"
+    ],
+    [
+      "pattove:dialogclose"
+    ]
+  ],
+  "drawer": [
+    "보조 작업을 별도 창에서 처리",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "title",
+      "body",
+      "trigger"
+    ],
+    [
+      "pattove:dialogclose"
+    ]
+  ],
+  "popover": [
+    "필요한 부가 정보를 열어 확인",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "label",
+      "text"
+    ],
+    [
+      "toggle"
+    ]
+  ],
+  "tooltip": [
+    "행동의 짧은 부가 설명",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "label",
+      "text"
+    ],
+    []
+  ],
+  "accordion": [
+    "필요한 설명을 선택해서 읽기",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "items"
+    ],
+    [
+      "toggle"
+    ]
+  ],
+  "breadcrumb": [
+    "상위 위치로 돌아가기",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "items"
+    ],
+    []
+  ],
+  "pagination": [
+    "결과를 쪽 단위로 탐색",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "page",
+      "total"
+    ],
+    [
+      "pattove:pagechange"
+    ]
+  ],
+  "side-nav": [
+    "주요 작업 화면 사이 이동",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "label",
+      "items",
+      "current"
+    ],
+    []
+  ],
+  "spinner": [
+    "진행 중인 작업을 알림",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "label"
+    ],
+    []
+  ],
+  "skeleton": [
+    "불러올 콘텐츠 위치를 표시",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "label"
+    ],
+    []
+  ],
+  "error-state": [
+    "실패 원인과 재시도 행동 제공",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "title",
+      "message",
+      "action"
+    ],
+    [
+      "pattove:retry"
+    ]
+  ],
+  "offline-state": [
+    "연결을 회복하고 다시 시도",
+    "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+    [
+      "title",
+      "message",
+      "action"
+    ],
+    [
+      "pattove:retry"
+    ]
+  ]
+});
+  for (const id of ['textarea','select','combobox','file-upload']) controls[id] = [control('state','상태',[['','기본'],['disabled','사용 불가'],...(id === 'textarea' || id === 'select' ? [['error','오류']] : [])])];
+  Object.assign(contracts, {"settings-form":["프로필을 수정하고 저장 실패 후 재시도","실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",["title","name","memo"],["pattove:submit"]],"login-form":["인증 서비스에 연결하는 로그인 폼","실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",["title"],["pattove:submit"]],"input-result":["입력값을 검증하고 계산 결과 표시","실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",["title"],["submit"]],"comparison":["대상의 차이를 비교한 뒤 하나 선택","실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",["title","items"],["pattove:choose"]],"article-page":["목차에서 긴 본문으로 이동해 읽기","실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",["title","sections"],[]]});
   // Shared CSS blocks: a part's own block plus the helper blocks it is drawn with.
   const cssBlocks = {
     checkbox: ['selection'], radio: ['selection'], switch: ['selection'],
@@ -331,5 +925,6 @@
   };
   const patterns = [{ id: 'search-filter-results', name: '검색·필터·결과', layer: 'Pattern', items: ['search-form', 'filter-chip-row', 'result-grid', 'result-list', 'empty-state', 'template', 'page'], rules: ['입력 필드와 상태 필터 뒤에 검색 동작을 둡니다.', '결과 개수는 바뀔 때마다 알리고, 결과가 없으면 전체 보기로 복구합니다.', '제목이 길어져도 카드의 행동은 같은 위치에 둡니다.'] }];
   patterns.push({ id:'admin-edit-save', name:'관리 목록·편집·저장·복구', layer:'Pattern', items:['admin-shell','data-table','record-editor','admin-page'], rules:['검색과 필터를 바꾸면 첫 쪽으로 돌아갑니다.','저장이 실패하면 입력을 유지하고 다시 시도합니다.','저장 결과가 확인된 뒤 목록을 갱신하고 원래 위치로 초점을 돌립니다.'] });
+  patterns.push(...[{"id":"settings-form","name":"프로필 설정","layer":"Pattern","items":["settings-form","field","textarea","select","switch","button"],"rules":["프로필을 수정하고 저장 실패 후 재시도","실제 콘텐츠와 실패·복구 상태를 확인합니다."]},{"id":"login-form","name":"로그인","layer":"Pattern","items":["login-form","field","button","settings-form"],"rules":["인증 서비스에 연결하는 로그인 폼","실제 콘텐츠와 실패·복구 상태를 확인합니다."]},{"id":"input-result","name":"입력과 계산 결과","layer":"Pattern","items":["input-result","field","button","settings-form"],"rules":["입력값을 검증하고 계산 결과 표시","실제 콘텐츠와 실패·복구 상태를 확인합니다."]},{"id":"comparison","name":"비교와 선택","layer":"Pattern","items":["comparison","button"],"rules":["대상의 차이를 비교한 뒤 하나 선택","실제 콘텐츠와 실패·복구 상태를 확인합니다."]},{"id":"article-page","name":"본문과 목차","layer":"Pattern","items":["article-page"],"rules":["목차에서 긴 본문으로 이동해 읽기","실제 콘텐츠와 실패·복구 상태를 확인합니다."]}]);
   window.Pattove.systemRegistry = { sections, items, index, matching, dependencies, patterns, normalizeOptions, version };
 })();

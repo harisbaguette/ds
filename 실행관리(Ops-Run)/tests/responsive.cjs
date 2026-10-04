@@ -63,7 +63,7 @@ const sameRow = (page, selector) => page.locator(selector).evaluateAll(nodes => 
       await page.setViewportSize({width:768,height:900}); await settle(page);
       check(name + ' desktop menu focus moves to the visible tablet toggle', await page.locator('#menu-toggle').evaluate(el => el === document.activeElement));
       await page.setViewportSize({width:1440,height:900}); await settle(page);
-      check(name + ' hidden tablet toggle releases focus to content', await page.locator('#main').evaluate(el => el === document.activeElement));
+      check(name + ' hidden tablet toggle releases focus to the page title', await page.locator('#page-title').evaluate(el => el === document.activeElement));
       await page.locator('#rail-toggle').click();
       await page.setViewportSize({width:768,height:900}); await page.locator('#menu-toggle').click();
       check(name + ' collapsed desktop rail does not hide tablet categories', await page.locator('#secondary-nav a').first().isVisible());
@@ -73,10 +73,11 @@ const sameRow = (page, selector) => page.locator(selector).evaluateAll(nodes => 
       for (const viewport of [{width:667,height:320},{width:375,height:280}]) {
         await page.setViewportSize(viewport); await goto('dictionary');
         await page.locator('#search-open').click(); await page.locator('#query').fill('버튼');
-        const count = await page.locator('#search-suggestions > *').count();
+        const count = await page.locator('#search-suggestions .search-suggestion:visible').count();
         check(name + ' search fits a short viewport ' + JSON.stringify(viewport), count > 1 && await inViewport(page.locator('#search-dialog')));
-        for (let i=0; i<count; i++) await page.locator('#query').press('ArrowDown');
-        check(name + ' keyboard selection scrolls into view ' + JSON.stringify(viewport), await inViewport(page.locator('#search-suggestions [aria-selected="true"]')));
+        await page.locator('#query').focus();
+        for (let i=0; i<count; i++) await page.keyboard.press('ArrowDown');
+        check(name + ' keyboard selection scrolls into view ' + JSON.stringify(viewport), await inViewport(page.locator('#search-suggestions .search-suggestion:focus')));
         check(name + ' search input and action remain visible while scrolling results', await inViewport(page.locator('#query')) && await inViewport(page.locator('.search-all')));
         await page.keyboard.press('Escape');
         check(name + ' short search returns focus to its opener', await page.locator('#search-open').evaluate(el => el === document.activeElement));

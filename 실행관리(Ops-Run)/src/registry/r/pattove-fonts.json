@@ -13,7 +13,7 @@
     }
   ],
   "meta": {
-    "version": "0.6.0",
+    "version": "0.7.0",
     "lifecycle": "Trial"
   },
   "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."

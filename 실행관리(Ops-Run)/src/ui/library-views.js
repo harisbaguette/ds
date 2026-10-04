@@ -1,7 +1,7 @@
-﻿(() => {
+(() => {
   const { library: data, views, previews } = window.Pattove;
   const { escape } = views, { icon } = previews;
-  // Every catalog subject stays visible while its illustration is being produced.
+  // Finished specimens open first; the full dictionary remains available through the list filter.
   // An icon lives in one home category (sub) and may also show in up to two more (also), the way Font Awesome and Lucide list one icon under several categories.
   const iconShelf=data.shelves.find(s=>s.codes?.includes('ICO'))?.id;
   const glyphSets=new Map(data.glyphSets.map(s=>[s.id,s]));
@@ -34,9 +34,9 @@
   const shelfOf=e=>e.category?e.shelf:data.shelves.find(s=>s.layers?.includes(e.layer))?.id;
   const itemShelf=item=>item.browse.shelf;
   const browseSections=['buttons','fields','selection','navigation','composition','feedback','primitives','foundations','page'];
-  // Keep the specimen shortcuts for existing addresses and the style overview; the menu covers the full dictionary.
+  // Specimen shortcuts sit above the complete dictionary taxonomy.
   const partGroups=[
-    {id:'buttons',name:'버튼',items:['button','icon-button','segmented-button']},
+    {id:'buttons',name:'버튼과 동작',items:['button','icon-button','segmented-button','record-editor']},
     {id:'fields',name:'입력',items:['input','clear-input','unit-input','stepper','password-input','field','date-range','search-bar']},
     {id:'selection',name:'선택',items:['checkbox','radio','switch','check-card','radio-card','filter-chip']},
     {id:'navigation',name:'탐색',items:['tabs','bottom-nav']},
@@ -50,6 +50,20 @@
   for (const e of dictionary.filter(e=>!part(e.id))) { bump(e.shelf+'|'+e.category); for (const sub of iconCats(e)) bump(e.shelf+'|ICO.'+sub); }
   for (const item of registry.items) bump(itemShelf(item)+'|'+item.browse.code);
   const short=name=>String(name).split(' — ')[0];
+  // Navigation uses short labels; the full category name remains in the link title.
+  const navLabels={
+    VIS:'스타일 기준',LAY:'레이아웃',NAV:'탐색과 위치',ACT:'버튼·메뉴·오버레이',INP:'입력과 폼',DAT:'검색·목록·데이터',STA:'상태와 피드백',
+    EDT:'글과 미디어',WEB:'웹사이트·브랜드',COM:'상품과 비교',ACC:'계정·시작·설정',SOC:'소통·활동·저장',MOT:'모바일 조작',FLW:'사용자 흐름',SRH:'검색과 발견',
+    CHR:'데이터 시각화',ANA:'분석과 탐색',RTE:'문서 편집',CAN:'캔버스·다이어그램',COL:'협업',FIL:'파일과 자료',SCH:'날짜·예약·일정',GEO:'지도와 위치',
+    AIX:'AI 인터페이스',BIL:'요금·결제·사용량',HLP:'고객지원',EDU:'학습과 평가',MOB:'모바일 시스템',ACS:'접근성과 환경',ART:'시각 구성',TYP:'타이포그래피',
+    IMG:'이미지와 자산',ANM:'움직임과 전환',DOC:'문서·인쇄·내보내기',MED:'음성·영상·통화',PRV:'동의와 정보 통제',OPS:'업무와 자동화',TOO:'계산·변환·생성',DOM:'업종별 패턴',
+    FX:'배경·재질·효과',GAM:'게임 화면 요소',MSG:'이메일·푸시·문자',ADM:'관리자·CMS',DSO:'디자인 시스템',DEV:'개발 문서·API',PRF:'속도와 대기',SEC:'보안과 위험 알림',
+    GRO:'전환과 재방문',ANT:'피해야 할 패턴',STR:'극단값 테스트',XR:'AR·VR·공간',DVC:'TV·차량·키오스크',VUI:'대화와 음성',ICO:'아이콘·기호',ATM:'아토믹 디자인',MOD:'페이지 구역',
+    TOK:'디자인 토큰',STT:'상호작용 상태',GES:'제스처·키보드',SND:'소리와 햅틱',CPY:'문구와 카피',FMT:'날짜·숫자·단위',ARI:'접근성 역할',AST:'자산 규격',LAW:'인지와 동기',CLI:'명령줄',
+    GHD:'HUD·전투 표시',GEC:'게임 상점과 경제',GLV:'라이브 운영·소셜',GGN:'장르별 화면',GIO:'게임 입력',GFX:'게임 감각과 연출',GTK:'게임 UI 도구',GAC:'게임 접근성',KOR:'국내 인증·결제',
+    CNT:'콘텐츠 뷰어',OBS:'운영 콘솔',PRO:'제작 도구',DSK:'데스크톱·브라우저',IND:'산업·기기 제어',AGE:'연령·생활 맞춤',MAG:'매거진·뉴스',BLG:'블로그·포트폴리오',
+    SLD:'발표·슬라이드',PRT:'인쇄·패키지',VID:'영상·모션 그래픽',FIN:'금융과 자산',LIF:'예약과 거래',HLT:'건강·의료·운동'
+  };
   // A shelf with no kinds (토큰) sorts by the family named before " — " (색, 글자, 간격 …); a family of one or a bare name reads as 기타,
   // and the hierarchy components on that shelf share one 묶음 kind.
   const byName=id=>!shelves.get(id)?.kinds.length;
@@ -60,17 +74,23 @@
   const shelfKinds=new Map(data.shelves.map(s=>[s.id,[...new Set([...(s.kinds.length?s.kinds:[...data.entries,...data.components].filter(e=>shelfOf(e)===s.id).map(kindOf)),...registry.items.filter(i=>itemShelf(i)===s.id).map(i=>i.browse.kind)])]
     .sort((x,y)=>(x==='기타')-(y==='기타')||0)]));
   // Guidelines explain icon usage; only generated illustrations are finished icon assets.
-  const isGuideline=e=>e.category==='ICO'&&e.kind==='기준';
+  const isGuideline=e=>e.kind==='기준';
   const todoArt=cls=>'<span class="'+cls+'">미구현</span>';
   const illustration=(e,large=false)=>'<img class="illustrated-icon" src="'+escape(large?e.art.src:e.art.thumb)+'" width="'+e.art.width+'" height="'+e.art.height+'" alt="'+(large?escape(short(e.name))+' 일러스트':'')+'" decoding="async"'+(large?'':' loading="lazy"')+'>';
+  const fileName=e=>{
+    const english=String(e.name).split(' — ')[1]||'', slug=value=>String(value).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+    return slug(english)||slug(e.id.includes(':')?e.id.slice(e.id.indexOf(':')+1):'')||slug((e.art.png.split('/').pop()||'').replace(/\.png$/,'').replace(/^illustrated-/,''))||e.id;
+  };
   const glyphSource=key=>{ const s=glyphSets.get(key.slice(0,key.indexOf(':'))); return s?s.name+' '+s.version+' · '+s.license:'유니코드 이모지'; };
   function sample(item, style = 'main', prefix = 'atlas') {
     const p = window.Pattove.parts, built = registry.index.get(item.id);
-    // Button: its three shapes side by side, with labels short enough to stay on one line in the narrowest card.
-    const body = item.id === 'button' ? p.button({label:'저장'}) + p.button({label:'취소',variant:'outline'}) + p.button({label:'닫기',variant:'ghost'})
+    const kept = built ? registry.normalizeOptions(item.id, window.Pattove.componentDocs?.defaults(item.id) || {}) : {};
+    // Button: its three shapes side by side, the kept default first, with labels short enough to stay on one line in the narrowest card.
+    const shapes = [['primary','저장'],['outline','취소'],['ghost','닫기']].sort((x,y)=>(y[0]===kept.variant)-(x[0]===kept.variant));
+    const body = item.id === 'button' ? shapes.map(([variant,label])=>p.button({label,variant})).join('')
       : item.id === 'icon' ? ['search','arrow','bookmark','grid','close','check','folder','bell'].map(p.icon).join('')
       : item.id === 'input' ? '<label class="ds-field">이름'+p.input({id:prefix,placeholder:'이름을 입력하세요'})+'</label>'
-      : p.renderItem(item.id, prefix);
+      : p.renderItem(item.id, prefix, kept);
     // Bottom bars are drawn on the card's lower edge at real size, as on a screen, so they are not shrunk scenes.
     const fitted=!['action-bar','bottom-nav'].includes(item.id)&&(['card','list-card','media-card'].includes(item.id)||!!built?.browse.fit);
     // A part or block is laid out at the narrowest width it supports (plus the scene's padding), so the card shows it at or near real size.
@@ -95,6 +115,7 @@
     const shelf=shelves.has(wanted)?wanted:legacyShelf||(detail?shelfOf(detail):code.length?homeShelf(code[0]):'part');
     return {
       shelf,
+      available:shelf!==iconShelf&&params.get('available')!=='all',
       group:shelf==='part'?list(params.get('group')).filter(id=>partGroups.some(g=>g.id===id)):[],
       kind:list(params.get('kind')).filter(k=>shelfKinds.get(shelf).includes(k)),
       role:list(params.get('role')).filter(id=>roles.some(r=>r.id===id)),
@@ -106,6 +127,7 @@
   function writeFilters(state, params) {
     const f=state.filters;
     if (state.page==='dictionary') params.set('shelf',f.shelf);
+    if (state.page==='dictionary'&&f.shelf!==iconShelf&&f.available===false) params.set('available','all');
     for (const [key,value] of Object.entries(f)) if (Array.isArray(value)&&value.length) params.set(key,value.join(','));
   }
   const passes=(f,e)=>(!f.group?.length||f.group.some(id=>partGroups.find(g=>g.id===id)?.items.includes(e.id)))
@@ -156,7 +178,7 @@
   // The 스타일 tab's left menu, shaped like every shelf's: 전체 보기 is the card grid, each row opens one style's page.
   function styleMenu(state) {
     const rows=window.Pattove.catalog.styles.filter(s=>s.id!=='base');
-    const all='<a class="nav-all ds-tab" href="#/styles" data-focus="nav-all"'+(!state.detail?' aria-current="page"':'')+'>전체 보기</a>';
+    const all='<a class="nav-all ds-tab" href="#/styles" data-focus="nav-all"'+(!state.detail?' aria-current="true"':'')+'>전체 보기</a>';
     return '<div class="nav-subnav" role="group" aria-label="스타일 목록">'+all+'<div class="nav-subnav-scroll">'+rows.map(s=>
       '<a class="nav-subcategory ds-tab" href="#/styles?detail='+encodeURIComponent(s.id)+'" data-focus="style-'+escape(s.id)+'" title="'+escape(s.description)+'"'+(state.detail===s.id?' aria-current="true"':'')+'><span>'+escape(s.name)+'</span></a>').join('')+'</div></div>';
   }
@@ -167,25 +189,37 @@
     if (!id) return '';
     const s=shelves.get(id), f=state.filters, q=querySuffix(state);
     const built=state.page==='system'&&registry.index.get(state.detail);
-    const menus=menusOf(id), split=m=>m.kids.length>1;
+    const menus=menusOf(id), shortcuts=id==='part'?partGroups.map(g=>({key:'group',id:g.id,name:g.name,ids:[g.id],kids:[]})):[], split=m=>m.kids.length>1;
     const same=(a,b)=>a.length===b.length&&a.every(x=>b.includes(x));
     // In a part's detail page the part decides what is picked, the same way the list's address would.
     const picked=m=>built?(m.key==='group'?partGroups.find(g=>g.id===m.id).items.includes(built.id):m.key==='kind'?built.browse.kind===m.id:m.ids.includes(built.browse.code)):(f[m.key]||[]).some(x=>m.ids.includes(x));
     const pickedKid=(m,k)=>built?built.browse.code===k.id:(f[m.key]||[]).length===1&&f[m.key][0]===k.id;
     const whole=m=>!built&&same(f[m.key]||[],m.ids);
     const current=m=>split(m)?whole(m):picked(m);
-    const link=(m,ids)=>'#/dictionary?'+new URLSearchParams({shelf:id,[m.key]:ids.join(',')})+q;
-    const all='<a class="nav-all ds-tab" href="#/dictionary?shelf='+id+q+'" data-focus="nav-all"'+(!menus.some(picked)?' aria-current="page"':'')+'>전체 보기</a>';
-    return '<div class="nav-subnav" role="group" aria-label="'+s.name+' 분류">'+all+'<div class="nav-subnav-scroll">'+menus.map(m=>{
-      const open=split(m)&&picked(m), kidsHtml=open?'<div class="nav-minor-group" role="group" aria-label="'+escape(m.name)+' 세부 분류">'+m.kids.map(k=>
-        '<a class="nav-minor ds-tab" href="'+link(m,[k.id])+'" data-focus="nav-'+id+'-'+escape(k.id)+'" title="'+escape(k.name)+'"'+(pickedKid(m,k)?' aria-current="true"':'')+'><span>'+escape(k.name)+'</span></a>').join('')+'</div>':'';
+    const available=id!==iconShelf&&f.available===false?'&available=all':'';
+    const link=(m,ids)=>'#/dictionary?'+new URLSearchParams({shelf:id,[m.key]:ids.join(',')})+available+q;
+    const all='<a class="nav-all ds-tab" href="#/dictionary?shelf='+id+available+q+'" data-focus="nav-all"'+(![...menus,...shortcuts].some(picked)?' aria-current="true"':'')+'>전체 보기</a>';
+    // While 견본 있음 is on, a row that would open an empty list is left out; the row in use always stays.
+    const pool=id!==iconShelf&&f.available!==false?builtMatches(id,built?'':state.query).map(browseEntry):null;
+    const none={...f,group:[],kind:[],role:[],place:[],code:[],icon:[]};
+    const filled=(key,ids)=>!pool||pool.some(e=>passes({...none,[key]:ids},e));
+    const shown=m=>picked(m)||filled(m.key,m.ids);
+    const rows=list=>list.filter(shown).map(m=>{
+      const open=split(m)&&picked(m), kidsHtml=open?'<div class="nav-minor-group" role="group" aria-label="'+escape(m.name)+' 세부 분류">'+m.kids.filter(k=>pickedKid(m,k)||filled(m.key,[k.id])).map(k=>
+        '<a class="nav-minor ds-tab" href="'+link(m,[k.id])+'" data-focus="nav-'+id+'-'+escape(k.id)+'" title="'+escape(k.name)+'"'+(pickedKid(m,k)?' aria-current="true"':'')+'><span>'+escape(navLabels[k.id]||k.name)+'</span></a>').join('')+'</div>':'';
       return '<a class="nav-subcategory ds-tab" href="'+link(m,m.ids)+'" data-focus="nav-'+id+'-'+escape(m.id)+'" title="'+escape(m.name)+'"'+(split(m)?' aria-expanded="'+open+'"':'')+(current(m)?' aria-current="true"':'')+'><span>'+escape(m.name)+'</span>'+(split(m)?icon('chevron-down'):'')+'</a>'+kidsHtml;
-    }).join('')+'</div></div>';
+    }).join('');
+    const taxonomy=rows(menus);
+    return '<div class="nav-subnav" role="group" aria-label="'+s.name+' 분류">'+all+'<div class="nav-subnav-scroll">'+(shortcuts.length?rows(shortcuts)+(!taxonomy?'':'<details class="nav-all-categories"'+(!built&&menus.some(picked)?' open':'')+'><summary data-focus="all-categories">모든 분류'+icon('chevron-down')+'</summary>'+taxonomy+'</details>'):taxonomy)+'</div></div>';
+  }
+  function builtMatches(shelf,query) {
+    const found=new Set(registry.matching(query).map(e=>e.id));
+    return builtInShelf(shelf).filter(i=>found.has(i.id)||(i.entry&&entries.has(i.entry)&&match(entries.get(i.entry),query)));
   }
   function shelfItems(state) {
-    const shelf=state.filters.shelf, found=new Set(registry.matching(state.query).map(e=>e.id));
+    const shelf=state.filters.shelf;
     return {
-      built:builtInShelf(shelf).filter(i=>found.has(i.id)||(i.entry&&match(entries.get(i.entry),state.query))),
+      built:builtMatches(shelf,state.query),
       plain:[...dictionary,...data.components].filter(e=>!part(e.id)&&shelfOf(e)===shelf&&match(e,state.query))
     };
   }
@@ -193,37 +227,44 @@
     const f=state.filters;
     if (state.page==='components') return data.components.filter(e=>(!f.layer.length||f.layer.includes(e.layer))&&match(e,state.query));
     const {built,plain}=shelfItems(state);
-    return [...built.filter(i=>passes(f,browseEntry(i))).map(i=>({...implemented(i),...browseEntry(i),implementation:true})), ...plain.filter(e=>passes(f,e))];
+    return [...built.filter(i=>passes(f,browseEntry(i))).map(i=>({...implemented(i),...browseEntry(i),implementation:true})), ...(f.available?[]:plain.filter(e=>passes(f,e)))];
   }
-  function suggestions(state,query) {
+  function suggestions(state,query,limit=6) {
     // Suggestions jump anywhere in the current tab, so picked filters do not narrow them.
     const whole=readFilters(state.page,new URLSearchParams(state.page==='dictionary'?'shelf='+state.filters.shelf:''));
-    return currentItems({...state,filters:whole,query}).slice(0,6);
+    whole.available=false;
+    return currentItems({...state,filters:whole,query}).slice(0,limit);
   }
-  function searchAll(query) {
+  function searchAll(query,limit=6) {
     const found=new Set(registry.matching(query).map(i=>i.id));
-    return [...registry.items.filter(i=>found.has(i.id)||(i.entry&&entries.has(i.entry)&&match(entries.get(i.entry),query))).map(i=>({...implemented(i),...browseEntry(i)})),...dictionary.filter(e=>!part(e.id)&&match(e,query))].slice(0,6);
+    return [...registry.items.filter(i=>found.has(i.id)||(i.entry&&entries.has(i.entry)&&match(entries.get(i.entry),query))).map(i=>({...implemented(i),...browseEntry(i)})),...dictionary.filter(e=>!part(e.id)&&match(e,query))].slice(0,limit);
   }
   function entryCard(state,e) {
     const label=data.layers.find(l=>l.id===e.layer).english;
     return '<button class="catalog-tile entry-tile ds-surface" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><span class="record-code ds-badge">'+label+'</span><h3>'+escape(e.name)+'</h3>'+window.Pattove.references.label(e.id)+'<span class="tile-foot">'+escape(e.kind||'')+icon('arrow')+'</span></button>';
   }
   // The industry name sits under the dictionary name so a tile is recognised by the word people say (햄버거 메뉴, 페이지네이션).
-  const termLine=e=>e.term?'<small class="dict-term">'+escape(e.term)+'</small>':'';
+  const termLine=e=>{
+    const alias=e.term?.match(/^(.+?)\s*\(([^)]+)\)$/);
+    const term=alias?.[1].trim()===e.name.trim()?alias[2]:e.term;
+    return term?'<small class="dict-term">'+escape(term)+'</small>':'';
+  };
   function dictEntry(state,e) {
-    if (e.art) return '<button class="dict-entry ds-surface is-illustrated" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" title="'+escape(e.name+(e.term?' · '+e.term:''))+'"><span class="dict-thumb">'+illustration(e)+'</span><strong>'+escape(short(e.name))+'</strong></button>';
-    if (isGuideline(e)) return '<button class="dict-entry ds-surface is-guideline" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><span class="guideline-label">아이콘 기준</span><strong>'+escape(short(e.name))+'</strong><span class="guideline-summary">'+escape(e.usage)+'</span></button>';
-    if (e.implementation) return '<div class="dict-entry ds-surface is-built"><span class="dict-thumb atlas-preview" inert aria-hidden="true">'+(['template','page'].includes(e.id)?window.Pattove.componentDocs.live(e.id,{},views.previewStyle(state),'thumb-'+e.id):sample(e,views.previewStyle(state),'thumb-'+e.id))+'</span><button class="dict-hit" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><strong>'+escape(e.name)+'</strong>'+termLine(e)+'</button></div>';
+    if (e.art) return '<div class="dict-entry ds-surface is-illustrated" data-illustration-id="'+escape(e.id)+'"><button class="illustration-open" data-library-entry="'+escape(e.id)+'" data-focus="entry-'+escape(e.id)+'" title="'+escape(e.name+(e.term?' · '+e.term:''))+'"><span class="dict-thumb">'+illustration(e)+'</span><strong>'+escape(short(e.name))+'</strong></button>'+window.Pattove.illustrationTools.checkbox(e.id,short(e.name))+'</div>';
+    if (isGuideline(e)) return '<button class="dict-entry ds-surface is-guideline" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'"><span class="guideline-label">사용 기준</span><strong>'+escape(short(e.name))+'</strong><span class="guideline-summary">'+escape(e.usage)+'</span></button>';
+    if (e.implementation) {
+      const label=({'clear-input':'지우기 버튼','unit-input':'단위 입력','stepper':'스테퍼'})[e.id]||e.name;
+      return '<div class="dict-entry ds-surface is-built"><span class="dict-thumb atlas-preview" inert aria-hidden="true">'+(['template','page'].includes(e.id)?window.Pattove.componentDocs.live(e.id,window.Pattove.componentDocs.defaults(e.id),views.previewStyle(state),'thumb-'+e.id):sample(e,views.previewStyle(state),'thumb-'+e.id))+'</span><button class="dict-hit" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" title="'+escape(e.name+(e.term?' · '+e.term:''))+'"><strong>'+escape(label)+'</strong></button></div>';
+    }
     // On a family-sorted shelf the family is the filter, so the tile keeps the whole name (색 — primary), not just 색.
     const kind=e.kind||'기준', label=byName(shelfOf(e))?e.name:short(e.name);
     return '<button class="dict-entry ds-surface is-todo" data-library-entry="'+e.id+'" data-focus="entry-'+e.id+'" data-kind="'+escape(kind)+'" title="'+escape(e.name+(e.term?' · '+e.term:''))+'"><span class="dict-thumb">'+todoArt('dict-todo')+'</span><strong>'+escape(label)+'</strong>'+termLine(e)+'</button>';
   }
-  const empty='<div class="empty-state ds-surface"><span class="empty-generated nav-sprite nav-sprite-search" aria-hidden="true"></span><h2>일치하는 항목이 없어요</h2><button class="secondary ds-button" data-variant="outline" data-action="clear-filters" data-focus="empty-clear">전체 보기</button></div>';
   // Long shelves are cut into numbered pages. The icon shelf holds thousands of square tiles, so its page is a little longer.
   const pageSize=state=>state.page==='dictionary'&&state.filters.shelf===iconShelf?72:48;
   function paging(state,total) {
     const size=pageSize(state), pages=Math.max(1,Math.ceil(total/size));
-    return {size,pages,n:Math.min(Math.max(1,state.pageNo||1),pages)};
+    return {size,pages,total,n:Math.min(Math.max(1,state.pageNo||1),pages)};
   }
   const pageCount=state=>paging(state,currentItems(state).length).pages;
   // 1 … 4 5 6 … 30: the ends and the neighbours of the current page; a gap of one number is written out, longer gaps become an ellipsis.
@@ -241,39 +282,61 @@
     });
     return out;
   }
-  function pagination(state,{n,pages}) {
-    if (pages<2) return '';
+  function pagination(state,{n,pages,total}) {
+    if (pages<=1) return '';
     const step=(to,label,name)=>'<button type="button" class="page-step ds-button" data-variant="outline" data-size="sm" data-icon-only data-page-go="'+to+'" data-focus="page-'+label+'" aria-label="'+label+'" title="'+label+'"'+(to<1||to>pages||to===n?' disabled':'')+'>'+icon(name)+'</button>';
     const numbers=pageNumbers(n,pages).map(i=>i==='…'?'<span class="page-gap" aria-hidden="true">…</span>'
-      :'<button type="button" class="page-num ds-button'+(i===n?' is-current':'')+'" data-page-go="'+i+'" data-focus="page-'+i+'"'+(i===n?' aria-current="page"':'')+' data-size="sm" data-variant="'+(i===n?'primary':'outline')+'" aria-label="'+i+'쪽">'+i+'</button>').join('');
-    const jump=pages>7?'<form class="page-jump" data-page-jump><label><span class="sr-only">이동할 쪽</span><input class="ds-input" type="number" inputmode="numeric" min="1" max="'+pages+'" placeholder="'+n+'" data-focus="page-jump"></label><span class="page-total">/ '+pages+'</span><button type="submit" class="secondary ds-button" data-variant="outline" data-size="sm" data-icon-only data-focus="page-jump-go" aria-label="입력한 쪽으로 이동" title="입력한 쪽으로 이동">'+icon('arrow')+'</button></form>':'';
-    return '<nav class="pagination" aria-label="쪽 이동">'+
-      '<div class="page-list">'+(pages>7?step(1,'처음','first'):'')+step(n-1,'이전','chevron-left')+numbers+'<span class="page-status">'+n+' / '+pages+'</span>'+step(n+1,'다음','chevron')+(pages>7?step(pages,'마지막','last'):'')+'</div>'+jump+'</nav>';
+      :'<button type="button" class="page-num ds-button'+(i===n?' is-current':'')+'" data-page-go="'+i+'" data-focus="page-'+i+'"'+(i===n?' aria-current="true"':'')+' data-size="sm" data-variant="'+(i===n?'primary':'outline')+'" aria-label="'+i+'쪽">'+i+'</button>').join('');
+    const jump=pages>7?'<form class="page-jump" data-page-jump novalidate><label><span class="sr-only">이동할 쪽</span><input class="ds-input" type="number" inputmode="numeric" min="1" max="'+pages+'" placeholder="'+n+'" data-focus="page-jump"></label><span class="page-total">/ '+pages+'</span><button type="submit" class="secondary ds-button" data-variant="outline" data-size="sm" data-icon-only data-focus="page-jump-go" aria-label="입력한 쪽으로 이동" title="입력한 쪽으로 이동">'+icon('arrow')+'</button></form>':'';
+    return '<nav class="pagination" aria-label="쪽 이동"><span class="page-count">'+total.toLocaleString('ko-KR')+'개</span>'+
+      '<div class="page-list">'+step(n-1,'이전','chevron-left')+numbers+'<span class="page-status" aria-label="'+pages+'쪽 중 '+n+'쪽">'+n+' / '+pages+'</span>'+step(n+1,'다음','chevron')+'</div>'+jump+'</nav>';
+  }
+  // A search keeps 견본 있음 on; the matches without a specimen wait after the results, one press away.
+  function unbuilt(state) {
+    const f=state.filters;
+    if (state.page!=='dictionary'||f.shelf===iconShelf||!f.available||!state.query) return '';
+    const count=shelfItems(state).plain.filter(e=>passes(f,e)).length;
+    return count?'<div class="empty-state unbuilt-more"><button type="button" class="ds-button" data-variant="outline" data-action="show-unbuilt" data-focus="show-unbuilt">미구현 항목 '+count.toLocaleString('ko-KR')+'개도 보기</button></div>':'';
   }
   // The tabs and the left tree say where you are; main carries only pictures.
+  function collectionControls(state) {
+    if (state.page!=='dictionary') return '';
+    if (state.filters.shelf===iconShelf) {
+      const items=currentItems(state),page=paging(state,items.length);
+      return window.Pattove.illustrationTools.toolbar(data.iconGroups,items.slice((page.n-1)*page.size,page.n*page.size).filter(e=>e.art).map(e=>e.id));
+    }
+    return '<button type="button" class="specimen-filter" role="switch" aria-checked="'+state.filters.available+'" data-action="toggle-specimens" data-focus="specimen-filter">견본 있음<span class="specimen-filter-track" aria-hidden="true"></span></button>';
+  }
   function collection(state) {
     const items=currentItems(state);
-    if (!items.length) return '<section aria-labelledby="page-title">'+empty+'</section>';
     const page=paging(state,items.length), shown=items.slice((page.n-1)*page.size,page.n*page.size);
+    if (!items.length) return '<section aria-labelledby="page-title">'+views.emptyState(state)+unbuilt(state)+'</section>';
     if (state.page==='components') return '<section aria-labelledby="page-title"><div class="catalog-grid">'+shown.map(e=>entryCard(state,e)).join('')+'</div>'+pagination(state,page)+'</section>';
-    const tools=state.filters.shelf===iconShelf?window.Pattove.illustrationTools.toolbar(data.iconGroups,shown.filter(e=>e.art).map(e=>e.id)):'';
-    return '<section class="atlas dict" data-shelf="'+state.filters.shelf+'" aria-labelledby="page-title">'+tools+'<div class="dict-grid dict-entries">'+shown.map(e=>dictEntry(state,e)).join('')+'</div>'+pagination(state,page)+'</section>';
+    const tools=state.filters.shelf===iconShelf?window.Pattove.illustrationTools.selectionBar():'';
+    return '<section class="atlas dict" data-shelf="'+state.filters.shelf+'" aria-labelledby="page-title"><div class="dict-grid dict-entries">'+shown.map(e=>dictEntry(state,e)).join('')+'</div>'+(page.n===page.pages?unbuilt(state):'')+tools+pagination(state,page)+'</section>';
+  }
+  function iconDetail(e) {
+    const format=window.Pattove.illustrationTools.format();
+    return `<article class="icon-detail"><header class="icon-detail-heading"><div><h2 id="detail-title" tabindex="-1">${escape(short(e.name))}</h2><p>${escape(iconGroups.get(e.sub)?.name || '일러스트 아이콘')}</p></div><button type="button" class="icon-detail-close" data-action="close-dialog" aria-label="상세 닫기">${icon('close')}</button></header><div class="icon-detail-body"><div class="icon-detail-preview">${illustration(e,true)}</div><div class="icon-detail-actions"><p class="icon-detail-description">${escape(e.usage || '')}</p><p class="icon-detail-meta">${e.art.width} × ${e.art.height}<span>투명 배경</span></p><div class="icon-download-row"><select data-icon-format aria-label="다운로드 파일 형식"><option value="png"${format==='png'?' selected':''}>PNG</option><option value="webp"${format==='webp'?' selected':''}>WebP</option></select><a class="icon-download" data-icon-download data-png="${escape(e.art.png)}" data-webp="${escape(e.art.src)}" data-id="${escape(e.id)}" data-file="${escape(fileName(e))}" href="${escape(format==='png'?e.art.png:e.art.src)}" download="${escape(fileName(e))}.${format}" aria-label="${format==='png'?'PNG':'WebP'} 다운로드">${icon('download')}다운로드</a></div>${window.Pattove.illustrationTools.pick(e.id,true)}</div></div><footer class="icon-detail-footer"><details class="icon-file-info"><summary>파일 정보</summary><dl><dt>식별자</dt><dd>${escape(e.id)}</dd><dt>크기</dt><dd>${e.art.width} × ${e.art.height} px</dd><dt>파일</dt><dd>PNG · WebP</dd></dl>${e.glyph?.length?`<h3>참고 출처</h3><ul>${e.glyph.map(g=>`<li><code>${escape(g)}</code><span>${escape(glyphSource(g))}</span></li>`).join('')}</ul>`:''}</details><div class="icon-reference">${window.Pattove.references.control(e.id,true).replace('<span>복사</span>','<span>AI용 정보 복사</span>')}</div></footer></article>`;
   }
   function detail(state) {
     // A hierarchy component opened from the 토큰 shelf reads like its components-page record.
     const e=state.page==='dictionary'&&entries.get(state.detail)||components.get(state.detail);
+    if(e.art)return iconDetail(e);
+    const motionExamples=(window.Pattove.motionData?.items || []).filter(item=>item.dictionaryRefs?.includes(e.id));
+    const motionLinks=motionExamples.length?'<section class="motion-related-record"><h3>움직임 보기</h3><div class="motion-related">'+motionExamples.map(item=>'<a href="#/motion?detail='+item.id+'">'+escape(item.name)+'</a>').join('')+'</div></section>':'';
     const dict=!!e.category, category=dict?null:data.layers.find(l=>l.id===e.layer);
     const downloadIcon=icon('download');
     return '<header class="dialog-header"><div><span class="dialog-category">'+escape(dict?[shelves.get(shelfOf(e))?.name,e.sub?'':short(categoryById.get(e.category)?.name||''),places.get(placeOf.get(e.category))?.name,iconGroups.get(e.sub)?.name].filter(Boolean).join(' · '):category.english)+'</span><h2 id="detail-title" tabindex="-1">'+escape(e.name)+'</h2>'+(e.term?'<p class="detail-term"><span>통용 용어</span>'+escape(e.term)+'</p>':'')+window.Pattove.references.control(e.id)+'</div><button class="icon-button ds-button" data-variant="outline" data-icon-only data-action="close-dialog" aria-label="상세 닫기">'+icon('close')+'</button></header>'+
-      (dict?(e.art?'<div class="detail-art illustrated-detail">'+illustration(e,true)+'</div><div class="illustrated-downloads"><p>'+escape(e.usage||'')+'</p><a class="secondary ds-button" data-variant="outline" href="'+escape(e.art.png)+'" download aria-label="PNG 다운로드" title="PNG 다운로드">'+downloadIcon+'<span>PNG</span></a><a class="secondary ds-button" data-variant="outline" href="'+escape(e.art.src)+'" download aria-label="WebP 다운로드" title="WebP 다운로드">'+downloadIcon+'<span>WebP</span></a>'+window.Pattove.illustrationTools.pick(e.id)+'</div>':isGuideline(e)?'':'<div class="detail-art is-todo">'+todoArt('detail-todo')+'<p>'+(e.glyph?'아직 그리지 않았어요':'아직 견본이 없어요')+'</p></div>')
+      (dict?(e.art?'<div class="detail-art illustrated-detail">'+illustration(e,true)+'</div><div class="illustrated-downloads"><p>'+escape(e.usage||'')+'</p><a class="secondary ds-button" data-variant="outline" href="'+escape(e.art.png)+'" download="'+escape(fileName(e))+'.png" aria-label="PNG 다운로드" title="PNG 다운로드">'+downloadIcon+'<span>PNG</span></a><a class="secondary ds-button" data-variant="outline" href="'+escape(e.art.src)+'" download="'+escape(fileName(e))+'.webp" aria-label="WebP 다운로드" title="WebP 다운로드">'+downloadIcon+'<span>WebP</span></a>'+window.Pattove.illustrationTools.pick(e.id)+'</div>':isGuideline(e)?motionLinks:motionExamples.length?motionLinks:'<div class="detail-art is-todo">'+todoArt('detail-todo')+'<p>'+(e.glyph?'아직 그리지 않았어요':'아직 견본이 없어요')+'</p></div>')
         +(!e.art&&e.usage?'<div class="record-detail"><p class="record-kind">'+escape(e.id)+' · '+escape(e.kind)+'</p><section><h3>쓰임</h3><p>'+escape(e.usage)+'</p></section></div>':'')
         +(e.glyph?'<section class="glyph-ref"><h3>참고 출처</h3><ul class="glyph-keys">'+e.glyph.map(g=>'<li><code>'+escape(g)+'</code><span>'+escape(glyphSource(g))+'</span></li>').join('')+'</ul></section>':'')
         :'<div class="record-detail"><p class="record-kind">'+escape(category.name)+'</p><section><h3>대표 항목</h3><p>'+escape(e.examples)+'</p></section></div>');
   }
   window.Pattove.libraryUI={
-    pages,navigation,subnavigation,pageCount,readFilters,writeFilters,collection,detail,currentItems,suggestions,searchAll,
+    pages,navigation,subnavigation,pageCount,pagination,readFilters,writeFilters,collection,collectionControls,detail,currentItems,suggestions,searchAll,
     validDetail:(page,id)=>components.has(id)||(page==='dictionary'&&(entries.has(id)||registry.index.has(id))),
-    suggestionGroup:(page,e)=>page==='dictionary'?(e.term?e.term+' · ':'')+(e.art?'일러스트 아이콘 · '+iconGroups.get(e.sub).name:isGuideline(e)?'아이콘 기준':e.implementation?'구현 · '+e.layer:'미구현 · '+shelves.get(shelfOf(e))?.name+' · '+(e.sub?iconGroups.get(e.sub).name:e.category?short(categoryById.get(e.category)?.name||''):kindOf(e))):data.layers.find(l=>l.id===e.layer).name,
+    suggestionGroup:(page,e)=>page==='dictionary'?(e.term?e.term+' · ':'')+(e.art?'일러스트 아이콘 · '+iconGroups.get(e.sub).name:isGuideline(e)?'사용 기준':e.implementation?'구현 · '+e.layer:'미구현 · '+shelves.get(shelfOf(e))?.name+' · '+(e.sub?iconGroups.get(e.sub).name:e.category?short(categoryById.get(e.category)?.name||''):kindOf(e))):data.layers.find(l=>l.id===e.layer).name,
     sample,itemShelf,
     shelfFor:state=>shelves.get(state.page==='system'?itemShelf(registry.index.get(state.detail)):state.filters.shelf)
   };

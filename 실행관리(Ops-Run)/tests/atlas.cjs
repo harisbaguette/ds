@@ -14,10 +14,12 @@ const checks=[],errors=[];const check=(name,result)=>{assert.ok(result,name);che
       await page.locator('[data-library-entry="button"]').click();
       check(name+' 고른 부품 상세가 열림',await page.locator('.component-page[data-component="button"]').count()===1);
       await page.locator('[data-focus="tab-part"]').click();
-      check(name+' 사전 첫 화면은 부품 탭 격자, 탭은 토큰·부품·블록·템플릿·아이콘',await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1&&await page.locator('[data-focus^="tab-"]').count()===await page.evaluate(()=>Pattove.library.shelves.length)&&await page.locator('.dict-entry').count()>0);
+      check(name+' 사전 첫 화면은 부품 탭 격자, 탭은 토큰·부품·블록·템플릿·아이콘',await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1&&await page.locator('[data-focus^="tab-"]').count()===await page.evaluate(()=>Pattove.library.shelves.length)+1&&await page.locator('.dict-entry').count()>0);
       await page.locator('[data-focus="tab-token"]').click();
       check(name+' 토큰 탭 목록과 상세의 색 토큰 그림이 같음',await page.locator('[data-focus="tab-token"][aria-current="page"]').count()===1&&await page.locator('.atlas-sample[data-kind="token-color"] .ds-token-swatches i').count()===4);
       await page.locator('[data-focus="tab-part"]').click();
+      // The full taxonomy sits under 모든 분류, below the part shortcuts.
+      await page.locator('[data-focus="all-categories"]').click();
       await page.locator('[data-focus="nav-part-interaction"]').click();await page.locator('[data-focus="nav-part-INP"]').click();await page.waitForURL(/code=INP/);check(name+' 탭→왼쪽 분류→항목으로 탐색',await page.locator('.dict-entry.is-built').count()>=1);
       await page.locator('[data-library-entry="field"]').click();check(name+' 사전에서 입력 필드 견본으로 연결, 설치 칸 없음',await page.locator('.component-page[data-component="field"] .part-demo input').count()>=1&&await page.locator('.install-panel,[data-system-download]').count()===0);
       await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);

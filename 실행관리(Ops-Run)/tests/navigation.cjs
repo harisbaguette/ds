@@ -19,13 +19,14 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       page.on('pageerror', e => errors.push(engineName + ': ' + e.message));
       const goto = async route => { await page.goto(base + '#/' + route); await page.locator('#primary-nav a').first().waitFor({state:'attached'}); };
       const visibleNav = () => page.locator('.nav-shelf-link').evaluateAll(links => links.every(a => {
+        if(innerWidth<=760&&!a.hasAttribute('aria-current'))return a.getBoundingClientRect().height>=44&&getComputedStyle(a.parentElement).overflowX==='auto';
         const r = a.getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight && a.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
       }));
       const shot = async name => { await page.evaluate(() => document.fonts.ready); await page.screenshot({ path: path.join(out, engineName + '-' + name + '.png'), animations: 'disabled' }); };
       await page.goto(base);
       check(engineName + ' 첫 방문은 스타일 카드 격자, 적용 중인 스타일에 사용 중 표시', page.url().endsWith('#/styles') && await page.locator('.style-card').count()===await page.evaluate(()=>Pattove.catalog.styles.filter(s=>s.id!=='base').length) && await page.locator('.style-card[data-style-card="main"] .variant-kept').count()===1);
       check(engineName + ' 대메뉴 일곱 개(스타일·모션 포함)·검색 단추는 상단, 검색 칸은 창 안에만', await page.locator('.app-top #style-context').isVisible() && await page.locator('.app-top #search-open').isVisible() && await page.locator('#query').count()===1 && !await page.locator('#query').isVisible() && await page.locator('.app-top .nav-shelf-link').count()===7 && await page.locator('.app-top #style-context.nav-shelf-link').count()===1 && await visibleNav());
-      check(engineName + ' 스타일 탭 왼쪽은 전체 보기와 스타일 목록', await page.locator('#app-menu').isVisible() && await page.locator('#secondary-nav .nav-all[aria-current="page"]').count()===1 && await page.locator('#secondary-nav .nav-subcategory').first().innerText()==='메인 스타일');
+      check(engineName + ' 스타일 탭 왼쪽은 전체 보기와 스타일 목록', await page.locator('#app-menu').isVisible() && await page.locator('#secondary-nav .nav-all[aria-current="true"]').count()===1 && await page.locator('#secondary-nav .nav-subcategory').first().innerText()==='메인 스타일');
       await page.locator('[data-style-card="main"] .dict-hit').click();
       check(engineName + ' 스타일 카드를 누르면 그 스타일 화면(미리보기 7칸·경로 표시)', page.url().endsWith('#/styles?detail=main') && await page.locator('.style-page .overview-tile').count()===7 && await page.locator('.content-breadcrumb a[href="#/styles"]').isVisible() && await page.locator('#secondary-nav [aria-current="true"]').innerText()==='메인 스타일' && !await page.locator('#detail-dialog').evaluate(d=>d.open));
       await page.locator('[data-focus="overview-button"]').click();
@@ -34,33 +35,36 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       check(engineName + ' 상단 스타일로 스타일 격자 복귀', await page.locator('.style-card').first().isVisible());
       await page.locator('#search-open').click();
       check(engineName + ' 검색 단추를 누르면 검색 창이 열리고 입력 칸에 초점', await page.locator('#search-dialog').evaluate(d=>d.open) && await page.locator('#query').evaluate(e=>e===document.activeElement));
-      await page.locator('#query').fill('TOK-01'); await page.locator('#query').press('ArrowDown'); await page.locator('#query').press('Enter');
+      await page.locator('#query').fill('TOK-01'); await page.locator('#query').press('ArrowDown'); await page.keyboard.press('Enter');
       await page.waitForURL(/detail=token-color/);
       check(engineName + ' 전체 미리보기에서 모든 갈래의 항목 검색', await page.locator('[data-focus="tab-token"][aria-current="page"]').count()===1);
       await goto('dictionary');
       assert.deepEqual((await page.locator('.nav-shelf-link').allTextContents()).map(t=>t.trim()), ['스타일','토큰','아이콘','부품','블록','템플릿','모션']);
-      check(engineName + ' 왼쪽 192px에 사전 전체의 부품 분류 표시', await page.locator('#app-menu').evaluate(e=>e.getBoundingClientRect().width)===192 && await page.locator('#secondary-nav .nav-subnav').count()===1 && await page.locator('#app-menu .nav-shelf-link').count()===0 && JSON.stringify(await page.locator('.nav-subcategory').allTextContents())===JSON.stringify(await page.evaluate(()=>Pattove.library.groups.map(g=>g.name))));
+      check(engineName + ' 왼쪽 208px에 빠른 분류와 전체 분류 표시', await page.locator('#app-menu').evaluate(e=>e.getBoundingClientRect().width)===208 && await page.locator('#secondary-nav .nav-subnav').count()===1 && await page.locator('#app-menu .nav-shelf-link').count()===0 && await page.locator('.nav-all-categories').count()===1 && await page.locator('[data-focus="nav-part-buttons"]').isVisible());
       const menuBox = () => page.evaluate(() => { const m = document.querySelector('#app-menu').getBoundingClientRect(); return [Math.round(m.width), Math.round(document.querySelector('main').getBoundingClientRect().left)]; });
       const widths = [];
-      for (const hash of ['styles', 'dictionary?shelf=token', 'dictionary?shelf=icon', 'dictionary?shelf=part', 'dictionary?shelf=block', 'dictionary?shelf=template']) { await goto(hash); widths.push((await menuBox()).join('/')); }
-      check(engineName + ' 여섯 탭 모두 사이드 메뉴 너비가 192px로 같고 본문 시작선도 같음', widths.every(w => w === '192/192'));
+      for (const hash of ['styles', 'dictionary?shelf=token', 'dictionary?shelf=icon', 'dictionary?shelf=part', 'dictionary?shelf=block', 'dictionary?shelf=template', 'motion', 'system?detail=button']) { await goto(hash); widths.push((await menuBox()).join('/')); }
+      check(engineName + ' 일곱 탭과 상세의 메뉴 너비 및 본문 시작선이 같음', widths.every(w => w === '208/208'));
       await page.locator('#rail-toggle').click();
       await goto('dictionary?shelf=icon');
-      check(engineName + ' 접으면 모든 탭에서 좁은 띠(56px)로 유지되고 눌러서 다시 폄', (await menuBox()).join('/') === '56/56' && await page.locator('#secondary-nav').isHidden() && await page.locator('#rail-toggle[aria-expanded="false"]').count() === 1 && (await page.locator('#rail-toggle').click(), (await menuBox()).join('/')) === '192/192');
+      check(engineName + ' 접으면 모든 탭에서 좁은 띠(56px)로 유지되고 눌러서 다시 폄', (await menuBox()).join('/') === '56/56' && await page.locator('#secondary-nav').isHidden() && await page.locator('#rail-toggle[aria-expanded="false"]').count() === 1 && (await page.locator('#rail-toggle').click(), (await menuBox()).join('/')) === '208/208');
       await goto('dictionary');
       check(engineName + ' 사전 주소는 기존 부품 목록, 주 메뉴 5개 모두 보임', await page.locator('#page-title').innerText()==='부품' && await visibleNav());
+      await page.locator('.nav-all-categories>summary').click();
       await page.locator('[data-focus="nav-part-interaction"]').click();
       await page.locator('[data-focus="nav-part-INP"]').click();
+      await page.locator('[data-action="toggle-specimens"]').click();
       check(engineName + ' 입력 분류에 구현 부품과 미구현 사전 항목을 함께 표시', await page.locator('.dict-entry.is-built').count()>0 && await page.locator('.dict-entry.is-todo').count()>0);
       await page.reload();
       check(engineName + ' 입력 분류 새로고침 유지', await page.locator('[data-focus="nav-part-INP"][aria-current="true"]').count()===1);
       await page.locator('[data-focus="nav-all"]').click();
-      check(engineName + ' 전체 보기로 하위 분류 해제', !page.url().includes('code=') && await page.locator('[data-focus="nav-all"][aria-current="page"]').count()===1 && await page.locator('[data-library-entry="button"]').count()===1);
+      check(engineName + ' 전체 보기로 하위 분류 해제', !page.url().includes('code=') && await page.locator('[data-focus="nav-all"][aria-current="true"]').count()===1 && await page.locator('[data-library-entry="button"]').count()===1);
+      await page.locator('.nav-all-categories>summary').click();
       await page.locator('[data-focus="nav-part-interaction"]').click();
       await page.locator('[data-focus="nav-part-INP"]').click();
       await page.locator('[data-library-entry="checkbox"]').click();
       check(engineName + ' 상세에서도 입력 분류 유지', await page.locator('[data-focus="nav-part-INP"][aria-current="true"]').count()===1);
-      await page.locator('[data-action="back-to-list"]').click(); await page.waitForURL(/code=INP/);
+      await page.locator('[data-action="back-to-list"]:visible').click(); await page.waitForURL(/code=INP/);
       check(engineName + ' 목록 복귀 시 하위 분류와 초점 복원', await page.locator('[data-library-entry="checkbox"]').evaluate(e=>e===document.activeElement));
       await goto('dictionary');
       check(engineName + ' 필터 단추·필터 칸·분류 찾기 칸 없음', await page.locator('#filter-toggle, #filter-bar, #active-filters, .facet-search, [data-filter]').count() === 0);
@@ -74,7 +78,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
           tokens:items('shelf=token').filter(i=>i.implementation).map(i=>i.id),
           parts:items('shelf=part').filter(i=>i.implementation).map(i=>i.id),
           allParts:items('shelf=part').map(i=>i.id),
-          grouped:[...document.querySelectorAll('#secondary-nav .nav-subcategory')].flatMap(a=>items(a.getAttribute('href').split('?')[1]).map(i=>i.id)),
+          grouped:[...document.querySelectorAll('#secondary-nav .nav-all-categories .nav-subcategory')].flatMap(a=>items(a.getAttribute('href').split('?')[1]).map(i=>i.id)),
           filtered:items('shelf=part&kind='+encodeURIComponent('부품')).filter(i=>i.implementation).map(i=>i.id),
           input:items('shelf=part&code=INP').filter(i=>i.implementation).map(i=>i.id)
         };
@@ -88,17 +92,17 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       await goto('dictionary?shelf=icon&icon=navigation');
       await page.locator('#search-open').click(); await page.locator('#query').fill('홈'); await page.locator('#query').press('Enter');
       await page.waitForURL(/q=/);
-      check(engineName + ' 검색은 왼쪽 분류와 상관없이 탭 전체에서 찾고 창은 닫힘', !page.url().includes('icon=navigation') && !await page.locator('#search-dialog').evaluate(d=>d.open) && await page.locator('.nav-all[aria-current="page"]').count()===1 && await page.locator('[data-library-entry="ICO-01"]').count()===1);
+      check(engineName + ' 검색은 왼쪽 분류와 상관없이 탭 전체에서 찾고 창은 닫힘', !page.url().includes('icon=navigation') && !await page.locator('#search-dialog').evaluate(d=>d.open) && await page.locator('.nav-all[aria-current="true"]').count()===1 && await page.locator('[data-library-entry="ICO-01"]').count()===1);
       check(engineName + ' 쓰는 중인 검색어는 제목 옆 칩으로 보임', (await page.locator('#query-chip').innerText()).includes('홈'));
       await page.reload();
       check(engineName + ' 새로고침에도 검색어 칩 유지', await page.locator('#query-chip').isVisible());
       await page.locator('#query-chip').click();
-      check(engineName + ' 검색어 칩으로 검색 해제 후 본문으로 초점', !page.url().includes('q=') && !await page.locator('#query-chip').isVisible() && await page.locator('#main').evaluate(e=>e===document.activeElement));
+      check(engineName + ' 검색어 칩으로 검색 해제 후 제목으로 초점', !page.url().includes('q=') && !await page.locator('#query-chip').isVisible() && await page.locator('#page-title').evaluate(e=>e===document.activeElement));
       await page.locator('#search-open').click(); await page.mouse.click(5, 995);
       check(engineName + ' 검색 창 바깥을 누르면 닫힘', !await page.locator('#search-dialog').evaluate(d=>d.open));
 
       await goto('dictionary?shelf=part&kind='+encodeURIComponent('부품'));
-      check(engineName + ' 주소의 종류 조건은 그대로 거름', await page.locator('.dict-entry.is-built').count() === data.parts.length);
+      check(engineName + ' 주소의 종류 조건은 그대로 거름', await page.locator('.dict-entry.is-built').count() === Math.min(48,data.parts.length));
       const card = page.locator('[data-library-entry="card"]');
       await card.scrollIntoViewIfNeeded();
       const listY = await page.evaluate(()=>scrollY);
@@ -106,7 +110,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       check(engineName + ' 상세에서도 주 메뉴 유지, 부품 고르는 목록 없음', await visibleNav() && await page.locator('[data-item-switch]').count()===0);
       await shot('detail');
       check(engineName + ' 상세에서도 메뉴 스크롤 없음', await visibleNav() && await page.locator('.menu-body').evaluate(e=>e.scrollTop)===0);
-      await page.locator('[data-action="back-to-list"]').click(); await page.waitForURL(/dictionary/);
+      await page.locator('[data-action="back-to-list"]:visible').click(); await page.waitForURL(/dictionary/);
       check(engineName + ' 목록 복귀 시 필터·스크롤·원래 카드 초점 복원', page.url().includes('kind=') && Math.abs((await page.evaluate(()=>scrollY))-listY)<3 && await card.evaluate(e=>e===document.activeElement));
       await page.goForward(); await page.waitForURL(/detail=card/);
       await page.goBack(); await page.waitForURL(/dictionary/);
@@ -114,25 +118,30 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
 
       await goto('dictionary?shelf=part&q='+encodeURIComponent('입력'));
       await page.locator('[data-library-entry="input"]').click();
-      await page.locator('#search-open').click(); await page.locator('#query').fill('토큰');
-      check(engineName + ' 부품 상세의 검색 제안에 토큰이 섞이지 않음', await page.locator('.search-suggestion').count()===0);
+      await page.locator('#search-open').click(); await page.locator('#query').fill('버튼');
+      check(engineName + ' 검색은 기본으로 전체 범위', await page.locator('[data-search-scope="all"]').getAttribute('aria-pressed')==='true' && await page.locator('.search-result-group').count()>1);
+      await page.locator('[data-search-scope="current"]').click();
+      check(engineName + ' 범위를 부품으로 고르면 부품 분류 안에서만 찾음', await page.locator('[data-suggest-open]').evaluateAll(es=>{
+        const u=Pattove.libraryUI, ids=new Set(u.currentItems({page:'dictionary',query:'',filters:u.readFilters('dictionary',new URLSearchParams('shelf=part&available=all'))}).map(item=>item.id));
+        return es.every(e=>ids.has(e.dataset.suggestOpen));
+      }));
       await page.locator('#query').fill('버튼'); await page.locator('#query').press('Enter'); await page.waitForURL(/dictionary/);
       check(engineName + ' 상세 검색 제출은 해당 분류 결과로 이동', page.url().includes('shelf=part') && await page.locator('[data-library-entry="button"]').count()===1);
       await goto('dictionary?shelf=token');
-      await page.locator('#search-open').click(); await page.locator('#query').fill('TOK-01'); await page.locator('#query').press('ArrowDown'); await page.locator('#query').press('Enter');
+      await page.locator('#search-open').click(); await page.locator('#query').fill('TOK-01'); await page.locator('#query').press('ArrowDown'); await page.keyboard.press('Enter');
       await page.waitForURL(/detail=token-color/);
       check(engineName + ' 사전 ID 검색과 상세 소속 유지', await page.locator('[data-focus="tab-token"][aria-current="page"]').count()===1);
       await goto('dictionary?category=ICO.navigation');
       check(engineName + ' 예전 분류 주소 유지', page.url().includes('shelf=icon') && page.url().includes('icon=navigation'));
       check(engineName + ' 아이콘 목록에는 구현 예시 카드가 없음', await page.locator('.dict-entry.is-built').count()===0);
-      check(engineName + ' 홈 아이콘 카드는 일러스트 그림으로 표시', await page.locator('[data-library-entry="ICO-01"].is-illustrated .illustrated-icon').isVisible());
+      check(engineName + ' 홈 아이콘 카드는 일러스트 그림으로 표시', await page.locator('[data-illustration-id="ICO-01"] .illustrated-icon').isVisible());
       await goto('dictionary?shelf=icon&p=99999');
       check(engineName + ' 마지막 쪽 아이콘은 SVG로 대체하지 않음', await page.locator('.dict-entry').count()>0 && await page.locator('.dict-entry svg').count()===0);
       await page.locator('.dict-entry .illustrated-icon').last().evaluate(img=>{img.loading='eager';return img.decode();});
       const iconPixels = await sharp(await page.locator('.dict-entry .illustrated-icon').last().screenshot()).stats();
       check(engineName + ' 마지막 쪽 일러스트가 실제로 그려짐', iconPixels.channels.slice(0,3).every(channel=>channel.stdev>10));
       await page.locator('.dict-entry.is-illustrated').last().click();
-      check(engineName + ' 마지막 쪽 아이콘 상세에 일러스트와 다운로드 표시', await page.locator('dialog .illustrated-icon').count()===1 && await page.locator('dialog a[download]').count()===2 && await page.locator('dialog .detail-art svg, dialog [data-download-glyph], dialog .detail-art.is-todo').count()===0);
+      check(engineName + ' 마지막 쪽 아이콘 상세에 일러스트와 다운로드 표시', await page.locator('dialog .illustrated-icon').count()===1 && await page.locator('dialog a[download]').count()===1 && await page.locator('[data-icon-format] option').count()===2 && await page.locator('dialog .detail-art svg, dialog [data-download-glyph], dialog .detail-art.is-todo').count()===0);
       await page.keyboard.press('Escape'); await page.waitForFunction(()=>!document.querySelector('dialog').open);
       await goto('system?detail=icon');
       check(engineName + ' 아이콘 부품은 부품 메뉴에 소속', await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1 && (await page.locator('#detail-title').innerText()).startsWith('아이콘 ('));
@@ -152,7 +161,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       check(engineName + ' 주 메뉴 변경 시 하위 목록과 스크롤 갱신', await page.locator('.menu-body').evaluate(e=>e.scrollTop)===0 && await page.locator('#secondary-nav [data-focus^="nav-icon-"]').count()===0);
       await goto('dictionary?shelf=icon');
       await shot('icons');
-      await page.locator('button.dict-entry').first().click();
+      await page.locator('.illustration-open').first().click();
       check(engineName + ' 사전 그림 상세 유지', await page.locator('#detail-dialog').isVisible());
       await page.keyboard.press('Escape'); await page.waitForFunction(()=>!document.querySelector('dialog').open);
       await goto('styles');
@@ -164,19 +173,19 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
       // Icon tiles are square, and long shelves are cut into numbered pages.
       await goto('dictionary?shelf=icon');
       check(engineName + ' 아이콘 그림 칸은 모두 1:1', await page.locator('.dict[data-shelf="icon"] .dict-entry .dict-thumb').evaluateAll(es=>es.length===72&&es.every(e=>{const r=e.getBoundingClientRect();return Math.abs(r.width-r.height)<1.5;})));
-      check(engineName + ' 아이콘 목록은 72개씩 쪽으로 나뉘고 지금 쪽이 표시됨', await page.locator('.pagination [aria-current="page"]').innerText()==='1' && await page.locator('.page-step[aria-label="이전"]').isDisabled());
+      check(engineName + ' 아이콘 목록은 72개씩 쪽으로 나뉘고 지금 쪽이 표시됨', await page.locator('.pagination [aria-current="true"]').innerText()==='1' && await page.locator('.page-step[aria-label="이전"]').isDisabled());
       await page.locator('.page-step[aria-label="다음"]').click(); await page.waitForURL(/p=2/);
-      check(engineName + ' 다음 쪽으로 이동하면 맨 위에서 시작하고 주소에 쪽 번호가 남음', await page.evaluate(()=>scrollY)===0 && await page.locator('.pagination [aria-current="page"]').innerText()==='2' && await page.locator('.dict-entry').count()===72);
+      check(engineName + ' 다음 쪽으로 이동하면 맨 위에서 시작하고 주소에 쪽 번호가 남음', await page.evaluate(()=>scrollY)===0 && await page.locator('.pagination [aria-current="true"]').innerText()==='2' && await page.locator('.dict-entry').count()===72);
       await page.reload();
-      check(engineName + ' 새로고침해도 같은 쪽', await page.locator('.pagination [aria-current="page"]').innerText()==='2');
+      check(engineName + ' 새로고침해도 같은 쪽', await page.locator('.pagination [aria-current="true"]').innerText()==='2');
       await page.locator('.page-jump input').fill('9'); await page.locator('.page-jump input').press('Enter'); await page.waitForURL(/p=9/);
-      check(engineName + ' 쪽 번호를 적어 바로 이동', await page.locator('.pagination [aria-current="page"]').innerText()==='9');
+      check(engineName + ' 쪽 번호를 적어 바로 이동', await page.locator('.pagination [aria-current="true"]').innerText()==='9');
       await page.goto(base + '#/dictionary?shelf=icon&p=99999');
       check(engineName + ' 범위를 넘은 쪽 번호는 마지막 쪽으로 고침', await page.locator('.pagination .page-num.is-current').innerText()===await page.locator('.pagination .page-num').last().innerText());
       await page.locator('#secondary-nav .nav-subcategory').nth(1).click(); await page.waitForURL(/icon=/);
-      check(engineName + ' 분류를 바꾸면 1쪽부터', !page.url().includes('p=') && await page.locator('.pagination [aria-current="page"]').innerText()==='1');
+      check(engineName + ' 분류를 바꾸면 1쪽부터', !page.url().includes('p=') && await page.locator('.pagination [aria-current="true"]').innerText()==='1');
       await goto('dictionary?shelf=part&group=selection');
-      check(engineName + ' 한 쪽에 다 들어가는 목록에는 쪽 이동 없음', await page.locator('.pagination').count()===0);
+      check(engineName + ' 한 쪽뿐인 목록은 쪽 막대를 숨김', await page.locator('.pagination').count()===0 && await page.locator('.dict-entry').count()>0);
       // Block shelf: 중 = 묶음, 소 = its categories.
       await goto('dictionary?shelf=block');
       await page.locator('#secondary-nav .nav-subcategory[aria-expanded]').first().click();
@@ -187,11 +196,12 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
         for (const route of ['dictionary','dictionary?shelf=token','dictionary?shelf=icon','styles','system?detail=button','system?detail=page']) {
           await goto(route);
           check(`${engineName} ${width} ${route} 가로 넘침 없음`, await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-          check(`${engineName} ${width} ${route} 주 메뉴 다섯 개가 상단에 보임`, await visibleNav());
+          check(`${engineName} ${width} ${route} 상단 주 메뉴를 탐색할 수 있음`, await visibleNav());
         }
         if (width<=1100) {
           await goto('dictionary'); await page.locator('#menu-toggle').click();
-          check(`${engineName} ${width} 모바일 서랍에도 전체 부품 분류 표시`, await page.locator('#secondary-nav .nav-subcategory').count()===await page.evaluate(()=>Pattove.library.groups.length) && await page.locator('#main').evaluate(e=>e.inert) && await page.locator('.app-top').evaluate(e=>e.inert));
+          check(`${engineName} ${width} 모바일 서랍에도 빠른 분류와 전체 분류 표시`, await page.locator('.nav-all-categories').count()===1 && await page.locator('[data-focus="nav-part-buttons"]').isVisible() && await page.locator('#main').evaluate(e=>e.inert) && await page.locator('.app-top').evaluate(e=>e.inert));
+          await page.locator('.nav-all-categories>summary').click();
           await page.locator('#secondary-nav a').last().focus(); await page.keyboard.press('Tab');
           check(`${engineName} ${width} 메뉴 안에서 키보드 초점 유지`, await page.evaluate(()=>!!document.activeElement.closest('#app-menu')));
           await page.locator('[data-focus="nav-part-interaction"]').click();
@@ -201,7 +211,7 @@ const check = (name, value) => { assert.ok(value, name); checks.push(name); };
           check(`${engineName} ${width} 검색 단축키는 검색 창으로`, await page.locator('#search-dialog').evaluate(d=>d.open) && await page.locator('#query').evaluate(e=>e===document.activeElement) && await page.locator('#menu-toggle').getAttribute('aria-expanded')==='false');
           check(`${engineName} ${width} 검색 창은 화면 안에 들어감`, await page.locator('#search-dialog').evaluate(e=>{const r=e.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth;}));
           await page.keyboard.press('Escape');
-          check(`${engineName} ${width} Esc로 검색 창을 닫으면 열기 전 자리로 초점`, !await page.locator('#search-dialog').evaluate(d=>d.open) && await page.locator('#main').evaluate(e=>e===document.activeElement));
+          check(`${engineName} ${width} Esc로 검색 창을 닫으면 열기 전 자리(새 화면 제목)로 초점`, !await page.locator('#search-dialog').evaluate(d=>d.open) && await page.locator('#page-title').evaluate(e=>e===document.activeElement));
           if(width===390) {
             await shot('mobile'); await page.locator('#menu-toggle').click(); await shot('mobile-menu');
             await page.locator('[data-action="close-menu"]').click();

@@ -8,7 +8,10 @@ const routes = [
   '/components', '/components?layer=organism', '/dictionary', '/dictionary?shelf=icon',
   '/dictionary?code=TOK&detail=TOK-01',
   '/system?style=main', '/system?style=main&detail=button', '/system?style=main&detail=page', '/system?style=main&detail=checkbox',
-  '/system?detail=admin-page', '/system?detail=record-editor', '/system?detail=admin-shell'
+  '/system?detail=admin-page', '/system?detail=record-editor', '/system?detail=admin-shell',
+  '/styles?detail=main', '/dictionary?shelf=block', '/dictionary?shelf=template',
+  '/dictionary?shelf=icon&detail=ICO-01', '/system?detail=token-color',
+  '/motion', '/motion?detail=aurora', '/motion?sources=1', '/motion?sources=1&q=zzzz'
 ];
 
 (async () => {

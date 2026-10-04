@@ -28,12 +28,13 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
  const page=await context.newPage();page.setDefaultTimeout(6000);
  page.on('pageerror',e=>errors.push(e.message));
  const origin='http://127.0.0.1:4173/';
- const goto=async route=>{await page.goto(origin+'#/'+route);};
+ const archiveRoute=route=>route.startsWith('dictionary')&&!route.includes('available=')?route+(route.includes('?')?'&':'?')+'available=all':route;
+ const goto=async route=>{await page.goto(origin+'#/'+archiveRoute(route));};
  const close=async()=>{await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('dialog').open);};
  const shot=async name=>{await page.mouse.move(0,0);await page.evaluate(()=>document.fonts.ready);await page.screenshot({path:path.join(out,name+'.png')});};
  try{
   await goto('styles');
-  check('상단에 스타일과 구성요소 다섯 갈래',await page.locator('.app-top .nav-shelf-link').count()===data.shelves.length+1&&await page.locator('.app-top #style-context').isVisible());
+  check('상단에 스타일·구성요소 다섯 갈래·모션',await page.locator('.app-top .nav-shelf-link').count()===data.shelves.length+2&&await page.locator('.app-top #style-context').isVisible());
   await shot('01-styles');
   // The count is not printed on screen any more; the screen-reader announcement still carries it.
   const shown=async()=>Number((await page.locator('#announcer').textContent()).match(/\d+/)[0]);
@@ -41,7 +42,7 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   const menuSide=async()=>await page.locator('#app-menu').isVisible()&&await page.evaluate(()=>Math.round(document.querySelector('main').getBoundingClientRect().left)===Math.round(document.querySelector('#app-menu').getBoundingClientRect().right));
   const noFilterUI=async()=>await page.locator('#filter-bar, #filter-toggle, #active-filters, .facet-search, [data-filter]').count()===0;
   // Each left-rail row is an address: [key, value] of its one narrowing.
-  const railPicks=()=>page.locator('#secondary-nav .nav-subcategory').evaluateAll(els=>els.map(a=>[...new URLSearchParams(a.getAttribute('href').split('?')[1])].find(([k])=>k!=='shelf')));
+  const railPicks=()=>page.locator('#secondary-nav').evaluate(nav=>[...(nav.querySelector('.nav-all-categories')||nav).querySelectorAll('.nav-subcategory')].map(a=>[...new URLSearchParams(a.getAttribute('href').split('?')[1])].find(([k])=>!['shelf','available'].includes(k))));
   await goto('components');
   check('구성요소 화면에 필터 칸 없이 전부 보임',await page.locator('#app-menu').evaluate(e=>e.hidden)&&await noFilterUI()&&await shown()===data.components.length);
   await shot('02-components');
@@ -53,10 +54,10 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
    await close();
   }
   await page.locator('[data-focus="tab-part"]').click();
-  check('사전 첫 화면은 부품 탭 격자',await menuSide()&&await page.locator('[data-focus^="tab-"]').count()===data.shelves.length&&await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1&&await page.locator('.dict-entry').count()>0);
+  check('사전 첫 화면은 부품 탭 격자',await menuSide()&&await page.locator('[data-focus^="tab-"]').count()===data.shelves.length+1&&await page.locator('[data-focus="tab-part"][aria-current="page"]').count()===1&&await page.locator('.dict-entry').count()>0);
   check('필터에 전체 항목 없음',await page.locator('#app-menu :is(a,button,label)').evaluateAll(els=>els.every(e=>e.textContent.trim()!=='전체')));
   await shot('03-dictionary');
-  const itemsOf=qs=>page.evaluate(qs=>{const ui=Pattove.libraryUI;return ui.currentItems({page:'dictionary',filters:ui.readFilters('dictionary',new URLSearchParams(qs)),query:''});},qs);
+  const itemsOf=qs=>page.evaluate(qs=>{const ui=Pattove.libraryUI;return ui.currentItems({page:'dictionary',filters:ui.readFilters('dictionary',new URLSearchParams(qs+'&available=all')),query:''});},qs);
   let shelfTotal=0;
   for(const shelf of data.shelves){
    await goto('dictionary?shelf='+shelf.id);
@@ -108,42 +109,44 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
   check('여러 칸에 속한 그림은 주 칸과 함께 보일 칸 모두에서 보임',(await itemsOf('shelf=icon&icon='+alsoCat)).some(e=>e.id===alsoKey)&&(await itemsOf('shelf=icon&icon='+alsoHome)).some(e=>e.id===alsoKey));
   await goto('dictionary?category=ICO');
   check('옛 분류 주소는 아이콘 탭에서 아이콘 전체를 보여줌',(await itemsOf('category=ICO')).length===data.entries.filter(e=>e.category==='ICO').length+glyphOnly.length&&page.url().includes('shelf=icon'));
-  check('대량 분류는 72개씩 쪽으로 나뉨',await page.locator('.dict-entry:not(.is-built)').count()===72&&await page.locator('.pagination [aria-current="page"]').innerText()==='1');
+  check('대량 분류는 72개씩 쪽으로 나뉨',await page.locator('.dict-entry:not(.is-built)').count()===72&&await page.locator('.pagination [aria-current="true"]').innerText()==='1');
   await page.locator('.page-step[aria-label="다음"]').click();
   check('다음 쪽은 이어지는 72개를 맨 위부터 보여줌',await page.locator('.dict-entry:not(.is-built)').count()===72&&page.url().includes('p=2')&&await page.evaluate(()=>scrollY)===0);
   await page.reload();
-  check('보고 있는 쪽 새로고침 유지',await page.locator('.pagination [aria-current="page"]').innerText()==='2');
+  check('보고 있는 쪽 새로고침 유지',await page.locator('.pagination [aria-current="true"]').innerText()==='2');
   // Suggestions stay inside the current tab, and TOK-01 lives in the token tab.
   await goto('dictionary?shelf=token');
   await page.locator('#search-open').click();await page.locator('#query').fill('TOK-01');
   check('ID 검색 제안',await page.locator('.search-suggestion').count()===1);
-  await page.locator('#query').press('ArrowDown');await page.locator('#query').press('Enter');
+  await page.locator('#query').press('ArrowDown');await page.keyboard.press('Enter');
   check('구현된 사전 항목의 검색 제안은 실제 부품 상세로 연결',(await page.locator('#detail-title').textContent()).startsWith(await page.evaluate(()=>Pattove.systemRegistry.items.find(i=>i.entry==='TOK-01').name)));
   await shot('04-entry');
   await page.goBack();
   check('부품 상세에서 뒤로 가면 사전으로 복귀',await page.locator('.dict').count()===1);
-  await page.locator('#search-open').click();await page.locator('#query').fill('색');await page.locator('#query').press('Enter');
+  if(!await page.locator('#search-dialog').isVisible())await page.locator('#search-open').click();await page.locator('#query').fill('색');await page.locator('#query').press('Enter');
   check('사전 전체 검색',await page.locator('.dict-entry').count()>0);
   await shot('05-search');
-  await goto('dictionary?code=VIS');
+  await goto('dictionary?shelf=template&code=LAY&available=all');
+  await page.locator('button.dict-entry.is-todo').first().waitFor();
   check('견본 없는 항목은 가짜 그림 대신 미구현 표시',await page.locator('button.dict-entry.is-todo').count()>0&&await page.locator('button.dict-entry.is-todo svg').count()===0&&(await page.locator('button.dict-entry.is-todo .dict-todo').first().textContent())==='미구현');
   const unbuiltID=await page.locator('button.dict-entry.is-todo').first().getAttribute('data-library-entry');
   await page.locator('button.dict-entry.is-todo').first().click();
-  check('미구현 항목 상세도 미구현이라고 말함',/미구현/.test(await page.locator('dialog .detail-art.is-todo').textContent())&&await page.locator('dialog .detail-art svg, dialog .dialog-footer').count()===0);
+  check('미구현 항목 상세도 견본이 없다고 말함',/아직 견본이 없어요/.test(await page.locator('dialog .detail-art.is-todo').textContent())&&await page.locator('dialog .detail-art svg, dialog .dialog-footer').count()===0);
   check('미구현 항목도 사전 ID와 실제 쓰임을 보여 줌',(await page.locator('dialog .record-kind').textContent()).includes(unbuiltID)&&await page.locator('dialog .record-detail section p').textContent()===data.entries.find(e=>e.id===unbuiltID).usage);
   await shot('06-entry-art');
   await close();
   await goto('dictionary?shelf=icon&kind='+encodeURIComponent('세트 그림'));
   check('아이콘 탭 종류에 세트 그림이 있고 이름 없는 그림이 없음',await shown()===glyphOnly.length&&await page.locator('.dict-entry strong').first().textContent()!=='');
   await goto('dictionary?shelf=icon&detail=material%3Ayard');
-  const glyphKey=await page.locator('dialog .glyph-keys code').first().textContent();
-  check('제작된 세트 항목도 일러스트와 PNG·WebP 다운로드 표시',await page.locator('dialog .detail-art.is-todo').count()===0&&await page.locator('dialog .illustrated-icon').count()===1&&await page.locator('dialog .detail-art svg, dialog [data-download-glyph], dialog .glyph-ref svg').count()===0&&await page.locator('dialog a[download]').count()===2&&glyphOnly.some(([key])=>key===glyphKey));
+  await page.locator('.icon-file-info summary').click();
+  const glyphKey=await page.locator('dialog .icon-file-info code').first().textContent();
+  check('제작된 세트 항목도 일러스트와 PNG·WebP 다운로드 표시',await page.locator('dialog .detail-art.is-todo').count()===0&&await page.locator('dialog .illustrated-icon').count()===1&&await page.locator('dialog .detail-art svg, dialog [data-download-glyph], dialog .glyph-ref svg').count()===0&&await page.locator('dialog a[download]').count()===1&&await page.locator('[data-icon-format] option').count()===2&&glyphOnly.some(([key])=>key===glyphKey));
   await shot('07-glyph-art');
   await close();
   await page.locator('#search-open').click();await page.locator('#query').fill('rocket');await page.locator('#query').press('Enter');
   check('영문 그림 이름으로도 일러스트를 찾음',await page.locator('.dict-entry.is-illustrated').count()>0&&await page.locator('.dict-entry svg').count()===0);
-  await goto('docs?doc=definition');await page.waitForFunction(()=>!location.hash.startsWith('#/docs'));
-  check('없앤 문서 주소는 문서 화면을 열지 않음',!page.url().includes('docs')&&await page.locator('.document-body').count()===0);
+  await goto('docs?doc=definition');await page.locator('.not-found').waitFor();
+  check('없앤 문서 주소는 문서 화면 대신 찾을 수 없음과 검색 열기를 보여 줌',await page.locator('.document-body').count()===0&&(await page.locator('#page-title').innerText())==='찾을 수 없음'&&await page.locator('[data-action="open-search"]').count()===1);
   const inView=sel=>page.locator(sel).evaluate(p=>{const r=p.getBoundingClientRect();return r.width>0&&r.left>=0&&r.right<=innerWidth&&r.top>=0&&r.bottom<=innerHeight;});
   // The drawer slides in; measure once it has settled.
   const openMenu=async()=>{await page.locator('#menu-toggle').click();await page.waitForFunction(()=>document.querySelector('#app-menu').getBoundingClientRect().left===0);};
@@ -161,8 +164,10 @@ check('81개 사전 분류가 메뉴 그룹에 한 번씩 연결',data.categorie
     await page.keyboard.press('Escape');
     check(width+' Esc로 메뉴 서랍 닫기',!await page.evaluate(()=>document.documentElement.classList.contains('menu-open')));
     await goto('system?detail=button');await page.evaluate(()=>document.fonts.ready);
+    check(width+' 부품 상세는 목록 복귀 동작을 바로 표시',await page.locator('[data-action="back-to-list"]:visible').count()===1);
+    await page.locator('[data-action="back-to-list"]:visible').click();
     await openMenu();
-    check(width+' 부품 상세에서도 소속 분류가 서랍 안에 보임',await inView('#app-menu')&&await inView('#secondary-nav [aria-current="true"]'));
+    check(width+' 상세에서 돌아오면 부품 목록과 현재 분류가 보임',page.url().includes('shelf=part')&&await inView('#app-menu')&&await inView('#secondary-nav [aria-current]'));
     await page.keyboard.press('Escape');
    }
   }

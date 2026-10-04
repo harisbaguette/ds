@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { loadTokens, tokenFiles, kinds } from './tokens.mjs';
 import { asset as illustrationAsset } from './lib/illustration-store.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const read = file => fs.readFileSync(path.join(root, file), 'utf8');
+const read = file => fs.readFileSync(path.join(root, file), 'utf8').replace(/\r\n/g,'\n');
 const write = (file, content) => { fs.mkdirSync(path.dirname(path.join(root, file)), { recursive: true }); fs.writeFileSync(path.join(root, file), content); };
 const ctx = vm.createContext({ window: {} });
 for (const file of ['src/data/catalog.js','src/ui/icons.js','src/system/registry.js','src/system/parts.js','src/system/admin.js','src/system/behaviors.js','src/data/system-source.js','src/data/system-fonts.js']) vm.runInContext(read(file), ctx);
@@ -23,7 +23,7 @@ const sharedKinds = kindsIn(css.shared, 'shared');
 const baseCSS = styleCSS('main', sharedKinds, '.ds') + css.shared;
 const base = (process.env.REGISTRY_URL || 'http://127.0.0.1:4173/src/registry/r').replace(/\/$/, '');
 const cliVersion = JSON.parse(read('node_modules/shadcn/package.json')).version;
-const sourceHash = crypto.createHash('sha256').update(['src/system/parts.css','src/system/parts.js','src/system/admin.js','src/system/behaviors.js','src/ui/icons.js','src/data/ui-icons.json',...tokenFiles(),...fs.readdirSync(path.join(root,'src/system/react')).map(file=>'src/system/react/'+file)].map(read).join('\0') + JSON.stringify(iconMarkup)).digest('hex');
+const sourceHash = crypto.createHash('sha256').update(['src/system/registry.js','src/system/parts.css','src/system/parts.js','src/system/admin.js','src/system/behaviors.js','src/ui/icons.js','src/data/ui-icons.json',...tokenFiles(),...fs.readdirSync(path.join(root,'src/system/react')).sort().map(file=>'src/system/react/'+file)].map(read).join('\0') + JSON.stringify(iconMarkup)).digest('hex');
 const file = (name, content) => ({ path: `design/${name}`, type: 'registry:file', target: `~/design/${name}`, content });
 const items = [];
 function emit(name, title, files, meta = {}, dependencies = [], npmDependencies = []) {
@@ -71,7 +71,11 @@ const jsxExamples = {
   tabs:'<Tabs />', 'bottom-nav':'<BottomNav current="#home" items={[{href:"#home",label:"홈"},{href:"#search",label:"탐색"},{href:"#saved",label:"저장"}]} />', template:'<Template title="나의 기록" count="1개"><p>본문이나 다른 블록을 이 자리에 넣습니다.</p></Template>', page:'<CollectionPage />'
 };
 const allReact = new Map();
-for (const id of [...Object.keys(componentNames),'table-toolbar','table-pagination','admin-records','ui-icon-plus','ui-icon-minus','ui-icon-close','ui-icon-image']) allReact.set(id, read(`src/system/react/${id}.jsx`));
+for (const item of registry.items) if (item.reactExport) {
+  componentNames[item.id] = item.reactExport;
+  jsxExamples[item.id] = item.exampleReact || `<${item.reactExport} />`;
+}
+for (const filename of fs.readdirSync(path.join(root,'src/system/react')).filter(name=>name.endsWith('.jsx'))) allReact.set(filename.slice(0,-4), read(`src/system/react/${filename}`));
 function reactClosure(id, result = new Set()) {
   if (result.has(id)) return result; result.add(id);
   for (const match of allReact.get(id).matchAll(/from '\.\/([\w-]+)\.jsx'/g)) reactClosure(match[1], result);
@@ -97,7 +101,8 @@ for (const style of catalog.styles.filter(s => s.id !== 'base')) {
   for (const item of registry.items.filter(i => !standalone(i.id))) for (const environment of ['html','react']) {
     const closure = environment === 'html' ? [...registry.dependencies(item.id).map(i => i.id), item.id].filter(id => !standalone(id)) : [...reactClosure(item.id)];
     if (environment === 'react') for (const id of exampleUses[item.id] || []) for (const dep of reactClosure(id)) if (!closure.includes(dep)) closure.push(dep);
-    const blocks = [...new Set(closure.flatMap(id => registry.index.get(id)?.css || []))];
+    const cssClosure = [...new Set([...closure, ...registry.dependencies(item.id).map(dep=>dep.id)])];
+    const blocks = [...new Set(cssClosure.filter(id=>!standalone(id)).flatMap(id => registry.index.get(id)?.css || []))];
     const themeKinds = kinds.filter(kind => [sharedKinds, ...blocks.map(block => kindsIn(css[block], block))].some(list => list.includes(kind)));
     const files = [file('base.css', baseCSS), ...themeKinds.map(theme), ...(style.specification ? [file(`styles/${style.id}.md`, read(style.specification))] : []), ...blocks.map(block => file(`css/${block}.css`, partCSS(block)))];
     const styleImports = ['../../fonts.css','../../base.css',...themeKinds.map(kind => `../../styles/${style.id}/${kind}.css`),...blocks.map(block => `../../css/${block}.css`)];
@@ -133,7 +138,7 @@ for (const style of catalog.styles.filter(s => s.id !== 'base')) {
       standaloneHTML = standaloneHTML.replace('<body', `<!-- Third-party notices: ${read('src/system/upstream/shadcn-admin/LICENSE').replace(/--/g,'—')}\n${read('src/system/vendor/table-core.LICENSE.txt').replace(/--/g,'—')} -->\n<body`);
       write(`src/registry/examples/${item.id}.html`,standaloneHTML);
     }
-    const manifest = { item:item.id, dictionary:item.entry || null, purpose:item.purpose, keywords:item.keywords, style:style.id, styleRules:style.rules, references:style.references, environment, version:registry.version, sourceRevision:sourceHash, provenance:item.provenance, npmDependencies:environment === 'react' && needsTable ? ['@tanstack/react-table@8.21.3'] : [], sourceFiles: environment === 'react' ? closure.map(id => `src/system/react/${id}.jsx`) : ['src/system/parts.js','src/system/parts.css','src/system/behaviors.js',...(admin ? ['src/system/admin.js'] : []),...(needsTable ? ['src/system/vendor/table-core.min.js'] : [])], files:files.map(f => ({ path:f.target, sha256:crypto.createHash('sha256').update(f.content).digest('hex') })), dependencies:closure.filter(id=>id!==item.id), tokens:themeKinds.map(kind=>`token-${kind}`), compatibility:item.compatibility };
+    const manifest = { item:item.id, dictionary:item.entry || null, purpose:item.purpose, keywords:item.keywords, style:style.id, styleRules:style.rules, references:style.references, environment, version:item.version, lifecycle:item.lifecycle, replacement:item.replacement, sourceRevision:sourceHash, provenance:item.provenance, npmDependencies:environment === 'react' && needsTable ? ['@tanstack/react-table@8.21.3'] : [], sourceFiles: environment === 'react' ? closure.map(id => `src/system/react/${id}.jsx`) : ['src/system/parts.js','src/system/parts.css','src/system/behaviors.js',...(admin ? ['src/system/admin.js'] : []),...(needsTable ? ['src/system/vendor/table-core.min.js'] : [])], files:files.map(f => ({ path:f.target, sha256:crypto.createHash('sha256').update(f.content).digest('hex') })), dependencies:closure.filter(id=>id!==item.id), tokens:themeKinds.map(kind=>`token-${kind}`), compatibility:item.compatibility };
     files.push(file(`manifests/${style.id}-${item.id}-${environment}.json`, JSON.stringify(manifest,null,2)));
     files.push(file(`examples/${style.id}/${item.id}-${environment}.md`, `# ${item.name} · ${style.name}\n\n${item.purpose}\n\n${environment === 'html' ? `같은 폴더의 ${item.id}.html을 브라우저에서 엽니다. html/${item.id}.html 조각을 다른 페이지에 넣을 때 예시의 CSS와 필요한 behaviors.js를 연결하세요. 관리 부품은 예시 순서대로 table-core.min.js와 admin.js도 연결합니다. 아이디와 라벨 연결은 인스턴스마다 다르게 유지합니다.` : `React 프로젝트에서 ${item.id}.jsx의 Example을 import합니다. Next.js App Router에서도 클라이언트 경계를 포함한 이 예시를 import할 수 있습니다. 개별 react/ 부품은 children·props·콜백으로 조합합니다. React 런타임은 대상 프로젝트가 제공합니다.`}\n\n${item.compatibility}\n\n상태: Trial. 웹 브라우저용입니다. 인쇄·네이티브 앱은 미검증입니다. 로컬에서 수정한 소스는 갱신 전에 diff로 확인하세요.\n`));
     emit(`pattove-${style.id}-${item.id}-${environment}`, `${style.name} · ${item.name} · ${environment}`, files, { ...manifest, files:undefined }, [`${base}/pattove-fonts.json`], manifest.npmDependencies);

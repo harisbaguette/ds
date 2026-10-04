@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
+import {root,exportSources,recipes,compareInstallation} from '../scripts/lib/system-store.mjs';
+import {configureProfile,readProfile,recordDecision} from '../scripts/lib/project-profile.mjs';
+import {evaluateScreen} from '../scripts/lib/evaluate-screen.mjs';
+const out=fs.mkdtempSync(path.join(root,'test-results/workflow-'));
+configureProfile(out,{environment:'html',recipe:'settings-form',intent:'Profile editing'});
+recordDecision(out,{id:'drawer',decision:'reject',reason:'This task needs visible context'});
+recordDecision(out,{id:'dialog',decision:'accept',reason:'Confirm before removing content'});
+assert.equal(readProfile(out).decisions.length,2);
+assert.throws(()=>recordDecision(out,{id:'missing',decision:'accept',reason:'Invalid ID'}));
+assert.throws(()=>configureProfile(out,{style:'unknown'}));
+assert.equal(readProfile(out).style,'main');
+for(const recipe of recipes()){
+  const exported=exportSources({recipe:recipe.id,out:path.join(out,recipe.id)});
+  const report=await evaluateScreen({project:exported.directory});
+  assert.deepEqual(report.findings,[],recipe.id+': '+JSON.stringify(report.findings));
+  assert(report.manualReviewRequired);
+  console.log(recipe.id+': offline images, runtime, references, 3 widths passed');
+}
+const broken=path.join(out,'broken');fs.mkdirSync(broken);
+fs.writeFileSync(path.join(broken,'index.html'),'<html><img src="missing.png"><button></button><div id="same"></div><input id="same"><p aria-describedby="absent">text</p></html>');
+const report=await evaluateScreen({project:broken});
+assert(!report.passed);
+for(const kind of ['broken-image','missing-alt','missing-name','duplicate-id','broken-reference'])assert(report.findings.some(f=>f.kind===kind),kind);
+await assert.rejects(()=>evaluateScreen({url:'https://example.com'}));
+const retired=path.join(out,'retired');fs.mkdirSync(path.join(retired,'design/manifests'),{recursive:true});
+fs.writeFileSync(path.join(retired,'design/manifests/retired.json'),JSON.stringify({item:'retired-example',style:'main',environment:'html',version:'0.1.0',files:[]}));
+assert.equal(compareInstallation(retired)[0].lifecycle,'unavailable');
+console.log('Project preferences, offline recipes, evaluation failures and retired installations verified.');

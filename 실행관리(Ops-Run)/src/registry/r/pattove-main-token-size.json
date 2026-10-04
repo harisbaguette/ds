@@ -31,7 +31,7 @@
     }
   ],
   "meta": {
-    "version": "0.6.0",
+    "version": "0.7.0",
     "lifecycle": "Trial",
     "item": "token-size",
     "purpose": "상자·아이콘·조작 요소의 크기",

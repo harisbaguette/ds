@@ -12,12 +12,16 @@ const parse = text => JSON.parse(text.slice(text.indexOf('{')));
 (async () => {
   const browser = await chromium.launch({ headless: true });
   try {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 }, permissions: ['clipboard-read', 'clipboard-write'] });
+    const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+    await context.addInitScript(() => Object.defineProperty(navigator, 'clipboard', { configurable: true, value: {
+      writeText: async value => { window.copiedReference = value; }, readText: async () => window.copiedReference
+    } }));
     const page = await context.newPage();
     page.on('pageerror', error => errors.push(error.message));
     const goto = async route => { await page.goto('http://127.0.0.1:4173/#/' + route); await page.reload(); };
     const copy = async id => {
       const button = page.locator('[data-copy-reference="' + id + '"]');
+      if (!await button.isVisible()) await page.locator('.component-reference>summary').click();
       await button.click();
       await page.waitForFunction(id => document.querySelector('[data-copy-reference="' + id + '"]').parentElement.querySelector('.reference-status').textContent === '복사됨', id);
       return parse(await page.evaluate(() => navigator.clipboard.readText()));
@@ -42,22 +46,24 @@ const parse = text => JSON.parse(text.slice(text.indexOf('{')));
     await goto('system?detail=button&option-variant=primary');
     const before = page.url();
     const outline = await copy('button/variant/outline');
+    check('복사 완료를 단추의 글자로 확인 가능', await page.locator('[data-copy-reference="button/variant/outline"] .reference-copy-label>span:last-child').isVisible());
     check('모양 복사는 선택 상태와 페이지를 바꾸지 않음', page.url() === before && await page.locator('[data-variant-pick="primary"]').getAttribute('aria-pressed') === 'true');
     check('버튼 하위 모양을 이름·ID·스타일·소스·실제 마크업과 함께 복사', outline.id === 'button/variant/outline' && outline.elementId === 'button' && outline.dictionaryId === 'ACT-01' && outline.style.id === 'main' && outline.status === 'implemented' && outline.options.variant === 'outline' && outline.reactProps.variant === 'outline' && outline.source.registry.length === 2 && outline.html.includes('data-variant="outline"'));
     await page.locator('[data-variant-pick="ghost"]').click();
+    check('명시적으로 저장하면 기본 모양이 바뀌고 초점 유지', await page.evaluate(() => JSON.parse(localStorage.getItem('pattove-part-choice')).button === 'ghost' && document.activeElement.dataset.variantPick === 'ghost'));
     const parent = await copy('button');
     check('요소 복사는 현재 선택한 하위 모양을 반영', parent.id === 'button' && parent.shape.id === 'button/variant/ghost');
     await page.goto(outline.url);
-    check('복사한 주소는 저장된 다른 선택보다 지정 모양을 우선', await page.locator('[data-variant-pick="outline"]').getAttribute('aria-pressed') === 'true');
+    check('복사한 주소는 저장된 다른 선택보다 지정 모양을 우선', await page.locator('[data-variant-preview="outline"]').evaluate(n=>n===document.activeElement) && await page.locator('[data-variant-pick="ghost"]').getAttribute('aria-pressed') === 'true');
     await page.locator('#search-open').click();
     await page.locator('#query').fill('tabs/look/vertical');
     await page.locator('#query').press('Enter');
-    check('하위 모양 ID를 검색하면 해당 모양으로 바로 이동', await page.locator('[data-variant-pick="vertical"]').getAttribute('aria-pressed') === 'true' && page.url().includes('detail=tabs'));
+    check('하위 모양 ID를 검색하면 해당 모양으로 바로 이동', await page.locator('[data-variant-preview="vertical"]').evaluate(n=>n===document.activeElement) && page.url().includes('detail=tabs'));
     // The specimen preview takes priority over the site's style.
     const chosenStyle = await page.evaluate(() => Pattove.references.payload('button/variant/outline', { style: 'unused', preview: 'main' }).style.id);
     check('복사에는 사이트의 스타일보다 견본의 스타일을 우선 반영', chosenStyle === 'main');
-    await goto('dictionary?shelf=part&detail=VIS-01');
-    const pending = await copy('VIS-01');
+    await goto('dictionary?shelf=part&detail=CAN-39');
+    const pending = await copy('CAN-39');
     check('미구현 항목은 사전 정의만 전달하고 구현 코드·설치 경로를 만들지 않음', pending.status === 'not-implemented' && pending.purpose && typeof pending.source === 'string' && !pending.html && !pending.reactProps && pending.instructions.includes('아직 구현되지 않은'));
     await goto('dictionary?shelf=icon&detail=ICO-01');
     const art = await copy('ICO-01');

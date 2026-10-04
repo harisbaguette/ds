@@ -34,7 +34,7 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
     await sp.locator('[data-style-card="alt"] .dict-hit').click();
     check('사용 중이 아닌 스타일 화면에는 적용 단추',sp.url().endsWith('#/styles?detail=alt')&&await sp.locator('[data-style-select="alt"]').isVisible()&&await sp.locator('.style-page .overview-preview.theme-alt').count()===7);
     await sp.locator('[data-style-select="alt"]').click();
-    check('적용하면 사이트 전체가 그 스타일로 바뀌고 단추는 사용 중 표시로',await sp.evaluate(()=>document.body.classList.contains('theme-alt'))&&await sp.locator('[data-style-select]').count()===0&&await sp.locator('.style-heading .variant-kept').isVisible());
+    check('적용하면 사이트 전체가 그 스타일로 바뀌고 단추는 사용 중 표시로',await sp.evaluate(()=>document.body.classList.contains('theme-alt'))&&await sp.locator('[data-style-select]').count()===0&&await sp.locator('.style-heading .style-in-use').isVisible());
     await sp.goto(origin+'#/dictionary?shelf=part');await sp.reload();
     check('적용한 스타일은 다른 탭과 다시 열기에서도 유지',await sp.evaluate(()=>document.body.classList.contains('theme-alt')));
     await sp.goto(origin+'#/styles');
@@ -42,7 +42,9 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
     await ctx.close();
   }
   { // Preview: on the part, block, template and token tabs the specimens can be redrawn in another style without changing the site's style.
-    check('스타일이 하나여도 미리보기 선택이 부품 탭에 있음',await (async()=>{await page.goto(origin+'#/dictionary?shelf=part');return await page.locator('.preview-style select option').count()===1&&await page.locator('[data-preview-select]').inputValue()==='main';})());
+    check('스타일이 하나인 목록에는 불필요한 선택창과 스타일 문구를 생략',await (async()=>{await page.goto(origin+'#/dictionary?shelf=part');return await page.locator('[data-preview-select],.preview-style-static').count()===0;})());
+    await page.goto(origin+'#/system?detail=button');
+    check('상세에는 현재 미리보기 스타일을 표시',await page.locator('.preview-style-static').innerText()==='메인 스타일');
     const ctx=await browser.newContext({viewport:{width:1440,height:1080}});
     await ctx.addInitScript(()=>{const freeze=Object.freeze;Object.freeze=o=>{if(o&&Array.isArray(o.styles)&&Array.isArray(o.patterns)&&!o.styles.some(s=>s.id==='alt'))o.styles.push({id:'alt',name:'시험 스타일',description:'전환 시험',rules:'시험',references:[],constraints:[]});return freeze(o);};});
     const sp=await ctx.newPage();sp.on('pageerror',e=>errors.push(e.message));
@@ -99,20 +101,20 @@ const checks=[],errors=[];const check=(name,value)=>{assert.ok(value,name);check
    linkage[id]=await page.evaluate(()=>{
     const rules=[...document.styleSheets].filter(x=>(x.href||'').includes('/src/tokens/semantic/color.css')).flatMap(x=>[...x.cssRules]).filter(r=>r.style&&r.style.getPropertyValue('--p-bg'));
     const nodes=[...document.querySelectorAll('body, body *')],read=()=>nodes.map(n=>[getComputedStyle(n).backgroundColor,getComputedStyle(n).color]);
-    const before=read(),old=rules.map(r=>[r.style.getPropertyValue('--p-bg'),r.style.getPropertyValue('--p-ink')]);
-    rules.forEach(r=>{r.style.setProperty('--p-bg','rgb(255, 0, 170)');r.style.setProperty('--p-ink','rgb(0, 170, 255)');});
+    const before=read(),old=rules.map(r=>[r.style.getPropertyValue('--p-bg'),r.style.getPropertyValue('--p-ink'),r.style.getPropertyValue('--p-surface')]);
+    rules.forEach(r=>{r.style.setProperty('--p-bg','rgb(255, 0, 170)');r.style.setProperty('--p-surface','rgb(170, 255, 0)');r.style.setProperty('--p-ink','rgb(0, 170, 255)');});
     const after=read();
     // Other roles may share the bg primitive (e.g. on-accent = white); repaint them too so only hard-coded colors stay behind.
     const twins=rules.flatMap(r=>[...r.style].filter(k=>k.startsWith('--p-')&&k!=='--p-bg'&&r.style.getPropertyValue(k).trim()===old[0][0].trim()).map(k=>[r,k,r.style.getPropertyValue(k)]));
     twins.forEach(([r,k],i)=>r.style.setProperty(k,'rgb(1, 2, '+(3+i)+')'));
     const oldBg=before[0][0],stale=read().filter(c=>c[0]===oldBg).length;
-    twins.forEach(([r,k,v])=>r.style.setProperty(k,v));rules.forEach((r,i)=>{r.style.setProperty('--p-bg',old[i][0]);r.style.setProperty('--p-ink',old[i][1]);});
+    twins.forEach(([r,k,v])=>r.style.setProperty(k,v));rules.forEach((r,i)=>{r.style.setProperty('--p-bg',old[i][0]);r.style.setProperty('--p-ink',old[i][1]);r.style.setProperty('--p-surface',old[i][2]);});
     const inDemo=i=>!!nodes[i].closest('.part-demo, .variant-card .ds');
     return {rules:rules.length,shell:after[0][0]==='rgb(255, 0, 170)',
-     partBg:after.filter((c,i)=>inDemo(i)&&c[0]==='rgb(255, 0, 170)').length,partInk:after.filter((c,i)=>inDemo(i)&&c[1]==='rgb(0, 170, 255)').length,stale};
+     partBg:after.filter((c,i)=>inDemo(i)&&['rgb(255, 0, 170)','rgb(170, 255, 0)'].includes(c[0])).length,partInk:after.filter((c,i)=>inDemo(i)&&c[1]==='rgb(0, 170, 255)').length,stale};
    });
    const r=linkage[id];
-   check(id+' 바탕·글자 역할 한 줄 수정이 외곽과 부품에 함께 반영',r.rules===1&&r.shell&&r.partBg>0&&r.partInk>0);
+   check(id+' 바탕·표면·글자 토큰 수정이 외곽과 부품에 반영',r.rules===1&&r.shell&&r.partBg>0&&r.partInk>0);
    check(id+' 옛 바탕색에 머문 요소 없음',r.stale===0);
    // Size roles: one line in a semantic file must reach the shell and, whenever a rule of the part's own CSS (or of a
    // part it composes) reading the role styles a rendered element, the part too; then it must revert cleanly.

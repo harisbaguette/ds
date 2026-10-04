@@ -27,11 +27,11 @@ fs.mkdirSync(out, { recursive: true });
     if (!allowPending) assert.deepEqual(catalog.pending, [], 'Every catalog icon must have an illustration');
     const seen = [], pictured = [];
     for (let n = 1; n <= catalog.pages; n++) {
-      await page.waitForFunction(n => document.querySelector('.page-num[aria-current="page"]')?.textContent === String(n), n);
+      await page.waitForFunction(n => document.querySelector('.page-num[aria-current="true"]')?.textContent === String(n), n);
       await page.locator('.dict-entry img').evaluateAll(images => Promise.all(images.map(img => { img.loading = 'eager'; return img.decode(); })));
       assert.equal(await page.locator('.dict-entry svg').count(), 0, 'Never substitute SVG on page ' + n);
       const cards = await page.locator('.dict-entry').evaluateAll(entries => entries.map(e => ({
-        id: e.dataset.libraryEntry, pending: e.classList.contains('is-todo'),
+        id: e.dataset.libraryEntry || e.dataset.illustrationId, pending: e.classList.contains('is-todo'),
         illustrated: !!e.querySelector('img')?.naturalWidth,
         guideline: e.classList.contains('is-guideline') && !!e.querySelector('.guideline-summary')?.textContent.trim()
       })));
@@ -50,7 +50,9 @@ fs.mkdirSync(out, { recursive: true });
       await picture.evaluate(img => img.decode());
       assert.equal(await picture.evaluate(img => img.naturalWidth), 512);
       assert.equal(await page.locator('dialog .detail-art svg, dialog .glyph-ref svg, dialog [data-download-glyph]').count(), 0);
-      assert.equal(await page.locator('dialog a[download]').count(), 2);
+      // One download link; the format menu switches it between PNG and WebP.
+      assert.equal(await page.locator('dialog a[download]').count(), 1);
+      assert.equal(await page.locator('dialog [data-icon-format] option').count(), 2);
       const asset = await page.evaluate(id => Pattove.references.payload(id), id);
       assert.equal(asset.status, 'asset-ready');
       assert.ok(asset.assets.png.endsWith('.png') && asset.assets.webp.endsWith('.webp') && !asset.assets.svg);

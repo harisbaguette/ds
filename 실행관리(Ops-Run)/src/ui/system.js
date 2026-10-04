@@ -5,8 +5,8 @@
   function fitPreview(scene) {
     const viewport=scene.parentElement, tray=viewport.parentElement, style=getComputedStyle(tray);
     const width=tray.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight);
-    const previous=parseFloat(scene.style.getPropertyValue('--preview-scale')) || 1;
-    const bounds=scene.getBoundingClientRect(), naturalWidth=bounds.width/previous, naturalHeight=bounds.height/previous;
+    // Layout dimensions exclude transforms on both the scene and its ancestors (search thumbnails).
+    const naturalWidth=scene.offsetWidth, naturalHeight=scene.offsetHeight;
     if (!width || !naturalWidth || !naturalHeight) return;
     const maxWidth=parseFloat(getComputedStyle(viewport).maxWidth) || width;
     let scale=Math.min(1,width/naturalWidth,maxWidth/naturalWidth);

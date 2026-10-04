@@ -211,7 +211,69 @@
     const mark = t => text ? `<span${t ? ` data-token="${t}"` : ''}>${text}</span>` : t ? `<i data-token="${t}"></i>` : '<i></i>';
     return `<span class="ds-token-row ${className}">${names.map(mark).join('')}</span>`;
   }
+  const safeHref = value => /^(?:https?:|mailto:|tel:|#|\/(?!\/)|\.\.?\/)/i.test(String(value)) ? esc(value) : '#';
+  const inputChoices = [{value:'private',label:'나만 보기'},{value:'team',label:'팀과 공유'},{value:'public',label:'모두 공개'}];
+  const extended = {
+    textarea(prefix, {label='메모',value='',help='',error='',disabled=false,required=false,name='memo'}={}) {
+      return `<div class="ds-field ds-textarea">${fieldLabel(prefix,label)}<textarea class="ds-input" id="${esc(prefix)}" name="${esc(name)}" rows="4"${disabled?' disabled':''}${required?' required':''}${error?' aria-invalid="true"':''}${help||error?` aria-describedby="${esc(prefix)}-help"`:''}>${esc(value)}</textarea>${help||error?fieldDescription(prefix+'-help',error||help):''}</div>`;
+    },
+    select(prefix, {label='공개 범위',value='private',items=inputChoices,disabled=false,required=false,name='visibility',error=''}={}) {
+      return `<div class="ds-field ds-select">${fieldLabel(prefix,label)}<select class="ds-input" id="${esc(prefix)}" name="${esc(name)}"${disabled?' disabled':''}${required?' required':''}${error?` aria-invalid="true" aria-describedby="${esc(prefix)}-help"`:''}>${items.map(i=>`<option value="${esc(i.value)}"${i.value===value?' selected':''}${i.disabled?' disabled':''}>${esc(i.label)}</option>`).join('')}</select>${error?fieldDescription(prefix+'-help',error):''}</div>`;
+    },
+    combobox(prefix,{label='도시',items=['서울','부산','제주'],value='',disabled=false,name='city'}={}) {
+      return `<div class="ds-field ds-combobox" data-combobox>${fieldLabel(prefix,label)}<input class="ds-input" id="${esc(prefix)}" name="${esc(name)}" value="${esc(value)}" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="${esc(prefix)}-list" autocomplete="off"${disabled?' disabled':''}><ul id="${esc(prefix)}-list" role="listbox" aria-label="${esc(label)}" hidden>${items.map((item,i)=>`<li id="${esc(prefix)}-option-${i}" role="option" aria-selected="false" data-value="${esc(item)}">${esc(item)}</li>`).join('')}</ul><span class="ds-help" role="status"></span></div>`;
+    },
+    'file-upload'(prefix,{label='파일 선택',accept='',multiple=true,disabled=false,maxBytes=10485760}={}) {
+      return `<div class="ds-field ds-file-upload" data-file-upload data-max-bytes="${Number(maxBytes)}">${fieldLabel(prefix,label)}<input id="${esc(prefix)}" name="files" type="file"${accept?` accept="${esc(accept)}"`:''}${multiple?' multiple':''}${disabled?' disabled':''} aria-describedby="${esc(prefix)}-status"><p id="${esc(prefix)}-status" class="ds-help" role="status">선택한 파일이 없어요.</p></div>`;
+    },
+    dialog(prefix,{title='내용 확인',body='선택한 내용을 확인하세요.',trigger='열기',confirmLabel='',drawer=false}={}) {
+      return `<div class="ds-dialog-demo">${button({label:trigger,action:''}).replace('<button ',`<button data-dialog-open="${esc(prefix)}" aria-haspopup="dialog" aria-controls="${esc(prefix)}" `)}<dialog id="${esc(prefix)}" class="ds-dialog${drawer?' ds-drawer':''}" aria-labelledby="${esc(prefix)}-title"><h2 id="${esc(prefix)}-title">${esc(title)}</h2><p>${esc(body)}</p><form method="dialog" class="ds-confirm-row"><button class="ds-button" data-variant="outline" value="cancel" autofocus>${confirmLabel?'취소':'닫기'}</button>${confirmLabel?`<button class="ds-button" value="confirm">${esc(confirmLabel)}</button>`:''}</form></dialog><span class="ds-help" role="status"></span></div>`;
+    },
+    'confirmation-dialog'(prefix,options={}) {return extended.dialog(prefix,{title:'항목을 삭제할까요?',body:'삭제한 항목은 복구할 수 없어요.',trigger:'삭제',confirmLabel:'삭제하기',...options});},
+    drawer(prefix,options={}) {return extended.dialog(prefix,{title:'필터',trigger:'필터 열기',drawer:true,...options});},
+    popover(prefix,{label='추가 정보',text='링크를 받은 사람만 이 자료를 볼 수 있어요.'}={}) {
+      return `<div class="ds-popover-demo"><button class="ds-button" type="button" popovertarget="${esc(prefix)}">${esc(label)}</button><div class="ds-popover" id="${esc(prefix)}" popover><p>${esc(text)}</p><button class="ds-button" type="button" popovertarget="${esc(prefix)}" popovertargetaction="hide">닫기</button></div></div>`;
+    },
+    tooltip(prefix,{label='보관',text='다음에 다시 볼 수 있게 보관해요.'}={}) {
+      return `<span class="ds-tooltip"><button type="button" class="ds-button" aria-describedby="${esc(prefix)}">${esc(label)}</button><span id="${esc(prefix)}" role="tooltip">${esc(text)}</span></span>`;
+    },
+    accordion(prefix,{items=[{title:'보관한 자료는 어디에서 보나요?',body:'보관함에서 다시 열 수 있어요.'},{title:'공유를 취소할 수 있나요?',body:'공개 범위를 나만 보기로 바꾸세요.'}]}={}) {
+      return `<div class="ds-accordion">${items.map(i=>`<details><summary>${esc(i.title)}</summary><p>${esc(i.body)}</p></details>`).join('')}</div>`;
+    },
+    breadcrumb(prefix,{items=[{label:'홈',href:'#home'},{label:'보관함',href:'#saved'},{label:'봄의 색'}]}={}) {
+      return `<nav class="ds-breadcrumb" aria-label="현재 위치"><ol>${items.map((i,n)=>`<li>${n===items.length-1?`<span aria-current="page">${esc(i.label)}</span>`:`<a href="${safeHref(i.href)}">${esc(i.label)}</a>`}</li>`).join('')}</ol></nav>`;
+    },
+    pagination(prefix,{page=1,total=8}={}) {
+      total=Math.max(1,Math.floor(Number(total)||1));page=Math.max(1,Math.min(total,Math.floor(Number(page)||1)));
+      return `<nav class="ds-pagination" aria-label="페이지 이동" data-page="${page}" data-total="${total}"><button class="ds-button" type="button" data-page-step="-1"${page===1?' disabled':''}>이전</button><span role="status">${page} / ${total}</span><button class="ds-button" type="button" data-page-step="1"${page===total?' disabled':''}>다음</button></nav>`;
+    },
+    'side-nav'(prefix,{label='작업 메뉴',items=[{label:'자료',href:'#records'},{label:'보관함',href:'#saved'},{label:'설정',href:'#settings'}],current='#records'}={}) {
+      return `<nav class="ds-side-nav" aria-label="${esc(label)}">${items.map(i=>`<a href="${safeHref(i.href)}"${i.href===current?' aria-current="page"':''}>${esc(i.label)}</a>`).join('')}</nav>`;
+    },
+    spinner(prefix,{label='불러오는 중'}={}) {return `<span class="ds-loading" role="status"><span class="ds-spinner" aria-hidden="true"></span>${esc(label)}</span>`;},
+    skeleton(prefix,{label='불러오는 중'}={}) {return `<div class="ds-skeleton" role="status" aria-label="${esc(label)}"><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span></div>`;},
+    'error-state'(prefix,{title='불러오지 못했어요.',message='연결 상태를 확인한 뒤 다시 시도하세요.',action='다시 시도'}={}) {
+      return `<section class="ds-error-state" aria-labelledby="${esc(prefix)}-title"><h3 id="${esc(prefix)}-title">${esc(title)}</h3><p>${esc(message)}</p><button class="ds-button" type="button" data-retry>${esc(action)}</button></section>`;
+    },
+    'offline-state'(prefix,options={}) {return extended['error-state'](prefix,{title:'인터넷에 연결되지 않았어요.',message:'작성한 내용은 이 화면에 남아 있어요.',...options});},
+    'settings-form'(prefix,{title='프로필 설정',name='하나',memo=''}={}) {
+      return `<form class="ds-workflow" data-async-form="settings" aria-label="${esc(title)}"><h2>${esc(title)}</h2><fieldset>${field({id:prefix+'-name',label:'표시 이름',value:name,name:'name'})}${extended.textarea(prefix+'-memo',{label:'소개',value:memo,name:'memo'})}${extended.select(prefix+'-visibility')}${choice({kind:'switch',label:'알림 받기',checked:true,name:'notification',value:'on'})}${button({label:'저장',type:'submit',action:''})}</fieldset><p role="status" aria-live="polite"></p></form>`;
+    },
+    'login-form'(prefix,{title='로그인'}={}) {
+      return `<form class="ds-workflow" data-async-form="login" aria-label="${esc(title)}"><h2>${esc(title)}</h2><fieldset><div class="ds-field">${fieldLabel(prefix+'-email','이메일')}${input({id:prefix+'-email',type:'email',name:'email',placeholder:'',extra:' required autocomplete="username"'})}</div><div class="ds-field">${fieldLabel(prefix+'-password','비밀번호')}${input({id:prefix+'-password',type:'password',name:'password',placeholder:'',extra:' required autocomplete="current-password"'})}</div>${button({label:'로그인',type:'submit',action:''})}</fieldset><p role="status" aria-live="polite"></p></form>`;
+    },
+    'input-result'(prefix,{title='금액 계산'}={}) {
+      return `<form class="ds-workflow" data-calculator aria-label="${esc(title)}"><h2>${esc(title)}</h2><div class="ds-field">${fieldLabel(prefix+'-price','개당 금액')}${input({id:prefix+'-price',type:'number',name:'price',value:'12000',extra:' min="0" step="0.01" required'})}</div><div class="ds-field">${fieldLabel(prefix+'-quantity','수량')}${input({id:prefix+'-quantity',type:'number',name:'quantity',value:'1',extra:' min="1" step="1" required'})}</div>${button({label:'계산',type:'submit',action:''})}<output aria-live="polite" aria-label="계산 결과"></output></form>`;
+    },
+    'comparison'(prefix,{title='수업 비교',items=[{id:'basic',name:'기초반',price:'30,000원',detail:'주 1회'},{id:'advanced',name:'심화반',price:'50,000원',detail:'주 2회'}]}={}) {
+      return `<section class="ds-comparison" aria-labelledby="${esc(prefix)}-title"><h2 id="${esc(prefix)}-title">${esc(title)}</h2><div class="ds-comparison-grid">${items.map(i=>`<article><h3>${esc(i.name)}</h3><p>${esc(i.price)}</p><p>${esc(i.detail)}</p><button type="button" class="ds-button" data-compare-id="${esc(i.id)}" data-compare-name="${esc(i.name)}" aria-pressed="false">${esc(i.name)} 선택</button></article>`).join('')}</div><p role="status"></p></section>`;
+    },
+    'article-page'(prefix,{title='기록을 오래 남기는 방법',sections=[{title:'먼저 고르기',body:'다시 보고 싶은 장면부터 골라 둡니다.'},{title:'이름 붙이기',body:'나중에 찾을 수 있게 날짜와 대상을 적습니다.'},{title:'다시 살펴보기',body:'모아 둔 기록에서 다음 작업의 단서를 찾습니다.'}]}={}) {
+      return `<article class="ds-article"><h1>${esc(title)}</h1><nav aria-label="목차"><ol>${sections.map((s,i)=>`<li><a href="#${esc(prefix)}-${i}">${esc(s.title)}</a></li>`).join('')}</ol></nav>${sections.map((s,i)=>`<section id="${esc(prefix)}-${i}"><h2>${esc(s.title)}</h2><p>${esc(s.body)}</p></section>`).join('')}</article>`;
+    }
+  };
   function renderItem(id, prefix = uid('example'), options = {}) {
+    if (extended[id]) return extended[id](prefix, {...options, disabled:options.disabled || options.state === 'disabled', error:options.state === 'error' ? '입력한 값을 확인하세요.' : options.error});
     if (id === 'data-table') return window.Pattove.admin.renderTable(prefix, options);
     if (id === 'record-editor') return window.Pattove.admin.renderEditorDemo(prefix);
     // The shell's example: side menu, heading band and the slot where the table and editor blocks go.

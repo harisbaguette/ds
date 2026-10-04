@@ -60,6 +60,7 @@ fs.mkdirSync(out, { recursive: true });
       assert.equal(await img.evaluate(img => img.naturalHeight), 512);
       assert.equal(await page.locator('dialog .detail-art.is-todo').count(), 0);
       for (const ext of ['png', 'webp']) {
+        await page.locator('dialog [data-icon-format]').selectOption(ext);
         const link = page.locator(`dialog a[download][href$=".${ext}"]`);
         const response = await page.request.get(new URL(await link.getAttribute('href'), page.url()).href);
         assert.equal(response.status(), 200);
@@ -81,7 +82,7 @@ fs.mkdirSync(out, { recursive: true });
     // ID search is partial: ICO-62 also matches ICO-620 through ICO-629.
     const searchMatches=artwork.filter(entry => entry.id.includes('ICO-62'));
     assert.equal(await page.locator('.is-illustrated').count(), searchMatches.length);
-    await page.locator('.is-illustrated[data-library-entry="ICO-62"]').click();
+    await page.locator('.is-illustrated[data-illustration-id="ICO-62"] .illustration-open').click();
     assert.match(await page.locator('#detail-title').textContent(), /검색/);
     for (const width of [320, 375, 768]) {
       await page.setViewportSize({ width, height: 950 });

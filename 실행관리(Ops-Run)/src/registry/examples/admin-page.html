@@ -254,7 +254,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 </style>
 <style>.ds[data-style="main"]{--p-opacity-disabled:.38;--p-opacity-faint:.35;--p-opacity-placeholder:.55;--p-opacity-dim:.65;--p-opacity-full:1;}
 </style>
-<style>.ds[data-style="main"]{--p-rise-sm:1px;--p-rise-md:2px;--p-duration:140ms;--p-duration-spin:800ms;--p-ease-standard:cubic-bezier(.2, 0, .38, .9);--p-ease-enter:cubic-bezier(0, 0, .38, .9);--p-ease-linear:linear;}
+<style>.ds[data-style="main"]{--p-rise-sm:1px;--p-rise-md:2px;--p-duration:140ms;--p-duration-enter:240ms;--p-duration-exit:180ms;--p-duration-layout:320ms;--p-duration-reveal:420ms;--p-duration-spin:800ms;--p-ease-standard:cubic-bezier(.2, 0, .38, .9);--p-ease-enter:cubic-bezier(0, 0, .38, .9);--p-ease-linear:linear;}
 </style>
 <style>.ds[data-style="main"]{--p-bp-xs:360px;--p-bp-sm:440px;--p-bp-md:580px;--p-bp-lg:760px;--p-bp-xl:1100px;--p-bp-2xl:1200px;--p-bp-3xl:1250px;--p-cq-xs:130px;--p-cq-sm:210px;--p-cq-md:290px;--p-cq-lg:420px;--p-cq-xl:580px;}
 </style>
@@ -665,6 +665,82 @@ SOFTWARE.
   });
   if (root.__pattovePartsMounted) return;
   root.__pattovePartsMounted = true;
+  const emit = (node, name, detail) => node.dispatchEvent(new CustomEvent('pattove:' + name, {bubbles:true, detail}));
+  // A host claims async work with event.detail.respondWith(promise). No response is never success.
+  root.addEventListener('submit',async event=>{
+    const form=event.target;
+    if(form.matches('[data-calculator]')) {
+      event.preventDefault();if(!form.reportValidity())return;
+      const data=new FormData(form),result=Number(data.get('price'))*Number(data.get('quantity'));
+      form.querySelector('output').textContent=Number.isFinite(result)?new Intl.NumberFormat('ko-KR',{style:'currency',currency:'KRW',maximumFractionDigits:2}).format(result):'금액을 확인하세요.';return;
+    }
+    if(!form.matches('[data-async-form]'))return;
+    event.preventDefault();if(form.dataset.pending||!form.reportValidity())return;
+    const data=Object.fromEntries(new FormData(form)),status=form.querySelector('[role="status"]'),field=form.querySelector('fieldset'),controller=new AbortController();
+    let promise,claimed=false;
+    const detail={kind:form.dataset.asyncForm,values:data,signal:controller.signal,respondWith(value){if(claimed)throw Error('Submission already handled');claimed=true;promise=Promise.resolve(value);},abort:()=>controller.abort()};
+    emit(form,'submit',detail);
+    if(!claimed){status.textContent='요청을 처리할 수 없어요. 잠시 후 다시 시도하세요.';return;}
+    form.dataset.pending='true';field.disabled=true;form.setAttribute('aria-busy','true');status.textContent='처리하고 있어요.';
+    try {await promise;if(!controller.signal.aborted&&form.isConnected)status.textContent=form.dataset.asyncForm==='login'?'로그인했어요.':'저장했어요.';}
+    catch {if(form.isConnected)status.textContent='처리하지 못했어요. 입력한 내용을 유지했으니 다시 시도하세요.';}
+    finally {delete form.dataset.pending;field.disabled=false;form.removeAttribute('aria-busy');}
+  });
+  const comboClose = box => {
+    box.querySelector('[role="listbox"]').hidden = true;
+    const input = box.querySelector('input'); input.setAttribute('aria-expanded','false'); input.removeAttribute('aria-activedescendant');
+    box.querySelectorAll('[role="option"]').forEach(n=>n.setAttribute('aria-selected','false'));
+  };
+  const comboOpen = box => {
+    const input=box.querySelector('input'), query=input.value.toLocaleLowerCase();
+    box.querySelectorAll('[role="option"]').forEach(n=>{n.hidden=!n.dataset.value.toLocaleLowerCase().includes(query);n.setAttribute('aria-selected','false');});
+    const options=[...box.querySelectorAll('[role="option"]')].filter(n=>!n.hidden);
+    box.querySelector('[role="listbox"]').hidden=!options.length;
+    input.setAttribute('aria-expanded',String(!!options.length));input.removeAttribute('aria-activedescendant');
+    box.querySelector('[role="status"]').textContent=options.length?'':'일치하는 항목이 없어요.';
+    return options;
+  };
+  const comboPick = (box, item) => {
+    const input=box.querySelector('input');input.value=item.dataset.value;comboClose(box);
+    input.dispatchEvent(new Event('change',{bubbles:true}));input.focus();
+    emit(box,'select',{value:input.value});
+  };
+  root.addEventListener('input',event=>{const box=event.target.closest('[data-combobox]');if(box&&event.target.matches('input'))comboOpen(box);});
+  root.addEventListener('focusout',event=>{
+    const box=event.target.closest('[data-combobox]');if(box&&!box.contains(event.relatedTarget))comboClose(box);
+    event.target.closest('.ds-tooltip')?.removeAttribute('data-dismissed');
+  });
+  root.addEventListener('pointerdown',event=>{const item=event.target.closest('[data-combobox] [role="option"]');if(item){event.preventDefault();comboPick(item.closest('[data-combobox]'),item);}});
+  root.addEventListener('pointerover',event=>event.target.closest('.ds-tooltip')?.removeAttribute('data-dismissed'));
+  root.addEventListener('keydown',event=>{
+    if(event.key==='Escape')event.target.closest('.ds-tooltip')?.setAttribute('data-dismissed','');
+    const box=event.target.closest('[data-combobox]');if(!box)return;
+    const input=box.querySelector('input');
+    if(event.key==='Escape'||event.key==='Tab'){comboClose(box);return;}
+    if(!['ArrowDown','ArrowUp','Enter'].includes(event.key))return;
+    let options=[...box.querySelectorAll('[role="option"]')].filter(n=>!n.hidden);
+    const active=input.getAttribute('aria-activedescendant'), index=options.findIndex(n=>n.id===active);
+    if(event.key==='Enter'){if(index>=0){event.preventDefault();comboPick(box,options[index]);}return;}
+    event.preventDefault();if(input.getAttribute('aria-expanded')!=='true')options=comboOpen(box);if(!options.length)return;
+    const next=options[(index+(event.key==='ArrowDown'?1:index<0?0:-1)+options.length)%options.length];
+    options.forEach(n=>n.setAttribute('aria-selected',String(n===next)));input.setAttribute('aria-activedescendant',next.id);next.scrollIntoView({block:'nearest'});
+  });
+  root.addEventListener('change',event=>{
+    const input=event.target,box=input.closest('[data-file-upload]');if(!box||input.type!=='file')return;
+    const files=[...input.files],max=Number(box.dataset.maxBytes),accept=input.accept.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+    const invalid=files.find(f=>(max>0&&f.size>max)||(accept.length&&!accept.some(a=>a.startsWith('.')?f.name.toLowerCase().endsWith(a):a.endsWith('/*')?f.type.startsWith(a.slice(0,-1)):f.type===a)));
+    const message=invalid?'파일 형식 또는 크기를 확인하세요.':files.length?files.map(f=>f.name).join(', '):'선택한 파일이 없어요.';
+    input.setCustomValidity(invalid?message:'');input.setAttribute('aria-invalid',String(!!invalid));box.querySelector('[role="status"]').textContent=message;
+    if(!invalid)emit(box,'files',{files});
+  });
+  root.addEventListener('click',event=>{
+    const open=event.target.closest('[data-dialog-open]');
+    if(open){const dialog=document.getElementById(open.dataset.dialogOpen);if(dialog&&!dialog.open){dialog.returnValue='';dialog.showModal();dialog.addEventListener('close',()=>{if(open.isConnected)open.focus();emit(open,'dialogclose',{value:dialog.returnValue});},{once:true});}}
+    const step=event.target.closest('[data-page-step]');
+    if(step){const nav=step.closest('.ds-pagination'),total=Number(nav.dataset.total),page=Math.max(1,Math.min(total,Number(nav.dataset.page)+Number(step.dataset.pageStep)));nav.dataset.page=page;nav.querySelector('[role="status"]').textContent=page+' / '+total;nav.querySelector('[data-page-step="-1"]').disabled=page===1;nav.querySelector('[data-page-step="1"]').disabled=page===total;emit(nav,'pagechange',{page});}
+    const retry=event.target.closest('[data-retry]');if(retry)emit(retry,'retry',{});
+    const choice=event.target.closest('[data-compare-id]');if(choice){const section=choice.closest('.ds-comparison');section.querySelectorAll('[data-compare-id]').forEach(b=>b.setAttribute('aria-pressed',String(b===choice)));section.querySelector('[role="status"]').textContent=choice.dataset.compareName+' 선택됨';emit(section,'choose',{id:choice.dataset.compareId});}
+  });
   function selectTab(tab) {
     const tabs = tab.closest('.ds-tabs');
     tabs.querySelectorAll('[role="tab"]').forEach(item => {

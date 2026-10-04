@@ -39,10 +39,10 @@ async function inspect(page, label) {
     document.querySelectorAll('[data-preview-scene]').forEach(scene => contains(scene.parentElement, scene, 'fitted scene', scene.dataset.previewFit === 'both'));
     const buttons = [...document.querySelectorAll('.overview-actions > button')];
     if (buttons.length && buttons.some(b => Math.abs(b.getBoundingClientRect().top - buttons[0].getBoundingClientRect().top) > 1)) result.push('overview buttons wrap');
-    // Compact controls use a bounded stage; only whole screens and icons need square canvases.
-    document.querySelectorAll('.dict[data-shelf="part"] .dict-thumb').forEach(art => {
+    // Specimen areas keep the requested 1:1 ratio at every viewport width.
+    document.querySelectorAll('.dict .dict-thumb').forEach(art => {
       const r = art.getBoundingClientRect();
-      if (r.height > 200 || r.height < 120) result.push({ name: 'part preview density', height: r.height });
+      if (Math.abs(r.width - r.height) > 1.5) result.push({ name: 'square preview', width: r.width, height: r.height });
     });
     if (document.documentElement.scrollWidth > innerWidth) result.push('page overflow');
     return result;

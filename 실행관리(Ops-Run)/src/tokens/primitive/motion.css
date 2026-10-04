@@ -4,6 +4,10 @@
   --distance-1: 1px;
   --distance-2: 2px;
   --duration-140: 140ms;
+  --duration-180: 180ms;
+  --duration-240: 240ms;
+  --duration-320: 320ms;
+  --duration-420: 420ms;
   --duration-800: 800ms;
   --ease-standard: cubic-bezier(.2, 0, .38, .9);
   --ease-enter: cubic-bezier(0, 0, .38, .9);

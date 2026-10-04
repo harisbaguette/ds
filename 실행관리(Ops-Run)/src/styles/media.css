@@ -1,0 +1,9 @@
+.has-image-error { position:relative; }
+.has-image-error>img { opacity:0; }
+.image-fallback { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:var(--p-space-sm); color:var(--p-muted); font-size:var(--p-text-sm); text-align:center; line-height:var(--p-leading-normal); background:var(--p-high); }
+/* A search thumbnail is too small for words: it keeps the empty well, the result row already names the item. */
+.search-thumb .image-fallback { padding:var(--p-space-2xs); overflow:hidden; color:transparent; }
+.icon-detail-preview .image-fallback { padding-bottom:var(--p-space-4xl); border-radius:inherit; }
+.image-retry { position:absolute; left:50%; top:calc(50% + var(--p-space-md)); transform:translateX(-50%); min-height:var(--p-control-size-sm); padding:var(--p-space-xs) var(--p-space-md); color:var(--p-ink); background:var(--p-bg); border:var(--p-border-width) solid var(--p-control-border); border-radius:var(--p-radius-md); font-size:var(--p-text-body); white-space:nowrap; }
+.image-retry:hover { background:var(--p-surface); }
+.image-retry:active { background:var(--p-hover); box-shadow:var(--p-inset); }

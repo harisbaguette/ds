@@ -70,7 +70,13 @@ export async function exportZip(options) {
     zip.end();await flush();if(!ended)throw Error('Incomplete ZIP');
     await handle.close();handle=null;
     const digest=digestHash.digest('hex'),filename=digest+'.zip';
-    await fs.rename(temp,path.join(exportRoot,filename));
+    // Content-addressed files are immutable. Publishing with a hard link is
+    // atomic and never replaces a ZIP another process may be downloading.
+    try{await fs.link(temp,path.join(exportRoot,filename));}
+    catch(error){
+      if(error.code!=='EEXIST')throw error;
+      if(sha(await fs.readFile(path.join(exportRoot,filename)))!==digest)throw Error('Cached ZIP checksum mismatch');
+    }
     noteCacheFile(exportRoot,filename,total);
     await trimCache(exportRoot,512*1024*1024);
     return {filename,path:path.join(exportRoot,filename),download:'/api/illustrations/exports/'+filename,sha256:digest,bytes:total,items:ids.length};

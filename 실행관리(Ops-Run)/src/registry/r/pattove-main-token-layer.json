@@ -55,7 +55,7 @@
     }
   ],
   "meta": {
-    "version": "0.6.0",
+    "version": "0.7.0",
     "lifecycle": "Trial",
     "item": "token-layer",
     "purpose": "겹치는 층의 앞뒤 순서",

@@ -71,6 +71,7 @@ fs.mkdirSync(out, { recursive: true });
       await checkImages('img.ui-icon');
       await page.screenshot({ path: path.join(out, 'frontend-' + width + '.png') });
       if (width === 375) {
+        await page.goto(origin + '#/dictionary?shelf=part');
         await page.locator('#menu-toggle').click();
         await page.locator('.menu-close').waitFor({ state: 'visible' });
         await page.locator('.menu-close').click();
@@ -84,14 +85,20 @@ fs.mkdirSync(out, { recursive: true });
       await page.goto(origin + '#/dictionary?shelf=icon');
       await page.locator('.page-step').first().waitFor();
       await checkImages('.page-step img');
-      await page.locator('.page-step').last().click();
+      await page.goto(origin + '#/dictionary?shelf=icon&p=99999');
       await page.waitForFunction(() => document.querySelector('.page-step:last-of-type')?.disabled);
       await checkImages('img.ui-icon');
       assert.ok(await page.locator('.dict-entry.is-illustrated').count() > 0);
       await page.locator('.dict-entry.is-illustrated').first().click();
       await page.locator('dialog[open]').waitFor();
       await checkImages('dialog[open] img.ui-icon');
-      assert.equal(await page.locator('dialog[open] a[download]').count(), 2);
+      assert.equal(await page.locator('dialog[open] a[download]').count(), 1);
+      assert.equal(await page.locator('[data-icon-format] option').count(), 2);
+      for (const format of ['png', 'webp']) {
+        await page.locator('[data-icon-format]').selectOption(format);
+        assert.ok((await page.locator('[data-icon-download]').getAttribute('download')).endsWith('.' + format));
+        assert.ok((await page.locator('[data-icon-download]').getAttribute('href')).endsWith('.' + format));
+      }
       await page.keyboard.press('Escape');
     }
     assert.deepEqual(errors, []);

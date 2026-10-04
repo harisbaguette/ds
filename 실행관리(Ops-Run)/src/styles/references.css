@@ -5,6 +5,14 @@
 .reference-caption>* { grid-area:1/1; }
 .element-reference .element-id { color:var(--p-ink); font-family:var(--p-mono-font); letter-spacing:var(--p-tracking-tight); }
 .reference-icon { flex:none; }
+.reference-copy { flex:none; }
+.reference-copy-label { display:grid; }
+.reference-copy-label>span { grid-area:1/1; }
+.reference-copy-label>span:last-child { visibility:hidden; }
+.element-reference[data-copied] .reference-copy-label>span:first-child { visibility:hidden; }
+.element-reference[data-copied] .reference-copy-label>span:last-child { visibility:visible; }
+.element-reference[data-copied] .reference-copy { color:var(--p-success); border-color:var(--p-success-line); background:var(--p-success-soft); }
+.element-reference.reference-compact { align-self:center; padding:0; margin:0 var(--p-space-sm) 0 0; background:none; border:0; box-shadow:none; }
 .ds .reference-icon-check { display:none; }
 .reference-status { color:var(--p-success); font-size:var(--p-text-sm); }
 .reference-status:empty { display:none; }
@@ -19,4 +27,17 @@
 .reference-dialog .ds-input { height:calc(100vh / 2); margin-bottom:var(--p-space-md); font-family:var(--p-mono-font); resize:vertical; }
 .reference-dialog .reference-dismiss { position:absolute; top:var(--p-space-md); right:var(--p-space-md); }
 @media(max-width:760px) { .component-heading>.element-reference { width:100%; } }
+.search-result .reference-compact[data-copied] .reference-status { clip-path:none; width:auto; height:auto; top:100%; left:50%; transform:translateX(-50%); white-space:nowrap; }
+@media(max-width:760px) {
+  .variant-card .reference-compact[data-copied] .reference-status { clip-path:none; width:auto; height:auto; top:100%; left:50%; transform:translateX(-50%); white-space:nowrap; }
+}
 @media(prefers-reduced-motion:reduce) { .element-reference, .element-reference .reference-copy { transition:none; } }
+
+/* Outline actions remain legible at small sizes beside the full-color specimens.
+   The copy mark is two sheets drawn with the icon stroke (12x16, offset by 4px) and centred in the 44px button. */
+.motion-card-copy, :is([data-color-copy],.token-copy) { position:relative; }
+.motion-card-copy .ui-icon, :is([data-color-copy],.token-copy) .ui-icon { display:none !important; }
+.motion-card-copy::before, :is([data-color-copy],.token-copy)::before { content:''; position:absolute; width:var(--p-size-sm); height:var(--p-size-md); border:calc(var(--p-icon-stroke) * var(--p-border-width)) solid currentColor; border-radius:var(--p-radius-xs); top:calc(50% - var(--p-size-xs)); left:calc(50% - var(--p-size-2xs)); }
+.motion-card-copy::after, :is([data-color-copy],.token-copy)::after { content:''; position:absolute; width:var(--p-size-sm); height:var(--p-size-md); border-left:calc(var(--p-icon-stroke) * var(--p-border-width)) solid currentColor; border-top:calc(var(--p-icon-stroke) * var(--p-border-width)) solid currentColor; border-radius:var(--p-radius-xs) 0 0; top:calc(50% - var(--p-size-sm)); left:calc(50% - var(--p-size-xs)); }
+.motion-card-copy[data-copied]::before, :is([data-color-copy],.token-copy)[data-copied]::before { width:var(--p-size-xs); height:var(--p-size-md); border:0; border-right:var(--p-border-width-strong) solid var(--p-success); border-bottom:var(--p-border-width-strong) solid var(--p-success); border-radius:0; transform:rotate(45deg); top:calc(50% - var(--p-size-xs) - var(--p-space-3xs)); left:calc(50% - var(--p-size-2xs)); }
+.motion-card-copy[data-copied]::after, :is([data-color-copy],.token-copy)[data-copied]::after { display:none; }

@@ -1,15 +1,96 @@
 {
-  "version": "0.6.0",
-  "revision": "8f469794f7d0d9dc44dc13d7ae3449831618b896cabd0ed9a06b7ef5476d75f5",
+  "version": "0.7.0",
+  "revision": "fe9bb5d77ad5e032fce12588293766fd511eaba5dfb2f890371a997d5ee5e474",
   "sources": [
-    "src/system/react/admin-records.jsx",
-    "src/system/react/table-toolbar.jsx",
-    "src/system/react/table-pagination.jsx",
-    "src/system/admin.js",
-    "src/system/react/data-table.jsx",
-    "src/system/react/record-editor.jsx",
-    "src/system/react/admin-shell.jsx",
+    "src/system/react/accordion.jsx",
+    "src/system/react/action-bar.jsx",
+    "src/system/react/action-row.jsx",
     "src/system/react/admin-page.jsx",
+    "src/system/react/admin-records.jsx",
+    "src/system/react/admin-shell.jsx",
+    "src/system/react/article-page.jsx",
+    "src/system/react/async-form.jsx",
+    "src/system/react/avatar.jsx",
+    "src/system/react/badge.jsx",
+    "src/system/react/bottom-nav.jsx",
+    "src/system/react/breadcrumb.jsx",
+    "src/system/react/button.jsx",
+    "src/system/react/card.jsx",
+    "src/system/react/check-card.jsx",
+    "src/system/react/check-list.jsx",
+    "src/system/react/checkbox.jsx",
+    "src/system/react/clear-input.jsx",
+    "src/system/react/combobox.jsx",
+    "src/system/react/comparison.jsx",
+    "src/system/react/confirm-row.jsx",
+    "src/system/react/confirmation-dialog.jsx",
+    "src/system/react/count-badge.jsx",
+    "src/system/react/data-table.jsx",
+    "src/system/react/date-range.jsx",
+    "src/system/react/dialog.jsx",
+    "src/system/react/divider.jsx",
+    "src/system/react/drawer.jsx",
+    "src/system/react/empty-state.jsx",
+    "src/system/react/error-state.jsx",
+    "src/system/react/featured-results.jsx",
+    "src/system/react/field.jsx",
+    "src/system/react/file-upload.jsx",
+    "src/system/react/filter-chip-row.jsx",
+    "src/system/react/filter-chip.jsx",
+    "src/system/react/icon-button.jsx",
+    "src/system/react/icon-label.jsx",
+    "src/system/react/icon.jsx",
+    "src/system/react/inline-form.jsx",
+    "src/system/react/input-result.jsx",
+    "src/system/react/input.jsx",
+    "src/system/react/list-card.jsx",
+    "src/system/react/login-form.jsx",
+    "src/system/react/media-card.jsx",
+    "src/system/react/notice.jsx",
+    "src/system/react/offline-state.jsx",
+    "src/system/react/page.jsx",
+    "src/system/react/pagination.jsx",
+    "src/system/react/password-input.jsx",
+    "src/system/react/people-picker.jsx",
+    "src/system/react/popover.jsx",
+    "src/system/react/progress-bar.jsx",
+    "src/system/react/progress-ring.jsx",
+    "src/system/react/radio-card.jsx",
+    "src/system/react/radio-list.jsx",
+    "src/system/react/radio.jsx",
+    "src/system/react/record-editor.jsx",
+    "src/system/react/result-grid.jsx",
+    "src/system/react/result-list.jsx",
+    "src/system/react/safe-link.jsx",
+    "src/system/react/search-bar.jsx",
+    "src/system/react/search-form.jsx",
+    "src/system/react/segmented-button.jsx",
+    "src/system/react/select-all-list.jsx",
+    "src/system/react/select.jsx",
+    "src/system/react/settings-form.jsx",
+    "src/system/react/side-nav.jsx",
+    "src/system/react/skeleton.jsx",
+    "src/system/react/spinner.jsx",
+    "src/system/react/stat-row.jsx",
+    "src/system/react/status-dot.jsx",
+    "src/system/react/step-bar.jsx",
+    "src/system/react/stepper.jsx",
+    "src/system/react/switch-list.jsx",
+    "src/system/react/switch.jsx",
+    "src/system/react/table-pagination.jsx",
+    "src/system/react/table-toolbar.jsx",
+    "src/system/react/tabs.jsx",
+    "src/system/react/template.jsx",
+    "src/system/react/text-divider.jsx",
+    "src/system/react/textarea.jsx",
+    "src/system/react/toast.jsx",
+    "src/system/react/tooltip.jsx",
+    "src/system/react/ui-icon-close.jsx",
+    "src/system/react/ui-icon-image.jsx",
+    "src/system/react/ui-icon-minus.jsx",
+    "src/system/react/ui-icon-plus.jsx",
+    "src/system/react/unit-input.jsx",
+    "src/system/admin.js",
     "src/system/parts.js",
     "src/system/parts.css",
     "src/system/behaviors.js",
@@ -138,7 +219,7 @@
       ],
       "entry": "DAT-05",
       "behavior": true,
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -227,9 +308,8 @@
         "token-container",
         "token-text"
       ],
-      "entry": "ACT-07",
       "behavior": true,
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -301,7 +381,7 @@
         "token-border",
         "token-stroke"
       ],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -367,7 +447,7 @@
         "token-text"
       ],
       "behavior": true,
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -432,7 +512,7 @@
       "keywords": "색 색상 컬러 배경 글자색 강조 color",
       "deps": [],
       "entry": "TOK-01",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -479,7 +559,7 @@
       "deps": [
         "token-color"
       ],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -529,7 +609,7 @@
         "token-leading"
       ],
       "entry": "TOK-62",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -574,7 +654,7 @@
       "layer": "Token",
       "keywords": "글자 크기 본문 제목 크기 font-size text",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -619,7 +699,7 @@
       "layer": "Token",
       "keywords": "굵기 글자 두께 font-weight weight",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -664,7 +744,7 @@
       "layer": "Token",
       "keywords": "줄 간격 행간 line-height leading",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -709,7 +789,7 @@
       "layer": "Token",
       "keywords": "자간 글자 사이 letter-spacing tracking",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -755,7 +835,7 @@
       "keywords": "간격 여백 거리 spacing space",
       "deps": [],
       "entry": "TOK-76",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -800,7 +880,7 @@
       "layer": "Token",
       "keywords": "크기 너비 높이 아이콘 조작 크기 size",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -845,7 +925,7 @@
       "layer": "Token",
       "keywords": "너비 폭 컨테이너 읽기 폭 container measure",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -891,7 +971,7 @@
       "keywords": "모서리 둥글기 반경 radius",
       "deps": [],
       "entry": "TOK-91",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -936,7 +1016,7 @@
       "layer": "Token",
       "keywords": "테두리 선 두께 초점 링 border outline",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -981,7 +1061,7 @@
       "layer": "Token",
       "keywords": "선 모양 점선 파선 아이콘 선 굵기 stroke dashed dotted",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1027,7 +1107,7 @@
       "keywords": "그림자 입체 층 깊이 shadow elevation",
       "deps": [],
       "entry": "TOK-95",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1072,7 +1152,7 @@
       "layer": "Token",
       "keywords": "흐림 유리 블러 backdrop blur",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1117,7 +1197,7 @@
       "layer": "Token",
       "keywords": "불투명도 투명도 흐리게 opacity",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1162,7 +1242,7 @@
       "layer": "Token",
       "keywords": "비율 가로세로 비 aspect ratio",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1208,7 +1288,7 @@
       "keywords": "움직임 시간 전환 애니메이션 가속 motion duration easing",
       "deps": [],
       "entry": "TOK-113",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1253,7 +1333,7 @@
       "layer": "Token",
       "keywords": "쌓임 순서 겹침 z-index layer",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1298,7 +1378,7 @@
       "layer": "Token",
       "keywords": "화면 폭 기준 반응형 분기 breakpoint media query",
       "deps": [],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1344,7 +1424,7 @@
       "keywords": "검색 닫기 화살표 일러스트 WebP icon",
       "deps": [],
       "english": "Icon",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1554,7 +1634,7 @@
         "token-size"
       ],
       "english": "Label",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1629,7 +1709,7 @@
         "token-border"
       ],
       "english": "Divider",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1683,7 +1763,7 @@
         "token-border"
       ],
       "english": "Divider with title",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1737,7 +1817,7 @@
         "token-radius"
       ],
       "english": "Status light",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1792,7 +1872,7 @@
         "token-border"
       ],
       "entry": "SOC-01",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1855,7 +1935,7 @@
         "token-motion"
       ],
       "entry": "ACT-01",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2041,7 +2121,7 @@
         "token-space"
       ],
       "entry": "ATM-08",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2219,7 +2299,7 @@
         "token-layer"
       ],
       "entry": "NAV-07",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2298,13 +2378,14 @@
         "token-opacity"
       ],
       "english": "Text field",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
         "React"
       ],
       "behavior": false,
+      "entry": "INP-02",
       "purpose": "한 줄 값 입력",
       "compatibility": "label과 id를 연결. 오류에는 설명과 aria-invalid를 함께 사용",
       "inputs": [
@@ -2441,7 +2522,7 @@
         "token-shadow"
       ],
       "entry": "INP-92",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2524,7 +2605,7 @@
         "token-shadow"
       ],
       "entry": "INP-34",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2608,7 +2689,7 @@
         "token-shadow"
       ],
       "entry": "INP-10",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2691,7 +2772,7 @@
         "token-shadow"
       ],
       "entry": "INP-15",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2771,7 +2852,7 @@
         "token-border"
       ],
       "entry": "INP-47",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2880,7 +2961,7 @@
         "token-shadow"
       ],
       "entry": "INP-11",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2975,7 +3056,7 @@
         "token-breakpoint"
       ],
       "entry": "ATM-89",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3039,12 +3120,13 @@
       ],
       "behavior": true,
       "english": "Checkbox",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
         "React"
       ],
+      "entry": "INP-04",
       "purpose": "여러 개 중 선택",
       "compatibility": "연결된 label을 조작 영역으로 유지",
       "inputs": [
@@ -3128,7 +3210,7 @@
       ],
       "behavior": true,
       "english": "Radio button",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3212,12 +3294,13 @@
       ],
       "behavior": true,
       "english": "Switch",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
         "React"
       ],
+      "entry": "INP-08",
       "purpose": "설정을 켜고 끄기",
       "compatibility": "동작 이름을 label로 제공",
       "inputs": [
@@ -3290,7 +3373,7 @@
         "token-border"
       ],
       "entry": "INP-77",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3372,7 +3455,7 @@
         "token-border"
       ],
       "entry": "INP-78",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3454,7 +3537,7 @@
         "token-border"
       ],
       "entry": "ACT-36",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3538,7 +3621,7 @@
         "token-border"
       ],
       "entry": "STA-01",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3656,7 +3739,7 @@
         "token-border"
       ],
       "entry": "NAV-25",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3734,7 +3817,7 @@
         "token-shadow"
       ],
       "entry": "NAV-06",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3866,7 +3949,7 @@
         "token-layer"
       ],
       "entry": "NAV-05",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3995,7 +4078,7 @@
         "token-shadow"
       ],
       "entry": "STA-02",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4053,7 +4136,7 @@
         "token-shadow"
       ],
       "entry": "STA-03",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4114,7 +4197,7 @@
         "token-shadow"
       ],
       "english": "Progress bar",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4176,7 +4259,7 @@
         "token-aspect"
       ],
       "entry": "STA-49",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4231,7 +4314,7 @@
         "token-size"
       ],
       "entry": "ATM-123",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4294,7 +4377,7 @@
         "token-shadow"
       ],
       "entry": "LAY-15",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4427,7 +4510,7 @@
         "token-aspect"
       ],
       "english": "Horizontal card",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4487,7 +4570,7 @@
         "token-opacity"
       ],
       "english": "Card with cover",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4547,7 +4630,7 @@
         "token-size"
       ],
       "entry": "ACT-03",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4603,7 +4686,7 @@
         "token-space"
       ],
       "english": "Confirm / dismiss buttons",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4660,7 +4743,7 @@
         "token-border"
       ],
       "entry": "ACT-49",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4714,7 +4797,7 @@
         "token-space"
       ],
       "entry": "INP-67",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4773,7 +4856,7 @@
         "token-border"
       ],
       "entry": "ATM-153",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4848,7 +4931,7 @@
         "token-border"
       ],
       "english": "Check all",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4931,13 +5014,14 @@
         "token-border"
       ],
       "english": "Radio group",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
         "React"
       ],
       "behavior": false,
+      "entry": "INP-05",
       "purpose": "설정 화면에서 하나 고르기",
       "compatibility": "같은 그룹은 name 공유. 줄 전체가 누르는 칸",
       "inputs": [
@@ -5006,7 +5090,7 @@
         "token-border"
       ],
       "entry": "ATM-203",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5079,7 +5163,7 @@
       ],
       "entry": "DAT-01",
       "behavior": true,
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5135,7 +5219,7 @@
         "token-size"
       ],
       "entry": "ATM-120",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5193,7 +5277,7 @@
         "token-space"
       ],
       "entry": "LAY-49",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5251,7 +5335,7 @@
         "token-border"
       ],
       "entry": "LAY-27",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5311,7 +5395,7 @@
         "token-space"
       ],
       "entry": "LAY-12",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5375,7 +5459,7 @@
       ],
       "entry": "INP-69",
       "behavior": true,
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5436,7 +5520,7 @@
       ],
       "entry": "STA-06",
       "behavior": true,
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5497,7 +5581,7 @@
         "token-border"
       ],
       "entry": "DAT-16",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5558,7 +5642,7 @@
         "token-border",
         "token-stroke"
       ],
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5693,7 +5777,7 @@
         "token-border"
       ],
       "behavior": true,
-      "version": "0.6.0",
+      "version": "0.7.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5801,6 +5885,1380 @@
         "suite": "tests/system-audit.cjs",
         "evidence": "test-results/system-audit/results.json"
       }
+    },
+    {
+      "id": "settings-form",
+      "name": "프로필 설정",
+      "english": "SettingsForm",
+      "reactExport": "SettingsForm",
+      "section": "composition",
+      "layer": "Module",
+      "browse": {
+        "shelf": "block",
+        "kind": "모듈",
+        "code": "ACC",
+        "fit": true
+      },
+      "keywords": "SettingsForm 프로필을 수정하고 저장 실패 후 재시도",
+      "deps": [
+        "field",
+        "textarea",
+        "select",
+        "switch",
+        "button",
+        "token-color",
+        "token-text",
+        "token-space",
+        "token-container"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "프로필을 수정하고 저장 실패 후 재시도",
+      "compatibility": "실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",
+      "inputs": [
+        "title",
+        "name",
+        "memo"
+      ],
+      "events": [
+        "pattove:submit"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "settings-form"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/settings-form.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "login-form",
+      "name": "로그인",
+      "english": "LoginForm",
+      "reactExport": "LoginForm",
+      "section": "composition",
+      "layer": "Module",
+      "browse": {
+        "shelf": "block",
+        "kind": "모듈",
+        "code": "ACC",
+        "fit": true
+      },
+      "entry": "ACC-01",
+      "keywords": "LoginForm 인증 서비스에 연결하는 로그인 폼",
+      "deps": [
+        "field",
+        "button",
+        "settings-form"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "인증 서비스에 연결하는 로그인 폼",
+      "compatibility": "실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",
+      "inputs": [
+        "title"
+      ],
+      "events": [
+        "pattove:submit"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "login-form"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/login-form.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "input-result",
+      "name": "입력과 계산 결과",
+      "english": "InputResult",
+      "reactExport": "InputResult",
+      "section": "composition",
+      "layer": "Module",
+      "browse": {
+        "shelf": "block",
+        "kind": "모듈",
+        "code": "TOO",
+        "fit": true
+      },
+      "keywords": "InputResult 입력값을 검증하고 계산 결과 표시",
+      "deps": [
+        "field",
+        "button",
+        "settings-form",
+        "token-text",
+        "token-weight"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "입력값을 검증하고 계산 결과 표시",
+      "compatibility": "실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",
+      "inputs": [
+        "title"
+      ],
+      "events": [
+        "submit"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "input-result"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/input-result.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "comparison",
+      "name": "비교와 선택",
+      "english": "Comparison",
+      "reactExport": "Comparison",
+      "section": "composition",
+      "layer": "Module",
+      "browse": {
+        "shelf": "block",
+        "kind": "모듈",
+        "code": "COM",
+        "fit": true
+      },
+      "keywords": "Comparison 대상의 차이를 비교한 뒤 하나 선택",
+      "deps": [
+        "button",
+        "token-color",
+        "token-space",
+        "token-container",
+        "token-radius",
+        "token-border"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "대상의 차이를 비교한 뒤 하나 선택",
+      "compatibility": "실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",
+      "inputs": [
+        "title",
+        "items"
+      ],
+      "events": [
+        "pattove:choose"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "comparison"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/comparison.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "article-page",
+      "name": "본문과 목차",
+      "english": "ArticlePage",
+      "reactExport": "ArticlePage",
+      "section": "page",
+      "layer": "Page",
+      "browse": {
+        "shelf": "template",
+        "kind": "페이지",
+        "code": "BLG",
+        "fit": true
+      },
+      "keywords": "ArticlePage 목차에서 긴 본문으로 이동해 읽기",
+      "deps": [
+        "token-color",
+        "token-text",
+        "token-leading",
+        "token-space",
+        "token-size",
+        "token-container"
+      ],
+      "behavior": false,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "목차에서 긴 본문으로 이동해 읽기",
+      "compatibility": "실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",
+      "inputs": [
+        "title",
+        "sections"
+      ],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "article-page"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/article-page.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "textarea",
+      "name": "여러 줄 입력",
+      "section": "fields",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "INP",
+        "fit": false
+      },
+      "entry": "INP-03",
+      "english": "Textarea",
+      "reactExport": "Textarea",
+      "keywords": "Textarea 긴 글을 입력하고 수정",
+      "deps": [
+        "input",
+        "field",
+        "token-space"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "긴 글을 입력하고 수정",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "label",
+        "value",
+        "name",
+        "help",
+        "error",
+        "required",
+        "disabled"
+      ],
+      "events": [
+        "input",
+        "change"
+      ],
+      "controls": [
+        {
+          "key": "state",
+          "label": "상태",
+          "values": [
+            [
+              "",
+              "기본"
+            ],
+            [
+              "disabled",
+              "사용 불가"
+            ],
+            [
+              "error",
+              "오류"
+            ]
+          ]
+        }
+      ],
+      "gallery": null,
+      "css": [
+        "textarea"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/textarea.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "select",
+      "name": "선택 상자",
+      "section": "fields",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "INP",
+        "fit": false
+      },
+      "entry": "INP-06",
+      "english": "Select",
+      "reactExport": "Select",
+      "keywords": "Select 정해진 값 중 하나 선택",
+      "deps": [
+        "input",
+        "field",
+        "token-size"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "정해진 값 중 하나 선택",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "label",
+        "items",
+        "value",
+        "name",
+        "required",
+        "error",
+        "disabled"
+      ],
+      "events": [
+        "change"
+      ],
+      "controls": [
+        {
+          "key": "state",
+          "label": "상태",
+          "values": [
+            [
+              "",
+              "기본"
+            ],
+            [
+              "disabled",
+              "사용 불가"
+            ],
+            [
+              "error",
+              "오류"
+            ]
+          ]
+        }
+      ],
+      "gallery": null,
+      "css": [
+        "select"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/select.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "combobox",
+      "name": "검색 가능한 선택",
+      "section": "fields",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "INP",
+        "fit": false
+      },
+      "entry": "INP-07",
+      "english": "Combobox",
+      "reactExport": "Combobox",
+      "keywords": "Combobox 입력으로 후보를 좁혀 선택",
+      "deps": [
+        "input",
+        "field",
+        "token-color",
+        "token-space",
+        "token-size",
+        "token-radius",
+        "token-border",
+        "token-layer"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "입력으로 후보를 좁혀 선택",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "label",
+        "items",
+        "value",
+        "name",
+        "disabled"
+      ],
+      "events": [
+        "pattove:select",
+        "change"
+      ],
+      "controls": [
+        {
+          "key": "state",
+          "label": "상태",
+          "values": [
+            [
+              "",
+              "기본"
+            ],
+            [
+              "disabled",
+              "사용 불가"
+            ]
+          ]
+        }
+      ],
+      "gallery": null,
+      "css": [
+        "combobox"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/combobox.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "file-upload",
+      "name": "파일 선택",
+      "section": "fields",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "INP",
+        "fit": false
+      },
+      "entry": "INP-12",
+      "english": "FileUpload",
+      "reactExport": "FileUpload",
+      "keywords": "FileUpload 파일 형식과 크기를 확인하고 전달",
+      "deps": [
+        "field",
+        "token-color",
+        "token-space",
+        "token-size",
+        "token-radius",
+        "token-border"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "파일 형식과 크기를 확인하고 전달",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "label",
+        "accept",
+        "multiple",
+        "maxBytes",
+        "disabled"
+      ],
+      "events": [
+        "pattove:files"
+      ],
+      "controls": [
+        {
+          "key": "state",
+          "label": "상태",
+          "values": [
+            [
+              "",
+              "기본"
+            ],
+            [
+              "disabled",
+              "사용 불가"
+            ]
+          ]
+        }
+      ],
+      "gallery": null,
+      "css": [
+        "file-upload"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/file-upload.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "dialog",
+      "name": "대화상자",
+      "section": "feedback",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "ACT",
+        "fit": false
+      },
+      "entry": "ACT-07",
+      "english": "Dialog",
+      "reactExport": "Dialog",
+      "keywords": "Dialog 배경을 잠그고 내용을 확인",
+      "deps": [
+        "button",
+        "confirm-row",
+        "token-color",
+        "token-text",
+        "token-space",
+        "token-container",
+        "token-radius",
+        "token-border"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "배경을 잠그고 내용을 확인",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "title",
+        "body",
+        "trigger",
+        "confirmLabel"
+      ],
+      "events": [
+        "pattove:dialogclose"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "dialog"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/dialog.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "confirmation-dialog",
+      "name": "실행 전 확인",
+      "section": "feedback",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "ACT",
+        "fit": false
+      },
+      "entry": "ACT-08",
+      "english": "ConfirmationDialog",
+      "reactExport": "ConfirmationDialog",
+      "keywords": "ConfirmationDialog 취소 가능한 확인 뒤 행동 실행",
+      "deps": [
+        "dialog"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "취소 가능한 확인 뒤 행동 실행",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "title",
+        "body",
+        "trigger",
+        "confirmLabel"
+      ],
+      "events": [
+        "pattove:dialogclose"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "confirmation-dialog"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/confirmation-dialog.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "drawer",
+      "name": "옆에서 열리는 창",
+      "section": "navigation",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "ACT",
+        "fit": false
+      },
+      "english": "Drawer",
+      "reactExport": "Drawer",
+      "keywords": "Drawer 보조 작업을 별도 창에서 처리",
+      "deps": [
+        "dialog"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "보조 작업을 별도 창에서 처리",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "title",
+        "body",
+        "trigger"
+      ],
+      "events": [
+        "pattove:dialogclose"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "drawer"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/drawer.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "popover",
+      "name": "팝오버",
+      "section": "feedback",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "ACT",
+        "fit": false
+      },
+      "entry": "ACT-09",
+      "english": "Popover",
+      "reactExport": "Popover",
+      "keywords": "Popover 필요한 부가 정보를 열어 확인",
+      "deps": [
+        "button",
+        "token-color",
+        "token-space",
+        "token-container",
+        "token-radius",
+        "token-border"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "필요한 부가 정보를 열어 확인",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "label",
+        "text"
+      ],
+      "events": [
+        "toggle"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "popover"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/popover.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "tooltip",
+      "name": "툴팁",
+      "section": "feedback",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "ACT",
+        "fit": false
+      },
+      "entry": "ACT-10",
+      "english": "Tooltip",
+      "reactExport": "Tooltip",
+      "keywords": "Tooltip 행동의 짧은 부가 설명",
+      "deps": [
+        "button",
+        "token-color",
+        "token-text",
+        "token-space",
+        "token-container",
+        "token-radius",
+        "token-layer"
+      ],
+      "behavior": false,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "행동의 짧은 부가 설명",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "label",
+        "text"
+      ],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "tooltip"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/tooltip.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "accordion",
+      "name": "접고 펼치기",
+      "section": "navigation",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "NAV",
+        "fit": true
+      },
+      "english": "Accordion",
+      "reactExport": "Accordion",
+      "keywords": "Accordion 필요한 설명을 선택해서 읽기",
+      "deps": [
+        "token-color",
+        "token-space",
+        "token-size",
+        "token-border"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "필요한 설명을 선택해서 읽기",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "items"
+      ],
+      "events": [
+        "toggle"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "accordion"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/accordion.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "breadcrumb",
+      "name": "현재 위치 경로",
+      "section": "navigation",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "NAV",
+        "fit": false
+      },
+      "entry": "NAV-08",
+      "english": "Breadcrumb",
+      "reactExport": "Breadcrumb",
+      "keywords": "Breadcrumb 상위 위치로 돌아가기",
+      "deps": [
+        "token-color",
+        "token-space",
+        "token-size"
+      ],
+      "behavior": false,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "상위 위치로 돌아가기",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "items"
+      ],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "breadcrumb"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/breadcrumb.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "pagination",
+      "name": "페이지 이동",
+      "section": "navigation",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "NAV",
+        "fit": false
+      },
+      "entry": "NAV-10",
+      "english": "Pagination",
+      "reactExport": "Pagination",
+      "keywords": "Pagination 결과를 쪽 단위로 탐색",
+      "deps": [
+        "button",
+        "token-space"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "결과를 쪽 단위로 탐색",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "page",
+        "total"
+      ],
+      "events": [
+        "pattove:pagechange"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "pagination"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/pagination.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "side-nav",
+      "name": "사이드 탐색",
+      "section": "navigation",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "NAV",
+        "fit": true
+      },
+      "english": "SideNav",
+      "reactExport": "SideNav",
+      "keywords": "SideNav 주요 작업 화면 사이 이동",
+      "deps": [
+        "token-color",
+        "token-space",
+        "token-size",
+        "token-radius"
+      ],
+      "behavior": false,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "주요 작업 화면 사이 이동",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "label",
+        "items",
+        "current"
+      ],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "side-nav"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/side-nav.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "spinner",
+      "name": "로딩 표시",
+      "section": "feedback",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "STA",
+        "fit": false
+      },
+      "english": "Spinner",
+      "reactExport": "Spinner",
+      "keywords": "Spinner 진행 중인 작업을 알림",
+      "deps": [
+        "button",
+        "token-space"
+      ],
+      "behavior": false,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "진행 중인 작업을 알림",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "label"
+      ],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "spinner"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/spinner.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "skeleton",
+      "name": "로딩 자리 표시",
+      "section": "feedback",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "STA",
+        "fit": true
+      },
+      "english": "Skeleton",
+      "reactExport": "Skeleton",
+      "keywords": "Skeleton 불러올 콘텐츠 위치를 표시",
+      "deps": [
+        "token-color",
+        "token-space",
+        "token-size",
+        "token-radius"
+      ],
+      "behavior": false,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "불러올 콘텐츠 위치를 표시",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "label"
+      ],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "skeleton"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/skeleton.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "error-state",
+      "name": "오류와 재시도",
+      "section": "feedback",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "STA",
+        "fit": false
+      },
+      "english": "ErrorState",
+      "reactExport": "ErrorState",
+      "keywords": "ErrorState 실패 원인과 재시도 행동 제공",
+      "deps": [
+        "button",
+        "token-color",
+        "token-space",
+        "token-radius",
+        "token-border"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "실패 원인과 재시도 행동 제공",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "title",
+        "message",
+        "action"
+      ],
+      "events": [
+        "pattove:retry"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "error-state"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/error-state.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "offline-state",
+      "name": "연결 끊김 안내",
+      "section": "feedback",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "STA",
+        "fit": false
+      },
+      "english": "OfflineState",
+      "reactExport": "OfflineState",
+      "keywords": "OfflineState 연결을 회복하고 다시 시도",
+      "deps": [
+        "error-state",
+        "token-color"
+      ],
+      "behavior": true,
+      "version": "0.7.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "연결을 회복하고 다시 시도",
+      "compatibility": "HTML은 renderItem의 options로 콘텐츠를 전달합니다. React는 명명된 props를 사용합니다. 서버 작업은 이벤트·콜백으로 연결하고 실패 시 입력을 보존합니다.",
+      "inputs": [
+        "title",
+        "message",
+        "action"
+      ],
+      "events": [
+        "pattove:retry"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "offline-state"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/offline-state.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
     }
   ],
   "patterns": [
@@ -5837,6 +7295,78 @@
         "검색과 필터를 바꾸면 첫 쪽으로 돌아갑니다.",
         "저장이 실패하면 입력을 유지하고 다시 시도합니다.",
         "저장 결과가 확인된 뒤 목록을 갱신하고 원래 위치로 초점을 돌립니다."
+      ]
+    },
+    {
+      "id": "settings-form",
+      "name": "프로필 설정",
+      "layer": "Pattern",
+      "items": [
+        "settings-form",
+        "field",
+        "textarea",
+        "select",
+        "switch",
+        "button"
+      ],
+      "rules": [
+        "프로필을 수정하고 저장 실패 후 재시도",
+        "실제 콘텐츠와 실패·복구 상태를 확인합니다."
+      ]
+    },
+    {
+      "id": "login-form",
+      "name": "로그인",
+      "layer": "Pattern",
+      "items": [
+        "login-form",
+        "field",
+        "button",
+        "settings-form"
+      ],
+      "rules": [
+        "인증 서비스에 연결하는 로그인 폼",
+        "실제 콘텐츠와 실패·복구 상태를 확인합니다."
+      ]
+    },
+    {
+      "id": "input-result",
+      "name": "입력과 계산 결과",
+      "layer": "Pattern",
+      "items": [
+        "input-result",
+        "field",
+        "button",
+        "settings-form"
+      ],
+      "rules": [
+        "입력값을 검증하고 계산 결과 표시",
+        "실제 콘텐츠와 실패·복구 상태를 확인합니다."
+      ]
+    },
+    {
+      "id": "comparison",
+      "name": "비교와 선택",
+      "layer": "Pattern",
+      "items": [
+        "comparison",
+        "button"
+      ],
+      "rules": [
+        "대상의 차이를 비교한 뒤 하나 선택",
+        "실제 콘텐츠와 실패·복구 상태를 확인합니다."
+      ]
+    },
+    {
+      "id": "article-page",
+      "name": "본문과 목차",
+      "layer": "Pattern",
+      "items": [
+        "article-page"
+      ],
+      "rules": [
+        "목차에서 긴 본문으로 이동해 읽기",
+        "실제 콘텐츠와 실패·복구 상태를 확인합니다."
       ]
     }
   ]

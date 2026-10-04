@@ -58,7 +58,7 @@
     "http://127.0.0.1:4173/src/registry/r/pattove-fonts.json"
   ],
   "meta": {
-    "version": "0.6.0",
+    "version": "0.7.0",
     "lifecycle": "Trial",
     "item": "token-typography",
     "dictionary": "TOK-62",

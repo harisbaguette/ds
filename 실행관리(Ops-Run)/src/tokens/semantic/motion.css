@@ -1,9 +1,13 @@
-/* Layer 2 · semantic · motion. --p-duration is the one state-change time (original name); spin is one turn of the loading spinner; the easing curves follow Carbon; rise-* is the hover lift distance. */
+/* Layer 2 · semantic · motion. State feedback, entrance, exit, layout, reveal and spinner timing; rise-* is hover travel. */
 :root,
 .theme-main {
   --p-rise-sm: var(--distance-1);
   --p-rise-md: var(--distance-2);
   --p-duration: var(--duration-140);
+  --p-duration-enter: var(--duration-240);
+  --p-duration-exit: var(--duration-180);
+  --p-duration-layout: var(--duration-320);
+  --p-duration-reveal: var(--duration-420);
   --p-duration-spin: var(--duration-800);
   --p-ease-standard: var(--ease-standard);
   --p-ease-enter: var(--ease-enter);

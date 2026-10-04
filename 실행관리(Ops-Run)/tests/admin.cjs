@@ -177,7 +177,7 @@ export default function Page(){return <main className="ds" data-style="main" sty
           for(const width of [320,375,768,1440]){await page.setViewportSize({width,height:900});check(`React ${width}px 문서 넘침 없음`,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));}
           await page.setViewportSize({width:375,height:900});await page.screenshot({path:path.join(out,'react-mobile.png'),fullPage:true});
           await page.locator('#products [data-record-edit]').click();await page.screenshot({path:path.join(out,'react-editor-mobile.png')});
-          await page.goto('http://127.0.0.1:4173/#/system?detail=admin-page');await page.locator('.component-page[data-component="admin-page"]').waitFor();await page.getByText('가져다 쓰기 · HTML / React',{exact:true}).click();check('실제 상세 화면에서 배포 경로 제공',await page.getByRole('link',{name:'단독 HTML 다운로드'}).isVisible());
+          await page.goto('http://127.0.0.1:4173/#/system?detail=admin-page');await page.locator('.component-page[data-component="admin-page"]').waitFor();check('상세 화면에는 설치·다운로드·사용 조건 칸이 없음',await page.locator('.component-install, main a[download]').count()===0&&!(await page.locator('main').innerText()).toLowerCase().includes('shadcn'));
         }
       } finally { await browser.close(); }
     }

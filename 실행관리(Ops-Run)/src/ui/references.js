@@ -29,7 +29,7 @@
     const ref = resolve(id);
     if (!ref) throw new Error('알 수 없는 고유 ID: ' + id);
     const { item, shape, type } = ref;
-    if (type === 'motion') return { ...window.Pattove.motionUI.payload(item), url:absolute('#/motion?detail=' + item.id) };
+    if (type === 'motion') return { ...window.Pattove.motionUI.payload(item,['html','react','next'].includes(state.copyTarget)?state.copyTarget:undefined), url:absolute('#/motion?detail=' + item.id) };
     const style = styles.get(type === 'style' ? item.id : state.preview || state.style || 'main');
     const result = {
       system: 'Pattove', systemVersion: registry.version, sourceRoot: '실행관리(Ops-Run)', id,
@@ -64,7 +64,7 @@
     } else {
       const chapter = library.categories.find(category => category.id === item.category);
       const referenceGlyph = glyphs.has(item.id);
-      const guideline = item.category === 'ICO' && item.kind === '기준';
+      const guideline = item.kind === '기준';
       Object.assign(result, {
         status: item.art ? 'asset-ready' : guideline ? 'guideline' : 'not-implemented',
         term: item.term, kind: item.kind, purpose: item.usage || item.examples,
@@ -75,8 +75,13 @@
           mcp: { server:'pattove-illustrations', tools:['search_illustrations','preview_illustration','export_illustrations'] } }),
         ...(item.glyph && { referenceGlyphs: item.glyph }),
         url: absolute(route(item.shelf ? 'dictionary' : 'components', { ...(item.shelf && { shelf: item.shelf }), detail: item.id })),
-        instructions: item.art ? 'assets의 완성된 이미지 파일을 그대로 사용하세요. referenceGlyphs는 참고 그림이며 완성 자산을 대신하지 않습니다.' : referenceGlyph ? '이 아이콘의 일러스트는 아직 제작 중입니다. referenceGlyphs는 참고용이며 SVG로 대신하지 마세요.' : guideline ? '이 항목은 아이콘 사용 기준입니다. purpose와 source의 규칙을 적용하세요.' : '아직 구현되지 않은 사전 항목입니다. 기존 완성 부품처럼 사용하지 말고, 위 정의와 원문을 확인해 구현이 필요하다고 알려 주세요.'
+        instructions: item.art ? 'assets의 완성된 이미지 파일을 그대로 사용하세요. referenceGlyphs는 참고 그림이며 완성 자산을 대신하지 않습니다.' : referenceGlyph ? '이 아이콘의 일러스트는 아직 제작 중입니다. referenceGlyphs는 참고용이며 SVG로 대신하지 마세요.' : guideline ? '이 항목은 디자인 사용 기준입니다. purpose와 source의 규칙을 적용하세요.' : '아직 구현되지 않은 사전 항목입니다. 기존 완성 부품처럼 사용하지 말고, 위 정의와 원문을 확인해 구현이 필요하다고 알려 주세요.'
       });
+    }
+    const motionExamples = (window.Pattove.motionData?.items || []).filter(example => example.dictionaryRefs?.includes(item.id));
+    if (motionExamples.length) {
+      result.motionExamples = motionExamples.map(example => ({id:'motion/' + example.id, name:example.name, url:absolute('#/motion?detail=' + example.id)}));
+      result.instructions += ' motionExamples에서 연결된 실행 예제를 열고 사용 환경에 맞는 코드와 의존성을 함께 가져올 수 있습니다.';
     }
     return result;
   }
@@ -84,10 +89,36 @@
   const label = id => `<code class="element-id" title="고유 ID: ${esc(id)}">${esc(id)}</code>`;
   const copyIcon = window.Pattove.uiIcon('copy', 'reference-icon reference-icon-copy');
   const checkIcon = window.Pattove.uiIcon('check', 'reference-icon reference-icon-check');
-  const control = id => `<div class="element-reference ds-surface"><div class="reference-identity"><div class="reference-caption"><span class="reference-kind">${shapes.has(id) ? '모양 ID' : '요소 ID'}</span><span class="reference-status sr-only" role="status" aria-live="polite"></span></div>${label(id)}</div><button type="button" class="reference-copy ds-button" data-variant="outline" data-size="sm" data-icon-only data-copy-reference="${esc(id)}" data-focus="copy-${esc(id)}" aria-label="${esc(id)} AI용 정보 복사" title="AI용 정보 복사">${copyIcon}${checkIcon}</button></div>`;
+  const copyName = id => { const ref = resolve(id); return ref ? [ref.item.name, ref.shape?.name.replace(/\s*\([^)]*\)\s*$/, '')].filter(Boolean).join(' · ') : id; };
+  const control = (id, compact = false) => `<div class="element-reference${compact ? ' reference-compact' : ' ds-surface'}"><div class="reference-identity${compact ? ' sr-only' : ''}"><div class="reference-caption"><span class="reference-kind">${shapes.has(id) ? '모양 ID' : '요소 ID'}</span></div>${label(id)}</div><span class="reference-status sr-only" role="status" aria-live="polite"></span><button type="button" class="reference-copy ds-button" data-variant="outline" data-size="sm" data-copy-reference="${esc(id)}" data-focus="copy-${esc(id)}" aria-label="${esc(copyName(id))} AI용 정보 복사" title="${esc(copyName(id))} · AI에 전달할 모양·스타일·소스 정보 복사">${copyIcon}${checkIcon}<span class="reference-copy-label" aria-hidden="true"><span>복사</span><span>복사됨</span></span></button></div>`;
   const feedbackTimers = new WeakMap();
+  async function copyValue(value,button) {
+    if(button.getAttribute('aria-busy')==='true')return;
+    button.setAttribute('aria-busy','true');
+    const status=button.parentElement.querySelector('[role="status"]');
+    clearTimeout(feedbackTimers.get(button));button.removeAttribute('data-copied');if(status)status.textContent='';
+    try {
+      await navigator.clipboard.writeText(value);
+      if(!button.isConnected)return;
+      const id=button.dataset.recentId||button.closest('[data-component]')?.dataset.component;
+      if(id && /^var\(--p-[\w-]+\)$|^#[0-9a-f]{6}([0-9a-f]{2})?$/i.test(value))window.Pattove.searchUI?.remember(id,{},value);
+      clearTimeout(feedbackTimers.get(button));button.setAttribute('data-copied','');
+      if(status)status.textContent='복사됨';
+      feedbackTimers.set(button,setTimeout(()=>{button.removeAttribute('data-copied');if(status)status.textContent='';},2200));
+    } catch {
+      if(!button.isConnected)return;
+      const dialog=document.getElementById('reference-dialog'),textarea=dialog.querySelector('textarea');
+      textarea.value=value;
+      dialog.addEventListener('close',()=>{if(button.isConnected)button.focus({preventScroll:true});},{once:true});
+      if(!dialog.open)dialog.showModal();textarea.focus();textarea.select();
+    } finally {button.removeAttribute('aria-busy');}
+  }
   async function copy(button, state) {
     if (button.getAttribute('aria-disabled') === 'true') return;
+    if(button.dataset.copyOptions) {
+      const ref=resolve(button.dataset.copyReference);
+      try {if(ref?.type==='implementation')state={...state,page:'system',detail:ref.item.id,options:JSON.parse(button.dataset.copyOptions)};} catch {}
+    }
     const value = text(button.dataset.copyReference, state);
     const panel = button.parentElement, status = panel.querySelector('.reference-status');
     clearTimeout(feedbackTimers.get(panel));
@@ -98,10 +129,13 @@
     button.setAttribute('aria-busy', 'true');
     try {
       await navigator.clipboard.writeText(value);
+      if(!button.isConnected)return;
+      window.Pattove.searchUI?.remember(button.dataset.copyReference,state);
       status.textContent = '복사됨';
       panel.setAttribute('data-copied', '');
       feedbackTimers.set(panel, setTimeout(() => { panel.removeAttribute('data-copied'); status.textContent = ''; }, 2400));
     } catch {
+      if(!button.isConnected)return;
       const dialog = document.getElementById('reference-dialog'), textarea = dialog.querySelector('textarea');
       textarea.value = value;
       dialog.addEventListener('close', () => { if (button.isConnected) button.focus({ preventScroll: true }); }, { once: true });
@@ -114,5 +148,5 @@
       button.removeAttribute('aria-busy');
     }
   }
-  window.Pattove.references = { shapeID, resolve, payload, text, label, control, copy };
+  window.Pattove.references = { shapeID, resolve, payload, text, label, control, copy, copyValue };
 })();

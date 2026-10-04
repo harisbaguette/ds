@@ -10,6 +10,7 @@
   const validStyle = id => catalog.styles.some(s => s.id === id);
   // 스타일 화면에서 고른 디자인 스타일은 앱 전체에 입혀지고 다음 방문에도 유지된다.
   const styleKey = 'pattove-style';
+  const lastViewKey = 'pattove-last-view';
   const storedStyle = (() => { try { return localStorage.getItem(styleKey); } catch { return null; } })();
   // 부품·블록·템플릿 화면의 견본만 다른 스타일로 그려 보는 선택. 사이트는 그대로이고, 이번 방문 동안 탭을 옮겨도 유지된다.
   const previewKey = 'pattove-preview-style';
@@ -389,6 +390,8 @@
     $('#query').value = state.query;
     render(previousDetail, focus);
     renderedHash = location.hash;
+    // 다시 켰을 때 되살릴 목록 화면. 상세·찾을 수 없음 화면은 남기지 않는다.
+    if (!state.detail && state.page !== 'missing') try { localStorage.setItem(lastViewKey, location.hash); } catch {}
     // A new page or tab moves focus to the content; a filter change only returns to the top and leaves focus where it was.
     if (previousPage !== state.page || (['system','styles','motion'].includes(state.page) && previousDetail!==state.detail) || (!state.detail && (previousStyle !== state.style || previousShelf !== state.filters.shelf || previousPageNo !== state.pageNo))) {
       window.scrollTo(0, 0);
@@ -645,6 +648,10 @@
   window.visualViewport?.addEventListener('scroll', updateSearchViewport);
   window.visualViewport?.addEventListener('resize', updateChromeOffset);
   new ResizeObserver(updateChromeOffset).observe($('.app-top'));
-  if (!location.hash || location.hash === '#main') history.replaceState({}, '', '#/styles');
+  // 처음 열면 스타일 카드 격자, 그다음부터는 마지막으로 보던 목록 화면을 연다.
+  if (!location.hash || location.hash === '#main') {
+    const last = (() => { try { return localStorage.getItem(lastViewKey); } catch { return null; } })();
+    history.replaceState({}, '', /^#\/[\w-]+/.test(last || '') ? last : '#/styles');
+  }
   renderRoute();
 })();

@@ -138,6 +138,9 @@
   .motion-detail .motion-target .ds-input { width:100%; min-width:0; }
   .motion-detail .motion-delivery>.motion-copy-status { grid-column:1 / -1; }
   .motion-detail .motion-delivery>button { min-height:var(--p-control-size-md); }
+  .motion-detail .motion-delivery { grid-template-columns:minmax(0,1fr); gap:var(--p-space-sm); }
+  .motion-detail .motion-copy-actions { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--p-space-xs); }
+  .motion-detail .motion-copy-actions>.ds-button { width:100%; justify-content:center; }
   .motion-detail .motion-spec { padding:0 0 var(--p-space-md); }
   .ds .motion-playback .ds-button[data-variant] { border:0; background:none; box-shadow:none; padding-inline:var(--p-space-xs); min-height:var(--p-control-size-md); }
   .ds .motion-playback .ds-button[data-variant][aria-pressed='true'] { background:var(--p-accent); color:var(--p-on-accent); }

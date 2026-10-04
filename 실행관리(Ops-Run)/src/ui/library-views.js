@@ -204,10 +204,13 @@
     const none={...f,group:[],kind:[],role:[],place:[],code:[],icon:[]};
     const filled=(key,ids)=>!pool||pool.some(e=>passes({...none,[key]:ids},e));
     const shown=m=>picked(m)||filled(m.key,m.ids);
+    // 토큰은 견본이 하나뿐인 분류를 누르면 카드 한 장짜리 목록을 거치지 않고 그 토큰 상세로 바로 간다.
+    const only=(key,ids)=>{ if(id!=='token'||!pool)return null; const hit=pool.filter(e=>passes({...none,[key]:ids},e)); return hit.length===1?hit[0]:null; };
+    const target=(m,ids)=>{ const one=only(m.key,ids); return one?'#/system?detail='+encodeURIComponent(one.id):link(m,ids); };
     const rows=list=>list.filter(shown).map(m=>{
       const open=split(m)&&picked(m), kidsHtml=open?'<div class="nav-minor-group" role="group" aria-label="'+escape(m.name)+' 세부 분류">'+m.kids.filter(k=>pickedKid(m,k)||filled(m.key,[k.id])).map(k=>
-        '<a class="nav-minor ds-tab" href="'+link(m,[k.id])+'" data-focus="nav-'+id+'-'+escape(k.id)+'" title="'+escape(k.name)+'"'+(pickedKid(m,k)?' aria-current="true"':'')+'><span>'+escape(navLabels[k.id]||k.name)+'</span></a>').join('')+'</div>':'';
-      return '<a class="nav-subcategory ds-tab" href="'+link(m,m.ids)+'" data-focus="nav-'+id+'-'+escape(m.id)+'" title="'+escape(m.name)+'"'+(split(m)?' aria-expanded="'+open+'"':'')+(current(m)?' aria-current="true"':'')+'><span>'+escape(m.name)+'</span>'+(split(m)?icon('chevron-down'):'')+'</a>'+kidsHtml;
+        '<a class="nav-minor ds-tab" href="'+target(m,[k.id])+'" data-focus="nav-'+id+'-'+escape(k.id)+'" title="'+escape(k.name)+'"'+(pickedKid(m,k)?' aria-current="true"':'')+'><span>'+escape(navLabels[k.id]||k.name)+'</span></a>').join('')+'</div>':'';
+      return '<a class="nav-subcategory ds-tab" href="'+(split(m)?link(m,m.ids):target(m,m.ids))+'" data-focus="nav-'+id+'-'+escape(m.id)+'" title="'+escape(m.name)+'"'+(split(m)?' aria-expanded="'+open+'"':'')+(current(m)?' aria-current="true"':'')+'><span>'+escape(m.name)+'</span>'+(split(m)?icon('chevron-down'):'')+'</a>'+kidsHtml;
     }).join('');
     const taxonomy=rows(menus);
     return '<div class="nav-subnav" role="group" aria-label="'+s.name+' 분류">'+all+'<div class="nav-subnav-scroll">'+(shortcuts.length?rows(shortcuts)+(!taxonomy?'':'<details class="nav-all-categories"'+(!built&&menus.some(picked)?' open':'')+'><summary data-focus="all-categories">모든 분류'+icon('chevron-down')+'</summary>'+taxonomy+'</details>'):taxonomy)+'</div></div>';

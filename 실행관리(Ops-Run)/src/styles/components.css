@@ -52,7 +52,7 @@
 .token-swatch[data-kind='gradient'] { width:100%; height:var(--p-size-xl); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius-md); background:var(--token-value); }
 /* A family role is applied on the element itself (font-family reads only --p-* roles). */
 .token-swatch[data-kind='typography'][data-font='family'] { font-size:var(--p-text-title); }
-.token-swatch[data-kind='typography'][data-font='type'] { font:var(--token-value); white-space:nowrap; overflow:hidden; }
+.token-swatch[data-kind='typography'][data-font='type'] { font:var(--token-value); overflow-wrap:anywhere; overflow:hidden; }
 .token-swatch[data-kind='text'] { font-size:var(--token-value); line-height:var(--p-leading-none); }
 .token-swatch[data-kind='weight'] { font-size:var(--p-text-title); font-weight:var(--token-value); }
 .token-swatch[data-kind='leading'] { width:max-content; font-size:var(--p-text-sm); line-height:var(--token-value); background:var(--p-surface); }

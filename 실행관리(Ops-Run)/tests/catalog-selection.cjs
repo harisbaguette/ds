@@ -9,6 +9,8 @@ fs.mkdirSync(out,{recursive:true});
 let checks=0;
 const ok=(value,message)=>{assert.ok(value,message);checks++;};
 (async()=>{
+  const {system}=await import('../scripts/lib/system-store.mjs');
+  const shelfCounts=system().systemRegistry.items.reduce((counts,item)=>(counts[item.browse.shelf]=(counts[item.browse.shelf]||0)+1,counts),{});
   for(const [engineName,engine] of Object.entries({chromium,firefox,webkit})){
     const browser=await engine.launch({headless:true});
     try{
@@ -16,7 +18,7 @@ const ok=(value,message)=>{assert.ok(value,message);checks++;};
       page.setDefaultTimeout(10000);
       const errors=[];page.on('pageerror',e=>errors.push(e.message));
       const goto=async route=>{await page.goto(base+'#/'+route);await page.evaluate(()=>document.fonts.ready);};
-      for(const [shelf,count]of Object.entries({token:20,part:55,block:22,template:5})){
+      for(const [shelf,count]of Object.entries(shelfCounts)){
         await goto('dictionary?shelf='+shelf);
         ok(await page.locator('.dict-entry.is-built').count()===Math.min(48,count),shelf+' ready specimens');
         ok(await page.locator('.is-todo').count()===0,shelf+' no empty specimens by default');

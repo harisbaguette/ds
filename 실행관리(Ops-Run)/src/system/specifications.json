@@ -102,5 +102,2659 @@
       "서버·인증·영구 저장은 호스트 책임",
       "직접 컴포넌트를 사용할 때도 공개 스키마의 필드 조건 준수"
     ]
+  },
+  "reading-layout": {
+    "useWhen": [
+      "긴 글의 읽기 폭을 제한하고 가운데 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "sidebar-layout": {
+    "useWhen": [
+      "본문과 보조 탐색을 넓이에 따라 나란히 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "split-layout": {
+    "useWhen": [
+      "동등한 두 영역을 나란히 배치하고 좁은 폭에서 쌓기"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "grid-layout": {
+    "useWhen": [
+      "같은 비중의 항목을 폭에 맞는 격자로 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "masonry-layout": {
+    "useWhen": [
+      "높이가 다른 비순차 콘텐츠를 세로 열로 배치"
+    ],
+    "avoidWhen": [
+      "순서대로 읽어야 하는 목록에는 행 기준 격자를 사용합니다."
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "CSS 다단 배치이므로 읽기 순서는 위에서 아래, 왼쪽에서 오른쪽입니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Multicol_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "bento-layout": {
+    "useWhen": [
+      "첫 항목을 넓게 두고 나머지를 작은 칸에 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "full-bleed-layout": {
+    "useWhen": [
+      "부모 컨테이너의 전체 너비로 미디어를 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "sticky-sidebar": {
+    "useWhen": [
+      "긴 본문 옆의 보조 영역을 스크롤 중 유지"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "alternating-layout": {
+    "useWhen": [
+      "그림과 설명의 위치를 행마다 바꾸어 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "print-layout": {
+    "useWhen": [
+      "화면 문서를 인쇄할 때 탐색을 숨기고 페이지를 나누기"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "브라우저 PDF 출력을 지원합니다. 용지와 프린터별 여백은 인쇄 설정으로 조절합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "stack-layout": {
+    "useWhen": [
+      "자식 사이의 일정한 세로 간격 유지"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "cluster-layout": {
+    "useWhen": [
+      "관련 항목을 가로로 두고 남는 폭에 맞추어 줄바꿈"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "switcher-layout": {
+    "useWhen": [
+      "가용 폭이 기준보다 작으면 모든 항목을 한 열로 전환"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "reel-layout": {
+    "useWhen": [
+      "연속된 항목을 키보드로도 스크롤할 수 있는 가로 띠에 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동",
+      "영역에 초점을 두고 방향키·PageDown·PageUp으로 스크롤"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "cover-layout": {
+    "useWhen": [
+      "상하 정보 사이 중앙에 주요 메시지 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "frame-layout": {
+    "useWhen": [
+      "콘텐츠 영역의 가로세로 비율 유지"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "imposter-layout": {
+    "useWhen": [
+      "기준 영역 위 가운데에 보조 콘텐츠 겹치기"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "supporting-pane": {
+    "useWhen": [
+      "주 작업과 보조 작업을 분리된 영역에 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "holy-grail-layout": {
+    "useWhen": [
+      "탐색·본문·보조 영역을 세 열로 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "three-pane-layout": {
+    "useWhen": [
+      "목록과 본문과 추가 정보를 각각 독립된 영역에 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "editor-layout": {
+    "useWhen": [
+      "도구와 작업면과 속성을 가진 편집기 뼈대"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "letterbox-layout": {
+    "useWhen": [
+      "주어진 공간 안에 비율을 유지한 무대를 가운데 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "breakout-layout": {
+    "useWhen": [
+      "본문은 읽기 폭으로 유지하고 별도 미디어는 더 넓게 배치"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "settings-layout": {
+    "useWhen": [
+      "설정 목록과 선택한 설정 본문을 분리"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "toolbar-spacer": {
+    "useWhen": [
+      "도구 모음의 양쪽 그룹 사이 남는 공간 차지"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "scroll-area": {
+    "useWhen": [
+      "제한된 높이 안에서 키보드로 스크롤하고 스크롤바 꾸미기"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동",
+      "영역에 초점을 두고 방향키·PageDown·PageUp으로 스크롤"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "scroll-fog": {
+    "useWhen": [
+      "스크롤 위치에 따라 위아래 가장자리에서 남은 콘텐츠 표시"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동",
+      "영역에 초점을 두고 방향키·PageDown·PageUp으로 스크롤"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "generic-header": {
+    "useWhen": [
+      "서비스명과 주요 탐색을 담는 상단 영역"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "bottom-info-bar": {
+    "useWhen": [
+      "본문 스크롤 중 하단에 보조 정보를 유지"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "fluid-layout": {
+    "useWhen": [
+      "넓은 화면에서는 다단으로, 좁아지면 한 열로 전환"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "column-drop-layout": {
+    "useWhen": [
+      "폭이 부족할 때 보조 영역부터 아래로 이동"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "layout-shifter": {
+    "useWhen": [
+      "화면 폭에 따라 탐색·본문·보조 정보의 배치 변경"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "tiny-tweaks-layout": {
+    "useWhen": [
+      "화면 폭에 맞춰 한 열의 글자 크기와 여백 조절"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "equal-columns": {
+    "useWhen": [
+      "2~6개의 같은 폭 단을 만들고 좁은 폭에서 축소"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "wide-grid-block": {
+    "useWhen": [
+      "여러 열의 격자에서 첫 콘텐츠가 두 칸을 차지"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "equal-height-grid": {
+    "useWhen": [
+      "모든 격자 행을 가장 긴 콘텐츠 높이에 맞추기"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "thumbnail-list": {
+    "useWhen": [
+      "작은 그림과 제목을 연결하고 넓은 화면에서 요약 표시"
+    ],
+    "avoidWhen": [
+      "시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠"
+    ],
+    "states": [
+      "넓은 영역",
+      "좁은 영역",
+      "긴 콘텐츠"
+    ],
+    "keyboard": [
+      "DOM 순서대로 Tab 이동"
+    ],
+    "requirements": [
+      "320px에서 페이지 가로 넘침이 없어야 합니다.",
+      "사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.",
+      "화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다."
+    ],
+    "limits": [
+      "배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout",
+        "appliesTo": "CSS 레이아웃과 가용 공간에 따른 배치"
+      }
+    ]
+  },
+  "list-detail-layout": {
+    "useWhen": [
+      "목록에서 항목을 선택하고 대응하는 상세 내용 열기"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "resizable-panels": {
+    "useWhen": [
+      "경계선을 끌거나 방향키로 두 작업 영역의 크기 조절"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "좌우 화살표로 비율 조절",
+      "Home·End로 양 끝 이동",
+      "Enter로 접기·복원"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/",
+        "appliesTo": "방향키와 접기·복원, separator 역할과 값"
+      }
+    ]
+  },
+  "focus-layout": {
+    "useWhen": [
+      "보조 영역을 숨겼다가 입력 상태를 유지하며 복귀"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "object-hub": {
+    "useWhen": [
+      "대상 요약과 관련 자료·활동을 탭으로 연결"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "shrinking-header": {
+    "useWhen": [
+      "스크롤하면 머리글을 축소하고 상단에서 원래 크기로 복원"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "sticky-action-layout": {
+    "useWhen": [
+      "긴 콘텐츠 아래에 주 행동을 유지"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "snap-sections": {
+    "useWhen": [
+      "가로 장면마다 스크롤 위치를 맞추어 순서대로 탐색"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "collapsible-sidebar": {
+    "useWhen": [
+      "탐색을 아이콘 열로 축소하고 이름을 유지"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "document-workspace": {
+    "useWhen": [
+      "열린 문서를 키보드와 탭으로 전환"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "stacked-panels": {
+    "useWhen": [
+      "하위 상세로 들어가고 이전 상세와 초점으로 복귀"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "profile-tabs": {
+    "useWhen": [
+      "대상의 소개와 활동을 탭으로 나누어 탐색"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "window-splitter": {
+    "useWhen": [
+      "이동 가능한 경계선으로 창의 두 영역 비율 조절"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "좌우 화살표로 비율 조절",
+      "Home·End로 양 끝 이동",
+      "Enter로 접기·복원"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/",
+        "appliesTo": "방향키와 접기·복원, separator 역할과 값"
+      }
+    ]
+  },
+  "floating-panel": {
+    "useWhen": [
+      "포인터와 키보드로 부모 영역 안에서 작업 창 이동"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "방향키로 창 이동",
+      "Home으로 원래 위치 복귀"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "off-canvas-layout": {
+    "useWhen": [
+      "보조 영역을 모달 서랍으로 열고 닫기"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "append-around": {
+    "useWhen": [
+      "동일한 콘텐츠를 화면 폭에 맞는 자리로 이동하며 입력 유지"
+    ],
+    "avoidWhen": [
+      "표시를 바꾸는 동안 작성 중인 입력을 삭제하는 흐름"
+    ],
+    "states": [
+      "기본",
+      "조작 후",
+      "좁은 화면"
+    ],
+    "keyboard": [
+      "Tab으로 조작부 이동",
+      "버튼은 Enter 또는 Space로 실행",
+      "탭 묶음은 좌우 또는 상하 방향키로 이동"
+    ],
+    "requirements": [
+      "조작 뒤에도 읽기 순서와 초점을 유지합니다.",
+      "내용을 숨겨도 입력값과 상태를 유지합니다.",
+      "서로 다른 인스턴스는 고유한 ID를 사용합니다."
+    ],
+    "limits": [
+      "웹의 작업 영역 배치입니다. 운영체제 창을 조작하지 않습니다."
+    ],
+    "references": [
+      {
+        "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position",
+        "appliesTo": "고정·겹침 위치와 스크롤 영역"
+      }
+    ]
+  },
+  "site-header": {
+    "useWhen": [
+      "사이트 정체성과 주요 경로 제공"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "mega-menu": {
+    "useWhen": [
+      "많은 경로를 범주별로 탐색"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "hamburger-menu": {
+    "useWhen": [
+      "좁은 공간에서 탐색을 열기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "table-of-contents": {
+    "useWhen": [
+      "긴 페이지의 필요한 구간으로 이동"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/WCAG22/Techniques/general/G1",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "site-footer": {
+    "useWhen": [
+      "보조 경로와 운영 정보 제공"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "skip-link": {
+    "useWhen": [
+      "반복 탐색 영역 건너뛰기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/WCAG22/Techniques/general/G1",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "back-to-top": {
+    "useWhen": [
+      "긴 페이지의 시작으로 복귀"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/WCAG22/Techniques/general/G1",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "app-switcher": {
+    "useWhen": [
+      "연결된 여러 제품 사이 이동"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "site-map": {
+    "useWhen": [
+      "모든 페이지를 한 곳에 계층으로 나열"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "navigation-rail": {
+    "useWhen": [
+      "태블릿 폭에서 세로로 세운 아이콘 탐색"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "page-header": {
+    "useWhen": [
+      "제목·설명·주 행동·경로를 묶은 상단"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "tag-cloud": {
+    "useWhen": [
+      "주제 목록을 크기·빈도로 보여 주고 이동"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "alphabet-index": {
+    "useWhen": [
+      "긴 목록 옆 글자 색인으로 바로 이동"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "navigation-progress": {
+    "useWhen": [
+      "상단 얇은 띠로 다음 화면 불러오는 중 표시"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "utility-header": {
+    "useWhen": [
+      "언어·로그인 같은 보조 링크 줄을 위에 따로"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "step-list": {
+    "useWhen": [
+      "여러 단계 중 지금 어디인지 줄지어 보여주는 표시"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "service-navigation": {
+    "useWhen": [
+      "서비스명 옆에 붙는 해당 서비스 전용 상단 메뉴 바"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "in-page-navigation": {
+    "useWhen": [
+      "긴 글 옆에 붙어 클릭하면 해당 섹션으로 이동하는 목차"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/WCAG22/Techniques/general/G1",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "horizontal-menu": {
+    "useWhen": [
+      "가로로 나열한 상단 메뉴 항목 묶음"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "page-counter": {
+    "useWhen": [
+      "여러 페이지 중 현재·전체 쪽수를 숫자로 표시"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "navigation-drawer": {
+    "useWhen": [
+      "화면 옆에서 밀려 나오는 전체 높이 메뉴 패널"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "journey-navigation": {
+    "useWhen": [
+      "여러 화면·서비스에 흩어진 절차 전체를 하나의 목차 지도로 묶어 지금 몇 단계인지 보여줌"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "select-navigation": {
+    "useWhen": [
+      "좁은 화면에서 메뉴를 선택 상자 하나로 접어 기기 기본 선택기를 쓰게 하기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "fullscreen-navigation": {
+    "useWhen": [
+      "메뉴를 열면 화면 전체를 덮어 목록만 보이게 하기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "overflow-navigation": {
+    "useWhen": [
+      "메뉴를 한 줄로 두고 넘치는 항목은 옆으로 밀어 보게 하기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "direct-subnav": {
+    "useWhen": [
+      "상위 항목을 누르면 목록을 펴지 않고 바로 하위 화면으로 넘기기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "multi-toggle-navigation": {
+    "useWhen": [
+      "하위 목록을 펼치면서 상위 항목 자체로 가는 링크도 같이 남겨 두기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "compact-breadcrumb": {
+    "useWhen": [
+      "좁은 화면에서 현재 위치 경로 중 바로 위 한 단계만 남기기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "breadcrumb-dropdown": {
+    "useWhen": [
+      "긴 경로를 버튼 하나로 접고 눌렀을 때 전체 단계를 펴 보이기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "breadcrumb-back": {
+    "useWhen": [
+      "좁은 화면에서 경로 전체 대신 바로 위로 가는 버튼 하나만 두기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "responsive-pagination": {
+    "useWhen": [
+      "좁은 화면에서 페이지 번호를 접고 이전·다음 두 버튼만 남기기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "conditional-pagination": {
+    "useWhen": [
+      "평소에는 번호를 접어 두고 누르면 전체 번호를 펴 보이기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
+  },
+  "footer-anchor": {
+    "useWhen": [
+      "상단 메뉴 버튼을 눌러 화면 아래 탐색 영역으로 이동시키기"
+    ],
+    "avoidWhen": [
+      "링크의 이름과 목적지가 다르거나 현재 위치를 알 수 없는 탐색"
+    ],
+    "states": [
+      "기본",
+      "현재 위치",
+      "좁은 영역"
+    ],
+    "keyboard": [
+      "Tab으로 링크와 여닫기 버튼 이동",
+      "Enter로 링크 실행",
+      "펼친 탐색에서 Escape를 누르면 닫고 여는 버튼으로 복귀"
+    ],
+    "requirements": [
+      "현재 경로는 aria-current로 구분합니다.",
+      "여러 탐색 영역은 서로 구분되는 접근성 이름을 사용합니다.",
+      "목차와 건너뛰기 링크는 실제 대상 ID와 연결하고 초점을 이동합니다."
+    ],
+    "limits": [
+      "앱의 인증·권한·실제 라우터 응답은 소비 프로젝트에서 제공합니다."
+    ],
+    "references": [
+      {
+        "url": "https://www.w3.org/WAI/WCAG22/Techniques/general/G1",
+        "appliesTo": "링크 탐색과 의미 구조, 여닫기·초점 이동"
+      }
+    ]
   }
 }

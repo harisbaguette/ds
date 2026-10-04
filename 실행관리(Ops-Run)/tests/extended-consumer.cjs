@@ -10,12 +10,12 @@ const freePort=()=>new Promise(resolve=>{const s=net.createServer();s.listen(0,'
   fs.writeFileSync(path.join(dir,'app/layout.jsx'),`import React from 'react';export default function Layout({children}){return <html lang="ko"><body>{children}</body></html>}`);
   const imports=ids.map((id,i)=>`import Example${i} from '../design/examples/main/${id}.jsx';`).join('\n');
   fs.writeFileSync(path.join(dir,'app/page.jsx'),`'use client';
-import React,{useRef} from 'react';
+import React,{useRef,useEffect} from 'react';
 import {SettingsForm} from '../design/react/settings-form.jsx';
 import {LoginForm} from '../design/react/login-form.jsx';
 import {Dialog} from '../design/react/dialog.jsx';
 ${imports}
-export default function Page(){const attempt=useRef(0);return <main className="ds" data-style="main"><section id="confirm-contract"><Dialog confirmLabel="확인" onConfirm={()=>window.confirmCount=(window.confirmCount||0)+1}/></section><section id="save-contract"><SettingsForm onSave={async(values)=>{window.lastValues=values;if(++attempt.current===1)throw Error('offline');await new Promise(r=>{window.finishSave=r;});}}/></section><section id="login-contract"><LoginForm onAuthenticate={async(values)=>{window.authValues=values;}}/></section>${ids.map((id,i)=>`<section data-example="${id}"><Example${i}/></section>`).join('')}</main>;}
+export default function Page(){const attempt=useRef(0);useEffect(()=>{document.documentElement.dataset.consumerReady='true';},[]);return <main className="ds" data-style="main"><section id="confirm-contract"><Dialog confirmLabel="확인" onConfirm={()=>window.confirmCount=(window.confirmCount||0)+1}/></section><section id="save-contract"><SettingsForm onSave={async(values)=>{window.lastValues=values;if(++attempt.current===1)throw Error('offline');await new Promise(r=>{window.finishSave=r;});}}/></section><section id="login-contract"><LoginForm onAuthenticate={async(values)=>{window.authValues=values;}}/></section>${ids.map((id,i)=>`<section data-example="${id}"><Example${i}/></section>`).join('')}</main>;}
 `);
   const port=await freePort(),server=spawn(process.execPath,[path.join(root,'node_modules/next/dist/bin/next'),'dev','--webpack','--hostname','127.0.0.1','--port',String(port)],{cwd:dir,stdio:['ignore','pipe','pipe'],windowsHide:true,env:{...process.env,NEXT_TELEMETRY_DISABLED:'1'}});
   let log='';server.stdout.on('data',s=>log+=s);server.stderr.on('data',s=>log+=s);
@@ -23,7 +23,7 @@ export default function Page(){const attempt=useRef(0);return <main className="d
   try{
     let ready=false;for(let i=0;i<150;i++){if(/Ready in/.test(log)){ready=true;break;}if(server.exitCode!==null)throw Error(log);await new Promise(r=>setTimeout(r,200));}assert(ready,log);
     browser=await chromium.launch();const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(12000);
-    const response=await page.goto('http://127.0.0.1:'+port,{timeout:120000});assert.equal(response.status(),200,log);await page.locator('[data-example="combobox"] input').waitFor();
+    const response=await page.goto('http://127.0.0.1:'+port,{timeout:120000});assert.equal(response.status(),200,log);await page.waitForFunction(()=>document.documentElement.dataset.consumerReady==='true');await page.locator('[data-example="combobox"] input').waitFor();
     assert.equal(await page.locator('[data-example]').count(),ids.length);
     const combo=page.locator('[data-example="combobox"] input');await combo.fill('제');await combo.press('ArrowDown');await combo.press('Enter');assert.equal(await combo.inputValue(),'제주');
     const dialog=page.locator('[data-example="dialog"]');await dialog.getByRole('button',{name:'열기'}).click();assert(await dialog.locator('dialog').evaluate(n=>n.open));await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('[data-example="dialog"] dialog').open);
@@ -32,6 +32,14 @@ export default function Page(){const attempt=useRef(0);return <main className="d
     const login=page.locator('#login-contract');await login.getByLabel('이메일').fill('reader@example.com');await login.getByLabel('비밀번호').fill('safe-test-value');await login.getByRole('button',{name:'로그인'}).click();await login.getByRole('status').filter({hasText:'로그인했어요.'}).waitFor();assert.equal(await page.evaluate(()=>window.authValues.email),'reader@example.com');
     assert(await page.locator('[data-example="spinner"] .ds-spinner').evaluate(n=>getComputedStyle(n).animationName==='ds-spin'),'React export includes transitive spinner CSS');
     assert(await page.locator('[data-example="textarea"] textarea').evaluate(n=>n.getBoundingClientRect().height>=96));
+    const sample=id=>page.locator('[data-example="'+id+'"]');
+    if(ids.includes('table-of-contents')){
+      const toc=sample('table-of-contents'),link=toc.getByRole('link').first(),target=decodeURIComponent((await link.getAttribute('href')).slice(1));await link.click();assert.equal(await page.evaluate(()=>document.activeElement.id),target);
+      const menu=sample('hamburger-menu');await menu.locator('summary').click();assert(await menu.locator('details').evaluate(n=>n.open));await menu.locator('summary').press('Escape');assert(!(await menu.locator('details').evaluate(n=>n.open)));
+      const paging=sample('responsive-pagination');await paging.getByRole('button',{name:'다음',exact:true}).click();await page.waitForFunction(()=>document.querySelector('[data-example="responsive-pagination"] output').textContent==='2 / 8');assert.equal(await paging.getByRole('button',{name:/쪽$/}).count(),0);
+      const conditional=sample('conditional-pagination');await conditional.locator('summary').click();await conditional.getByRole('button',{name:'3쪽',exact:true}).click();assert.equal(await conditional.locator('output').textContent(),'3 / 8');await conditional.getByRole('button',{name:'3쪽',exact:true}).press('Escape');assert(!(await conditional.locator('details').evaluate(n=>n.open)));
+      const drawer=sample('navigation-drawer');await drawer.getByRole('button',{name:'메뉴 열기'}).click();assert(await drawer.getByRole('dialog').isVisible());await page.keyboard.press('Escape');
+    }
     assert.deepEqual(errors,[]);await page.screenshot({path:path.join(parent,'mobile.png'),fullPage:true});console.log('React exports compiled in Next.js; independent callbacks, failure, retry, keyboard and CSS dependencies verified.');
   }finally{await browser?.close();server.kill();fs.writeFileSync(path.join(parent,'next.log'),log);}
 })().catch(e=>{console.error(e);process.exitCode=1;});

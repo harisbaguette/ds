@@ -87,6 +87,8 @@ exports.exercise = async function exercise(get, label, check, page) {
   await root.locator('[data-scroller]').evaluate(n=>{n.scrollTop=n.scrollHeight;n.dispatchEvent(new Event('scroll'));});
   check(label+' scroll progress reaches end',await root.locator('[role="progressbar"]').getAttribute('aria-valuenow')==='100');
   root=await get('parallax');await page.emulateMedia({reducedMotion:'reduce'});
+  // The browser dispatches matchMedia change asynchronously after emulation is applied.
+  for(let i=0;i<40&&await root.getAttribute('data-motion-still')===null;i++)await new Promise(resolve=>setTimeout(resolve,25));
   await root.locator('[data-scroller]').evaluate(n=>{n.scrollTop=180;n.dispatchEvent(new Event('scroll'));});
   check(label+' parallax disabled while scrolling remains',await root.locator('[data-parallax]').evaluate(n=>n.ownerDocument.defaultView.getComputedStyle(n).transform==='none'));
   await page.emulateMedia({reducedMotion:'no-preference'});

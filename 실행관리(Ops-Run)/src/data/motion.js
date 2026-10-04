@@ -28,7 +28,7 @@
   const ledge = 'color-mix(in srgb, var(--p-accent, #303b48) 70%, var(--p-shade, #000000))';
   const items = [
     {
-      id: 'fade-up', name: '가볍게 올라오기', english: 'Fade up', category: 'entrance', trigger: '진입', cost: 'low',
+      id: 'fade-up', name: '가볍게 올라오기', english: 'Fade up', category: 'entrance', trigger: '진입', cost: 'low', previewRepeat: true,
       description: '짧은 거리만 올라오며 내용을 보여 줍니다. 카드와 안내 문구에 어울립니다.',
       properties: 'transform · opacity', performance: '위치와 투명도만 변경합니다. 합성 처리 후보이며 실제 레이어 승격은 브라우저가 결정합니다.',
       reduced: '이동과 페이드를 없애고 처음부터 내용을 표시합니다.',
@@ -36,7 +36,7 @@
       css: '.pm-fade { animation:pm-fade-in 600ms cubic-bezier(.2,.8,.2,1) both; }\n@keyframes pm-fade-in { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }'
     },
     {
-      id: 'stagger', name: '차례로 나타나기', english: 'Staggered list', category: 'entrance', trigger: '진입', cost: 'low',
+      id: 'stagger', name: '차례로 나타나기', english: 'Staggered list', category: 'entrance', trigger: '진입', cost: 'low', previewRepeat: true,
       description: '세 항목을 90ms 간격으로 보여 줍니다. 길어진 목록도 기다리게 하지 않습니다.',
       properties: 'transform · opacity', performance: '세 요소만 순차 실행합니다. 긴 목록에서는 지연 시간을 계속 누적하지 마세요.',
       reduced: '지연 없이 모든 항목을 바로 표시합니다.',

@@ -1,0 +1,12 @@
+'use client';
+import React,{useEffect,useId,useRef,useState} from 'react';
+import {safeLink} from './safe-link.jsx';
+const defaults=[{id:'walks',label:'산책 목록 열기',href:'#walks'},{id:'notes',label:'기록 열기',href:'#notes'},{id:'settings',label:'설정 열기',href:'#settings'}];
+export function CommandPalette({items=defaults,onSelect,title='명령 검색',trigger='명령 검색 열기'}){
+ const id=useId(),dialog=useRef(null),input=useRef(null),opener=useRef(null),[query,setQuery]=useState(''),[index,setIndex]=useState(-1),[open,setOpen]=useState(false);
+ const found=items.filter(i=>(i.label+' '+(i.keywords??'')).toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())),active=index>=0?found[Math.min(index,found.length-1)]:null;
+ useEffect(()=>{dialog.current?.querySelector('[aria-selected="true"]')?.scrollIntoView({block:'nearest'});},[active?.id]);
+ const choose=item=>{dialog.current.close();if(onSelect)onSelect(item);else if(item.href)location.assign(safeLink(item.href));};
+ const openDialog=()=>{setQuery('');setIndex(-1);setOpen(true);dialog.current.showModal();input.current.focus();};
+ return <div className="ds-nav ds-command-palette"><button type="button" className="ds-nav-button" ref={opener} aria-haspopup="dialog" aria-controls={id} onClick={openDialog}>{trigger}</button><dialog ref={dialog} id={id} className="ds-dialog" aria-labelledby={id+'-title'} onClose={()=>{setOpen(false);opener.current?.focus();}}><h2 id={id+'-title'}>{title}</h2><label htmlFor={id+'-input'}>명령</label><input ref={input} id={id+'-input'} type="text" role="combobox" aria-autocomplete="list" aria-expanded={open} aria-controls={id+'-options'} aria-activedescendant={active?id+'-option-'+found.indexOf(active):undefined} value={query} onChange={e=>{setQuery(e.target.value);setIndex(-1);}} onKeyDown={e=>{if(e.nativeEvent.isComposing)return;if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(found.length)setIndex(i=>e.key==='ArrowDown'?Math.min(i+1,found.length-1):i<0?found.length-1:Math.max(0,i-1));}else if(e.key==='Enter'&&active){e.preventDefault();choose(active);}}}/><ul id={id+'-options'} role="listbox" aria-label="검색한 명령">{found.map((item,i)=><li key={item.id} id={id+'-option-'+i} role="option" aria-selected={active===item} onPointerDown={e=>e.preventDefault()} onClick={()=>choose(item)}>{item.label}</li>)}</ul><p role="status">{found.length?found.length+'개 명령':'일치하는 명령이 없어요.'}</p><form method="dialog"><button className="ds-nav-button">닫기</button></form></dialog></div>;
+}

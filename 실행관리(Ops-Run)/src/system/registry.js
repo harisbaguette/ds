@@ -881,6 +881,3944 @@
   contracts['settings-form'][2]=['title','name','memo','initialValues'];
   contracts['input-result'][2]=['title','initialPrice','initialQuantity'];
   contracts['article-page'][2]=['title','sections','headingLevel'];
+  const layoutItems = [
+  {
+    "id": "reading-layout",
+    "entry": "LAY-01",
+    "name": "읽기 배치",
+    "reactExport": "ReadingLayout",
+    "english": "ReadingLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "긴 글의 읽기 폭을 제한하고 가운데 배치 ReadingLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "body",
+    "layoutTag": "article",
+    "purpose": "긴 글의 읽기 폭을 제한하고 가운데 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "sidebar-layout",
+    "entry": "LAY-02",
+    "name": "본문과 사이드바",
+    "reactExport": "SidebarLayout",
+    "english": "SidebarLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "본문과 보조 탐색을 넓이에 따라 나란히 배치 SidebarLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "body-aside",
+    "layoutTag": "div",
+    "purpose": "본문과 보조 탐색을 넓이에 따라 나란히 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "split-layout",
+    "entry": "LAY-05",
+    "name": "분할 배치",
+    "reactExport": "SplitLayout",
+    "english": "SplitLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "동등한 두 영역을 나란히 배치하고 좁은 폭에서 쌓기 SplitLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "body-aside",
+    "layoutTag": "div",
+    "purpose": "동등한 두 영역을 나란히 배치하고 좁은 폭에서 쌓기",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "grid-layout",
+    "entry": "LAY-06",
+    "name": "균등 격자",
+    "reactExport": "GridLayout",
+    "english": "GridLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "같은 비중의 항목을 폭에 맞는 격자로 배치 GridLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "cards",
+    "layoutTag": "div",
+    "purpose": "같은 비중의 항목을 폭에 맞는 격자로 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "masonry-layout",
+    "entry": "LAY-07",
+    "name": "높이가 다른 격자",
+    "reactExport": "MasonryLayout",
+    "english": "MasonryLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "높이가 다른 비순차 콘텐츠를 세로 열로 배치 MasonryLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "cards",
+    "layoutTag": "div",
+    "purpose": "높이가 다른 비순차 콘텐츠를 세로 열로 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "bento-layout",
+    "entry": "LAY-08",
+    "name": "강약 격자",
+    "reactExport": "BentoLayout",
+    "english": "BentoLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "첫 항목을 넓게 두고 나머지를 작은 칸에 배치 BentoLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "cards",
+    "layoutTag": "div",
+    "purpose": "첫 항목을 넓게 두고 나머지를 작은 칸에 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "full-bleed-layout",
+    "entry": "LAY-09",
+    "name": "너비를 채우는 배치",
+    "reactExport": "FullBleedLayout",
+    "english": "FullBleedLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "부모 컨테이너의 전체 너비로 미디어를 배치 FullBleedLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "media",
+    "layoutTag": "div",
+    "purpose": "부모 컨테이너의 전체 너비로 미디어를 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "sticky-sidebar",
+    "entry": "LAY-10",
+    "name": "고정 보조 영역",
+    "reactExport": "StickySidebar",
+    "english": "StickySidebar",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "긴 본문 옆의 보조 영역을 스크롤 중 유지 StickySidebar",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "body-aside",
+    "layoutTag": "div",
+    "purpose": "긴 본문 옆의 보조 영역을 스크롤 중 유지",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "alternating-layout",
+    "entry": "LAY-13",
+    "name": "교차 배치",
+    "reactExport": "AlternatingLayout",
+    "english": "AlternatingLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "그림과 설명의 위치를 행마다 바꾸어 배치 AlternatingLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "pairs",
+    "layoutTag": "div",
+    "purpose": "그림과 설명의 위치를 행마다 바꾸어 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "print-layout",
+    "entry": "LAY-14",
+    "name": "인쇄 문서",
+    "reactExport": "PrintLayout",
+    "english": "PrintLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "화면 문서를 인쇄할 때 탐색을 숨기고 페이지를 나누기 PrintLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "print",
+    "layoutTag": "article",
+    "purpose": "화면 문서를 인쇄할 때 탐색을 숨기고 페이지를 나누기",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "stack-layout",
+    "entry": "LAY-16",
+    "name": "세로 간격 묶음",
+    "reactExport": "StackLayout",
+    "english": "StackLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "자식 사이의 일정한 세로 간격 유지 StackLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "cards",
+    "layoutTag": "div",
+    "purpose": "자식 사이의 일정한 세로 간격 유지",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "cluster-layout",
+    "entry": "LAY-18",
+    "name": "줄바꿈 묶음",
+    "reactExport": "ClusterLayout",
+    "english": "ClusterLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "관련 항목을 가로로 두고 남는 폭에 맞추어 줄바꿈 ClusterLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "labels",
+    "layoutTag": "div",
+    "purpose": "관련 항목을 가로로 두고 남는 폭에 맞추어 줄바꿈",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "switcher-layout",
+    "entry": "LAY-19",
+    "name": "가로·세로 전환",
+    "reactExport": "SwitcherLayout",
+    "english": "SwitcherLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "가용 폭이 기준보다 작으면 모든 항목을 한 열로 전환 SwitcherLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "cards",
+    "layoutTag": "div",
+    "purpose": "가용 폭이 기준보다 작으면 모든 항목을 한 열로 전환",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "reel-layout",
+    "entry": "LAY-20",
+    "name": "가로 탐색 띠",
+    "reactExport": "ReelLayout",
+    "english": "ReelLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "연속된 항목을 키보드로도 스크롤할 수 있는 가로 띠에 배치 ReelLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "cards",
+    "layoutTag": "div",
+    "purpose": "연속된 항목을 키보드로도 스크롤할 수 있는 가로 띠에 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "cover-layout",
+    "entry": "LAY-21",
+    "name": "중앙 표지",
+    "reactExport": "CoverLayout",
+    "english": "CoverLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "상하 정보 사이 중앙에 주요 메시지 배치 CoverLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "cover",
+    "layoutTag": "section",
+    "purpose": "상하 정보 사이 중앙에 주요 메시지 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "frame-layout",
+    "entry": "LAY-22",
+    "name": "비율 프레임",
+    "reactExport": "FrameLayout",
+    "english": "FrameLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "콘텐츠 영역의 가로세로 비율 유지 FrameLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "media",
+    "layoutTag": "div",
+    "purpose": "콘텐츠 영역의 가로세로 비율 유지",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "imposter-layout",
+    "entry": "LAY-23",
+    "name": "겹침 배치",
+    "reactExport": "ImposterLayout",
+    "english": "ImposterLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "기준 영역 위 가운데에 보조 콘텐츠 겹치기 ImposterLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "overlay",
+    "layoutTag": "div",
+    "purpose": "기준 영역 위 가운데에 보조 콘텐츠 겹치기",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "supporting-pane",
+    "entry": "LAY-24",
+    "name": "보조 작업 배치",
+    "reactExport": "SupportingPane",
+    "english": "SupportingPane",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "주 작업과 보조 작업을 분리된 영역에 배치 SupportingPane",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "body-aside",
+    "layoutTag": "div",
+    "purpose": "주 작업과 보조 작업을 분리된 영역에 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "holy-grail-layout",
+    "entry": "LAY-28",
+    "name": "양쪽 사이드바",
+    "reactExport": "HolyGrailLayout",
+    "english": "HolyGrailLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "탐색·본문·보조 영역을 세 열로 배치 HolyGrailLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "three",
+    "layoutTag": "div",
+    "purpose": "탐색·본문·보조 영역을 세 열로 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "three-pane-layout",
+    "entry": "LAY-29",
+    "name": "목록·상세·보조 배치",
+    "reactExport": "ThreePaneLayout",
+    "english": "ThreePaneLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "목록과 본문과 추가 정보를 각각 독립된 영역에 배치 ThreePaneLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "three",
+    "layoutTag": "div",
+    "purpose": "목록과 본문과 추가 정보를 각각 독립된 영역에 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "editor-layout",
+    "entry": "LAY-35",
+    "name": "도구·작업·속성 배치",
+    "reactExport": "EditorLayout",
+    "english": "EditorLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "도구와 작업면과 속성을 가진 편집기 뼈대 EditorLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "three",
+    "layoutTag": "div",
+    "purpose": "도구와 작업면과 속성을 가진 편집기 뼈대",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "letterbox-layout",
+    "entry": "LAY-39",
+    "name": "고정 비율 무대",
+    "reactExport": "LetterboxLayout",
+    "english": "LetterboxLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "주어진 공간 안에 비율을 유지한 무대를 가운데 배치 LetterboxLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "media",
+    "layoutTag": "div",
+    "purpose": "주어진 공간 안에 비율을 유지한 무대를 가운데 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "breakout-layout",
+    "entry": "LAY-40",
+    "name": "본문 밖 확장",
+    "reactExport": "BreakoutLayout",
+    "english": "BreakoutLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "본문은 읽기 폭으로 유지하고 별도 미디어는 더 넓게 배치 BreakoutLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "breakout",
+    "layoutTag": "article",
+    "purpose": "본문은 읽기 폭으로 유지하고 별도 미디어는 더 넓게 배치",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "settings-layout",
+    "entry": "LAY-41",
+    "name": "설정 화면 배치",
+    "reactExport": "SettingsLayout",
+    "english": "SettingsLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "설정 목록과 선택한 설정 본문을 분리 SettingsLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "aside-body",
+    "layoutTag": "div",
+    "purpose": "설정 목록과 선택한 설정 본문을 분리",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "toolbar-spacer",
+    "entry": "LAY-44",
+    "name": "도구 사이 간격",
+    "reactExport": "ToolbarSpacer",
+    "english": "ToolbarSpacer",
+    "section": "page",
+    "layer": "Atom",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "도구 모음의 양쪽 그룹 사이 남는 공간 차지 ToolbarSpacer",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "spacer",
+    "layoutTag": "span",
+    "purpose": "도구 모음의 양쪽 그룹 사이 남는 공간 차지",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "scroll-area",
+    "entry": "LAY-45",
+    "name": "스크롤 영역",
+    "reactExport": "ScrollArea",
+    "english": "ScrollArea",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "제한된 높이 안에서 키보드로 스크롤하고 스크롤바 꾸미기 ScrollArea",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "long",
+    "layoutTag": "div",
+    "purpose": "제한된 높이 안에서 키보드로 스크롤하고 스크롤바 꾸미기",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "scroll-fog",
+    "entry": "LAY-47",
+    "name": "스크롤 가장자리 표시",
+    "reactExport": "ScrollFog",
+    "english": "ScrollFog",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "스크롤 위치에 따라 위아래 가장자리에서 남은 콘텐츠 표시 ScrollFog",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "long",
+    "layoutTag": "div",
+    "purpose": "스크롤 위치에 따라 위아래 가장자리에서 남은 콘텐츠 표시",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "generic-header",
+    "entry": "LAY-48",
+    "name": "서비스 머리글",
+    "reactExport": "GenericHeader",
+    "english": "GenericHeader",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "서비스명과 주요 탐색을 담는 상단 영역 GenericHeader",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "header",
+    "layoutTag": "header",
+    "purpose": "서비스명과 주요 탐색을 담는 상단 영역",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "bottom-info-bar",
+    "entry": "LAY-50",
+    "name": "하단 정보 바",
+    "reactExport": "BottomInfoBar",
+    "english": "BottomInfoBar",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "본문 스크롤 중 하단에 보조 정보를 유지 BottomInfoBar",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "footer",
+    "layoutTag": "aside",
+    "purpose": "본문 스크롤 중 하단에 보조 정보를 유지",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "fluid-layout",
+    "entry": "LAY-51",
+    "name": "유동 열 배치",
+    "reactExport": "FluidLayout",
+    "english": "FluidLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "넓은 화면에서는 다단으로, 좁아지면 한 열로 전환 FluidLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "cards",
+    "layoutTag": "div",
+    "purpose": "넓은 화면에서는 다단으로, 좁아지면 한 열로 전환",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "column-drop-layout",
+    "entry": "LAY-52",
+    "name": "단 떨어뜨리기",
+    "reactExport": "ColumnDropLayout",
+    "english": "ColumnDropLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "폭이 부족할 때 보조 영역부터 아래로 이동 ColumnDropLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "three",
+    "layoutTag": "div",
+    "purpose": "폭이 부족할 때 보조 영역부터 아래로 이동",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "layout-shifter",
+    "entry": "LAY-53",
+    "name": "배치 재구성",
+    "reactExport": "LayoutShifter",
+    "english": "LayoutShifter",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "화면 폭에 따라 탐색·본문·보조 정보의 배치 변경 LayoutShifter",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "three",
+    "layoutTag": "div",
+    "purpose": "화면 폭에 따라 탐색·본문·보조 정보의 배치 변경",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "tiny-tweaks-layout",
+    "entry": "LAY-54",
+    "name": "읽기 폭 미세 조정",
+    "reactExport": "TinyTweaksLayout",
+    "english": "TinyTweaksLayout",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "화면 폭에 맞춰 한 열의 글자 크기와 여백 조절 TinyTweaksLayout",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "body",
+    "layoutTag": "article",
+    "purpose": "화면 폭에 맞춰 한 열의 글자 크기와 여백 조절",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "equal-columns",
+    "entry": "LAY-58",
+    "name": "같은 폭 단",
+    "reactExport": "EqualColumns",
+    "english": "EqualColumns",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "2~6개의 같은 폭 단을 만들고 좁은 폭에서 축소 EqualColumns",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "cards",
+    "layoutTag": "div",
+    "purpose": "2~6개의 같은 폭 단을 만들고 좁은 폭에서 축소",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "wide-grid-block",
+    "entry": "LAY-59",
+    "name": "두 칸 격자",
+    "reactExport": "WideGridBlock",
+    "english": "WideGridBlock",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "여러 열의 격자에서 첫 콘텐츠가 두 칸을 차지 WideGridBlock",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "cards",
+    "layoutTag": "div",
+    "purpose": "여러 열의 격자에서 첫 콘텐츠가 두 칸을 차지",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "equal-height-grid",
+    "entry": "LAY-60",
+    "name": "같은 높이 격자",
+    "reactExport": "EqualHeightGrid",
+    "english": "EqualHeightGrid",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "모든 격자 행을 가장 긴 콘텐츠 높이에 맞추기 EqualHeightGrid",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "cards",
+    "layoutTag": "div",
+    "purpose": "모든 격자 행을 가장 긴 콘텐츠 높이에 맞추기",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "thumbnail-list",
+    "entry": "LAY-61",
+    "name": "섬네일 목록",
+    "reactExport": "ThumbnailList",
+    "english": "ThumbnailList",
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "작은 그림과 제목을 연결하고 넓은 화면에서 요약 표시 ThumbnailList",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "thumbnails",
+    "layoutTag": "ul",
+    "purpose": "작은 그림과 제목을 연결하고 넓은 화면에서 요약 표시",
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.",
+    "inputs": [
+      "children",
+      "aside",
+      "secondary",
+      "header",
+      "footer",
+      "label",
+      "columns"
+    ],
+    "events": [],
+    "css": [
+      "layout-base",
+      "layout-patterns"
+    ],
+    "minInlineSize": 160
+  }
+];
+  layoutItems.push(...[
+  {
+    "id": "list-detail-layout",
+    "entry": "LAY-04",
+    "name": "목록과 상세",
+    "reactExport": "ListDetailLayout",
+    "english": "ListDetailLayout",
+    "purpose": "목록에서 항목을 선택하고 대응하는 상세 내용 열기",
+    "deps": [
+      "tabs",
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "ListDetailLayout 목록에서 항목을 선택하고 대응하는 상세 내용 열기",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "resizable-panels",
+    "entry": "LAY-11",
+    "name": "크기 조절 패널",
+    "reactExport": "ResizablePanels",
+    "english": "ResizablePanels",
+    "purpose": "경계선을 끌거나 방향키로 두 작업 영역의 크기 조절",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "ResizablePanels 경계선을 끌거나 방향키로 두 작업 영역의 크기 조절",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "focus-layout",
+    "entry": "LAY-25",
+    "name": "집중 작업 모드",
+    "reactExport": "FocusLayout",
+    "english": "FocusLayout",
+    "purpose": "보조 영역을 숨겼다가 입력 상태를 유지하며 복귀",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "FocusLayout 보조 영역을 숨겼다가 입력 상태를 유지하며 복귀",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "object-hub",
+    "entry": "LAY-26",
+    "name": "객체 상세 허브",
+    "reactExport": "ObjectHub",
+    "english": "ObjectHub",
+    "purpose": "대상 요약과 관련 자료·활동을 탭으로 연결",
+    "deps": [
+      "tabs",
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "ObjectHub 대상 요약과 관련 자료·활동을 탭으로 연결",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "shrinking-header",
+    "entry": "LAY-30",
+    "name": "축소되는 고정 헤더",
+    "reactExport": "ShrinkingHeader",
+    "english": "ShrinkingHeader",
+    "purpose": "스크롤하면 머리글을 축소하고 상단에서 원래 크기로 복원",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "ShrinkingHeader 스크롤하면 머리글을 축소하고 상단에서 원래 크기로 복원",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "sticky-action-layout",
+    "entry": "LAY-31",
+    "name": "고정 행동 바",
+    "reactExport": "StickyActionLayout",
+    "english": "StickyActionLayout",
+    "purpose": "긴 콘텐츠 아래에 주 행동을 유지",
+    "deps": [
+      "button",
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "StickyActionLayout 긴 콘텐츠 아래에 주 행동을 유지",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "snap-sections",
+    "entry": "LAY-32",
+    "name": "장면 단위 스크롤",
+    "reactExport": "SnapSections",
+    "english": "SnapSections",
+    "purpose": "가로 장면마다 스크롤 위치를 맞추어 순서대로 탐색",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "SnapSections 가로 장면마다 스크롤 위치를 맞추어 순서대로 탐색",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "collapsible-sidebar",
+    "entry": "LAY-33",
+    "name": "접히는 탐색 레일",
+    "reactExport": "CollapsibleSidebar",
+    "english": "CollapsibleSidebar",
+    "purpose": "탐색을 아이콘 열로 축소하고 이름을 유지",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "CollapsibleSidebar 탐색을 아이콘 열로 축소하고 이름을 유지",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "document-workspace",
+    "entry": "LAY-34",
+    "name": "문서 탭 작업 공간",
+    "reactExport": "DocumentWorkspace",
+    "english": "DocumentWorkspace",
+    "purpose": "열린 문서를 키보드와 탭으로 전환",
+    "deps": [
+      "tabs",
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "DocumentWorkspace 열린 문서를 키보드와 탭으로 전환",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "stacked-panels",
+    "entry": "LAY-38",
+    "name": "쌓이는 상세 패널",
+    "reactExport": "StackedPanels",
+    "english": "StackedPanels",
+    "purpose": "하위 상세로 들어가고 이전 상세와 초점으로 복귀",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint",
+      "token-motion"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "StackedPanels 하위 상세로 들어가고 이전 상세와 초점으로 복귀",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive",
+      "stacked-panels"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "profile-tabs",
+    "entry": "LAY-42",
+    "name": "프로필과 탭 본문",
+    "reactExport": "ProfileTabs",
+    "english": "ProfileTabs",
+    "purpose": "대상의 소개와 활동을 탭으로 나누어 탐색",
+    "deps": [
+      "tabs",
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "ProfileTabs 대상의 소개와 활동을 탭으로 나누어 탐색",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "window-splitter",
+    "entry": "LAY-43",
+    "name": "창 분할 경계선",
+    "reactExport": "WindowSplitter",
+    "english": "WindowSplitter",
+    "purpose": "이동 가능한 경계선으로 창의 두 영역 비율 조절",
+    "deps": [
+      "resizable-panels",
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "WindowSplitter 이동 가능한 경계선으로 창의 두 영역 비율 조절",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "floating-panel",
+    "entry": "LAY-46",
+    "name": "플로팅 패널",
+    "reactExport": "FloatingPanel",
+    "english": "FloatingPanel",
+    "purpose": "포인터와 키보드로 부모 영역 안에서 작업 창 이동",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "FloatingPanel 포인터와 키보드로 부모 영역 안에서 작업 창 이동",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "off-canvas-layout",
+    "entry": "LAY-55",
+    "name": "화면 밖 서랍",
+    "reactExport": "OffCanvasLayout",
+    "english": "OffCanvasLayout",
+    "purpose": "보조 영역을 모달 서랍으로 열고 닫기",
+    "deps": [
+      "drawer",
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "OffCanvasLayout 보조 영역을 모달 서랍으로 열고 닫기",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  },
+  {
+    "id": "append-around",
+    "entry": "LAY-57",
+    "name": "폭에 따른 자리 이동",
+    "reactExport": "AppendAround",
+    "english": "AppendAround",
+    "purpose": "동일한 콘텐츠를 화면 폭에 맞는 자리로 이동하며 입력 유지",
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-space",
+      "token-radius",
+      "token-border",
+      "token-size",
+      "token-container",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "layoutMode": "interactive",
+    "layoutTag": "div",
+    "behavior": true,
+    "section": "page",
+    "layer": "Template",
+    "browse": {
+      "shelf": "template",
+      "kind": "템플릿",
+      "code": "LAY",
+      "fit": true
+    },
+    "keywords": "AppendAround 동일한 콘텐츠를 화면 폭에 맞는 자리로 이동하며 입력 유지",
+    "compatibility": "React는 children과 콜백으로 연결하고 HTML은 data 속성과 pattove 이벤트를 사용합니다. 호스트 작업의 완료 상태는 서비스 응답으로 판단하세요.",
+    "inputs": [
+      "children",
+      "items",
+      "title",
+      "aside",
+      "onChange"
+    ],
+    "events": [
+      "pattove:layoutchange"
+    ],
+    "css": [
+      "layout-base",
+      "layout-patterns",
+      "layout-interactive"
+    ],
+    "minInlineSize": 240
+  }
+]);
+  items.find(i=>i.id==='divider').entry='LAY-17';
+  for(const item of layoutItems){
+    contracts[item.id]=[item.purpose,item.compatibility,item.inputs,item.events];
+    items.push({...item,version,lifecycle:'Trial',environments:['HTML','React'],behavior:!!item.behavior});
+  }
+  const navigationItems = [
+  {
+    "id": "site-header",
+    "entry": "NAV-01",
+    "name": "헤더와 주 탐색",
+    "english": "SiteHeader",
+    "reactExport": "SiteHeader",
+    "purpose": "사이트 정체성과 주요 경로 제공",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "site-header",
+    "keywords": "GNB (Global Navigation Bar) 사이트 정체성과 주요 경로 제공",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "mega-menu",
+    "entry": "NAV-02",
+    "name": "메가 메뉴",
+    "english": "MegaMenu",
+    "reactExport": "MegaMenu",
+    "purpose": "많은 경로를 범주별로 탐색",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "mega-menu",
+    "keywords": "메가 메뉴 (Mega Menu) 많은 경로를 범주별로 탐색",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "hamburger-menu",
+    "entry": "NAV-03",
+    "name": "접히는 탐색 메뉴",
+    "english": "HamburgerMenu",
+    "reactExport": "HamburgerMenu",
+    "purpose": "좁은 공간에서 탐색을 열기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "hamburger-menu",
+    "keywords": "햄버거 메뉴 (Hamburger Menu) 좁은 공간에서 탐색을 열기",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "table-of-contents",
+    "entry": "NAV-09",
+    "name": "목차·앵커 탐색",
+    "english": "TableOfContents",
+    "reactExport": "TableOfContents",
+    "purpose": "긴 페이지의 필요한 구간으로 이동",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "table-of-contents",
+    "keywords": "목차 (Table of Contents) 긴 페이지의 필요한 구간으로 이동",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "site-footer",
+    "entry": "NAV-13",
+    "name": "푸터 탐색",
+    "english": "SiteFooter",
+    "reactExport": "SiteFooter",
+    "purpose": "보조 경로와 운영 정보 제공",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "site-footer",
+    "keywords": "푸터 (Footer) 보조 경로와 운영 정보 제공",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "skip-link",
+    "entry": "NAV-14",
+    "name": "본문 바로 가기",
+    "english": "SkipLink",
+    "reactExport": "SkipLink",
+    "purpose": "반복 탐색 영역 건너뛰기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "skip-link",
+    "keywords": "스킵 링크 (Skip Link) 반복 탐색 영역 건너뛰기",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "back-to-top",
+    "entry": "NAV-15",
+    "name": "맨 위로 이동",
+    "english": "BackToTop",
+    "reactExport": "BackToTop",
+    "purpose": "긴 페이지의 시작으로 복귀",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "back-to-top",
+    "keywords": "맨 위로 버튼 (Back to Top) 긴 페이지의 시작으로 복귀",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "app-switcher",
+    "entry": "NAV-17",
+    "name": "앱 전환 런처",
+    "english": "AppSwitcher",
+    "reactExport": "AppSwitcher",
+    "purpose": "연결된 여러 제품 사이 이동",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "app-switcher",
+    "keywords": "앱 스위처 (App Switcher) 연결된 여러 제품 사이 이동",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "site-map",
+    "entry": "NAV-23",
+    "name": "사이트 전체 지도 페이지",
+    "english": "SiteMap",
+    "reactExport": "SiteMap",
+    "purpose": "모든 페이지를 한 곳에 계층으로 나열",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "site-map",
+    "keywords": "사이트맵 (Sitemap) 모든 페이지를 한 곳에 계층으로 나열",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "navigation-rail",
+    "entry": "NAV-28",
+    "name": "탐색 레일",
+    "english": "NavigationRail",
+    "reactExport": "NavigationRail",
+    "purpose": "태블릿 폭에서 세로로 세운 아이콘 탐색",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "navigation-rail",
+    "keywords": "내비게이션 레일 (Navigation Rail) 태블릿 폭에서 세로로 세운 아이콘 탐색",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "page-header",
+    "entry": "NAV-29",
+    "name": "페이지 제목 영역",
+    "english": "PageHeader",
+    "reactExport": "PageHeader",
+    "purpose": "제목·설명·주 행동·경로를 묶은 상단",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "page-header",
+    "keywords": "페이지 헤더 (Page Header) 제목·설명·주 행동·경로를 묶은 상단",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "tag-cloud",
+    "entry": "NAV-30",
+    "name": "태그·주제 구름 탐색",
+    "english": "TagCloud",
+    "reactExport": "TagCloud",
+    "purpose": "주제 목록을 크기·빈도로 보여 주고 이동",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "tag-cloud",
+    "keywords": "태그 클라우드 (Tag Cloud) 주제 목록을 크기·빈도로 보여 주고 이동",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "alphabet-index",
+    "entry": "NAV-31",
+    "name": "가나다·알파벳 색인 점프",
+    "english": "AlphabetIndex",
+    "reactExport": "AlphabetIndex",
+    "purpose": "긴 목록 옆 글자 색인으로 바로 이동",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "alphabet-index",
+    "keywords": "인덱스 스크롤 (Alphabet Index Bar) 긴 목록 옆 글자 색인으로 바로 이동",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "navigation-progress",
+    "entry": "NAV-32",
+    "name": "페이지 전환 진행 띠",
+    "english": "NavigationProgress",
+    "reactExport": "NavigationProgress",
+    "purpose": "상단 얇은 띠로 다음 화면 불러오는 중 표시",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "navigation-progress",
+    "keywords": "상단 로딩 바 (Top Progress Bar) 상단 얇은 띠로 다음 화면 불러오는 중 표시",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "utility-header",
+    "entry": "NAV-33",
+    "name": "유틸리티 바와 주 탐색의 2단 헤더",
+    "english": "UtilityHeader",
+    "reactExport": "UtilityHeader",
+    "purpose": "언어·로그인 같은 보조 링크 줄을 위에 따로",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "utility-header",
+    "keywords": "유틸리티 바 (Utility Bar) 언어·로그인 같은 보조 링크 줄을 위에 따로",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "step-list",
+    "entry": "NAV-35",
+    "name": "단계 목록",
+    "english": "StepList",
+    "reactExport": "StepList",
+    "purpose": "여러 단계 중 지금 어디인지 줄지어 보여주는 표시",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "step-list",
+    "keywords": "스텝 리스트 (Step List) 여러 단계 중 지금 어디인지 줄지어 보여주는 표시",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "service-navigation",
+    "entry": "NAV-37",
+    "name": "서비스 전용 상단 메뉴 바",
+    "english": "ServiceNavigation",
+    "reactExport": "ServiceNavigation",
+    "purpose": "서비스명 옆에 붙는 해당 서비스 전용 상단 메뉴 바",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "service-navigation",
+    "keywords": "서비스 내비게이션 (Service Navigation) 서비스명 옆에 붙는 해당 서비스 전용 상단 메뉴 바",
+    "behavior": true,
+    "deps": [
+      "site-header",
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "in-page-navigation",
+    "entry": "NAV-38",
+    "name": "페이지 내 목차 이동",
+    "english": "InPageNavigation",
+    "reactExport": "InPageNavigation",
+    "purpose": "긴 글 옆에 붙어 클릭하면 해당 섹션으로 이동하는 목차",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "in-page-navigation",
+    "keywords": "페이지 내 내비게이션 (In-Page Navigation) 긴 글 옆에 붙어 클릭하면 해당 섹션으로 이동하는 목차",
+    "behavior": true,
+    "deps": [
+      "table-of-contents",
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "horizontal-menu",
+    "entry": "NAV-40",
+    "name": "수평 메뉴",
+    "english": "HorizontalMenu",
+    "reactExport": "HorizontalMenu",
+    "purpose": "가로로 나열한 상단 메뉴 항목 묶음",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "horizontal-menu",
+    "keywords": "가로 메뉴 (Horizontal Menu) 가로로 나열한 상단 메뉴 항목 묶음",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "page-counter",
+    "entry": "NAV-41",
+    "name": "페이지 카운터",
+    "english": "PageCounter",
+    "reactExport": "PageCounter",
+    "purpose": "여러 페이지 중 현재·전체 쪽수를 숫자로 표시",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "page-counter",
+    "keywords": "페이지 카운터 (Page Counter) 여러 페이지 중 현재·전체 쪽수를 숫자로 표시",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "navigation-drawer",
+    "entry": "NAV-42",
+    "name": "사이드 드로어",
+    "english": "NavigationDrawer",
+    "reactExport": "NavigationDrawer",
+    "purpose": "화면 옆에서 밀려 나오는 전체 높이 메뉴 패널",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "navigation-drawer",
+    "keywords": "사이드 드로어 (Navigation Drawer) 화면 옆에서 밀려 나오는 전체 높이 메뉴 패널",
+    "behavior": true,
+    "deps": [
+      "drawer",
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "journey-navigation",
+    "entry": "NAV-43",
+    "name": "여정 전체 단계 목차",
+    "english": "JourneyNavigation",
+    "reactExport": "JourneyNavigation",
+    "purpose": "여러 화면·서비스에 흩어진 절차 전체를 하나의 목차 지도로 묶어 지금 몇 단계인지 보여줌",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "journey-navigation",
+    "keywords": "단계별 내비게이션 (Step by Step Navigation) 여러 화면·서비스에 흩어진 절차 전체를 하나의 목차 지도로 묶어 지금 몇 단계인지 보여줌",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "select-navigation",
+    "entry": "NAV-44",
+    "name": "선택 상자로 바꾼 탐색",
+    "english": "SelectNavigation",
+    "reactExport": "SelectNavigation",
+    "purpose": "좁은 화면에서 메뉴를 선택 상자 하나로 접어 기기 기본 선택기를 쓰게 하기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "select-navigation",
+    "keywords": "셀렉트 내비게이션 (Select Menu Navigation) 좁은 화면에서 메뉴를 선택 상자 하나로 접어 기기 기본 선택기를 쓰게 하기",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "fullscreen-navigation",
+    "entry": "NAV-45",
+    "name": "화면 전체를 덮는 탐색",
+    "english": "FullscreenNavigation",
+    "reactExport": "FullscreenNavigation",
+    "purpose": "메뉴를 열면 화면 전체를 덮어 목록만 보이게 하기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "fullscreen-navigation",
+    "keywords": "풀스크린 메뉴 (Fullscreen Overlay Menu) 메뉴를 열면 화면 전체를 덮어 목록만 보이게 하기",
+    "behavior": true,
+    "deps": [
+      "drawer",
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "overflow-navigation",
+    "entry": "NAV-46",
+    "name": "가로로 넘치는 탐색 띠",
+    "english": "OverflowNavigation",
+    "reactExport": "OverflowNavigation",
+    "purpose": "메뉴를 한 줄로 두고 넘치는 항목은 옆으로 밀어 보게 하기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "overflow-navigation",
+    "keywords": "가로 스크롤 내비게이션 (Horizontal Scroll Nav) 메뉴를 한 줄로 두고 넘치는 항목은 옆으로 밀어 보게 하기",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "direct-subnav",
+    "entry": "NAV-47",
+    "name": "상위 메뉴를 건너뛰는 하위 탐색",
+    "english": "DirectSubnav",
+    "reactExport": "DirectSubnav",
+    "purpose": "상위 항목을 누르면 목록을 펴지 않고 바로 하위 화면으로 넘기기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "direct-subnav",
+    "keywords": "서브내비 건너뛰기 (Skip the Subnav) 상위 항목을 누르면 목록을 펴지 않고 바로 하위 화면으로 넘기기",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "multi-toggle-navigation",
+    "entry": "NAV-49",
+    "name": "상위 링크를 함께 두는 다단 토글",
+    "english": "MultiToggleNavigation",
+    "reactExport": "MultiToggleNavigation",
+    "purpose": "하위 목록을 펼치면서 상위 항목 자체로 가는 링크도 같이 남겨 두기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "multi-toggle-navigation",
+    "keywords": "멀티 토글 메뉴 (Multi-Toggle Menu) 하위 목록을 펼치면서 상위 항목 자체로 가는 링크도 같이 남겨 두기",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "compact-breadcrumb",
+    "entry": "NAV-51",
+    "name": "마지막 단계만 보이는 경로",
+    "english": "CompactBreadcrumb",
+    "reactExport": "CompactBreadcrumb",
+    "purpose": "좁은 화면에서 현재 위치 경로 중 바로 위 한 단계만 남기기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "compact-breadcrumb",
+    "keywords": "축약 브레드크럼 (Truncated Breadcrumb) 좁은 화면에서 현재 위치 경로 중 바로 위 한 단계만 남기기",
+    "behavior": true,
+    "deps": [
+      "breadcrumb",
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "breadcrumb-dropdown",
+    "entry": "NAV-52",
+    "name": "경로를 접어 넣은 드롭다운",
+    "english": "BreadcrumbDropdown",
+    "reactExport": "BreadcrumbDropdown",
+    "purpose": "긴 경로를 버튼 하나로 접고 눌렀을 때 전체 단계를 펴 보이기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "breadcrumb-dropdown",
+    "keywords": "브레드크럼 드롭다운 (Breadcrumb Dropdown) 긴 경로를 버튼 하나로 접고 눌렀을 때 전체 단계를 펴 보이기",
+    "behavior": true,
+    "deps": [
+      "breadcrumb",
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "breadcrumb-back",
+    "entry": "NAV-53",
+    "name": "경로를 뒤로 버튼으로 바꾸기",
+    "english": "BreadcrumbBack",
+    "reactExport": "BreadcrumbBack",
+    "purpose": "좁은 화면에서 경로 전체 대신 바로 위로 가는 버튼 하나만 두기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "breadcrumb-back",
+    "keywords": "뒤로 가기 링크 (Back Link) 좁은 화면에서 경로 전체 대신 바로 위로 가는 버튼 하나만 두기",
+    "behavior": true,
+    "deps": [
+      "breadcrumb",
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "responsive-pagination",
+    "entry": "NAV-54",
+    "name": "번호 대신 이전·다음으로 바꾸기",
+    "english": "ResponsivePagination",
+    "reactExport": "ResponsivePagination",
+    "purpose": "좁은 화면에서 페이지 번호를 접고 이전·다음 두 버튼만 남기기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "responsive-pagination",
+    "keywords": "이전·다음 페이지네이션 (Prev/Next Pagination) 좁은 화면에서 페이지 번호를 접고 이전·다음 두 버튼만 남기기",
+    "behavior": true,
+    "deps": [
+      "button",
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "conditional-pagination",
+    "entry": "NAV-55",
+    "name": "필요할 때만 펴는 페이지 번호",
+    "english": "ConditionalPagination",
+    "reactExport": "ConditionalPagination",
+    "purpose": "평소에는 번호를 접어 두고 누르면 전체 번호를 펴 보이기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "conditional-pagination",
+    "keywords": "접이식 페이지네이션 (Collapsed Pagination) 평소에는 번호를 접어 두고 누르면 전체 번호를 펴 보이기",
+    "behavior": true,
+    "deps": [
+      "responsive-pagination",
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  },
+  {
+    "id": "footer-anchor",
+    "entry": "NAV-56",
+    "name": "푸터로 보내는 탐색 링크",
+    "english": "FooterAnchor",
+    "reactExport": "FooterAnchor",
+    "purpose": "상단 메뉴 버튼을 눌러 화면 아래 탐색 영역으로 이동시키기",
+    "section": "navigation",
+    "layer": "Molecule",
+    "browse": {
+      "shelf": "part",
+      "kind": "부품",
+      "code": "NAV",
+      "fit": true
+    },
+    "navigationMode": "footer-anchor",
+    "keywords": "푸터 앵커 내비게이션 (Footer Anchor) 상단 메뉴 버튼을 눌러 화면 아래 탐색 영역으로 이동시키기",
+    "behavior": true,
+    "deps": [
+      "token-color",
+      "token-text",
+      "token-weight",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-breakpoint"
+    ],
+    "css": [
+      "navigation-parts"
+    ],
+    "compatibility": "링크는 실제 목적지로 연결합니다. 탐색을 가리는 요소가 있으면 대상의 scroll-margin을 조절하세요. 링크 탐색에 애플리케이션 메뉴 역할을 부여하지 않습니다.",
+    "inputs": [
+      "items",
+      "title",
+      "label",
+      "current",
+      "children"
+    ],
+    "events": [
+      "pattove:navigate"
+    ],
+    "minInlineSize": 160
+  }
+];
+  items.find(i=>i.id==='side-nav').entry='NAV-04';
+  for(const item of navigationItems){contracts[item.id]=[item.purpose,item.compatibility,item.inputs,item.events];items.push({...item,version,lifecycle:'Trial',environments:['HTML','React']});}
   // Shared CSS blocks: a part's own block plus the helper blocks it is drawn with.
   const cssBlocks = {
     checkbox: ['selection'], radio: ['selection'], switch: ['selection'],
@@ -896,9 +4834,9 @@
   for (const item of items) {
     const [purpose, compatibility, inputs, events] = contracts[item.id];
     Object.assign(item, { purpose, compatibility, inputs, events, controls: controls[item.id] || [], gallery: galleries[item.id] || null,
-      css: cssBlocks[item.id] || (item.id === 'page' ? ['page'] : [item.id]),
+      css: item.css || cssBlocks[item.id] || (item.id === 'page' ? ['page'] : [item.id]),
       source: 'src/system/parts.js', reactSource: item.layer === 'Token' ? null : 'src/system/react/'+item.id+'.jsx', styles: window.Pattove.catalog.styles.filter(s => s.id !== 'base').map(s => s.id),
-      minInlineSize: minInline[item.id] || 160,
+      minInlineSize: item.minInlineSize || minInline[item.id] || 160,
       support: { html: 'implemented', react: 'implemented', native: 'not-implemented', print: 'not-verified' },
       verification: { suite: 'tests/system-audit.cjs', evidence: 'test-results/system-audit/results.json' }
     });

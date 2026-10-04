@@ -70,9 +70,59 @@
     const list = files(item, environment);
     return list.length === 1 ? list[0].content : list.map(file => fileComment(file) + '\n' + file.content.trimEnd()).join('\n\n') + '\n';
   }
+  // A reference preview repeats short entrances after a readable hold. Exported effects still run once.
+  function repeatPreview(root) {
+    const doc = root.ownerDocument, win = doc.defaultView;
+    const media = win.matchMedia('(prefers-reduced-motion: reduce)');
+    let timer = 0, active = false;
+    const watched = new WeakMap();
+    const animations = () => root.getAnimations({subtree:true}).filter(animation =>
+      animation.animationName && Number.isFinite(animation.effect.getComputedTiming().endTime));
+    const finished = animation => animation.playState === 'finished' || animation.currentTime >= animation.effect.getComputedTiming().endTime;
+    const canRun = () => !doc.hidden && !media.matches && !doc.documentElement.hasAttribute('data-paused') && !doc.documentElement.hasAttribute('data-reduced');
+    function watch(animation) {
+      const promise = animation.finished;
+      if (watched.get(animation) === promise) return;
+      watched.set(animation, promise);
+      promise.then(schedule).catch(() => {});
+    }
+    function schedule() {
+      win.clearTimeout(timer); timer = 0;
+      const list = animations();
+      if (!canRun() || !list.length || !list.every(finished)) return;
+      timer = win.setTimeout(() => {
+        timer = 0;
+        if (canRun()) for (const animation of animations()) {
+          animation.pause(); animation.currentTime = 0; animation.play(); watch(animation);
+        }
+      }, 1400);
+    }
+    function sync() {
+      const playing = canRun();
+      for (const animation of animations()) {
+        if (playing) {
+          if (!active && finished(animation)) { animation.pause(); animation.currentTime = 0; }
+          if (animation.playState === 'paused') animation.play();
+        } else {
+          // Pin the hold time even when an offscreen frame cannot process a pending pause.
+          const time = animation.currentTime;
+          animation.pause(); animation.currentTime = time;
+        }
+        watch(animation);
+      }
+      active = playing;
+      schedule();
+    }
+    const observer = new win.MutationObserver(sync);
+    observer.observe(doc.documentElement, {attributes:true, attributeFilter:['data-paused','data-reduced']});
+    media.addEventListener('change', sync);
+    doc.addEventListener('visibilitychange', sync);
+    win.addEventListener('pagehide', event => { if (!event.persisted) { win.clearTimeout(timer); observer.disconnect(); } });
+    sync();
+  }
   function documentHTML(item, preview = false) {
     const setup = item.behavior ? `${window.Pattove.mountMotion.toString()}\nconst runtime = mountMotion(document.currentScript.previousElementSibling, ${JSON.stringify(item.behavior)});\nwindow.addEventListener('pagehide', event => { if (!event.persisted) runtime.destroy(); });` : '';
-    const bridge = preview ? `window.addEventListener('message', event => {
+    const bridge = preview ? `${item.previewRepeat ? `(${repeatPreview.toString()})(document.currentScript.previousElementSibling);\n` : ''}window.addEventListener('message', event => {
   if (event.source !== parent || event.data?.type !== 'pattove:motion-playback') return;
   document.documentElement.toggleAttribute('data-paused', event.data.paused === true);
   document.documentElement.toggleAttribute('data-reduced', event.data.reduced === true);

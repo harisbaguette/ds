@@ -287,10 +287,173 @@
       return `<article class="ds-article"><${headingLevel===2?'h2':'h1'}>${esc(title)}</${headingLevel===2?'h2':'h1'}><nav aria-label="목차"><ol>${sections.map((s,i)=>`<li><a href="#${esc(prefix)}-${i}">${esc(s.title)}</a></li>`).join('')}</ol></nav>${sections.map((s,i)=>`<section id="${esc(prefix)}-${i}"><${headingLevel===2?'h3':'h2'}>${esc(s.title)}</${headingLevel===2?'h3':'h2'}><p>${esc(s.body)}</p></section>`).join('')}</article>`;
     }
   };
+
+  function advancedNavigationItem(id,prefix,o){
+    const p=esc(prefix),title=o.title??'전체 탐색';
+    const defaults=[{id:'walks',label:'산책',href:'#walks'},{id:'notes',label:'기록',href:'#notes'},{id:'group',label:'모임',href:'#group'}],items=o.items??defaults;
+    const button=(label,attributes='')=>'<button type="button" class="ds-nav-button" '+attributes+'>'+esc(label)+'</button>';
+    const link=item=>'<a href="'+safeHref(item.href)+'">'+esc(item.label)+'</a>';
+    if(['workspace-switcher','version-switcher','locale-switcher'].includes(id)){
+      const settings={ 'workspace-switcher':{label:'작업 공간',items:[{label:'디자인팀',href:'#design'},{label:'개발팀',href:'#development'}]},'version-switcher':{label:'문서 버전',items:[{label:'현재 버전',href:'#current'},{label:'이전 버전',href:'#previous'}]},'locale-switcher':{label:'언어',items:[{label:'한국어',lang:'ko',href:'#ko'},{label:'English',lang:'en',href:'#en'},{label:'日本語',lang:'ja',href:'#ja'}]}};
+      return navigationItem('select-navigation',prefix,{...settings[id],...o});
+    }
+    if(['drilldown-navigation','push-navigation','rtl-drill-navigation'].includes(id)){
+      const groups=o.items??[{label:'산책',href:'#walks',children:[{label:'숲길',href:'#forest'},{label:'물가',href:'#river'}]},{label:'기록',href:'#notes',children:[{label:'여행기',href:'#journals'},{label:'사진',href:'#photos'}]}],levels=[];
+      const visit=(rows,path=[],keys=[],parent=null)=>{
+        if(path.length>20)throw Error('Navigation depth must not exceed 20');
+        const level=p+'-level-'+(path.join('-')||'root'),parentLevel=p+'-level-'+(path.slice(0,-1).join('-')||'root');
+        levels.push('<section class="ds-nav-drill-level" id="'+level+'" data-drill-level data-drill-path="'+esc(JSON.stringify(keys))+'"'+(path.length?' hidden':'')+'><header>'+(path.length?button('이전','data-drill-back="'+parentLevel+'"'):'')+'<h2 tabindex="-1">'+esc(parent?.label??title)+'</h2>'+(parent?.href?'<a href="'+safeHref(parent.href)+'">'+esc(parent.label)+' 전체</a>':'')+'</header><ul>'+rows.map((item,i)=>'<li>'+(item.children?.length?button(item.label+' ›','data-drill-next="'+p+'-level-'+[...path,i].join('-')+'"'):link(item))+'</li>').join('')+'</ul></section>');
+        rows.forEach((item,i)=>{if(item.children?.length)visit(item.children,[...path,i],[...keys,String(item.id??item.href??item.label)],item);});
+      };visit(groups);
+      return '<nav class="ds-nav ds-drilldown-navigation" aria-label="'+esc(title)+'" data-drill-navigation data-variant="'+(id==='push-navigation'?'push':id==='rtl-drill-navigation'?'rtl':'basic')+'">'+levels.join('')+'</nav>';
+    }
+    if(['priority-navigation','overflow-set'].includes(id)){
+      const row=(item,i,measure=false)=>'<li'+(measure?'':' data-overflow-index="'+i+'"')+'><a href="'+safeHref(item.href)+'"'+(o.current===item.href?' aria-current="page"':'')+'>'+esc(item.label)+'</a></li>';
+      return '<nav class="ds-nav ds-priority-navigation" aria-label="'+esc(o.label??'주 탐색')+'" data-priority-navigation><ul class="ds-priority-visible" data-overflow-visible>'+items.map((item,i)=>row(item,i)).join('')+'</ul><details class="ds-nav-disclosure" data-nav-disclosure data-overflow-menu hidden><summary>더보기</summary><ul class="ds-priority-overflow" data-overflow-extra></ul></details><div class="ds-nav-measure" aria-hidden="true" inert><ul class="ds-priority-visible" data-overflow-measure>'+items.map((item,i)=>row(item,i,true)).join('')+'</ul><details class="ds-nav-disclosure"><summary data-overflow-measure-more>더보기</summary></details></div></nav>';
+    }
+    if(id==='load-more'){
+      const records=o.initialItems??[{id:'forest',label:'가을 숲',href:'#forest'},{id:'river',label:'물가 산책',href:'#river'}];
+      return '<section class="ds-nav ds-load-more" aria-label="'+esc(o.label??'산책 목록')+'" data-load-more data-cursor="'+esc(JSON.stringify(o.initialCursor??null))+'" data-more="'+(o.initialHasMore!==false)+'"><ul data-more-list aria-busy="false">'+records.map(item=>'<li data-record-id="'+esc(item.id)+'">'+(item.href?link(item):'<span>'+esc(item.label)+'</span>')+(item.description?'<p>'+esc(item.description)+'</p>':'')+'</li>').join('')+'</ul><div class="ds-nav-actions">'+button('더 보기','data-more-request'+(o.initialHasMore===false?' hidden':''))+button('취소','data-more-cancel hidden')+'</div><p role="status"></p></section>';
+    }
+    if(id==='command-palette'){
+      const commands=o.items??[{id:'walks',label:'산책 목록 열기',href:'#walks'},{id:'notes',label:'기록 열기',href:'#notes'},{id:'settings',label:'설정 열기',href:'#settings'}];
+      return '<div class="ds-nav ds-command-palette" data-command-palette>'+button(o.trigger??'명령 검색 열기','data-command-open aria-haspopup="dialog" aria-controls="'+p+'-dialog"')+'<dialog class="ds-dialog" id="'+p+'-dialog" aria-labelledby="'+p+'-title"><h2 id="'+p+'-title">'+esc(o.title??'명령 검색')+'</h2><label for="'+p+'-input">명령</label><input id="'+p+'-input" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="'+p+'-options" data-command-input><ul id="'+p+'-options" role="listbox" aria-label="검색한 명령">'+commands.map((item,i)=>'<li role="option" aria-selected="false" id="'+p+'-option-'+i+'" data-command-option data-command-id="'+esc(item.id)+'" data-command-label="'+esc(item.label)+'" data-command-href="'+(item.href?safeHref(item.href):'')+'" data-command-keywords="'+esc(item.keywords??'')+'">'+esc(item.label)+'</li>').join('')+'</ul><p role="status">'+commands.length+'개 명령</p><form method="dialog"><button class="ds-nav-button">닫기</button></form></dialog></div>';
+    }
+    if(id==='pinned-navigation'){
+      const pinned=o.pinned??o.defaultPinned??[],rows=[...items.map((item,i)=>({...item,order:i}))].sort((a,b)=>Number(pinned.includes(b.id))-Number(pinned.includes(a.id)));
+      return '<nav class="ds-nav ds-pinned-navigation" aria-label="'+esc(o.label??'즐겨찾기 탐색')+'" data-pinned-navigation><ul>'+rows.map(item=>'<li data-pin-id="'+esc(item.id)+'" data-pin-order="'+item.order+'" data-pinned="'+pinned.includes(item.id)+'">'+link(item)+button(pinned.includes(item.id)?'고정 해제':'고정','data-pin-toggle aria-label="'+esc(item.label)+' 고정" aria-pressed="'+pinned.includes(item.id)+'"')+'</li>').join('')+'</ul><p role="status"></p></nav>';
+    }
+    if(id==='history-navigation'){
+      const pages=o.items??[{id:'walks',label:'산책',body:'참여할 산책 코스를 확인합니다.'},{id:'notes',label:'기록',body:'함께 걸었던 날의 기록입니다.'},{id:'group',label:'모임',body:'다음 산책에서 만날 사람들입니다.'}];
+      return '<div class="ds-nav ds-history-navigation" data-history-navigation><nav aria-label="앱 방문 이력" class="ds-nav-actions">'+button('뒤로','data-history-back disabled')+button('앞으로','data-history-forward disabled')+'</nav><nav aria-label="작업 화면"><ul class="ds-nav-actions">'+pages.map((item,i)=>'<li>'+button(item.label,'data-history-target="'+p+'-page-'+i+'"'+(!i?' aria-current="page"':''))+'</li>').join('')+'</ul></nav>'+pages.map((item,i)=>'<section id="'+p+'-page-'+i+'" data-history-page data-record-id="'+esc(item.id)+'"'+(i?' hidden':'')+'><h2 tabindex="-1">'+esc(item.label)+'</h2><p>'+esc(item.body??'')+'</p></section>').join('')+'</div>';
+    }
+    if(id==='scroll-restore-list'){
+      const rows=o.items??Array.from({length:30},(_,i)=>({id:'walk-'+i,label:'산책 코스 '+(i+1),body:(i+1)+'번 산책 코스의 출발 시간과 준비물을 확인하세요.'}));
+      return '<div class="ds-nav ds-scroll-restore-list" data-scroll-restore><div data-restore-list-view><label for="'+p+'-search">코스 검색</label><input id="'+p+'-search" data-restore-search><div class="ds-nav-scroll" role="region" aria-label="산책 목록" tabindex="0" data-restore-scroll><ul>'+rows.map((item,i)=>'<li>'+button(item.label,'id="'+p+'-record-'+i+'" data-restore-open="'+p+'-detail-'+i+'" data-record-id="'+esc(item.id)+'"')+'</li>').join('')+'</ul></div></div>'+rows.map((item,i)=>'<section id="'+p+'-detail-'+i+'" data-restore-detail hidden>'+button('목록으로','data-restore-back')+'<h2 tabindex="-1">'+esc(item.label)+'</h2><p>'+esc(item.body??'')+'</p></section>').join('')+'</div>';
+    }
+    if(id==='auto-hide-navigation')return '<div class="ds-nav ds-auto-hide-navigation"><div class="ds-nav-scroll" tabindex="0" role="region" aria-label="본문" data-nav-auto-scroll><header class="ds-nav-auto-header" data-hidden="false"><strong>'+esc(o.title??'산책 기록')+'</strong><nav aria-label="주 탐색"><ul class="ds-nav-links">'+items.map(item=>'<li>'+link(item)+'</li>').join('')+'</ul></nav></header>'+(o.children??Array.from({length:12},(_,i)=>'<section class="ds-nav-scroll-section"><h2>산책 '+(i+1)+'구간</h2><p>나무와 꽃을 살펴보며 천천히 걸어갑니다. 물가의 쉼터에서 잠시 쉬어 가세요.</p></section>').join(''))+'</div></div>';
+    if(id==='tabs-picker'){
+      const rows=o.items??['계획','준비물','기록','사진','참여자','설정'].map((label,i)=>({value:String(i),label,content:label+' 내용을 확인하세요.'})),count=Math.max(1,Math.floor(Number(o.visibleCount))||3);
+      return '<div class="ds-nav ds-tabs-picker" data-tabs-picker data-visible-count="'+count+'"><div class="ds-tabs" data-look="scroll"><div class="ds-tablist" role="tablist" aria-label="'+esc(o.label??'문서 탭')+'">'+rows.map((item,i)=>'<button class="ds-tab" type="button" role="tab" id="'+p+'-tab-'+i+'" aria-controls="'+p+'-panel-'+i+'" aria-selected="'+(i===0)+'" tabindex="'+(i===0?0:-1)+'" data-picker-value="'+esc(item.value)+'"'+(i>=count?' hidden':'')+'>'+esc(item.label)+'</button>').join('')+'</div>'+rows.map((item,i)=>'<div class="ds-tabpanel" role="tabpanel" tabindex="0" id="'+p+'-panel-'+i+'" aria-labelledby="'+p+'-tab-'+i+'"'+(i?' hidden':'')+'>'+esc(item.content)+'</div>').join('')+'</div>'+(rows.length>count?'<div class="ds-nav-extra-tabs"><label for="'+p+'-more">추가 탭</label><select id="'+p+'-more" data-picker-select><option value="" selected disabled>탭 선택</option>'+rows.slice(count).map(item=>'<option value="'+esc(item.value)+'">'+esc(item.label)+'</option>').join('')+'</select></div>':'')+'</div>';
+    }
+    if(id==='scrollspy-navigation'){
+      const rows=o.items??['출발 전','산책 코스','돌아오는 길'].map(title=>({title,body:'물과 편한 신발을 준비하세요. 동쪽 입구에서 시작해 나무와 꽃을 살펴보며 천천히 걸어갑니다. 물가 쉼터에서 잠시 쉬고 함께 기록을 나눕니다.'}));
+      return '<div class="ds-nav ds-scrollspy-navigation" data-scrollspy><nav aria-label="'+esc(o.label??'이 글의 순서')+'"><ol>'+rows.map((item,i)=>'<li><a href="#'+p+'-'+i+'" data-spy-target="'+p+'-'+i+'"'+(i===0?' aria-current="location"':'')+'>'+esc(item.title)+'</a></li>').join('')+'</ol></nav><div class="ds-nav-scroll ds-nav-spy-scroll" role="region" aria-label="문서 내용" tabindex="0" data-spy-scroll>'+rows.map((item,i)=>'<section class="ds-nav-spy-section" id="'+p+'-'+i+'" tabindex="-1"><h2>'+esc(item.title)+'</h2><p>'+esc(item.body)+'</p></section>').join('')+'</div></div>';
+    }
+    throw Error('Unknown advanced navigation: '+id);
+  }
+  function navigationItem(id,prefix,o){
+    if(window.Pattove.systemRegistry.index.get(id)?.advancedNavigation)return advancedNavigationItem(id,prefix,o);
+    const defaults=[{label:'산책',href:'#walks'},{label:'기록',href:'#notes'},{label:'모임',href:'#group'}];
+    const groups=o.groups??[{label:'산책',href:'#walks',children:[{label:'숲길',href:'#forest'},{label:'물가',href:'#river'}]},{label:'기록',href:'#notes',children:[{label:'여행기',href:'#journals'},{label:'사진',href:'#photos'}]}];
+    const items=o.items??defaults,title=o.title??'산책 기록',label=o.label??'주 탐색',current=o.current;
+    const jump=(target,text)=>'<a class="ds-nav-jump" data-nav-target="'+esc(target)+'" href="#'+esc(encodeURIComponent(target))+'">'+esc(text)+'</a>';
+    const links=(rows=items,rail=false,skip=false)=>'<ul class="ds-nav-links">'+rows.map(v=>{const target=skip?(v.children?.[0]??v):v;return '<li><a href="'+safeHref(target.href)+'"'+(current===target.href?' aria-current="page"':'')+(rail?' aria-label="'+esc(v.label)+'"':'')+'>'+(rail?'<span class="ds-nav-symbol" aria-hidden="true">'+esc(v.label.slice(0,1))+'</span>':'')+'<span>'+esc(v.label)+'</span></a></li>';}).join('')+'</ul>';
+    const disclosure=(text,body)=>'<details class="ds-nav-disclosure" data-nav-disclosure><summary>'+esc(text)+'</summary>'+body+'</details>';
+    const tree=(rows,toggle=false,depth=0)=>{if(depth>20)throw Error('Navigation depth must not exceed 20');return '<ul class="ds-nav-tree">'+rows.map(v=>'<li><a href="'+safeHref(v.href)+'"'+(current===v.href?' aria-current="page"':'')+'>'+esc(v.label)+'</a>'+(v.children?.length?(toggle?disclosure(v.label+' 하위 항목',tree(v.children,true,depth+1)):tree(v.children,false,depth+1)):'')+'</li>').join('')+'</ul>';};
+    let body='',tag='div';
+    if(['site-header','service-navigation'].includes(id)){tag='header';body='<a class="ds-nav-brand" href="'+safeHref(o.home??'#home')+'">'+esc(title)+'</a><nav aria-label="주 탐색">'+links()+'</nav>';}
+    else if(id==='utility-header'){tag='header';body='<nav class="ds-nav-utility" aria-label="보조 탐색">'+links(o.utilities??[{label:'로그인',href:'#login'},{label:'도움말',href:'#help'}])+'</nav><div class="ds-site-header"><strong class="ds-nav-brand">'+esc(title)+'</strong><nav aria-label="주 탐색">'+links()+'</nav></div>';}
+    else if(id==='mega-menu'){tag='nav';body=groups.map(g=>disclosure(g.label,'<div class="ds-nav-mega-body"><a href="'+safeHref(g.href)+'">'+esc(g.label)+' 전체</a>'+tree(g.children??[])+'</div>')).join('');}
+    else if(['hamburger-menu','app-switcher'].includes(id)){tag='nav';body=disclosure(o.label??(id==='app-switcher'?'앱 전환':'메뉴'),links(items,id==='app-switcher'));}
+    else if(id==='site-footer'){tag='footer';body='<strong>'+esc(title)+'</strong><nav aria-label="하단 탐색">'+links()+'</nav><p>'+esc(o.information??'함께 걷고 기록합니다.')+'</p>';}
+    else if(id==='site-map'){tag='nav';body='<h2>'+esc(o.title??'사이트 전체 지도')+'</h2>'+tree(o.items??groups);}
+    else if(['horizontal-menu','overflow-navigation','navigation-rail','direct-subnav'].includes(id)){tag='nav';body=links(o.items??(id==='direct-subnav'?groups:defaults),id==='navigation-rail',id==='direct-subnav');}
+    else if(id==='multi-toggle-navigation'){tag='nav';body=tree(o.items??groups,true);}
+    else if(id==='page-header'){tag='header';const heading=o.headingLevel===2?'h2':'h1';body='<nav aria-label="상위 경로">'+links()+'</nav><div><'+heading+'>'+esc(o.title??'산책 계획')+'</'+heading+'>'+(o.actions??'')+'</div><p>'+esc(o.description??'다가오는 일정을 확인하세요.')+'</p>';}
+    else if(id==='page-counter'){const total=Math.min(10000,Math.max(1,Math.floor(Number(o.total??8))||1)),page=Math.min(total,Math.max(1,Math.floor(Number(o.page))||1));return '<output class="ds-nav ds-page-counter" aria-label="'+esc(o.label??'현재 쪽')+'">'+page+' / '+total+'</output>';}
+    else if(id==='navigation-progress')body='<progress aria-label="'+esc(o.label??'페이지 불러오는 중')+'" max="100"'+(o.value==null?'':' value="'+Math.min(100,Math.max(0,Number(o.value)||0))+'"')+'></progress>';
+    else if(id==='tag-cloud'){tag='nav';const tags=o.items??[{label:'숲',href:'#forest',count:24},{label:'물가',href:'#river',count:9},{label:'정원',href:'#garden',count:4}],maximum=Math.max(1,...tags.map(v=>Number(v.count)||0));body='<ul>'+tags.map(v=>'<li data-rank="'+Math.min(3,Math.max(1,Math.ceil((Number(v.count)||0)/maximum*3)))+'"><a href="'+safeHref(v.href)+'">'+esc(v.label)+' <span>'+Math.max(0,Number(v.count)||0)+'건</span></a></li>').join('')+'</ul>';}
+    else if(['table-of-contents','in-page-navigation'].includes(id)){
+      const rows=(o.items??[{title:'출발 전',body:'물과 편한 신발을 준비합니다.'},{title:'산책 코스',body:'동쪽 입구에서 시작해 물가 쉼터까지 걸어갑니다.'},{title:'돌아오는 길',body:'함께 기록을 나누고 다음 산책을 준비합니다.'}]).map((v,i)=>({...v,id:v.id??prefix+'-section-'+i}));
+      body='<nav aria-label="'+esc(o.title??'이 글의 순서')+'"><h2>'+esc(o.title??'이 글의 순서')+'</h2><ol>'+rows.map(v=>'<li>'+jump(v.id,v.title??v.label)+'</li>').join('')+'</ol></nav><div class="ds-nav-sections">'+(o.children??rows.map(v=>'<section id="'+esc(v.id)+'" tabindex="-1"><h2>'+esc(v.title??v.label)+'</h2><p>'+esc(v.body??'')+'</p></section>').join(''))+'</div>';
+    }else if(['skip-link','back-to-top','footer-anchor'].includes(id)){
+      const target=o.targetId??o.footerId??prefix+'-target';let destination=o.children??((o.targetId||o.footerId)?'':'<section id="'+esc(target)+'" tabindex="-1"><h2>산책 안내</h2><p>본문을 읽고 다음 일정을 확인하세요.</p></section>');
+      if(id==='footer-anchor'&&!o.footerId)destination=(o.children??'')+'<footer id="'+esc(target)+'" tabindex="-1"><nav aria-label="하단 메뉴">'+links()+'</nav></footer>';
+      const anchor=jump(target,o.label??(id==='skip-link'?'본문 바로 가기':id==='back-to-top'?'맨 위로':'하단 메뉴로 이동'));
+      body=id==='back-to-top'?destination+anchor:anchor+destination;
+    }else if(id==='alphabet-index'){
+      const rows=o.groups??[{label:'ㄱ',items:[{label:'가을 숲',href:'#autumn'},{label:'강변 길',href:'#river'}]},{label:'ㄴ',items:[{label:'나무 정원',href:'#trees'}]},{label:'ㅅ',items:[{label:'산책 학교',href:'#school'}]}];
+      body='<nav aria-label="'+esc(o.label??'가나다 색인')+'"><ul>'+rows.map((g,i)=>'<li>'+jump(prefix+'-'+i,g.label)+'</li>').join('')+'</ul></nav>'+rows.map((g,i)=>'<section id="'+esc(prefix+'-'+i)+'" tabindex="-1"><h2>'+esc(g.label)+'</h2>'+links(g.items)+'</section>').join('');
+    }else if(['step-list','journey-navigation'].includes(id)){
+      tag='nav';const steps=o.items??[{label:'기본 정보',href:'#information',description:'이름과 연락처를 입력합니다.'},{label:'일정 선택',href:'#schedule',description:'참여할 날짜를 고릅니다.'},{label:'신청 확인',description:'입력한 내용을 확인하고 제출합니다.'}],now=Math.max(0,Math.min(steps.length-1,Number(o.current??1)));
+      body='<ol>'+steps.map((v,i)=>'<li'+(i===now?' aria-current="step"':'')+' data-complete="'+(i<now)+'">'+(id==='journey-navigation'?disclosure((i+1)+'. '+v.label,'<p>'+esc(v.description??'')+'</p>'+(v.href?'<a href="'+safeHref(v.href)+'">'+esc(v.label)+'으로 이동</a>':'')):'<span class="ds-nav-step-number" aria-hidden="true">'+(i+1)+'</span><div>'+(v.href?'<a href="'+safeHref(v.href)+'">'+esc(v.label)+'</a>':'<span>'+esc(v.label)+'</span>')+(i<now?'<span class="ds-nav-step-state">완료</span>':'')+'</div>')+'</li>').join('')+'</ol>';
+    }else if(['navigation-drawer','fullscreen-navigation'].includes(id)){
+      body='<button type="button" class="ds-nav-button" data-dialog-open="'+esc(prefix)+'-nav" aria-controls="'+esc(prefix)+'-nav" aria-haspopup="dialog">'+esc(o.trigger??'메뉴 열기')+'</button><dialog id="'+esc(prefix)+'-nav" class="ds-dialog ds-drawer" aria-labelledby="'+esc(prefix)+'-title"><h2 id="'+esc(prefix)+'-title">'+esc(o.title??'메뉴')+'</h2><nav aria-label="'+esc(o.title??'메뉴')+'" data-nav-dialog>'+links()+'</nav><form method="dialog"><button class="ds-nav-button" autofocus>닫기</button></form></dialog>';
+    }else if(['compact-breadcrumb','breadcrumb-dropdown','breadcrumb-back'].includes(id)){
+      const rows=o.items??[{label:'홈',href:'#home'},{label:'산책',href:'#walks'},{label:'숲길'}],markup=extended.breadcrumb(prefix,{items:rows});
+      body=id==='breadcrumb-dropdown'?disclosure(o.label??'현재 경로',markup):id==='breadcrumb-back'?'<div class="ds-nav-full-path">'+markup+'</div>'+(rows.length>1?'<a class="ds-nav-back-path" href="'+safeHref(rows.at(-2).href)+'">이전: '+esc(rows.at(-2).label)+'</a>':''):markup;
+    }else if(id==='select-navigation'){
+      return '<form class="ds-nav ds-select-navigation" data-nav-select><label for="'+esc(prefix)+'-select">'+esc(o.label??'이동할 곳')+'</label><select id="'+esc(prefix)+'-select"'+(!items.length?' disabled':'')+'>'+items.map(v=>'<option value="'+safeHref(v.href)+'"'+(v.lang?' lang="'+esc(v.lang)+'"':'')+'>'+esc(v.label)+'</option>').join('')+'</select><button class="ds-nav-button" type="submit"'+(!items.length?' disabled':'')+'>이동</button></form>';
+    }else if(['responsive-pagination','conditional-pagination'].includes(id)){
+      const total=Math.min(10000,Math.max(1,Math.floor(Number(o.total??8))||1)),page=Math.min(total,Math.max(1,Math.floor(Number(o.page))||1));
+      const numbers=[...new Set([1,total,...Array.from({length:5},(_,i)=>page-2+i).filter(n=>n>0&&n<=total)])].sort((a,b)=>a-b);
+      const pages='<div class="ds-nav-pages">'+numbers.map((n,i)=>(i&&n>numbers[i-1]+1?'<span aria-hidden="true">…</span>':'')+'<button type="button" class="ds-nav-button" data-nav-page="'+n+'" aria-label="'+n+'쪽"'+(n===page?' aria-current="page"':'')+'>'+n+'</button>').join('')+'</div>';
+      return '<nav class="ds-nav ds-responsive-pagination'+(id==='conditional-pagination'?' ds-conditional-pagination':'')+'" aria-label="페이지 이동" data-nav-pagination data-page="'+page+'" data-total="'+total+'"><button type="button" class="ds-nav-button" data-nav-step="-1"'+(page===1?' disabled':'')+'>이전</button>'+(id==='conditional-pagination'?disclosure(page+' / '+total,pages):pages)+'<output aria-live="polite">'+page+' / '+total+'</output><button type="button" class="ds-nav-button" data-nav-step="1"'+(page===total?' disabled':'')+'>다음</button></nav>';
+    }else throw Error('Unknown navigation: '+id);
+    return '<'+tag+' class="ds-nav ds-'+id+'"'+(tag==='nav'?' aria-label="'+esc(label)+'"':'')+(id==='overflow-navigation'?' tabindex="0"':'')+(id==='navigation-progress'&&o.loading===false?' hidden':'')+'>'+body+'</'+tag+'>';
+  }
+  function interactiveLayoutItem(id,prefix,o){
+    prefix=esc(prefix);
+    const content=o.children ?? '<div class="ds-layout-copy"><h2>숲길 탐방 계획</h2><p>가을 숲을 따라 걸으며 계절의 변화를 살펴봅니다.</p><label>여행 메모 <textarea aria-label="여행 메모">물과 노트를 챙기기</textarea></label></div>';
+    const aside=o.aside ?? '<p>출발 09:00 · 동쪽 입구</p>';
+    const title=esc(o.title ?? '산책 기록');
+    const btn=(label,attrs='')=>'<button type="button" class="ds-layout-control" '+attrs+'>'+esc(label)+'</button>';
+    const tabbed=(items,vertical=false)=>'<div class="ds-tabs" data-look="'+(vertical?'vertical':'scroll')+'"><div role="tablist" class="ds-tablist" aria-label="'+title+'"'+(vertical?' aria-orientation="vertical"':'')+'>'+items.map((v,i)=>'<button type="button" class="ds-tab" role="tab" id="'+prefix+'-tab-'+i+'" aria-controls="'+prefix+'-panel-'+i+'" aria-selected="'+(i===0)+'" tabindex="'+(i===0?0:-1)+'">'+esc(v.label)+'</button>').join('')+'</div>'+items.map((v,i)=>'<section class="ds-tabpanel" role="tabpanel" id="'+prefix+'-panel-'+i+'" aria-labelledby="'+prefix+'-tab-'+i+'" tabindex="0"'+(i?' hidden':'')+'>'+esc(v.content)+'</section>').join('')+'</div>';
+    const items=o.items ?? [{label:'계획',content:'동쪽 입구에서 오전 9시에 출발합니다.'},{label:'준비물',content:'물, 편한 신발, 노트를 준비합니다.'},{label:'기록',content:'산책 후 이곳에 모여 기록을 나눕니다.'}];
+    let body='';
+    if(['list-detail-layout','document-workspace','object-hub','profile-tabs'].includes(id))body=(['object-hub','profile-tabs'].includes(id)?'<header class="ds-layout-object"><h2>'+title+'</h2><p>'+esc(o.description??'함께 걷고 기록하는 모임')+'</p></header>':'')+tabbed(items,id==='list-detail-layout');
+    else if(['resizable-panels','window-splitter'].includes(id)){
+      const value=Math.min(80,Math.max(0,Number.isFinite(Number(o.defaultValue))?Number(o.defaultValue):50));
+      body='<div class="ds-layout-resizer" data-layout-resizer><section id="'+prefix+'-primary" data-layout-primary style="flex:'+value+' 1 0%"'+(!value?' hidden':'')+'>'+content+'</section><div class="ds-layout-separator" role="separator" tabindex="0" aria-label="'+esc(o.label??'본문 영역 크기')+'" aria-orientation="vertical" aria-controls="'+prefix+'-primary" aria-valuemin="0" aria-valuemax="80" aria-valuenow="'+value+'" data-layout-separator></div><aside data-layout-secondary style="flex:'+(100-value)+' 1 0%">'+aside+'</aside></div>';
+    }else if(id==='focus-layout')body=btn('집중 모드','data-layout-focus aria-pressed="false"')+'<div class="ds-layout-focus-body"><aside data-layout-distraction>'+aside+'</aside><div>'+content+'</div></div>';
+    else if(id==='shrinking-header')body='<div class="ds-layout-scroll" tabindex="0" role="region" aria-label="문서" data-layout-scroll><header class="ds-layout-shrinking"><h2>'+title+'</h2></header>'+Array.from({length:8},()=>'<p class="ds-layout-scroll-copy">'+esc(o.text??'나무와 꽃을 살펴보며 천천히 걸어갑니다. 가파른 길에서는 충분히 쉬어 가세요.')+'</p>').join('')+'</div>';
+    else if(id==='sticky-action-layout')body='<div class="ds-layout-scroll" tabindex="0" role="region" aria-label="문서">'+content+'<div class="ds-layout-action">'+btn(o.actionLabel??'일정 저장','data-layout-action')+'</div></div>';
+    else if(id==='snap-sections')body='<div class="ds-layout-snap" tabindex="0" role="region" aria-label="'+title+'">'+items.map(v=>'<section><h2>'+esc(v.label)+'</h2><p>'+esc(v.content)+'</p></section>').join('')+'</div>';
+    else if(id==='collapsible-sidebar')body='<div class="ds-layout-rail-shell"><aside id="'+prefix+'-rail">'+btn('탐색 접기','data-layout-rail aria-expanded="true" aria-controls="'+prefix+'-rail-nav"')+'<nav id="'+prefix+'-rail-nav" aria-label="작업 탐색">'+(o.links??[{label:'산책',href:'#walks'},{label:'기록',href:'#notes'},{label:'모임',href:'#group'}]).map(v=>'<a href="'+safeHref(v.href)+'" aria-label="'+esc(v.label)+'"><span aria-hidden="true">'+esc(v.label.slice(0,1))+'</span><span class="ds-layout-rail-label">'+esc(v.label)+'</span></a>').join('')+'</nav></aside><div>'+content+'</div></div>';
+    else if(id==='stacked-panels')body='<div data-layout-stack>'+items.map((v,i)=>'<section data-layout-stack-page="'+i+'"'+(i?' hidden':'')+' tabindex="-1"><h2>'+esc(v.label)+'</h2><p>'+esc(v.content)+'</p><div class="ds-layout-stack-actions">'+(i?btn('이전','data-layout-stack-back'):'')+(i<items.length-1?btn('상세 보기','data-layout-stack-next'):'')+'</div></section>').join('')+'</div>';
+    else if(id==='floating-panel')body='<div class="ds-layout-float-host" data-layout-float-host><div class="ds-layout-float" role="dialog" aria-modal="false" aria-labelledby="'+prefix+'-float-title" data-layout-float><header><h2 id="'+prefix+'-float-title">'+title+'</h2>'+btn('위치 조절','data-layout-drag aria-describedby="'+prefix+'-move-help"')+'</header><span id="'+prefix+'-move-help" class="ds-layout-sr">방향키로 이동하고 Home으로 원래 위치로 돌아갑니다.</span>'+content+'</div></div>';
+    else if(id==='off-canvas-layout')body=btn(o.trigger??'안내 열기','data-dialog-open="'+prefix+'-drawer" aria-haspopup="dialog" aria-controls="'+prefix+'-drawer"')+'<dialog id="'+prefix+'-drawer" class="ds-dialog ds-drawer" aria-labelledby="'+prefix+'-drawer-title"><h2 id="'+prefix+'-drawer-title">'+title+'</h2><div>'+content+'</div><form method="dialog">'+ '<button class="ds-layout-control" value="cancel" autofocus>닫기</button></form></dialog>';
+    else if(id==='append-around')body='<div class="ds-layout-append-grid" data-layout-append><div><div data-layout-narrow-slot></div>'+content+'</div><aside data-layout-wide-slot><div data-layout-movable>'+aside+'</div></aside></div>';
+    else throw Error('Unknown interactive layout: '+id);
+    return '<div class="ds-layout ds-'+id+'" data-interactive-layout="'+id+'">'+body+'</div>';
+  }
+  function layoutItem(item,prefix,options){
+    if(item.layoutMode==='interactive')return interactiveLayoutItem(item.id,prefix,options);
+    const body=options.children ?? "<div class=\"ds-layout-copy\"><h2>숲을 천천히 걷는 하루</h2><p>작은 산책로를 따라 계절의 색을 기록합니다. 햇빛이 드는 자리에서 잠시 쉬어 가세요.</p><p>출발 전 물과 편한 신발을 준비하세요. 길에서 만난 풍경은 여행 기록에 남길 수 있습니다.</p></div>",aside=options.aside ?? "<div class=\"ds-layout-copy\"><h3>준비할 것</h3><ul><li>물과 간식</li><li>편한 신발</li><li>기록할 노트</li></ul></div>",secondary=options.secondary ?? "<div class=\"ds-layout-copy\"><h3>함께 읽기</h3><p>계절별 산책 안내와 주변 쉼터를 확인하세요.</p></div>";
+    const header=options.header ?? "<strong>산책 기록</strong><nav aria-label=\"주 탐색\"><a href=\"#walks\">산책</a><a href=\"#notes\">기록</a></nav>",footer=options.footer ?? "<p>전체 코스 약 2시간 · 식수대 3곳</p>";
+    const cards=options.children ?? "<article class=\"ds-layout-tile\"><h3>아침 산책</h3><p>천천히 하루를 시작합니다.</p></article><article class=\"ds-layout-tile\"><h3>점심의 정원</h3><p>초록 잎 사이에 앉아 가져온 도시락을 나눕니다. 햇볕이 강한 시간에는 그늘에서 쉬어 가세요.</p></article><article class=\"ds-layout-tile\"><h3>저녁의 기록</h3><p>오늘 만난 풍경을 글로 남깁니다.</p></article>",media=options.media ?? ( ['breakout','pairs'].includes(item.layoutMode) ? undefined : options.children ) ?? "<div class=\"ds-layout-media\"><span>산책 기록</span><strong>가을의 숲</strong></div>";
+    const long=options.children ?? "<p>산책 1구간 · 나무와 꽃을 살펴보며 천천히 걸어갑니다. 가파른 길에서는 충분히 쉬어 가세요.</p><p>산책 2구간 · 나무와 꽃을 살펴보며 천천히 걸어갑니다. 가파른 길에서는 충분히 쉬어 가세요.</p><p>산책 3구간 · 나무와 꽃을 살펴보며 천천히 걸어갑니다. 가파른 길에서는 충분히 쉬어 가세요.</p><p>산책 4구간 · 나무와 꽃을 살펴보며 천천히 걸어갑니다. 가파른 길에서는 충분히 쉬어 가세요.</p><p>산책 5구간 · 나무와 꽃을 살펴보며 천천히 걸어갑니다. 가파른 길에서는 충분히 쉬어 가세요.</p><p>산책 6구간 · 나무와 꽃을 살펴보며 천천히 걸어갑니다. 가파른 길에서는 충분히 쉬어 가세요.</p><p>산책 7구간 · 나무와 꽃을 살펴보며 천천히 걸어갑니다. 가파른 길에서는 충분히 쉬어 가세요.</p><p>산책 8구간 · 나무와 꽃을 살펴보며 천천히 걸어갑니다. 가파른 길에서는 충분히 쉬어 가세요.</p>",thumbnails=options.children ?? "<li><span class=\"ds-layout-thumb\" aria-hidden=\"true\">01</span><div><h3>동쪽 숲길</h3><p>그늘과 쉼터가 있는 한 시간 코스입니다.</p></div></li><li><span class=\"ds-layout-thumb\" aria-hidden=\"true\">02</span><div><h3>작은 정원</h3><p>그늘과 쉼터가 있는 한 시간 코스입니다.</p></div></li><li><span class=\"ds-layout-thumb\" aria-hidden=\"true\">03</span><div><h3>물가 산책로</h3><p>그늘과 쉼터가 있는 한 시간 코스입니다.</p></div></li>";
+    const labels=options.children ?? '<span>숲</span><span>산책</span><span>기록</span><span>계절</span>';
+    const patterns={"body":()=>`<div class="ds-layout-body">${body}</div>`,
+"body-aside":()=>`<div class="ds-layout-body">${body}</div><aside class="ds-layout-aside">${aside}</aside>`,
+"aside-body":()=>`<aside class="ds-layout-aside">${aside}</aside><div class="ds-layout-body">${body}</div>`,
+"cards":()=>`${cards}`,
+"labels":()=>`${labels}`,
+"media":()=>`${media}`,
+"three":()=>`<aside class="ds-layout-aside">${aside}</aside><div class="ds-layout-body">${body}</div><aside class="ds-layout-secondary">${secondary}</aside>`,
+"cover":()=>`<header>${header}</header><div class="ds-layout-center">${body}</div><footer>${footer}</footer>`,
+"overlay":()=>`<div class="ds-layout-body">${media}</div><div class="ds-layout-overlay">${aside}</div>`,
+"breakout":()=>`<div class="ds-layout-body">${body}</div><div class="ds-layout-breakout">${media}</div><div class="ds-layout-body">${secondary}</div>`,
+"print":()=>`<div class="ds-layout-no-print">${header}</div><div class="ds-layout-body">${body}</div><div class="ds-layout-page-break">${secondary}</div>`,
+"pairs":()=>`<section class="ds-layout-pair">${media}<div>${body}</div></section><section class="ds-layout-pair">${media}<div>${secondary}</div></section>`,
+"spacer":()=>``,
+"long":()=>`${long}`,
+"header":()=>`${header}`,
+"footer":()=>`${footer}`,
+"thumbnails":()=>`${thumbnails}`};
+    const mode=item.layoutMode,tag=item.layoutTag;
+    const columns=Math.min(6,Math.max(2,Math.trunc(Number(options.columns))||3));
+    const scroll=['reel-layout','scroll-area','scroll-fog'].includes(item.id);
+    return '<'+tag+' class="ds-layout ds-'+item.id+'" data-columns="'+columns+'"'+(scroll?' tabindex="0" role="region" aria-label="'+esc(options.label||item.name)+'"':'')+'>'+patterns[mode]()+'</'+tag+'>';
+  }
   function renderItem(id, prefix = uid('example'), options = {}) {
     if (extended[id]) return extended[id](prefix, {...options, disabled:options.disabled || options.state === 'disabled', error:options.state === 'error' ? '입력한 값을 확인하세요.' : options.error});
     if (id === 'data-table') return window.Pattove.admin.renderTable(prefix, options);
     if (id === 'record-editor') return window.Pattove.admin.renderEditorDemo(prefix);
+    const layoutDefinition=window.Pattove.systemRegistry.index.get(id);
+    if(layoutDefinition?.layoutMode)return layoutItem(layoutDefinition,prefix,options);
+    if(layoutDefinition?.navigationMode)return navigationItem(id,prefix,options);
     // The shell's example: side menu, heading band and the slot where the table and editor blocks go.
     if (id === 'admin-shell') return window.Pattove.admin.renderShell(prefix, { navigation: ['자료', '사용자', '설정'].map((label, i) => ({ label, href: '#', current: i === 0 })), body: '<div class="ds-admin-slot">본문 자리</div>', ...options });
     if (id === 'admin-page') return window.Pattove.admin.renderPage(prefix, options);

@@ -81,7 +81,7 @@
     description:'완료 순간 체크가 한 번 그려집니다. 동작을 줄여도 완료 문구와 체크가 남습니다.',cost:'medium',properties:'stroke-dashoffset',performance:'SVG 선을 다시 그립니다. 작은 아이콘 한 개에 사용하세요.',
     html:wrap(`<svg class="pm-check" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="none" stroke="var(--p-line, #c2cad5)" stroke-width="2"></circle><path data-check pathLength="1" d="M18 32 L28 42 L47 22" fill="none" stroke="var(--p-accent, #303b48)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path></svg>${button('완료하기','data-complete')}${status}`),
     css:'.pm-check { width:76px; height:76px; margin:auto; } .pm-check path { stroke-dasharray:1; stroke-dashoffset:1; }'});
-  add({id:'split-text',name:'단어마다 한 걸음',english:'Split text stagger reveal',category:'text',trigger:'진입',dictionaryRefs:['ANM-09'],
+  add({id:'split-text',name:'단어마다 한 걸음',english:'Split text stagger reveal',category:'text',trigger:'진입',previewRepeat:true,dictionaryRefs:['ANM-09'],
     description:'단어가 차례로 올라오며 짧은 문장을 완성합니다. 읽는 기기에는 문장 전체를 전달합니다.',
     html:wrap('<p class="pm-split"><span class="pm-sr">작은 움직임, 또렷한 의미.</span><span aria-hidden="true"><span>작은</span> <span>움직임,</span><br><span>또렷한</span> <span>의미.</span></span></p>'),
     css:'.pm-split { text-align:center; font-size:clamp(24px,6vw,34px); font-weight:700; color:var(--p-ink, #2c333d) !important; line-height:1.5; } .pm-split [aria-hidden] > span { display:inline-block; animation:pm-word-in var(--pm-reveal) ease-out both; } .pm-split [aria-hidden] > span:nth-of-type(2) { animation-delay:70ms; } .pm-split [aria-hidden] > span:nth-of-type(3) { animation-delay:140ms; } .pm-split [aria-hidden] > span:nth-of-type(4) { animation-delay:210ms; } @keyframes pm-word-in { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }',sources:[sources.text]});
@@ -89,7 +89,7 @@
     description:'숫자가 목표값에 도착합니다. 한 번에 최종값을 읽을 수 있고 다시 재생할 수 있습니다.',cost:'medium',properties:'textContent',performance:'숫자 변경은 텍스트 페인트를 일으킵니다. 고정 폭 숫자와 자리 확보로 흔들림을 줄입니다.',
     html:wrap(`<div class="pm-number"><span class="pm-sr">총 1,280.5 킬로미터</span><strong data-output data-value="1280.5" data-decimals="1" aria-hidden="true">1,280.5</strong><span aria-hidden="true">km / 함께한 거리</span></div>${button('다시 세기','data-start',true)}`),
     css:'.pm-number { text-align:center; } .pm-number strong { font-size:clamp(30px,9vw,46px); font-variant-numeric:tabular-nums; color:var(--p-accent, #303b48); min-height:56px; } .pm-number > span { font-size:12px; color:var(--p-muted, #59636f); }',sources:['https://magicui.design/docs/components/number-ticker']});
-  add({id:'mask-reveal',name:'커튼처럼 열리는 장면',english:'Image mask reveal',category:'entrance',trigger:'진입',dictionaryRefs:['ANM-08'],
+  add({id:'mask-reveal',name:'커튼처럼 열리는 장면',english:'Image mask reveal',category:'entrance',trigger:'진입',previewRepeat:true,dictionaryRefs:['ANM-08'],
     description:'작은 풍경이 아래에서 열립니다. 이미지 자리는 처음부터 확보되어 있습니다.',cost:'medium',properties:'clip-path',performance:'마스크 변화의 합성 여부와 페인트 비용은 브라우저에 따라 다릅니다. 큰 이미지에서 측정하세요.',
     html:wrap('<div class="pm-art pm-mask" role="img" aria-label="초록 달이 떠 있는 산 풍경"></div><p class="pm-caption">한 장면을 천천히 발견하기.</p>'),
     css:'.pm-mask { animation:pm-mask-in var(--pm-reveal) cubic-bezier(.2,0,.38,.9) both; } @keyframes pm-mask-in { from { clip-path:inset(100% 0 0); } to { clip-path:inset(0); } }',reduceCSS:'.pm-mask { clip-path:none; }'});

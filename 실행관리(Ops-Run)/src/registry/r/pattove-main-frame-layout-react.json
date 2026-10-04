@@ -1,0 +1,195 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "pattove-main-frame-layout-react",
+  "type": "registry:item",
+  "title": "메인 스타일 · 비율 프레임 · react",
+  "description": "메인 스타일 · 비율 프레임 · react. 콘텐츠 영역의 가로세로 비율 유지. 콘텐츠 영역의 가로세로 비율 유지 FrameLayout",
+  "files": [
+    {
+      "path": "design/base.css",
+      "type": "registry:file",
+      "target": "~/design/base.css",
+      "content": ".ds{--p-bg:#ffffff;--p-surface:#f1f3f6;--p-high:#fafbfc;--p-hover:#e1e6ed;--p-row-active:#e5e9f2;--p-disabled:#dce1e8;--p-glass:#f6f8fbe8;--p-backdrop:#2c333d66;--p-tile:#f2f3f0;--p-tile-header:#f3f4f1;--p-image-well:#e7e9e4;--p-selected-surface:#e7f0eb;--p-ink:#2c333d;--p-muted:#59636f;--p-on-accent:#ffffff;--p-line:#c2cad5;--p-line-subtle:#cbd2dc;--p-control-border:#7b8592;--p-edge:#ffffff;--p-edge-soft:#ffffffa8;--p-accent:#303b48;--p-accent-hover:#25303d;--p-shade:#000;--p-highlight:#6153b5;--p-highlight-soft:#e2ddf3;--p-soft:#d3e8de;--p-mark:#ffbf63;--p-mark-hover:#ffd07b;--p-mark-alt:#9ad9aa;--p-error:#a3313e;--p-error-soft:#f9e8e9;--p-error-line:#d4a2a8;--p-success:#26614f;--p-success-soft:#e5f2eb;--p-success-line:#8fb8a5;--p-warning:#805719;--p-warning-soft:#f6efd9;--p-warning-line:#b9a16f;--p-accent-shaded:color-mix(in srgb, var(--p-accent) 84%, var(--p-shade));--p-glass-veil:color-mix(in oklab, var(--p-glass) 68%, transparent);--p-high-veil:color-mix(in oklab, var(--p-high) 80%, transparent);--p-current-tint:color-mix(in oklab, currentColor 14%, transparent);--p-on-accent-muted:color-mix(in oklab, var(--p-on-accent) 74%, transparent);--p-accent-wash:color-mix(in oklab, var(--p-accent) 26%, transparent);--p-success-wash:color-mix(in oklab, var(--p-success) 34%, transparent);--p-soft-success:color-mix(in oklab, var(--p-success) 16%, var(--p-soft));--p-font:Pretendard, sans-serif;--p-mono-font:ui-monospace, SFMono-Regular, Consolas, monospace;--p-display-font:Outfit, Pretendard, sans-serif;--p-type-body:var(--p-text-md)/var(--p-leading-normal) var(--p-font);--p-type-display:var(--p-weight-semibold) var(--p-text-display) var(--p-display-font);--p-type-figure:var(--p-weight-bold) var(--p-text-md)/var(--p-leading-none) var(--p-display-font);--p-type-stat:var(--p-weight-bold) var(--p-text-lg)/var(--p-leading-tight) var(--p-display-font);--p-text-sm:12px;--p-text-body:14px;--p-text-md:16px;--p-text-title-sm:18px;--p-text-title:20px;--p-text-lg:24px;--p-text-heading:30px;--p-text-display:40px;--p-weight-light:300;--p-weight-regular:400;--p-weight-medium:500;--p-weight-semibold:600;--p-weight-bold:700;--p-weight-extrabold:800;--p-leading-none:1;--p-leading-tight:1.2;--p-leading-snug:1.35;--p-leading-normal:1.5;--p-leading-relaxed:1.65;--p-leading-loose:1.8;--p-space-unit:4px;--p-space-3xs:2px;--p-space-2xs:4px;--p-space-xs:8px;--p-space-sm:12px;--p-space-md:16px;--p-space-lg:24px;--p-space-xl:32px;--p-space-2xl:40px;--p-space-3xl:48px;--p-space-4xl:64px;--p-space-5xl:80px;--p-size-hairline:1px;--p-size-2xs:4px;--p-size-xs:8px;--p-size-sm:12px;--p-size-md:16px;--p-size-lg:24px;--p-size-xl:32px;--p-size-2xl:40px;--p-size-3xl:48px;--p-icon-xs:12px;--p-icon-sm:16px;--p-icon-md:20px;--p-icon-lg:24px;--p-icon-xl:28px;--p-icon-2xl:32px;--p-icon-3xl:40px;--p-control-size-sm:44px;--p-control-size-md:48px;--p-control-size-lg:56px;--p-control-size-xl:64px;--p-radius-xs:2px;--p-radius-sm:4px;--p-radius-md:8px;--p-radius-lg:12px;--p-radius-xl:16px;--p-radius-2xl:24px;--p-radius-full:999px;--p-radius-circle:50%;--p-inner-radius:var(--p-radius-lg);--p-control-radius:var(--p-radius-xl);--p-radius:var(--p-radius-2xl);--p-underline-offset:3px;--p-border-width:1px;--p-border-width-strong:2px;--p-border-width-focus:3px;--p-focus-offset:3px;--p-focus-offset-tight:2px;--p-shadow:6px 7px 16px #bbc4d166, -5px -5px 14px #ffffffed;--p-raised:3px 4px 8px #b9c3d066, -3px -3px 8px #ffffffed;--p-inset:inset 3px 3px 6px #b7c1cf55, inset -3px -3px 6px #ffffffd9;--p-pressed:inset 3px 3px 6px #15222f60,inset -1px -1px 3px #ffffff18;--p-float:0 12px 32px #26394d26;--p-lift:0 3px 5px #24314526;--p-control-shadow:0 3px 5px #24314526,inset 0 1px 0 #ffffff24;--p-selected-shadow:0 2px 5px #24314526;--p-knob-shadow:0 1px 3px #26344726;--p-glass-shadow:0 8px 24px #38465e12;--p-dialog-shadow:0 24px 80px #26344740;--p-drop:0 10px 12px #24293616;--p-ring:inset 0 0 0 2px #24293610;--p-focus-glow:0 0 0 2px #ed667b33;--p-stage-shadow:0 24px 44px -28px #303b4873;--p-blur-sm:blur(3px);--p-blur-md:blur(16px);--p-blur-glass:blur(20px) saturate(1.2);}\n.ds {\n  color:var(--p-ink); background:var(--p-bg); font:var(--p-type-body);\n  color-scheme:light; word-break:keep-all; overflow-wrap:anywhere; text-align:left;\n}\n.ds,.ds * { box-sizing:border-box; }\n.ds [hidden] { display:none!important; }\n.ds :is(h1,h2,h3,p,fieldset) { margin:0; }\n.ds :is(button,input,select,textarea) { font:inherit; color:inherit; letter-spacing:inherit; }\n.ds :is(code,pre) { font-family:var(--p-mono-font); }\n.ds button { cursor:pointer; touch-action:manipulation; }\n.ds button:disabled { cursor:not-allowed; }\n.ds :is(button,input,select,textarea,a,[tabindex]):focus-visible { outline:var(--p-border-width-focus) solid var(--p-highlight); outline-offset:var(--p-focus-offset); }\n.ds .ui-icon { display:inline-block; width:var(--p-icon-lg); height:var(--p-icon-lg); object-fit:contain; flex-shrink:0; vertical-align:middle; }\n.ds .ds-demo-note { font-size:var(--p-text-sm); margin-top:var(--p-space-sm); min-height:calc(var(--p-space-unit) * 5); color:var(--p-muted); }\n.ds .ds-surface { border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius); background:var(--p-surface); }\n.ds .ds-surface[data-material=\"raised\"] { box-shadow:var(--p-shadow); border-color:var(--p-edge); }\n.ds .ds-surface[data-material=\"inset\"] { box-shadow:var(--p-inset); background:var(--p-bg); }\n.ds .ds-surface[data-material=\"glass\"] { background:var(--p-high); box-shadow:var(--p-glass-shadow); }\n@supports (backdrop-filter:blur(0)) { .ds .ds-surface[data-material=\"glass\"] { background:var(--p-glass); backdrop-filter:var(--p-blur-md); } }\n@media(prefers-reduced-transparency:reduce) { .ds .ds-surface[data-material=\"glass\"] { background:var(--p-high); backdrop-filter:none; } }\n@media(prefers-reduced-motion:reduce) { .ds * { transition:none!important; animation:none!important; } }\n.ds .ds-token-row { display:flex; flex-wrap:wrap; align-items:center; gap:var(--p-space-sm); }\n.ds .ds-admin-error { color:var(--p-error); font-size:var(--p-text-body); }"
+    },
+    {
+      "path": "design/styles/main/color.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/color.css",
+      "content": ".ds[data-style=\"main\"]{--p-bg:#ffffff;--p-surface:#f1f3f6;--p-high:#fafbfc;--p-hover:#e1e6ed;--p-row-active:#e5e9f2;--p-disabled:#dce1e8;--p-glass:#f6f8fbe8;--p-backdrop:#2c333d66;--p-tile:#f2f3f0;--p-tile-header:#f3f4f1;--p-image-well:#e7e9e4;--p-selected-surface:#e7f0eb;--p-ink:#2c333d;--p-muted:#59636f;--p-on-accent:#ffffff;--p-line:#c2cad5;--p-line-subtle:#cbd2dc;--p-control-border:#7b8592;--p-edge:#ffffff;--p-edge-soft:#ffffffa8;--p-accent:#303b48;--p-accent-hover:#25303d;--p-shade:#000;--p-highlight:#6153b5;--p-highlight-soft:#e2ddf3;--p-soft:#d3e8de;--p-mark:#ffbf63;--p-mark-hover:#ffd07b;--p-mark-alt:#9ad9aa;--p-error:#a3313e;--p-error-soft:#f9e8e9;--p-error-line:#d4a2a8;--p-success:#26614f;--p-success-soft:#e5f2eb;--p-success-line:#8fb8a5;--p-warning:#805719;--p-warning-soft:#f6efd9;--p-warning-line:#b9a16f;--p-accent-shaded:color-mix(in srgb, var(--p-accent) 84%, var(--p-shade));--p-glass-veil:color-mix(in oklab, var(--p-glass) 68%, transparent);--p-high-veil:color-mix(in oklab, var(--p-high) 80%, transparent);--p-current-tint:color-mix(in oklab, currentColor 14%, transparent);--p-on-accent-muted:color-mix(in oklab, var(--p-on-accent) 74%, transparent);--p-accent-wash:color-mix(in oklab, var(--p-accent) 26%, transparent);--p-success-wash:color-mix(in oklab, var(--p-success) 34%, transparent);--p-soft-success:color-mix(in oklab, var(--p-success) 16%, var(--p-soft));}\n"
+    },
+    {
+      "path": "design/styles/main/typography.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/typography.css",
+      "content": ".ds[data-style=\"main\"]{--p-font:Pretendard, sans-serif;--p-mono-font:ui-monospace, SFMono-Regular, Consolas, monospace;--p-display-font:Outfit, Pretendard, sans-serif;--p-type-body:var(--p-text-md)/var(--p-leading-normal) var(--p-font);--p-type-display:var(--p-weight-semibold) var(--p-text-display) var(--p-display-font);--p-type-figure:var(--p-weight-bold) var(--p-text-md)/var(--p-leading-none) var(--p-display-font);--p-type-stat:var(--p-weight-bold) var(--p-text-lg)/var(--p-leading-tight) var(--p-display-font);}\n"
+    },
+    {
+      "path": "design/styles/main/text.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/text.css",
+      "content": ".ds[data-style=\"main\"]{--p-text-sm:12px;--p-text-body:14px;--p-text-md:16px;--p-text-title-sm:18px;--p-text-title:20px;--p-text-lg:24px;--p-text-heading:30px;--p-text-display:40px;}\n"
+    },
+    {
+      "path": "design/styles/main/weight.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/weight.css",
+      "content": ".ds[data-style=\"main\"]{--p-weight-light:300;--p-weight-regular:400;--p-weight-medium:500;--p-weight-semibold:600;--p-weight-bold:700;--p-weight-extrabold:800;}\n"
+    },
+    {
+      "path": "design/styles/main/leading.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/leading.css",
+      "content": ".ds[data-style=\"main\"]{--p-leading-none:1;--p-leading-tight:1.2;--p-leading-snug:1.35;--p-leading-normal:1.5;--p-leading-relaxed:1.65;--p-leading-loose:1.8;}\n"
+    },
+    {
+      "path": "design/styles/main/space.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/space.css",
+      "content": ".ds[data-style=\"main\"]{--p-space-unit:4px;--p-space-3xs:2px;--p-space-2xs:4px;--p-space-xs:8px;--p-space-sm:12px;--p-space-md:16px;--p-space-lg:24px;--p-space-xl:32px;--p-space-2xl:40px;--p-space-3xl:48px;--p-space-4xl:64px;--p-space-5xl:80px;}\n"
+    },
+    {
+      "path": "design/styles/main/size.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/size.css",
+      "content": ".ds[data-style=\"main\"]{--p-size-hairline:1px;--p-size-2xs:4px;--p-size-xs:8px;--p-size-sm:12px;--p-size-md:16px;--p-size-lg:24px;--p-size-xl:32px;--p-size-2xl:40px;--p-size-3xl:48px;--p-icon-xs:12px;--p-icon-sm:16px;--p-icon-md:20px;--p-icon-lg:24px;--p-icon-xl:28px;--p-icon-2xl:32px;--p-icon-3xl:40px;--p-control-size-sm:44px;--p-control-size-md:48px;--p-control-size-lg:56px;--p-control-size-xl:64px;}\n"
+    },
+    {
+      "path": "design/styles/main/container.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/container.css",
+      "content": ".ds[data-style=\"main\"]{--p-measure-narrow:60ch;--p-measure:72ch;--p-container-2xs:256px;--p-container-xs:288px;--p-container-sm:384px;--p-container-md:512px;--p-container-lg:576px;--p-container-xl:1024px;--p-container-2xl:1280px;}\n"
+    },
+    {
+      "path": "design/styles/main/radius.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/radius.css",
+      "content": ".ds[data-style=\"main\"]{--p-radius-xs:2px;--p-radius-sm:4px;--p-radius-md:8px;--p-radius-lg:12px;--p-radius-xl:16px;--p-radius-2xl:24px;--p-radius-full:999px;--p-radius-circle:50%;--p-inner-radius:var(--p-radius-lg);--p-control-radius:var(--p-radius-xl);--p-radius:var(--p-radius-2xl);}\n"
+    },
+    {
+      "path": "design/styles/main/border.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/border.css",
+      "content": ".ds[data-style=\"main\"]{--p-underline-offset:3px;--p-border-width:1px;--p-border-width-strong:2px;--p-border-width-focus:3px;--p-focus-offset:3px;--p-focus-offset-tight:2px;}\n"
+    },
+    {
+      "path": "design/styles/main/shadow.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/shadow.css",
+      "content": ".ds[data-style=\"main\"]{--p-shadow:6px 7px 16px #bbc4d166, -5px -5px 14px #ffffffed;--p-raised:3px 4px 8px #b9c3d066, -3px -3px 8px #ffffffed;--p-inset:inset 3px 3px 6px #b7c1cf55, inset -3px -3px 6px #ffffffd9;--p-pressed:inset 3px 3px 6px #15222f60,inset -1px -1px 3px #ffffff18;--p-float:0 12px 32px #26394d26;--p-lift:0 3px 5px #24314526;--p-control-shadow:0 3px 5px #24314526,inset 0 1px 0 #ffffff24;--p-selected-shadow:0 2px 5px #24314526;--p-knob-shadow:0 1px 3px #26344726;--p-glass-shadow:0 8px 24px #38465e12;--p-dialog-shadow:0 24px 80px #26344740;--p-drop:0 10px 12px #24293616;--p-ring:inset 0 0 0 2px #24293610;--p-focus-glow:0 0 0 2px #ed667b33;--p-stage-shadow:0 24px 44px -28px #303b4873;}\n"
+    },
+    {
+      "path": "design/styles/main/blur.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/blur.css",
+      "content": ".ds[data-style=\"main\"]{--p-blur-sm:blur(3px);--p-blur-md:blur(16px);--p-blur-glass:blur(20px) saturate(1.2);}\n"
+    },
+    {
+      "path": "design/styles/main/aspect.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/aspect.css",
+      "content": ".ds[data-style=\"main\"]{--p-aspect-square:1;--p-aspect-landscape:5 / 3;--p-aspect-portrait:1 / 2;}\n"
+    },
+    {
+      "path": "design/styles/main/breakpoint.css",
+      "type": "registry:file",
+      "target": "~/design/styles/main/breakpoint.css",
+      "content": ".ds[data-style=\"main\"]{--p-bp-xs:360px;--p-bp-sm:440px;--p-bp-md:580px;--p-bp-lg:760px;--p-bp-xl:1100px;--p-bp-2xl:1200px;--p-bp-3xl:1250px;--p-cq-xs:130px;--p-cq-sm:210px;--p-cq-md:290px;--p-cq-lg:420px;--p-cq-xl:580px;}\n"
+    },
+    {
+      "path": "design/styles/main.md",
+      "type": "registry:file",
+      "target": "~/design/styles/main.md",
+      "content": "# 메인 프런트엔드 스타일\n\n2026-09-30 · 0.8.0 · Trial\n\n기존 익더·소프트 LCD·선화·루틴 격자·컬러블록·스티커·작은 정원·풍경·밤하늘은 목록, CSS, 레지스트리에서 제거했다. 사용자 요청에 따라 현재 메인 프런트엔드 스타일 하나를 구축한다. 시스템의 최종 목표는 [디자인 시스템 정의](<디자인 시스템 정의.md>)를 따른다.\n\n## 레퍼런스 해석\n\n이번 대화에서 사용자가 제공한 4장의 이미지가 근거다. 회색 바탕의 시계·물 마시기 위젯, 여러 뉴모픽 컨트롤을 모은 보드, 하트와 시계가 있는 모바일 화면, 둥근 음악·일정 대시보드를 직접 보고 해석했다. 원본 브랜드의 공식 설계나 실제 동작을 확인한 것은 아니다.\n\n공통점은 밝은 회색 재질, 넓고 둥근 모서리, 양쪽 명암으로 만든 양각·음각, 작은 파스텔 포인트다. 투명도보다 뉴모픽 입체감이 중심이다. 메인 화면에서는 그 감각을 유지하고, 유리 표면은 떠 있는 탐색에 한정한다. 고양이·하트·날씨 같은 레퍼런스의 콘텐츠를 부품 사전에 장식으로 옮기지 않는다.\n\n## 단점과 보완\n\n| 확인한 문제 | 적용한 보완 |\n|---|---|\n| 밝은 회색 글자·컨트롤과 배경이 섞임 | 본문과 보조 글자는 짙게. 입력 경계·선택·초점은 대비가 있는 실선·채움으로 표시 |\n| 모든 박스가 떠 있어 강조 순서를 알기 어려움 | 문서와 비교 시트는 그림자 없는 표면, 버튼은 작은 양각, 입력은 음각, 떠 있는 탐색만 유리 표면 |\n| 눌림·선택·초점이 그림자로만 구분됨 | 눌림은 음각, 선택은 짙은 채움과 체크/현재 상태, 초점은 바깥 보라색 링 |\n| 투명 배경과 흐림에 글자가 영향받음 | 본문은 불투명. 유리 표면은 높은 불투명도의 밝은 배경과 짙은 글자. 미지원·투명도 감소 설정에는 불투명 대체 |\n| 비활성화가 흐린 정상 버튼처럼 보임 | 그림자 제거, 평평한 회색 채움, 실제 disabled 속성, 읽을 수 있는 라벨 유지 |\n| 깊은 그림자와 큰 여백 때문에 작은 화면이 답답함 | 그림자 깊이 2단계, 44px 이상 조작 영역, 좁은 화면에서 한 열 조합. 비교 표만 내부 가로 스크롤 |\n| 색만 보고 성공·실패를 추측해야 함 | 상태 이름, 체크·오류 기호, 접근성 상태 속성을 함께 제공 |\n\n## 같은 기준을 적용하는 방법\n\n공통 값의 정본은 `src/tokens/`의 두 층 폴더다. `primitive/<종류>.css`(원시 값) → `semantic/<종류>.css`(역할 `--p-*`) 순서로만 참조한다. 종류는 색·그러데이션·글꼴·글자 크기·굵기·줄 간격·자간·간격·크기·너비·모서리·테두리·선 모양·그림자·흐림·불투명도·비율·움직임·쌓임 순서·화면 폭 기준 스무 종류이며, hex·px·ms 같은 값은 `primitive/` 밖에 쓰지 않는다. 실제 HTML·React 부품의 공유 CSS는 `src/system/parts.css`이며, 부품은 역할 `--p-*`만 가져다 쓴다. 사이트 외곽(`src/styles/`)도 같은 `--p-*` 역할을 사용한다. 보여 주기용 부품에만 숨은 스타일을 추가하지 않는다.\n\n| 역할 (토큰) | 값·규칙 |\n|---|---|\n| 바탕 / 표면 / 높은 표면 (`--p-bg` / `--p-surface` / `--p-high`) | #ffffff / #f1f3f6 / #fafbfc |\n| 외곽 hover / 비활성 / 흐린 뒷막 (`--p-hover` / `--p-disabled` / `--p-backdrop`) | #e1e6ed / #dce1e8 / #2c333d 40% |\n| 본문 / 보조 글자 (`--p-ink` / `--p-muted`) | #2c333d / #59636f |\n| 주요 행동 / 그 위의 글자 (`--p-accent` / `--p-on-accent`) | #303b48 / #ffffff |\n| 보조 색면 (`--p-soft`) | #d3e8de. 의미 없는 강조색을 더 늘리지 않음 |\n| 외곽 표시 색 (`--p-mark` / `--p-mark-alt`) | #ffbf63 / #9ad9aa. 사이트 외곽의 강조 표시에만 사용 |\n| 경계 / 옅은 구분선 (`--p-line` / `--p-line-subtle`) | #c2cad5 / #cbd2dc |\n| 입력 경계 / 초점 (`--p-control-border` / `--p-highlight`) | #7b8592 / #6153b5. 초점 링은 3px, 간격 3px |\n| 오류 / 성공 / 주의 (`--p-error` / `--p-success` / `--p-warning`) | #a3313e / #26614f / #805719. 짧은 상태 이름과 함께 사용 |\n| 안쪽 카드 / 부품 / 표면의 모서리 (`--p-inner-radius` / `--p-control-radius` / `--p-radius`) | 12px / 16px / 24px. 큰 패널의 모서리를 작은 부품에 그대로 적용하지 않음 |\n| 조작 높이 (`--p-control-size-*`) | 44px / 48px / 56px / 64px. 44px보다 낮은 조작 영역을 만들지 않음 |\n| 간격 (`--p-space-*`) | 4px 격자 2~80px 11단계. 척도에 없는 값은 `calc(var(--p-space-unit) * N)` |\n| 움직임 | 140ms 색·그림자 전환. 움직임 감소 설정에서는 전환·회전 정지 |\n| 타이포그래피 | 한글 Pretendard, 영문 표본 Outfit. 글자 크기 12·14·16·18·20·24·30·40px 8단계. 본문 16px, 목록·설명 14px, 보조 12px. 긴 한글은 줄바꿈 허용 |\n\n본문 글자 대비 4.5:1, 입력·선택 등 의미 있는 비문자 경계 3:1을 검사 기준으로 사용한다. 배경 장식선이나 비활성 부품과 구분한다. 기준 출처: [W3C 글자 대비](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html), [W3C 비문자 대비](https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html). 일부 검사를 통과한 것을 WCAG 전체 준수로 표시하지 않는다.\n\n## 적용 조건\n\n차분한 개인 도구, 컬렉션·콘텐츠 보관함, 설정과 가벼운 작업 화면에 사용한다. 긴 문서나 많은 행의 표에서는 음각·양각을 셀마다 반복하지 않고 평면을 사용한다. 한 영역의 주요 행동은 하나를 우선하고 나머지는 보조 버튼·글자 버튼으로 낮춘다. 레퍼런스의 공기감 때문에 필요한 정보까지 숨기지 않는다.\n\n재질은 `ds-surface`의 `data-material=\"raised|inset|glass\"`로 참조할 수 있다. 버튼·필드·선택·탭·탐색·카드·검색 블록의 예시는 동일한 CSS를 사용한다. React는 실제 컴포넌트, HTML은 조각·CSS·필요한 JavaScript를 제공한다.\n\n이전 스타일 주소는 메인으로 이동하고 저장한 패턴의 식별자는 유지한다. 이전 스타일의 설치 URL은 제거되므로 새 설치는 `pattove-main-*`을 사용한다. 이미 다른 프로젝트로 가져간 파일은 자동 변경하지 않는다.\n\n## 확인 범위\n\n대표 부품의 상태, 검색·상세·보관·복귀, HTML 오프라인 사용과 별도 Next.js 프로젝트 설치를 검사한다. 작은 화면·키보드·움직임 감소·고대비를 포함한다. 결과와 전후 캡처는 `test-results/main-style/`에 기록한다. 전체 사전 구현, 모든 사용자 흐름, 실제 사용자의 이해도 검증은 별개다.\n"
+    },
+    {
+      "path": "design/css/layout-base.css",
+      "type": "registry:file",
+      "target": "~/design/css/layout-base.css",
+      "content": ".ds .ds-layout { min-inline-size:0; max-inline-size:100%; gap:var(--p-space-lg); }\n.ds .ds-layout > * { min-inline-size:0; }\n.ds .ds-layout:not(.ds-toolbar-spacer) { container-type:inline-size; container-name:pattove-layout; }\n.ds .ds-layout :is(img,video,svg) { max-inline-size:100%; }\n.ds .ds-layout-copy,.ds .ds-layout-tile { display:grid; gap:var(--p-space-md); align-content:start; }\n.ds .ds-layout-tile { padding:var(--p-space-lg); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius); background:var(--p-surface); }\n.ds .ds-layout :is(h2,h3) { font-size:var(--p-text-title); }\n.ds .ds-layout :is(ul,ol) { padding-inline-start:var(--p-space-lg); }\n.ds .ds-layout-aside,.ds .ds-layout-secondary { padding:var(--p-space-md); background:var(--p-soft); border-radius:var(--p-radius); }\n.ds .ds-layout-media { min-block-size:calc(var(--p-space-unit) * 48); padding:var(--p-space-xl); display:flex; flex-direction:column; justify-content:end; gap:var(--p-space-sm); background:var(--p-accent); color:var(--p-on-accent); border-radius:var(--p-radius); }\n.ds .ds-layout-media strong { font-size:var(--p-text-heading); }\n.ds .ds-layout a { color:var(--p-ink); text-underline-offset:var(--p-space-2xs); }\n.ds .ds-layout :is(header,footer) { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:var(--p-space-md); }\n.ds .ds-layout nav { display:flex; flex-wrap:wrap; gap:var(--p-space-md); }"
+    },
+    {
+      "path": "design/css/layout-patterns.css",
+      "type": "registry:file",
+      "target": "~/design/css/layout-patterns.css",
+      "content": ".ds .ds-reading-layout { max-inline-size:var(--p-measure); margin-inline:auto; padding:var(--p-space-lg); }\n.ds :is(.ds-sidebar-layout,.ds-split-layout,.ds-sticky-sidebar,.ds-supporting-pane,.ds-settings-layout) { display:flex; flex-wrap:wrap; align-items:start; }\n.ds :is(.ds-sidebar-layout,.ds-sticky-sidebar,.ds-supporting-pane,.ds-settings-layout) > .ds-layout-body { flex:999 1 var(--p-container-sm); }\n.ds :is(.ds-sidebar-layout,.ds-sticky-sidebar,.ds-supporting-pane,.ds-settings-layout) > .ds-layout-aside { flex:1 1 var(--p-container-2xs); }\n.ds .ds-split-layout > * { flex:1 1 var(--p-container-2xs); }\n.ds .ds-sticky-sidebar > .ds-layout-aside { position:sticky; inset-block-start:var(--p-space-md); max-block-size:calc(100dvh - var(--p-space-xl)); overflow:auto; }\n.ds :is(.ds-grid-layout,.ds-bento-layout,.ds-fluid-layout,.ds-wide-grid-block,.ds-equal-height-grid) { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--p-container-2xs)),1fr)); }\n.ds .ds-masonry-layout { columns:var(--p-container-2xs); column-gap:var(--p-space-lg); }\n.ds .ds-masonry-layout > * { break-inside:avoid; margin-block-end:var(--p-space-lg); }\n.ds .ds-bento-layout,.ds .ds-wide-grid-block { container-type:inline-size; }\n.ds .ds-bento-layout > :first-child { background:var(--p-soft); }\n@container pattove-layout (min-width:580px) { .ds :is(.ds-bento-layout,.ds-wide-grid-block) > :first-child { grid-column:span 2; } }\n.ds .ds-full-bleed-layout { inline-size:100%; }\n.ds .ds-full-bleed-layout > * { inline-size:100%; border-radius:0; }\n.ds .ds-alternating-layout { display:grid; }\n.ds .ds-layout-pair { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:var(--p-space-lg); align-items:center; }\n.ds .ds-layout-pair:nth-child(even) > :first-child { order:2; }\n.ds .ds-print-layout { max-inline-size:var(--p-measure); margin-inline:auto; display:grid; gap:var(--p-space-xl); }\n.ds .ds-stack-layout { display:flex; flex-direction:column; }\n.ds .ds-cluster-layout { display:flex; flex-wrap:wrap; align-items:center; }\n.ds .ds-switcher-layout { display:flex; flex-wrap:wrap; }\n.ds .ds-switcher-layout > * { flex:1 1 calc((var(--p-container-xl) - 100%) * 999); }\n.ds .ds-reel-layout { display:flex; overflow-x:auto; scroll-snap-type:x proximity; padding-block:var(--p-space-xs); }\n.ds .ds-reel-layout > * { flex:0 0 min(calc(100% * 5 / 6),var(--p-container-xs)); scroll-snap-align:start; }\n.ds .ds-cover-layout { display:flex; flex-direction:column; min-block-size:calc(100dvh * 3 / 5); padding:var(--p-space-lg); }\n.ds .ds-cover-layout .ds-layout-center { margin-block:auto; padding-block:var(--p-space-xl); }\n.ds .ds-frame-layout { aspect-ratio:var(--p-aspect-landscape); overflow:hidden; }\n.ds .ds-frame-layout > * { inline-size:100%; block-size:100%; min-block-size:0; object-fit:cover; }\n.ds .ds-imposter-layout { display:grid; isolation:isolate; }\n.ds .ds-imposter-layout > * { grid-area:1/1; }\n.ds .ds-imposter-layout > .ds-layout-overlay { place-self:center; max-inline-size:calc(100% - var(--p-space-lg)); max-block-size:calc(100% - var(--p-space-lg)); overflow:auto; padding:var(--p-space-md); background:var(--p-surface); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius); }\n.ds :is(.ds-holy-grail-layout,.ds-three-pane-layout,.ds-editor-layout) { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,2fr) minmax(0,1fr); align-items:start; }\n.ds .ds-editor-layout > * { min-block-size:calc(var(--p-space-unit) * 64); }\n.ds .ds-letterbox-layout { display:grid; place-items:center; background:var(--p-ink); padding:var(--p-space-md); min-block-size:calc(100dvh * 2 / 5); }\n.ds .ds-letterbox-layout > * { aspect-ratio:var(--p-aspect-landscape); inline-size:100%; max-inline-size:var(--p-container-xl); min-block-size:0; object-fit:contain; }\n.ds .ds-breakout-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,var(--p-measure)) minmax(0,1fr); row-gap:var(--p-space-xl); }\n.ds .ds-breakout-layout > .ds-layout-body { grid-column:2; }\n.ds .ds-breakout-layout > .ds-layout-breakout { grid-column:1/-1; }\n.ds .ds-toolbar-spacer { flex:1 1 auto; min-inline-size:var(--p-space-md); }\n.ds :is(.ds-scroll-area,.ds-scroll-fog) { max-block-size:calc(var(--p-space-unit) * 64); overflow:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:var(--p-muted) var(--p-surface); padding:var(--p-space-md); border:var(--p-border-width) solid var(--p-line); border-radius:var(--p-radius); }\n.ds :is(.ds-scroll-area,.ds-scroll-fog) > * + * { margin-block-start:var(--p-space-md); }\n.ds .ds-scroll-fog { background:linear-gradient(var(--p-bg) 50%,transparent) center top / 100% var(--p-space-xl) no-repeat local,linear-gradient(transparent,var(--p-bg) 50%) center bottom / 100% var(--p-space-xl) no-repeat local,radial-gradient(farthest-side at 50% 0,var(--p-line),transparent) center top / 100% var(--p-space-md) no-repeat scroll,radial-gradient(farthest-side at 50% 100%,var(--p-line),transparent) center bottom / 100% var(--p-space-md) no-repeat scroll; }\n.ds .ds-generic-header { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; padding:var(--p-space-lg); border-block-end:var(--p-border-width) solid var(--p-line); }\n.ds .ds-bottom-info-bar { position:sticky; inset-block-end:0; padding:var(--p-space-md); background:var(--p-surface); border-block-start:var(--p-border-width) solid var(--p-line); }\n.ds .ds-column-drop-layout { display:flex; flex-wrap:wrap; align-items:start; }\n.ds .ds-column-drop-layout > * { flex:1 1 var(--p-container-2xs); }\n.ds .ds-column-drop-layout > .ds-layout-body { flex-grow:2; flex-basis:var(--p-container-sm); }\n.ds .ds-layout-shifter { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,3fr); }\n.ds .ds-layout-shifter > .ds-layout-aside { grid-row:span 2; }\n.ds .ds-layout-shifter > .ds-layout-secondary { grid-column:2; }\n.ds .ds-tiny-tweaks-layout { max-inline-size:var(--p-measure); margin-inline:auto; padding:var(--p-space-lg); font-size:var(--p-text-body); }\n.ds .ds-equal-columns { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,var(--p-container-2xs)),1fr)); max-inline-size:calc(var(--p-container-2xs) * 3 + var(--p-space-lg) * 2); }\n.ds .ds-equal-columns[data-columns=\"2\"] { max-inline-size:calc(var(--p-container-2xs) * 2 + var(--p-space-lg) * 1); }\n.ds .ds-equal-columns[data-columns=\"4\"] { max-inline-size:calc(var(--p-container-2xs) * 4 + var(--p-space-lg) * 3); }\n.ds .ds-equal-columns[data-columns=\"5\"] { max-inline-size:calc(var(--p-container-2xs) * 5 + var(--p-space-lg) * 4); }\n.ds .ds-equal-columns[data-columns=\"6\"] { max-inline-size:calc(var(--p-container-2xs) * 6 + var(--p-space-lg) * 5); }\n.ds .ds-equal-height-grid { grid-auto-rows:1fr; }\n.ds .ds-thumbnail-list { container-type:inline-size; list-style:none; padding:0; margin:0; display:grid; }\n.ds .ds-thumbnail-list > li { display:flex; align-items:center; gap:var(--p-space-md); padding-block:var(--p-space-md); border-block-end:var(--p-border-width) solid var(--p-line); }\n.ds .ds-layout-thumb { flex:0 0 var(--p-control-size-xl); aspect-ratio:var(--p-aspect-square); display:grid; place-items:center; background:var(--p-soft); border-radius:var(--p-radius); }\n.ds .ds-thumbnail-list > li p { margin-block-start:var(--p-space-xs); }\n@container(max-width:440px) { .ds .ds-thumbnail-list > li p { display:none; } }\n@media(max-width:760px) {\n .ds :is(.ds-holy-grail-layout,.ds-three-pane-layout,.ds-editor-layout,.ds-layout-shifter,.ds-equal-columns) { grid-template-columns:minmax(0,1fr); }\n .ds .ds-layout-shifter > * { grid-column:auto; grid-row:auto; }\n .ds .ds-layout-pair { grid-template-columns:minmax(0,1fr); }\n .ds .ds-layout-pair:nth-child(even) > :first-child { order:0; }\n .ds .ds-sticky-sidebar > .ds-layout-aside { position:static; max-block-size:none; }\n}\n@media print {\n .ds .ds-print-layout { display:block; max-inline-size:none; padding:0; }\n .ds .ds-print-layout .ds-layout-no-print { display:none; }\n .ds .ds-print-layout .ds-layout-page-break { break-before:page; }\n .ds .ds-print-layout :is(h1,h2,h3) { break-after:avoid; }\n .ds .ds-print-layout :is(img,table,figure) { break-inside:avoid; }\n .ds :is(.ds-bottom-info-bar,.ds-sticky-sidebar > .ds-layout-aside) { position:static; }\n}"
+    },
+    {
+      "path": "design/react/frame-layout.jsx",
+      "type": "registry:file",
+      "target": "~/design/react/frame-layout.jsx",
+      "content": "import React from 'react';\nimport { LayoutMedia } from './layout-content.jsx';\nexport function FrameLayout({children,aside,secondary,media,secondaryMedia,header,footer,label=\"비율 프레임\",columns=3,className='',...props}){\n return <div {...props} className={'ds-layout ds-frame-layout '+className} data-columns={Math.min(6,Math.max(2,Math.trunc(Number(columns))||3))}>{children ?? media ?? <LayoutMedia/>}</div>;\n}\n"
+    },
+    {
+      "path": "design/react/layout-content.jsx",
+      "type": "registry:file",
+      "target": "~/design/react/layout-content.jsx",
+      "content": "import React from 'react';\nexport function LayoutArticle(){return <div className=\"ds-layout-copy\"><h2>숲을 천천히 걷는 하루</h2><p>작은 산책로를 따라 계절의 색을 기록합니다. 햇빛이 드는 자리에서 잠시 쉬어 가세요.</p><p>출발 전 물과 편한 신발을 준비하세요. 길에서 만난 풍경은 여행 기록에 남길 수 있습니다.</p></div>;}\nexport function LayoutCards(){return <>{[['아침 산책','천천히 하루를 시작합니다.'],['점심의 정원','초록 잎 사이에 앉아 가져온 도시락을 나눕니다. 햇볕이 강한 시간에는 그늘에서 쉬어 가세요.'],['저녁의 기록','오늘 만난 풍경을 글로 남깁니다.']].map(([title,body])=><article key={title} className=\"ds-layout-tile\"><h3>{title}</h3><p>{body}</p></article>)}</>;}\nexport function LayoutMedia(){return <div className=\"ds-layout-media\"><span>산책 기록</span><strong>가을의 숲</strong></div>;}\nexport function LayoutAside(){return <div className=\"ds-layout-copy\"><h3>준비할 것</h3><ul><li>물과 간식</li><li>편한 신발</li><li>기록할 노트</li></ul></div>;}\nexport function LayoutRelated(){return <div className=\"ds-layout-copy\"><h3>함께 읽기</h3><p>계절별 산책 안내와 주변 쉼터를 확인하세요.</p></div>;}\nexport function LayoutHeader(){return <><strong>산책 기록</strong><nav aria-label=\"주 탐색\"><a href=\"#walks\">산책</a><a href=\"#notes\">기록</a></nav></>;}\nexport function LayoutFooter(){return <p>전체 코스 약 2시간 · 식수대 3곳</p>;}\nexport function LayoutParagraphs(){return <>{Array.from({length:8},(_,i)=><p key={i}>산책 {i+1}구간 · 나무와 꽃을 살펴보며 천천히 걸어갑니다. 가파른 길에서는 충분히 쉬어 가세요.</p>)}</>;}\nexport function LayoutThumbnails(){return <>{['동쪽 숲길','작은 정원','물가 산책로'].map((title,i)=><li key={title}><span className=\"ds-layout-thumb\" aria-hidden=\"true\">0{i+1}</span><div><h3>{title}</h3><p>그늘과 쉼터가 있는 한 시간 코스입니다.</p></div></li>)}</>;}\n"
+    },
+    {
+      "path": "design/examples/main/frame-layout.jsx",
+      "type": "registry:file",
+      "target": "~/design/examples/main/frame-layout.jsx",
+      "content": "'use client';\nimport React from 'react';\nimport { FrameLayout } from '../../react/frame-layout.jsx';\nimport '../../fonts.css';\nimport '../../base.css';\nimport '../../styles/main/color.css';\nimport '../../styles/main/typography.css';\nimport '../../styles/main/text.css';\nimport '../../styles/main/weight.css';\nimport '../../styles/main/leading.css';\nimport '../../styles/main/space.css';\nimport '../../styles/main/size.css';\nimport '../../styles/main/container.css';\nimport '../../styles/main/radius.css';\nimport '../../styles/main/border.css';\nimport '../../styles/main/shadow.css';\nimport '../../styles/main/blur.css';\nimport '../../styles/main/aspect.css';\nimport '../../styles/main/breakpoint.css';\nimport '../../css/layout-base.css';\nimport '../../css/layout-patterns.css';\nexport default function Example(){return <main className=\"ds\" data-style=\"main\" style={{padding:'var(--p-space-xl)'}}><FrameLayout /></main>;}\n"
+    },
+    {
+      "path": "design/specifications/frame-layout.json",
+      "type": "registry:file",
+      "target": "~/design/specifications/frame-layout.json",
+      "content": "{\n  \"useWhen\": [\n    \"콘텐츠 영역의 가로세로 비율 유지\"\n  ],\n  \"avoidWhen\": [\n    \"시각 배치와 DOM의 읽기 순서가 달라지는 콘텐츠\"\n  ],\n  \"states\": [\n    \"넓은 영역\",\n    \"좁은 영역\",\n    \"긴 콘텐츠\"\n  ],\n  \"keyboard\": [\n    \"DOM 순서대로 Tab 이동\"\n  ],\n  \"requirements\": [\n    \"320px에서 페이지 가로 넘침이 없어야 합니다.\",\n    \"사용자가 제공하는 탐색에는 실제 목적지와 고유한 접근성 이름이 필요합니다.\",\n    \"화면 확대 시 슬롯 내부 콘텐츠도 줄바꿈되어야 합니다.\"\n  ],\n  \"limits\": [\n    \"배치 뼈대입니다. 슬롯 안의 서비스 동작은 소비 프로젝트에서 연결합니다.\"\n  ],\n  \"references\": [\n    {\n      \"url\": \"https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout\",\n      \"appliesTo\": \"CSS 레이아웃과 가용 공간에 따른 배치\"\n    }\n  ]\n}\n"
+    },
+    {
+      "path": "design/manifests/main-frame-layout-react.json",
+      "type": "registry:file",
+      "target": "~/design/manifests/main-frame-layout-react.json",
+      "content": "{\n  \"item\": \"frame-layout\",\n  \"dictionary\": \"LAY-22\",\n  \"purpose\": \"콘텐츠 영역의 가로세로 비율 유지\",\n  \"keywords\": \"콘텐츠 영역의 가로세로 비율 유지 FrameLayout\",\n  \"style\": \"main\",\n  \"styleRules\": \"흰 바탕과 둥근 양각, 입력 영역의 음각을 사용합니다. 주요 행동은 짙은 색, 선택은 채움과 체크, 초점은 보라색 링으로 구분합니다. 유리 효과는 떠 있는 탐색 영역에만 적용하고 본문 표면은 불투명하게 유지합니다.\",\n  \"references\": [],\n  \"environment\": \"react\",\n  \"version\": \"0.8.0\",\n  \"lifecycle\": \"Trial\",\n  \"sourceRevision\": \"28c30e9d53f477eb4ed833873f0dc42e4122852f2e41f8a07f834093487dad16\",\n  \"npmDependencies\": [],\n  \"sourceFiles\": [\n    \"src/system/react/frame-layout.jsx\",\n    \"src/system/react/layout-content.jsx\"\n  ],\n  \"files\": [\n    {\n      \"path\": \"~/design/base.css\",\n      \"sha256\": \"67bcbf484cc5c874ef701b80b88be46dea717a2c19805535765a0a6f0b34f84c\"\n    },\n    {\n      \"path\": \"~/design/styles/main/color.css\",\n      \"sha256\": \"35a6be9f6c9a0659b9a8ce8bcf83fc4ce62d65d280d619c8f275e8e750dc38ff\"\n    },\n    {\n      \"path\": \"~/design/styles/main/typography.css\",\n      \"sha256\": \"843fa690e109bf1858a18a7abe54f0b4776828db3f13c8f04edc61340bdbe441\"\n    },\n    {\n      \"path\": \"~/design/styles/main/text.css\",\n      \"sha256\": \"f8ba65452f7b4d4eb5abb411a5096614f6c69c3c3776a4b24e554d525145a58d\"\n    },\n    {\n      \"path\": \"~/design/styles/main/weight.css\",\n      \"sha256\": \"c8f0177858ea01c4063e16e5d065a48ea127e85fa288f4de62f475cbf3b67a98\"\n    },\n    {\n      \"path\": \"~/design/styles/main/leading.css\",\n      \"sha256\": \"b628a73ad1d710f7d466c3209b85d982503df662bf89bfab1487832a0a6cee09\"\n    },\n    {\n      \"path\": \"~/design/styles/main/space.css\",\n      \"sha256\": \"f93fbe1064a36a00e5e70e637fd87e1a07a102aee071c0e66b2bb30208b5aece\"\n    },\n    {\n      \"path\": \"~/design/styles/main/size.css\",\n      \"sha256\": \"f16d1f012a67392039cbb8a1c02a26101fc8ca8e28f7b63bb29921457faf0890\"\n    },\n    {\n      \"path\": \"~/design/styles/main/container.css\",\n      \"sha256\": \"0379d07f886e8637449fe23916100105b7631b6de5fdf3ff5f465dfb8bf0457b\"\n    },\n    {\n      \"path\": \"~/design/styles/main/radius.css\",\n      \"sha256\": \"ab86012112e8ff2bef077a265c5ba5b7426c88bf544a4439506e68a0d5eded01\"\n    },\n    {\n      \"path\": \"~/design/styles/main/border.css\",\n      \"sha256\": \"69e311c53be1e006728f18c199de59a266062ff6e530f73917cea0031c7ea4f3\"\n    },\n    {\n      \"path\": \"~/design/styles/main/shadow.css\",\n      \"sha256\": \"b170b4c824cce162048e4a9a6786780c37d3341d3b355ff4b803c8e0e6b7aa68\"\n    },\n    {\n      \"path\": \"~/design/styles/main/blur.css\",\n      \"sha256\": \"604d73c657a5d14ecb1ebc71362566b9f5a17e3fa181d9252157e0c4274439aa\"\n    },\n    {\n      \"path\": \"~/design/styles/main/aspect.css\",\n      \"sha256\": \"a8731fc333cfb2762af39ad0ed10c3370af812930bd3eae11d64adf7df1e1f19\"\n    },\n    {\n      \"path\": \"~/design/styles/main/breakpoint.css\",\n      \"sha256\": \"bd3cdcf63a08fa661eb4b535849af523e894d8d5a4325f6845096fe336024827\"\n    },\n    {\n      \"path\": \"~/design/styles/main.md\",\n      \"sha256\": \"f188822714245bd4826f2b343cb3d107ce7dba6ec1a5a0627c57fba6fca69afb\"\n    },\n    {\n      \"path\": \"~/design/css/layout-base.css\",\n      \"sha256\": \"89b52857beedf21db96eac8b1ce30a49fa1aa94d084c3ad8749f33b1bd57c996\"\n    },\n    {\n      \"path\": \"~/design/css/layout-patterns.css\",\n      \"sha256\": \"9ba8603f6c641c9f0f139a3132c7a15cfd44cfd2cdc3bd473e94cf6259a1843e\"\n    },\n    {\n      \"path\": \"~/design/react/frame-layout.jsx\",\n      \"sha256\": \"b4fbfaff11dae407bd3a8befc65f420b15680bb4cbabe285766dd10659364172\"\n    },\n    {\n      \"path\": \"~/design/react/layout-content.jsx\",\n      \"sha256\": \"69d89589fac5a40189be82681b1c06389bc9c480bb8cd6865faa4fe63a286cdf\"\n    },\n    {\n      \"path\": \"~/design/examples/main/frame-layout.jsx\",\n      \"sha256\": \"3ad511011883482c1666d03957dd76462c6b62f9df3d4e64de19beec86278b9d\"\n    },\n    {\n      \"path\": \"~/design/specifications/frame-layout.json\",\n      \"sha256\": \"fed46005f336740a9c3e488c2ff903e83305d430539dccc76dd9536d2616e4fa\"\n    },\n    {\n      \"path\": \"~/design/fonts.css\",\n      \"sha256\": \"6715b00758512fbde92c15e2d54deac51743786e13065bfcfea12f5de773b7b5\"\n    }\n  ],\n  \"dependencies\": [\n    \"layout-content\"\n  ],\n  \"tokens\": [\n    \"token-color\",\n    \"token-typography\",\n    \"token-text\",\n    \"token-weight\",\n    \"token-leading\",\n    \"token-space\",\n    \"token-size\",\n    \"token-container\",\n    \"token-radius\",\n    \"token-border\",\n    \"token-shadow\",\n    \"token-blur\",\n    \"token-aspect\",\n    \"token-breakpoint\"\n  ],\n  \"compatibility\": \"children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.\"\n}"
+    },
+    {
+      "path": "design/examples/main/frame-layout-react.md",
+      "type": "registry:file",
+      "target": "~/design/examples/main/frame-layout-react.md",
+      "content": "# 비율 프레임 · 메인 스타일\n\n콘텐츠 영역의 가로세로 비율 유지\n\nReact 프로젝트에서 frame-layout.jsx의 Example을 import합니다. Next.js App Router에서도 클라이언트 경계를 포함한 이 예시를 import할 수 있습니다. 개별 react/ 부품은 children·props·콜백으로 조합합니다. React 런타임은 대상 프로젝트가 제공합니다.\n\nchildren과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요.\n\n상태: Trial. 웹 브라우저용입니다. 인쇄·네이티브 앱은 미검증입니다. 로컬에서 수정한 소스는 갱신 전에 diff로 확인하세요.\n"
+    }
+  ],
+  "registryDependencies": [
+    "http://127.0.0.1:4173/src/registry/r/pattove-fonts.json"
+  ],
+  "meta": {
+    "version": "0.8.0",
+    "lifecycle": "Trial",
+    "item": "frame-layout",
+    "dictionary": "LAY-22",
+    "purpose": "콘텐츠 영역의 가로세로 비율 유지",
+    "keywords": "콘텐츠 영역의 가로세로 비율 유지 FrameLayout",
+    "style": "main",
+    "styleRules": "흰 바탕과 둥근 양각, 입력 영역의 음각을 사용합니다. 주요 행동은 짙은 색, 선택은 채움과 체크, 초점은 보라색 링으로 구분합니다. 유리 효과는 떠 있는 탐색 영역에만 적용하고 본문 표면은 불투명하게 유지합니다.",
+    "references": [],
+    "environment": "react",
+    "sourceRevision": "28c30e9d53f477eb4ed833873f0dc42e4122852f2e41f8a07f834093487dad16",
+    "npmDependencies": [],
+    "sourceFiles": [
+      "src/system/react/frame-layout.jsx",
+      "src/system/react/layout-content.jsx"
+    ],
+    "dependencies": [
+      "layout-content"
+    ],
+    "tokens": [
+      "token-color",
+      "token-typography",
+      "token-text",
+      "token-weight",
+      "token-leading",
+      "token-space",
+      "token-size",
+      "token-container",
+      "token-radius",
+      "token-border",
+      "token-shadow",
+      "token-blur",
+      "token-aspect",
+      "token-breakpoint"
+    ],
+    "compatibility": "children과 aside·secondary·header·footer 슬롯에 실제 콘텐츠를 넣습니다. HTML 슬롯은 신뢰할 수 있는 마크업만 사용합니다. DOM 순서를 읽기 순서와 일치시키세요."
+  },
+  "docs": "설치한 design 폴더의 예시와 소스를 직접 수정해 사용하세요."
+}

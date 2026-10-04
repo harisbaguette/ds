@@ -1,4 +1,5 @@
 const { exercise } = require('./motion-interactions.cjs');
+const { exercisePlayback } = require('./motion-playback.cjs');
 const { chromium, firefox, webkit } = require('playwright-core');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -120,6 +121,12 @@ let exported;
         }
       }
       await exercise(async id => { await goto('?detail='+id); await framesReady(page); return page.frameLocator('[data-motion-frame]').locator('.pm-demo'); }, engineName+' preview', check, page);
+      await exercisePlayback(async (id, gallery) => {
+        await goto(gallery ? '' : '?detail='+id);
+        await page.locator('[data-motion-frame="'+id+'"]').scrollIntoViewIfNeeded();
+        await framesReady(page);
+        return page.frameLocator('[data-motion-frame="'+id+'"]').locator('.pm-demo');
+      }, engineName, check, page);
       check(engineName + ' 모션의 모든 사전 참조가 실제 항목으로 연결', await page.evaluate(() => {
         const ids = new Set(Pattove.library.entries.map(entry => entry.id));
         return Pattove.motionData.items.every(item => item.dictionaryRefs?.length && item.dictionaryRefs.every(id => ids.has(id)));
@@ -187,6 +194,10 @@ let exported;
     await page.goto(pathToFileURL(path.join(out,'aurora.html')).href);
     await page.locator('.pm-pause').check();
     check('내보낸 단독 HTML 네트워크 없이 실행·일시정지', await page.locator('.pm-aurora-orb').first().evaluate(n => getComputedStyle(n).animationPlayState === 'paused'));
+    await page.goto(pathToFileURL(path.join(out,'fade-up.html')).href);
+    await page.locator('.pm-fade').evaluate(n => Promise.all(n.getAnimations().map(a => a.finished)));
+    await page.waitForTimeout(1600);
+    check('복사한 등장 모션은 미리보기와 달리 한 번만 실행', await page.locator('.pm-fade').evaluate(n => n.getAnimations().every(a => a.playState === 'finished')));
     await exercise(async id => {
       await page.goto(pathToFileURL(path.join(out,id + '.html')).href);
       return page.locator('.pm-demo');

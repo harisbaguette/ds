@@ -4,7 +4,7 @@ import {spawn} from 'node:child_process';
 import {root} from './lib/system-store.mjs';
 const all=process.argv.includes('--all');
 const startedAt=new Date().toISOString(),results=[];
-const suites=all?fs.readdirSync(path.join(root,'tests')).filter(n=>/\.(cjs|mjs)$/.test(n)&&!['frontend-repair.cjs','launcher.cjs','motion-interactions.cjs','motion-playback.cjs'].includes(n)).sort():['build-reproducibility.mjs','tokens.mjs','system-contracts.mjs','system-workflow.mjs','screen-composition.mjs','extended-parts.cjs','system-audit.cjs','navigation.cjs','references.cjs','ux-journeys.cjs'];
+const suites=all?fs.readdirSync(path.join(root,'tests')).filter(n=>/\.(cjs|mjs)$/.test(n)&&!['frontend-repair.cjs','launcher.cjs','motion-interactions.cjs','motion-playback.cjs'].includes(n)).sort():['build-reproducibility.mjs','tokens.mjs','system-contracts.mjs','system-workflow.mjs','screen-composition.mjs','layouts.cjs','layout-consumers.cjs','navigation-parts.cjs','extended-parts.cjs','system-audit.cjs','navigation.cjs','references.cjs','ux-journeys.cjs'];
 const run=(script,args=[])=>new Promise(resolve=>{
   const start=Date.now();let finished=false;
   const child=spawn(process.execPath,[script,...args],{cwd:root,stdio:'inherit',windowsHide:true});

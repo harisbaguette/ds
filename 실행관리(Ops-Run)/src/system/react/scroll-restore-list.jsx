@@ -1,0 +1,9 @@
+'use client';
+import React,{useId,useLayoutEffect,useRef,useState} from 'react';
+const defaults=Array.from({length:30},(_,i)=>({id:'walk-'+i,label:'산책 코스 '+(i+1),body:(i+1)+'번 산책 코스의 출발 시간과 준비물을 확인하세요.'}));
+export function ScrollRestoreList({items=defaults,onSelect}){
+ const id=useId(),[query,setQuery]=useState(''),[selected,setSelected]=useState(null),list=useRef(null),search=useRef(null),heading=useRef(null),saved=useRef({top:0,id:null}),pending=useRef(false),record=items.find(i=>i.id===selected);
+ useLayoutEffect(()=>{if(!pending.current)return;pending.current=false;if(selected)heading.current?.focus();else{list.current.scrollTop=saved.current.top;const button=[...list.current.querySelectorAll('[data-record-id]')].find(n=>n.dataset.recordId===saved.current.id);(button??search.current)?.focus({preventScroll:true});}},[selected]);
+ const open=item=>{saved.current={top:list.current.scrollTop,id:item.id};pending.current=true;setSelected(item.id);onSelect?.(item);};
+ return <div className="ds-nav ds-scroll-restore-list"><div hidden={selected!==null}><label htmlFor={id}>코스 검색</label><input ref={search} id={id} value={query} onChange={e=>{setQuery(e.target.value);list.current.scrollTop=0;}}/><div ref={list} className="ds-nav-scroll" role="region" aria-label="산책 목록" tabIndex={0}><ul>{items.filter(i=>i.label.toLocaleLowerCase().includes(query.toLocaleLowerCase())).map(item=><li key={item.id}><button type="button" className="ds-nav-button" data-record-id={item.id} onClick={()=>open(item)}>{item.label}</button></li>)}</ul></div></div><section hidden={selected===null}><button type="button" className="ds-nav-button" onClick={()=>{pending.current=true;setSelected(null);}}>목록으로</button><h2 ref={heading} tabIndex={-1}>{record?.label??'항목을 찾을 수 없어요.'}</h2><p>{record?.body}</p></section></div>;
+}

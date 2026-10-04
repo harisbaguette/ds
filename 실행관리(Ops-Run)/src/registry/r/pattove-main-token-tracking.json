@@ -55,7 +55,7 @@
     }
   ],
   "meta": {
-    "version": "0.7.0",
+    "version": "0.8.0",
     "lifecycle": "Trial",
     "item": "token-tracking",
     "purpose": "자간 단계",

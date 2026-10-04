@@ -1,0 +1,106 @@
+{
+  "error-summary": {
+    "useWhen": [
+      "제출한 입력에 수정할 오류가 있을 때"
+    ],
+    "avoidWhen": [
+      "서버 장애나 권한 부족처럼 입력을 고쳐도 해결되지 않을 때"
+    ],
+    "states": [
+      "오류 없음: 숨김",
+      "오류 있음: 요약과 입력 옆에 같은 문구",
+      "수정 후 재제출: 남은 오류로 갱신"
+    ],
+    "keyboard": [
+      "제출 오류 뒤 요약으로 초점 이동",
+      "요약 링크 활성화 시 해당 입력에 초점 이동"
+    ],
+    "requirements": [
+      "errors[].id는 실제 입력 ID",
+      "오류 메시지는 수정 방법을 포함",
+      "입력값 유지"
+    ],
+    "references": [
+      {
+        "url": "https://design-system.service.gov.uk/components/error-summary/",
+        "appliesTo": "요약·인라인 메시지의 일치, 오류 입력으로 링크, 오류 후 초점"
+      }
+    ],
+    "limits": [
+      "페이지 title의 오류 접두어는 소비 앱에서 처리",
+      "스크린리더 실기기 검증은 별도"
+    ]
+  },
+  "summary-list": {
+    "useWhen": [
+      "한 대상의 이름과 값을 검토할 때"
+    ],
+    "avoidWhen": [
+      "여러 대상의 열을 비교할 때: 표 사용",
+      "순서만 있는 할 일: 목록 사용"
+    ],
+    "states": [
+      "읽기 전용",
+      "수정 링크 포함",
+      "긴 값·줄바꿈"
+    ],
+    "keyboard": [
+      "수정 링크에 Tab으로 이동하고 Enter로 열기"
+    ],
+    "requirements": [
+      "이름은 dt, 값은 dd",
+      "수정 링크의 접근 가능한 이름에 대상 포함",
+      "링크를 실제 입력 화면에 연결"
+    ],
+    "references": [
+      {
+        "url": "https://design-system.service.gov.uk/components/summary-list/",
+        "appliesTo": "이름과 값의 정의 목록 및 문맥이 있는 수정 행동"
+      }
+    ],
+    "limits": [
+      "검토·수정·제출 전체 흐름과 데이터 저장은 포함하지 않음"
+    ]
+  },
+  "data-form": {
+    "useWhen": [
+      "한 작업에 필요한 텍스트·선택·체크 입력을 제출할 때"
+    ],
+    "avoidWhen": [
+      "단계별 분기·파일 전송·서명·결제가 필요한 과제"
+    ],
+    "states": [
+      "기본",
+      "클라이언트 오류",
+      "처리 중",
+      "서버 필드 오류",
+      "연결 실패",
+      "완료",
+      "취소 후 재시도"
+    ],
+    "keyboard": [
+      "DOM 순서로 입력",
+      "제출 오류는 요약으로 이동",
+      "중복 제출은 진행 중 잠금"
+    ],
+    "requirements": [
+      "fields[].name은 고유하고 DOM 속성 이름과 충돌하지 않음",
+      "실제 서비스를 onSubmit 또는 pattove:submit에 연결",
+      "성공 응답 전 완료 표시 금지",
+      "서버 오류의 fieldErrors를 필드 이름에 연결",
+      "서버에서도 값과 권한 검증"
+    ],
+    "references": [
+      {
+        "url": "https://design-system.service.gov.uk/patterns/validation/",
+        "appliesTo": "제출 시 오류 제시, 입력 보존, 서버 검증",
+        "adaptation": "브라우저 기본 팝업은 끄고 Constraint Validation API의 상태를 한국어 오류 요약으로 표시; GOV.UK의 서버 전용 구현과는 다름"
+      }
+    ],
+    "limits": [
+      "schemaVersion 1에서는 한국어 화면만 지원",
+      "서버·인증·영구 저장은 호스트 책임",
+      "직접 컴포넌트를 사용할 때도 공개 스키마의 필드 조건 준수"
+    ]
+  }
+}

@@ -43,7 +43,7 @@
     }
   ],
   "meta": {
-    "version": "0.7.0",
+    "version": "0.8.0",
     "lifecycle": "Trial",
     "item": "token-text",
     "purpose": "글자 크기 단계",

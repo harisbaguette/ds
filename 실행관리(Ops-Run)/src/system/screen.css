@@ -1,0 +1,7 @@
+.ds .ds-screen { width:min(100%,var(--p-container-xl)); margin-inline:auto; padding:var(--p-space-xl) var(--p-space-md); display:grid; gap:var(--p-space-2xl); }
+.ds .ds-screen > header { padding-bottom:var(--p-space-lg); border-bottom:var(--p-border-width) solid var(--p-line); }
+.ds .ds-screen > header h1 { margin:0; font-size:var(--p-text-heading); line-height:var(--p-leading-tight); letter-spacing:var(--p-tracking-tight); }
+.ds .ds-screen-section { min-width:0; scroll-margin-top:var(--p-space-lg); }
+.ds .ds-screen-skip { position:absolute; top:0; inset-inline-start:var(--p-space-md); padding:var(--p-space-sm); background:var(--p-high); color:var(--p-ink); z-index:var(--p-layer-raised); transform:translateY(calc((100% + var(--p-space-xs)) * -1)); }
+.ds .ds-screen-skip:focus { transform:none; }
+@media print { .ds .ds-screen { width:100%; padding:0; } .ds .ds-screen-skip { display:none; } }

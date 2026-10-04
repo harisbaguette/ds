@@ -1,7 +1,9 @@
 {
-  "version": "0.7.0",
-  "revision": "fe9bb5d77ad5e032fce12588293766fd511eaba5dfb2f890371a997d5ee5e474",
+  "version": "0.8.0",
+  "revision": "7efd471656044b069e2683668608044e7a5fce0f932b75dd1040f27fde312175",
   "sources": [
+    "src/system/specifications.json",
+    "src/system/screen.css",
     "src/system/react/accordion.jsx",
     "src/system/react/action-bar.jsx",
     "src/system/react/action-row.jsx",
@@ -25,6 +27,7 @@
     "src/system/react/confirm-row.jsx",
     "src/system/react/confirmation-dialog.jsx",
     "src/system/react/count-badge.jsx",
+    "src/system/react/data-form.jsx",
     "src/system/react/data-table.jsx",
     "src/system/react/date-range.jsx",
     "src/system/react/dialog.jsx",
@@ -32,6 +35,7 @@
     "src/system/react/drawer.jsx",
     "src/system/react/empty-state.jsx",
     "src/system/react/error-state.jsx",
+    "src/system/react/error-summary.jsx",
     "src/system/react/featured-results.jsx",
     "src/system/react/field.jsx",
     "src/system/react/file-upload.jsx",
@@ -75,6 +79,7 @@
     "src/system/react/status-dot.jsx",
     "src/system/react/step-bar.jsx",
     "src/system/react/stepper.jsx",
+    "src/system/react/summary-list.jsx",
     "src/system/react/switch-list.jsx",
     "src/system/react/switch.jsx",
     "src/system/react/table-pagination.jsx",
@@ -219,7 +224,7 @@
       ],
       "entry": "DAT-05",
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -309,7 +314,7 @@
         "token-text"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -381,7 +386,7 @@
         "token-border",
         "token-stroke"
       ],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -447,7 +452,7 @@
         "token-text"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -512,7 +517,7 @@
       "keywords": "색 색상 컬러 배경 글자색 강조 color",
       "deps": [],
       "entry": "TOK-01",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -559,7 +564,7 @@
       "deps": [
         "token-color"
       ],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -609,7 +614,7 @@
         "token-leading"
       ],
       "entry": "TOK-62",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -654,7 +659,7 @@
       "layer": "Token",
       "keywords": "글자 크기 본문 제목 크기 font-size text",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -699,7 +704,7 @@
       "layer": "Token",
       "keywords": "굵기 글자 두께 font-weight weight",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -744,7 +749,7 @@
       "layer": "Token",
       "keywords": "줄 간격 행간 line-height leading",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -789,7 +794,7 @@
       "layer": "Token",
       "keywords": "자간 글자 사이 letter-spacing tracking",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -835,7 +840,7 @@
       "keywords": "간격 여백 거리 spacing space",
       "deps": [],
       "entry": "TOK-76",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -880,7 +885,7 @@
       "layer": "Token",
       "keywords": "크기 너비 높이 아이콘 조작 크기 size",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -925,7 +930,7 @@
       "layer": "Token",
       "keywords": "너비 폭 컨테이너 읽기 폭 container measure",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -971,7 +976,7 @@
       "keywords": "모서리 둥글기 반경 radius",
       "deps": [],
       "entry": "TOK-91",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1016,7 +1021,7 @@
       "layer": "Token",
       "keywords": "테두리 선 두께 초점 링 border outline",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1061,7 +1066,7 @@
       "layer": "Token",
       "keywords": "선 모양 점선 파선 아이콘 선 굵기 stroke dashed dotted",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1107,7 +1112,7 @@
       "keywords": "그림자 입체 층 깊이 shadow elevation",
       "deps": [],
       "entry": "TOK-95",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1152,7 +1157,7 @@
       "layer": "Token",
       "keywords": "흐림 유리 블러 backdrop blur",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1197,7 +1202,7 @@
       "layer": "Token",
       "keywords": "불투명도 투명도 흐리게 opacity",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1242,7 +1247,7 @@
       "layer": "Token",
       "keywords": "비율 가로세로 비 aspect ratio",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1288,7 +1293,7 @@
       "keywords": "움직임 시간 전환 애니메이션 가속 motion duration easing",
       "deps": [],
       "entry": "TOK-113",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1333,7 +1338,7 @@
       "layer": "Token",
       "keywords": "쌓임 순서 겹침 z-index layer",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1378,7 +1383,7 @@
       "layer": "Token",
       "keywords": "화면 폭 기준 반응형 분기 breakpoint media query",
       "deps": [],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1424,7 +1429,7 @@
       "keywords": "검색 닫기 화살표 일러스트 WebP icon",
       "deps": [],
       "english": "Icon",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1634,7 +1639,7 @@
         "token-size"
       ],
       "english": "Label",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1709,7 +1714,7 @@
         "token-border"
       ],
       "english": "Divider",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1763,7 +1768,7 @@
         "token-border"
       ],
       "english": "Divider with title",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1817,7 +1822,7 @@
         "token-radius"
       ],
       "english": "Status light",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1872,7 +1877,7 @@
         "token-border"
       ],
       "entry": "SOC-01",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -1935,7 +1940,7 @@
         "token-motion"
       ],
       "entry": "ACT-01",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2121,7 +2126,7 @@
         "token-space"
       ],
       "entry": "ATM-08",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2299,7 +2304,7 @@
         "token-layer"
       ],
       "entry": "NAV-07",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2378,7 +2383,7 @@
         "token-opacity"
       ],
       "english": "Text field",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2522,7 +2527,7 @@
         "token-shadow"
       ],
       "entry": "INP-92",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2605,7 +2610,7 @@
         "token-shadow"
       ],
       "entry": "INP-34",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2689,7 +2694,7 @@
         "token-shadow"
       ],
       "entry": "INP-10",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2772,7 +2777,7 @@
         "token-shadow"
       ],
       "entry": "INP-15",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2852,7 +2857,7 @@
         "token-border"
       ],
       "entry": "INP-47",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -2961,7 +2966,7 @@
         "token-shadow"
       ],
       "entry": "INP-11",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3056,7 +3061,7 @@
         "token-breakpoint"
       ],
       "entry": "ATM-89",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3120,7 +3125,7 @@
       ],
       "behavior": true,
       "english": "Checkbox",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3210,7 +3215,7 @@
       ],
       "behavior": true,
       "english": "Radio button",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3294,7 +3299,7 @@
       ],
       "behavior": true,
       "english": "Switch",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3373,7 +3378,7 @@
         "token-border"
       ],
       "entry": "INP-77",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3455,7 +3460,7 @@
         "token-border"
       ],
       "entry": "INP-78",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3537,7 +3542,7 @@
         "token-border"
       ],
       "entry": "ACT-36",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3621,7 +3626,7 @@
         "token-border"
       ],
       "entry": "STA-01",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3739,7 +3744,7 @@
         "token-border"
       ],
       "entry": "NAV-25",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3817,7 +3822,7 @@
         "token-shadow"
       ],
       "entry": "NAV-06",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -3949,7 +3954,7 @@
         "token-layer"
       ],
       "entry": "NAV-05",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4078,7 +4083,7 @@
         "token-shadow"
       ],
       "entry": "STA-02",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4136,7 +4141,7 @@
         "token-shadow"
       ],
       "entry": "STA-03",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4197,7 +4202,7 @@
         "token-shadow"
       ],
       "english": "Progress bar",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4259,7 +4264,7 @@
         "token-aspect"
       ],
       "entry": "STA-49",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4314,7 +4319,7 @@
         "token-size"
       ],
       "entry": "ATM-123",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4377,7 +4382,7 @@
         "token-shadow"
       ],
       "entry": "LAY-15",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4510,7 +4515,7 @@
         "token-aspect"
       ],
       "english": "Horizontal card",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4570,7 +4575,7 @@
         "token-opacity"
       ],
       "english": "Card with cover",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4630,7 +4635,7 @@
         "token-size"
       ],
       "entry": "ACT-03",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4686,7 +4691,7 @@
         "token-space"
       ],
       "english": "Confirm / dismiss buttons",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4743,7 +4748,7 @@
         "token-border"
       ],
       "entry": "ACT-49",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4797,7 +4802,7 @@
         "token-space"
       ],
       "entry": "INP-67",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4856,7 +4861,7 @@
         "token-border"
       ],
       "entry": "ATM-153",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -4931,7 +4936,7 @@
         "token-border"
       ],
       "english": "Check all",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5014,7 +5019,7 @@
         "token-border"
       ],
       "english": "Radio group",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5090,7 +5095,7 @@
         "token-border"
       ],
       "entry": "ATM-203",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5163,7 +5168,7 @@
       ],
       "entry": "DAT-01",
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5219,7 +5224,7 @@
         "token-size"
       ],
       "entry": "ATM-120",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5277,7 +5282,7 @@
         "token-space"
       ],
       "entry": "LAY-49",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5335,7 +5340,7 @@
         "token-border"
       ],
       "entry": "LAY-27",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5395,7 +5400,7 @@
         "token-space"
       ],
       "entry": "LAY-12",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5459,7 +5464,7 @@
       ],
       "entry": "INP-69",
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5520,7 +5525,7 @@
       ],
       "entry": "STA-06",
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5581,7 +5586,7 @@
         "token-border"
       ],
       "entry": "DAT-16",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5642,7 +5647,7 @@
         "token-border",
         "token-stroke"
       ],
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5777,7 +5782,7 @@
         "token-border"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5912,7 +5917,7 @@
         "token-container"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -5923,7 +5928,8 @@
       "inputs": [
         "title",
         "name",
-        "memo"
+        "memo",
+        "initialValues"
       ],
       "events": [
         "pattove:submit"
@@ -5971,7 +5977,7 @@
         "settings-form"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6029,7 +6035,7 @@
         "token-weight"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6038,7 +6044,9 @@
       "purpose": "입력값을 검증하고 계산 결과 표시",
       "compatibility": "실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",
       "inputs": [
-        "title"
+        "title",
+        "initialPrice",
+        "initialQuantity"
       ],
       "events": [
         "submit"
@@ -6088,7 +6096,7 @@
         "token-border"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6148,7 +6156,7 @@
         "token-container"
       ],
       "behavior": false,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6158,7 +6166,8 @@
       "compatibility": "실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",
       "inputs": [
         "title",
-        "sections"
+        "sections",
+        "headingLevel"
       ],
       "events": [],
       "controls": [],
@@ -6204,7 +6213,7 @@
         "token-space"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6287,7 +6296,7 @@
         "token-size"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6374,7 +6383,7 @@
         "token-layer"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6454,7 +6463,7 @@
         "token-border"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6535,7 +6544,7 @@
         "token-border"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6593,7 +6602,7 @@
         "dialog"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6650,7 +6659,7 @@
         "dialog"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6712,7 +6721,7 @@
         "token-border"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6774,7 +6783,7 @@
         "token-layer"
       ],
       "behavior": false,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6830,7 +6839,7 @@
         "token-border"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6887,7 +6896,7 @@
         "token-size"
       ],
       "behavior": false,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6941,7 +6950,7 @@
         "token-space"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -6999,7 +7008,7 @@
         "token-radius"
       ],
       "behavior": false,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -7054,7 +7063,7 @@
         "token-space"
       ],
       "behavior": false,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -7109,7 +7118,7 @@
         "token-radius"
       ],
       "behavior": false,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -7165,7 +7174,7 @@
         "token-border"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -7222,7 +7231,7 @@
         "token-color"
       ],
       "behavior": true,
-      "version": "0.7.0",
+      "version": "0.8.0",
       "lifecycle": "Trial",
       "environments": [
         "HTML",
@@ -7245,6 +7254,193 @@
       ],
       "source": "src/system/parts.js",
       "reactSource": "src/system/react/offline-state.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "error-summary",
+      "name": "입력 오류 요약",
+      "english": "ErrorSummary",
+      "reactExport": "ErrorSummary",
+      "section": "feedback",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "STA",
+        "fit": true
+      },
+      "entry": "STA-07",
+      "keywords": "Error summary 입력 오류 위치 수정 초점",
+      "deps": [
+        "token-color",
+        "token-text",
+        "token-space",
+        "token-size",
+        "token-radius",
+        "token-border"
+      ],
+      "behavior": true,
+      "version": "0.8.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "잘못된 입력의 위치와 수정 방법을 연결",
+      "compatibility": "오류가 있을 때 입력 옆에 같은 메시지를 표시하고 요약으로 초점을 옮깁니다. 링크의 id는 실제 입력을 가리켜야 합니다.",
+      "inputs": [
+        "title",
+        "errors",
+        "focus"
+      ],
+      "events": [
+        "focus"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "error-summary"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/error-summary.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "summary-list",
+      "entry": "DAT-54",
+      "name": "이름과 값 요약",
+      "english": "SummaryList",
+      "reactExport": "SummaryList",
+      "section": "composition",
+      "layer": "Molecule",
+      "browse": {
+        "shelf": "part",
+        "kind": "부품",
+        "code": "DAT",
+        "fit": true
+      },
+      "keywords": "Summary list 요약 정의 목록 검토 확인",
+      "deps": [
+        "token-color",
+        "token-text",
+        "token-weight",
+        "token-space",
+        "token-size",
+        "token-container",
+        "token-border"
+      ],
+      "version": "0.8.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "behavior": false,
+      "purpose": "대상의 이름과 값을 한 쌍씩 확인",
+      "compatibility": "항목 간 열 비교에는 표를 사용합니다. 수정 링크는 실제 입력 화면으로 연결해야 합니다.",
+      "inputs": [
+        "title",
+        "items"
+      ],
+      "events": [],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "summary-list"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/summary-list.jsx",
+      "styles": [
+        "main"
+      ],
+      "minInlineSize": 160,
+      "support": {
+        "html": "implemented",
+        "react": "implemented",
+        "native": "not-implemented",
+        "print": "not-verified"
+      },
+      "verification": {
+        "suite": "tests/system-audit.cjs",
+        "evidence": "test-results/system-audit/results.json"
+      }
+    },
+    {
+      "id": "data-form",
+      "name": "입력과 제출",
+      "english": "DataForm",
+      "reactExport": "DataForm",
+      "section": "fields",
+      "layer": "Module",
+      "browse": {
+        "shelf": "block",
+        "kind": "모듈",
+        "code": "INP",
+        "fit": true
+      },
+      "keywords": "Data form 신청 입력 검증 오류 제출 재시도",
+      "deps": [
+        "field",
+        "textarea",
+        "select",
+        "checkbox",
+        "button",
+        "error-summary",
+        "settings-form",
+        "token-color"
+      ],
+      "behavior": true,
+      "version": "0.8.0",
+      "lifecycle": "Trial",
+      "environments": [
+        "HTML",
+        "React"
+      ],
+      "purpose": "신청 내용을 검증하고 호스트에 제출",
+      "compatibility": "필드 이름은 고유해야 합니다. 호스트 Promise 성공 뒤에만 완료를 표시합니다. 서버 검증은 fieldErrors로 각 입력과 연결합니다.",
+      "inputs": [
+        "title",
+        "fields",
+        "submitLabel",
+        "successMessage",
+        "onSubmit"
+      ],
+      "events": [
+        "pattove:submit"
+      ],
+      "controls": [],
+      "gallery": null,
+      "css": [
+        "data-form"
+      ],
+      "source": "src/system/parts.js",
+      "reactSource": "src/system/react/data-form.jsx",
       "styles": [
         "main"
       ],

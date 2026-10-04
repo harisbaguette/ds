@@ -1,6 +1,6 @@
 /* Representative implementations for validating the system structure, not the full dictionary. */
 (() => {
-  const version = '0.7.0';
+  const version = '0.8.0';
   const sections = [
     { id: 'all', name: '전체 보기', group: '' },
     { id: 'foundations', name: '색·글꼴·간격', group: '기초' },
@@ -507,7 +507,7 @@
     ],
     "behavior": true
   }
-]).map(item => ({ ...item, english: item.english || english[item.id], version:item.version || version, lifecycle: item.lifecycle || 'Trial', environments: ['HTML','React'], behavior: item.behavior || interactive.includes(item.id) }));
+]).concat([{"id":"error-summary","name":"입력 오류 요약","english":"ErrorSummary","reactExport":"ErrorSummary","section":"feedback","layer":"Molecule","browse":{"shelf":"part","kind":"부품","code":"STA","fit":true},"entry":"STA-07","keywords":"Error summary 입력 오류 위치 수정 초점","deps":["token-color","token-text","token-space","token-size","token-radius","token-border"],"behavior":true},{"id":"summary-list","entry":"DAT-54","name":"이름과 값 요약","english":"SummaryList","reactExport":"SummaryList","section":"composition","layer":"Molecule","browse":{"shelf":"part","kind":"부품","code":"DAT","fit":true},"keywords":"Summary list 요약 정의 목록 검토 확인","deps":["token-color","token-text","token-weight","token-space","token-size","token-container","token-border"]},{"id":"data-form","name":"입력과 제출","english":"DataForm","reactExport":"DataForm","section":"fields","layer":"Module","browse":{"shelf":"block","kind":"모듈","code":"INP","fit":true},"keywords":"Data form 신청 입력 검증 오류 제출 재시도","deps":["field","textarea","select","checkbox","button","error-summary","settings-form","token-color"],"behavior":true}]).map(item => ({ ...item, english: item.english || english[item.id], version:item.version || version, lifecycle: item.lifecycle || 'Trial', environments: ['HTML','React'], behavior: item.behavior || interactive.includes(item.id) }));
   // A dictionary concept and its reusable implementation must resolve identically.
   const dictionaryLinks = { input:'INP-02', checkbox:'INP-04', 'radio-list':'INP-05', switch:'INP-08' };
   for (const [id, entry] of Object.entries(dictionaryLinks)) items.find(item => item.id === id).entry = entry;
@@ -877,6 +877,10 @@
 });
   for (const id of ['textarea','select','combobox','file-upload']) controls[id] = [control('state','상태',[['','기본'],['disabled','사용 불가'],...(id === 'textarea' || id === 'select' ? [['error','오류']] : [])])];
   Object.assign(contracts, {"settings-form":["프로필을 수정하고 저장 실패 후 재시도","실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",["title","name","memo"],["pattove:submit"]],"login-form":["인증 서비스에 연결하는 로그인 폼","실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",["title"],["pattove:submit"]],"input-result":["입력값을 검증하고 계산 결과 표시","실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",["title"],["submit"]],"comparison":["대상의 차이를 비교한 뒤 하나 선택","실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",["title","items"],["pattove:choose"]],"article-page":["목차에서 긴 본문으로 이동해 읽기","실제 콘텐츠를 props/options로 교체합니다. 로그인·저장은 호스트 콜백이 성공한 뒤에만 완료를 알리며 입력은 실패해도 유지합니다. 인증·영구 저장 서비스는 포함하지 않습니다.",["title","sections"],[]]});
+  Object.assign(contracts,{"error-summary":["잘못된 입력의 위치와 수정 방법을 연결","오류가 있을 때 입력 옆에 같은 메시지를 표시하고 요약으로 초점을 옮깁니다. 링크의 id는 실제 입력을 가리켜야 합니다.",["title","errors","focus"],["focus"]],"summary-list":["대상의 이름과 값을 한 쌍씩 확인","항목 간 열 비교에는 표를 사용합니다. 수정 링크는 실제 입력 화면으로 연결해야 합니다.",["title","items"],[]],"data-form":["신청 내용을 검증하고 호스트에 제출","필드 이름은 고유해야 합니다. 호스트 Promise 성공 뒤에만 완료를 표시합니다. 서버 검증은 fieldErrors로 각 입력과 연결합니다.",["title","fields","submitLabel","successMessage","onSubmit"],["pattove:submit"]]});
+  contracts['settings-form'][2]=['title','name','memo','initialValues'];
+  contracts['input-result'][2]=['title','initialPrice','initialQuantity'];
+  contracts['article-page'][2]=['title','sections','headingLevel'];
   // Shared CSS blocks: a part's own block plus the helper blocks it is drawn with.
   const cssBlocks = {
     checkbox: ['selection'], radio: ['selection'], switch: ['selection'],

@@ -150,8 +150,8 @@ const fingerprint = element => {
     demo = await stage(page, 'stepper');
     await demo.locator('[data-step="1"]').click();
     check('수량 조절은 더하기로 1 늘어남', await demo.locator('input').inputValue() === '2');
-    await demo.locator('[data-step="-1"]').click(); await demo.locator('[data-step="-1"]').click(); await demo.locator('[data-step="-1"]').click();
-    check('수량 조절은 최솟값 아래로 안 내려감', await demo.locator('input').inputValue() === '0');
+    await demo.locator('[data-step="-1"]').click(); await demo.locator('[data-step="-1"]').click();
+    check('수량 조절은 최솟값에서 빼기 단추가 잠김', await demo.locator('input').inputValue() === '0' && await demo.locator('[data-step="-1"]').isDisabled());
     await inspect(page,'main','people-picker');
     demo = await stage(page, 'people-picker');
     await demo.locator('[name="query"]').fill('이도');

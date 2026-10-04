@@ -16,7 +16,7 @@ const ok=(value,message)=>{assert.ok(value,message);checks++;};
       page.setDefaultTimeout(10000);
       const errors=[];page.on('pageerror',e=>errors.push(e.message));
       const goto=async route=>{await page.goto(base+'#/'+route);await page.evaluate(()=>document.fonts.ready);};
-      for(const [shelf,count]of Object.entries({token:20,part:53,block:21,template:5})){
+      for(const [shelf,count]of Object.entries({token:20,part:55,block:22,template:5})){
         await goto('dictionary?shelf='+shelf);
         ok(await page.locator('.dict-entry.is-built').count()===Math.min(48,count),shelf+' ready specimens');
         ok(await page.locator('.is-todo').count()===0,shelf+' no empty specimens by default');

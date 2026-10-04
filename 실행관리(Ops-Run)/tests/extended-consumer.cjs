@@ -24,7 +24,7 @@ export default function Page(){const attempt=useRef(0);return <main className="d
     let ready=false;for(let i=0;i<150;i++){if(/Ready in/.test(log)){ready=true;break;}if(server.exitCode!==null)throw Error(log);await new Promise(r=>setTimeout(r,200));}assert(ready,log);
     browser=await chromium.launch();const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[];page.on('pageerror',e=>errors.push(e.message));page.setDefaultTimeout(12000);
     const response=await page.goto('http://127.0.0.1:'+port,{timeout:120000});assert.equal(response.status(),200,log);await page.locator('[data-example="combobox"] input').waitFor();
-    assert.equal(await page.locator('[data-example]').count(),22);
+    assert.equal(await page.locator('[data-example]').count(),ids.length);
     const combo=page.locator('[data-example="combobox"] input');await combo.fill('제');await combo.press('ArrowDown');await combo.press('Enter');assert.equal(await combo.inputValue(),'제주');
     const dialog=page.locator('[data-example="dialog"]');await dialog.getByRole('button',{name:'열기'}).click();assert(await dialog.locator('dialog').evaluate(n=>n.open));await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('[data-example="dialog"] dialog').open);
     const confirmation=page.locator('#confirm-contract');await confirmation.getByRole('button',{name:'열기'}).click();await confirmation.getByRole('button',{name:'확인',exact:true}).click();await page.waitForFunction(()=>window.confirmCount===1);await confirmation.getByRole('button',{name:'열기'}).click();await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('#confirm-contract dialog').open);assert.equal(await page.evaluate(()=>window.confirmCount),1,'Escape must never replay the previous confirmation');
@@ -32,6 +32,6 @@ export default function Page(){const attempt=useRef(0);return <main className="d
     const login=page.locator('#login-contract');await login.getByLabel('이메일').fill('reader@example.com');await login.getByLabel('비밀번호').fill('safe-test-value');await login.getByRole('button',{name:'로그인'}).click();await login.getByRole('status').filter({hasText:'로그인했어요.'}).waitFor();assert.equal(await page.evaluate(()=>window.authValues.email),'reader@example.com');
     assert(await page.locator('[data-example="spinner"] .ds-spinner').evaluate(n=>getComputedStyle(n).animationName==='ds-spin'),'React export includes transitive spinner CSS');
     assert(await page.locator('[data-example="textarea"] textarea').evaluate(n=>n.getBoundingClientRect().height>=96));
-    assert.deepEqual(errors,[]);await page.screenshot({path:path.join(parent,'mobile.png'),fullPage:true});console.log('22 React exports compiled in Next.js; independent callbacks, failure, retry, keyboard and CSS dependencies verified.');
+    assert.deepEqual(errors,[]);await page.screenshot({path:path.join(parent,'mobile.png'),fullPage:true});console.log('React exports compiled in Next.js; independent callbacks, failure, retry, keyboard and CSS dependencies verified.');
   }finally{await browser?.close();server.kill();fs.writeFileSync(path.join(parent,'next.log'),log);}
 })().catch(e=>{console.error(e);process.exitCode=1;});

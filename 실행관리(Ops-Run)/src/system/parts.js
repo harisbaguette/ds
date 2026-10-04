@@ -43,8 +43,8 @@
     `<span class="ds-input-group ds-clear-input">${input({ id, value, placeholder, disabled, name })}${tool('clear-input', label + ' 지우기', icon('close'), disabled)}</span>`;
   const unitInput = ({ id = uid('unit'), label = '금액', value = '12,000', placeholder = '0', disabled = false, units = ['원','달러'] } = {}) =>
     `<span class="ds-input-group ds-unit-input">${input({ id, value, placeholder, disabled, extra: ' inputmode="numeric"' })}<select class="ds-input-unit" aria-label="${esc(label)} 단위"${disabled ? ' disabled' : ''}>${units.map(unit => `<option>${esc(unit)}</option>`).join('')}</select></span>`;
-  const stepper = ({ id = uid('stepper'), value = '1', min = 0, disabled = false } = {}) =>
-    `<span class="ds-input-group ds-stepper">${tool('step', '하나 빼기', icon('minus'), disabled, ' data-step="-1"')}${input({ id, value, type: 'number', placeholder: '', disabled, extra: ` min="${Number(min)}" inputmode="numeric"` })}${tool('step', '하나 더하기', icon('plus'), disabled, ' data-step="1"')}</span>`;
+  const stepper = ({ id = uid('stepper'), value = '1', min = 0, max, disabled = false } = {}) =>
+    `<span class="ds-input-group ds-stepper">${tool('step', '하나 빼기', icon('minus'), disabled || Number(value) <= Number(min), ' data-step="-1"')}${input({ id, value, type: 'number', placeholder: '', disabled, extra: ` min="${Number(min)}"${max===undefined?'':` max="${Number(max)}"`} inputmode="numeric"` })}${tool('step', '하나 더하기', icon('plus'), disabled || (max!==undefined && Number(value)>=Number(max)), ' data-step="1"')}</span>`;
   // The show button flips the typed secret to plain text in place, so a typo is seen instead of retyped.
   const passwordInput = ({ id = uid('password'), label = '비밀번호', value = '', placeholder = '8자 이상', disabled = false } = {}) =>
     `<span class="ds-input-group ds-password-input">${input({ id, value, placeholder, disabled, type: 'password' })}${tool('reveal', label + ' 보기', '보기', disabled)}</span>`;
@@ -214,6 +214,21 @@
   const safeHref = value => /^(?:https?:|mailto:|tel:|#|\/(?!\/)|\.\.?\/)/i.test(String(value)) ? esc(value) : '#';
   const inputChoices = [{value:'private',label:'나만 보기'},{value:'team',label:'팀과 공유'},{value:'public',label:'모두 공개'}];
   const extended = {
+    'error-summary'(prefix,{title='입력한 내용을 확인하세요.',errors=[{message:'필수 항목을 확인하세요.'}]}={}) {
+      return `<div class="ds-error-summary" tabindex="-1" role="region" aria-label="${esc(title)}"${errors.length?'':' hidden'}><h3>${esc(title)}</h3><ul>${errors.map(error=>`<li>${error.id?`<a href="#${esc(encodeURIComponent(error.id))}" data-error-target="${esc(error.id)}">${esc(error.message)}</a>`:esc(error.message)}</li>`).join('')}</ul></div>`;
+    },
+    'summary-list'(prefix,{title='신청 내용',items=[{label:'이름',value:'김하나'},{label:'수업',value:'기초반'}]}={}) {
+      return `<section class="ds-summary-list"><h2>${esc(title)}</h2><dl>${items.map(item=>`<div><dt>${esc(item.label)}</dt><dd>${esc(item.value)}</dd>${item.href?`<dd><a href="${safeHref(item.href)}" aria-label="${esc(item.label)} 수정">수정</a></dd>`:''}</div>`).join('')}</dl></section>`;
+    },
+    'data-form'(prefix,{title='신청하기',submitLabel='제출',successMessage='접수했어요.',fields=[{name:'name',label:'이름',type:'text',required:true,autoComplete:'name'},{name:'email',label:'이메일',type:'email',required:true,autoComplete:'email'}]}={}) {
+      const content=fields.map(f=>{
+        const id=prefix+'-'+f.name,type=option(f.type,['text','email','password','tel','url','number','date','time','textarea','select','checkbox'],'text');
+        const attrs=` id="${esc(id)}" name="${esc(f.name)}" data-field-label="${esc(f.label)}"${f.required?' required':''} aria-describedby="${esc(id)}-help"${f.autoComplete?` autocomplete="${esc(f.autoComplete)}"`:''}${['min','max','step','maxLength'].filter(k=>f[k]!==undefined).map(k=>` ${k.toLowerCase()}="${esc(f[k])}"`).join('')}`;
+        const control=type==='textarea'?`<textarea class="ds-input ds-textarea"${attrs} rows="4">${esc(f.value??'')}</textarea>`:type==='select'?`<select class="ds-input"${attrs}>${f.items.map(i=>`<option value="${esc(i.value)}"${i.value===f.value?' selected':''}>${esc(i.label)}</option>`).join('')}</select>`:type==='checkbox'?`<label class="ds-choice"><input type="checkbox"${attrs}${f.value?' checked':''}>${esc(f.label)}</label>`:`<input class="ds-input" type="${type}"${attrs} value="${esc(f.value??'')}">`;
+        return `<div class="ds-field">${type==='checkbox'?'':fieldLabel(id,f.label)}${control}<p class="ds-help" id="${esc(id)}-help" data-field-help="${esc(f.help||'')}">${esc(f.help||'')}</p></div>`;
+      }).join('');
+      return `<form method="post" class="ds-workflow ds-data-form" data-async-form="data" data-success-message="${esc(successMessage)}" aria-label="${esc(title)}" novalidate><h2>${esc(title)}</h2>${extended['error-summary'](prefix+'-errors',{errors:[]})}<noscript><p>이 양식을 사용하려면 JavaScript를 켜주세요.</p></noscript><fieldset disabled data-await-script>${content}${button({label:submitLabel,type:'submit',action:''})}</fieldset><p role="status" aria-live="polite"></p></form>`;
+    },
     textarea(prefix, {label='메모',value='',help='',error='',disabled=false,required=false,name='memo'}={}) {
       return `<div class="ds-field ds-textarea">${fieldLabel(prefix,label)}<textarea class="ds-input" id="${esc(prefix)}" name="${esc(name)}" rows="4"${disabled?' disabled':''}${required?' required':''}${error?' aria-invalid="true"':''}${help||error?` aria-describedby="${esc(prefix)}-help"`:''}>${esc(value)}</textarea>${help||error?fieldDescription(prefix+'-help',error||help):''}</div>`;
     },
@@ -256,20 +271,20 @@
       return `<section class="ds-error-state" aria-labelledby="${esc(prefix)}-title"><h3 id="${esc(prefix)}-title">${esc(title)}</h3><p>${esc(message)}</p><button class="ds-button" type="button" data-retry>${esc(action)}</button></section>`;
     },
     'offline-state'(prefix,options={}) {return extended['error-state'](prefix,{title:'인터넷에 연결되지 않았어요.',message:'작성한 내용은 이 화면에 남아 있어요.',...options});},
-    'settings-form'(prefix,{title='프로필 설정',name='하나',memo=''}={}) {
-      return `<form class="ds-workflow" data-async-form="settings" aria-label="${esc(title)}"><h2>${esc(title)}</h2><fieldset>${field({id:prefix+'-name',label:'표시 이름',value:name,name:'name'})}${extended.textarea(prefix+'-memo',{label:'소개',value:memo,name:'memo'})}${extended.select(prefix+'-visibility')}${choice({kind:'switch',label:'알림 받기',checked:true,name:'notification',value:'on'})}${button({label:'저장',type:'submit',action:''})}</fieldset><p role="status" aria-live="polite"></p></form>`;
+    'settings-form'(prefix,{title='프로필 설정',name='하나',memo='',initialValues={}}={}) {
+      return `<form method="post" class="ds-workflow" data-async-form="settings" aria-label="${esc(title)}"><h2>${esc(title)}</h2><noscript><p>이 양식을 사용하려면 JavaScript를 켜주세요.</p></noscript><fieldset disabled data-await-script>${field({id:prefix+'-name',label:'표시 이름',value:initialValues.name??name,name:'name'})}${extended.textarea(prefix+'-memo',{label:'소개',value:initialValues.memo??memo,name:'memo'})}${extended.select(prefix+'-visibility',{value:initialValues.visibility??'private'})}${choice({kind:'switch',label:'알림 받기',checked:initialValues.notification??true,name:'notification',value:'on'})}${button({label:'저장',type:'submit',action:''})}</fieldset><p role="status" aria-live="polite"></p></form>`;
     },
     'login-form'(prefix,{title='로그인'}={}) {
-      return `<form class="ds-workflow" data-async-form="login" aria-label="${esc(title)}"><h2>${esc(title)}</h2><fieldset><div class="ds-field">${fieldLabel(prefix+'-email','이메일')}${input({id:prefix+'-email',type:'email',name:'email',placeholder:'',extra:' required autocomplete="username"'})}</div><div class="ds-field">${fieldLabel(prefix+'-password','비밀번호')}${input({id:prefix+'-password',type:'password',name:'password',placeholder:'',extra:' required autocomplete="current-password"'})}</div>${button({label:'로그인',type:'submit',action:''})}</fieldset><p role="status" aria-live="polite"></p></form>`;
+      return `<form method="post" class="ds-workflow" data-async-form="login" aria-label="${esc(title)}"><h2>${esc(title)}</h2><noscript><p>이 양식을 사용하려면 JavaScript를 켜주세요.</p></noscript><fieldset disabled data-await-script><div class="ds-field">${fieldLabel(prefix+'-email','이메일')}${input({id:prefix+'-email',type:'email',name:'email',placeholder:'',extra:' required autocomplete="username"'})}</div><div class="ds-field">${fieldLabel(prefix+'-password','비밀번호')}${input({id:prefix+'-password',type:'password',name:'password',placeholder:'',extra:' required autocomplete="current-password"'})}</div>${button({label:'로그인',type:'submit',action:''})}</fieldset><p role="status" aria-live="polite"></p></form>`;
     },
-    'input-result'(prefix,{title='금액 계산'}={}) {
-      return `<form class="ds-workflow" data-calculator aria-label="${esc(title)}"><h2>${esc(title)}</h2><div class="ds-field">${fieldLabel(prefix+'-price','개당 금액')}${input({id:prefix+'-price',type:'number',name:'price',value:'12000',extra:' min="0" step="0.01" required'})}</div><div class="ds-field">${fieldLabel(prefix+'-quantity','수량')}${input({id:prefix+'-quantity',type:'number',name:'quantity',value:'1',extra:' min="1" step="1" required'})}</div>${button({label:'계산',type:'submit',action:''})}<output aria-live="polite" aria-label="계산 결과"></output></form>`;
+    'input-result'(prefix,{title='금액 계산',initialPrice=12000,initialQuantity=1}={}) {
+      return `<form method="post" class="ds-workflow" data-calculator aria-label="${esc(title)}"><h2>${esc(title)}</h2><noscript><p>이 양식을 사용하려면 JavaScript를 켜주세요.</p></noscript><fieldset disabled data-await-script><div class="ds-field">${fieldLabel(prefix+'-price','개당 금액')}${input({id:prefix+'-price',type:'number',name:'price',value:initialPrice,extra:' min="0" step="0.01" required'})}</div><div class="ds-field">${fieldLabel(prefix+'-quantity','수량')}${input({id:prefix+'-quantity',type:'number',name:'quantity',value:initialQuantity,extra:' min="1" step="1" required'})}</div>${button({label:'계산',type:'submit',action:''})}</fieldset><output aria-live="polite" aria-label="계산 결과"></output></form>`;
     },
     'comparison'(prefix,{title='수업 비교',items=[{id:'basic',name:'기초반',price:'30,000원',detail:'주 1회'},{id:'advanced',name:'심화반',price:'50,000원',detail:'주 2회'}]}={}) {
       return `<section class="ds-comparison" aria-labelledby="${esc(prefix)}-title"><h2 id="${esc(prefix)}-title">${esc(title)}</h2><div class="ds-comparison-grid">${items.map(i=>`<article><h3>${esc(i.name)}</h3><p>${esc(i.price)}</p><p>${esc(i.detail)}</p><button type="button" class="ds-button" data-compare-id="${esc(i.id)}" data-compare-name="${esc(i.name)}" aria-pressed="false">${esc(i.name)} 선택</button></article>`).join('')}</div><p role="status"></p></section>`;
     },
-    'article-page'(prefix,{title='기록을 오래 남기는 방법',sections=[{title:'먼저 고르기',body:'다시 보고 싶은 장면부터 골라 둡니다.'},{title:'이름 붙이기',body:'나중에 찾을 수 있게 날짜와 대상을 적습니다.'},{title:'다시 살펴보기',body:'모아 둔 기록에서 다음 작업의 단서를 찾습니다.'}]}={}) {
-      return `<article class="ds-article"><h1>${esc(title)}</h1><nav aria-label="목차"><ol>${sections.map((s,i)=>`<li><a href="#${esc(prefix)}-${i}">${esc(s.title)}</a></li>`).join('')}</ol></nav>${sections.map((s,i)=>`<section id="${esc(prefix)}-${i}"><h2>${esc(s.title)}</h2><p>${esc(s.body)}</p></section>`).join('')}</article>`;
+    'article-page'(prefix,{title='기록을 오래 남기는 방법',headingLevel=1,sections=[{title:'먼저 고르기',body:'다시 보고 싶은 장면부터 골라 둡니다.'},{title:'이름 붙이기',body:'나중에 찾을 수 있게 날짜와 대상을 적습니다.'},{title:'다시 살펴보기',body:'모아 둔 기록에서 다음 작업의 단서를 찾습니다.'}]}={}) {
+      return `<article class="ds-article"><${headingLevel===2?'h2':'h1'}>${esc(title)}</${headingLevel===2?'h2':'h1'}><nav aria-label="목차"><ol>${sections.map((s,i)=>`<li><a href="#${esc(prefix)}-${i}">${esc(s.title)}</a></li>`).join('')}</ol></nav>${sections.map((s,i)=>`<section id="${esc(prefix)}-${i}"><${headingLevel===2?'h3':'h2'}>${esc(s.title)}</${headingLevel===2?'h3':'h2'}><p>${esc(s.body)}</p></section>`).join('')}</article>`;
     }
   };
   function renderItem(id, prefix = uid('example'), options = {}) {

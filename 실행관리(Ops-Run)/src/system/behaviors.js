@@ -1,12 +1,40 @@
 /* Self-contained so the exact same behavior can travel with an exported HTML file. */
 window.Pattove.mountParts = function mountParts(root) {
   window.Pattove?.admin?.mount(root);
+  root.querySelectorAll('[data-await-script]').forEach(fieldset=>{fieldset.disabled=false;fieldset.removeAttribute('data-await-script');});
   root.querySelectorAll('[data-indeterminate]').forEach(input => {
     if (!input.__pattoveInitialized) { input.indeterminate = true; input.__pattoveInitialized = true; }
   });
+  const syncStepper=input=>{
+    const box=input.closest('.ds-stepper');if(!box)return;
+    for(const button of box.querySelectorAll('[data-step]'))button.disabled=input.disabled||(input.value!==''&&(Number(button.dataset.step)<0?input.min!==''&&input.valueAsNumber<=Number(input.min):input.max!==''&&input.valueAsNumber>=Number(input.max)));
+  };
+  root.querySelectorAll('.ds-stepper input').forEach(syncStepper);
   if (root.__pattovePartsMounted) return;
   root.__pattovePartsMounted = true;
   const emit = (node, name, detail) => node.dispatchEvent(new CustomEvent('pattove:' + name, {bubbles:true, detail}));
+  const fieldError=(control,label)=>{
+    const v=control.validity;
+    const message=v.valueMissing?(control.type==='checkbox'?'체크해 주세요.':control.tagName==='SELECT'?'항목을 선택하세요.':'값을 입력하세요.'):
+      v.typeMismatch?(control.type==='email'?'이메일 주소를 확인하세요.':'주소 형식을 확인하세요.'):
+      v.rangeUnderflow?control.min+' 이상 입력하세요.':v.rangeOverflow?control.max+' 이하로 입력하세요.':
+      v.stepMismatch?(control.step||'1')+' 간격으로 입력하세요.':v.tooLong?control.maxLength+'자 이내로 입력하세요.':
+      v.customError?control.validationMessage:'입력 형식을 확인하세요.';
+    return label+': '+message;
+  };
+  root.addEventListener('input',event=>{if(event.target.matches('.ds-stepper input'))syncStepper(event.target);});
+  const formErrors = (form, errors) => {
+    const summary=form.querySelector('.ds-error-summary');if(!summary)return;
+    for(const control of form.querySelectorAll('[data-field-label]')){
+      const error=errors.find(e=>e.id===control.id),help=document.getElementById(control.id+'-help');
+      control.setAttribute('aria-invalid',String(!!error));
+      if(help)help.textContent=error?.message||help.dataset.fieldHelp||'';
+    }
+    const list=summary.querySelector('ul');list.replaceChildren();summary.hidden=!errors.length;
+    for(const error of errors){const li=document.createElement('li'),a=document.createElement('a');a.href='#'+encodeURIComponent(error.id);a.dataset.errorTarget=error.id;a.textContent=error.message;li.append(a);list.append(li);}
+    if(errors.length)summary.focus();
+  };
+  root.addEventListener('click',event=>{const link=event.target.closest('[data-error-target]');if(!link)return;const input=document.getElementById(link.dataset.errorTarget);if(input){event.preventDefault();input.focus();input.scrollIntoView({block:'center'});}});
   // A host claims async work with event.detail.respondWith(promise). No response is never success.
   root.addEventListener('submit',async event=>{
     const form=event.target;
@@ -16,16 +44,34 @@ window.Pattove.mountParts = function mountParts(root) {
       form.querySelector('output').textContent=Number.isFinite(result)?new Intl.NumberFormat('ko-KR',{style:'currency',currency:'KRW',maximumFractionDigits:2}).format(result):'금액을 확인하세요.';return;
     }
     if(!form.matches('[data-async-form]'))return;
-    event.preventDefault();if(form.dataset.pending||!form.reportValidity())return;
+    event.preventDefault();if(form.dataset.pending)return;
+    if(form.matches('.ds-data-form')){
+      const invalid=[...form.querySelectorAll('[data-field-label]')].filter(n=>!n.validity.valid).map(n=>({id:n.id,message:fieldError(n,n.dataset.fieldLabel)}));
+      formErrors(form,invalid);form.querySelector('[role="status"]').textContent='';if(invalid.length)return;
+    }else if(!form.reportValidity())return;
     const data=Object.fromEntries(new FormData(form)),status=form.querySelector('[role="status"]'),field=form.querySelector('fieldset'),controller=new AbortController();
-    let promise,claimed=false;
-    const detail={kind:form.dataset.asyncForm,values:data,signal:controller.signal,respondWith(value){if(claimed)throw Error('Submission already handled');claimed=true;promise=Promise.resolve(value);},abort:()=>controller.abort()};
+    if(form.matches('.ds-data-form'))for(const checkbox of form.querySelectorAll('input[type="checkbox"][name]'))data[checkbox.name]=checkbox.checked;
+    // Claim the form before invoking host handlers, including synchronous resubmission.
+    form.dataset.pending='true';
+    let promise,claimed=false,accepting=true;
+    const detail={kind:form.dataset.asyncForm,values:data,signal:controller.signal,respondWith(value){if(!accepting)throw Error('respondWith must be called during the submit event');if(claimed)throw Error('Submission already handled');claimed=true;promise=Promise.resolve(value);},abort:()=>controller.abort()};
     emit(form,'submit',detail);
-    if(!claimed){status.textContent='요청을 처리할 수 없어요. 잠시 후 다시 시도하세요.';return;}
+    accepting=false;
+    if(!claimed){delete form.dataset.pending;status.textContent='요청을 처리할 수 없어요. 잠시 후 다시 시도하세요.';return;}
     form.dataset.pending='true';field.disabled=true;form.setAttribute('aria-busy','true');status.textContent='처리하고 있어요.';
-    try {await promise;if(!controller.signal.aborted&&form.isConnected)status.textContent=form.dataset.asyncForm==='login'?'로그인했어요.':'저장했어요.';}
-    catch {if(form.isConnected)status.textContent='처리하지 못했어요. 입력한 내용을 유지했으니 다시 시도하세요.';}
-    finally {delete form.dataset.pending;field.disabled=false;form.removeAttribute('aria-busy');}
+    try {
+      await new Promise((resolve,reject)=>{
+        const abort=()=>reject(new DOMException('Request aborted','AbortError'));
+        promise.then(value=>{controller.signal.removeEventListener('abort',abort);resolve(value);},error=>{controller.signal.removeEventListener('abort',abort);reject(error);});
+        if(controller.signal.aborted)abort();else controller.signal.addEventListener('abort',abort,{once:true});
+      });
+      if(!controller.signal.aborted&&form.isConnected)status.textContent=form.dataset.successMessage||(form.dataset.asyncForm==='login'?'로그인했어요.':'저장했어요.');
+    }
+    catch(error) {if(form.isConnected&&!controller.signal.aborted){
+      const server=[...form.querySelectorAll('[data-field-label]')].filter(n=>typeof error?.fieldErrors?.[n.name]==='string'&&error.fieldErrors[n.name]).map(n=>({id:n.id,message:error.fieldErrors[n.name]}));
+      formErrors(form,server);status.textContent=server.length?'':'처리하지 못했어요. 입력한 내용을 유지했으니 다시 시도하세요.';
+    }}
+    finally {delete form.dataset.pending;field.disabled=false;form.removeAttribute('aria-busy');if(controller.signal.aborted&&form.isConnected)status.textContent='요청을 취소했어요. 다시 시도할 수 있어요.';}
   });
   const comboClose = box => {
     box.querySelector('[role="listbox"]').hidden = true;
@@ -186,8 +232,9 @@ window.Pattove.mountParts = function mountParts(root) {
       button.setAttribute('aria-label', button.getAttribute('aria-label').replace(/ (보기|숨기기)$/, shown ? ' 숨기기' : ' 보기'));
     } else if (action === 'step') {
       const input = button.closest('.ds-input-group').querySelector('input');
-      input.value = String(Math.max(Number(input.min || 0), (Number(input.value) || 0) + Number(button.dataset.step)));
+      if(Number(button.dataset.step)>0)input.stepUp();else input.stepDown();
       input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
     } else if (action === 'undo') {
       // Undo closes the toast; the project reverses the action it reported.
       button.dispatchEvent(new CustomEvent('pattove:undo', { bubbles: true }));

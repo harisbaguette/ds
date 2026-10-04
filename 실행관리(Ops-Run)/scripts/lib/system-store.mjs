@@ -20,7 +20,7 @@ export function describe(id,{environment='html',style='main',baseURL='http://127
   if(!item&&!entry)throw Error('Unknown ID: '+id);
   if(!item)return {id:entry.id,name:entry.name,kind:entry.kind,status:entry.art?'asset-ready':entry.kind==='기준'?'guideline':'not-implemented',purpose:entry.usage,evidence:entry.evidence,source:l.categories.find(c=>c.id===entry.category)?.source,assets:entry.art||null,style:selected.id,implementation:null};
   const installable=['html','react'].includes(environment),name=item.layer==='Token'?`pattove-${style}-${item.id}`:item.id==='icon'?null:`pattove-${style}-${item.id}-${environment}`;
-  return {id:item.id,dictionaryId:item.entry||null,name:item.name,status:'implemented',lifecycle:item.lifecycle,version:item.version,purpose:item.purpose,compatibility:item.compatibility,inputs:item.inputs,events:item.events,style:selected,support:item.support,verification:item.verification,dependencies:r.dependencies(item.id).map(i=>i.id),source:{html:item.source,react:item.reactSource,css:'src/system/parts.css'},installation:installable&&name?{registry:`${baseURL.replace(/\/$/,'')}/src/registry/r/${name}.json`,command:`npx shadcn@4.21.0 add ${baseURL.replace(/\/$/,'')}/src/registry/r/${name}.json`}:null,limitations:installable?[]:[environment+' support has not been verified']};
+  return {id:item.id,dictionaryId:item.entry||null,name:item.name,status:'implemented',lifecycle:item.lifecycle,version:item.version,purpose:item.purpose,compatibility:item.compatibility,inputs:item.inputs,events:item.events,style:selected,support:item.support,verification:item.verification,dependencies:r.dependencies(item.id).map(i=>i.id),specification:JSON.parse(fs.readFileSync(path.join(root,'src/system/specifications.json'),'utf8'))[item.id]||null,source:{html:item.source,react:item.reactSource,css:'src/system/parts.css'},installation:installable&&name?{registry:`${baseURL.replace(/\/$/,'')}/src/registry/r/${name}.json`,command:`npx shadcn@4.21.0 add ${baseURL.replace(/\/$/,'')}/src/registry/r/${name}.json`}:null,limitations:installable?[]:[environment+' support has not been verified']};
 }
 export function search({query='',environment='html',implementedOnly=false,category,limit=20,offset=0}={}) {
   const {library:l,systemRegistry:r}=system(),claimed=new Set(r.items.map(i=>i.entry).filter(Boolean));
@@ -43,7 +43,7 @@ export function coverage() {
   const records=l.entries.map(e=>({id:e.id,category:e.category,kind:e.kind,status:linked.has(e.id)?'implemented':e.art?'asset-ready':e.kind==='기준'?'guideline':'not-implemented',implementation:linked.get(e.id)?.id||null,evidence:e.evidence,needsSourceReview:e.evidence.includes('[MK]')&&!e.evidence.includes('대조')}));
   return {version:r.version,implementations:r.items.length,recipes:r.patterns.length,dictionaryEntries:records.length,categories:l.categories.map(c=>({id:c.id,total:records.filter(e=>e.category===c.id).length,states:records.filter(e=>e.category===c.id).reduce((o,e)=>(o[e.status]=(o[e.status]||0)+1,o),{})})),records};
 }
-function registryFiles(ids,environment,style) {
+export function registryFiles(ids,environment,style) {
   const files=new Map(),visited=new Set(),dependencies=new Set();
   const visit=name=>{
     if(!/^pattove-[a-z0-9-]+$/.test(name))throw Error('Invalid registry item');if(visited.has(name))return;visited.add(name);
@@ -73,9 +73,22 @@ export function exportSources({ids,environment='html',style='main',out,recipe,ti
     files.set('index.html',`<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${p.esc(title)}</title>${links}<body class="ds" data-style="main"><main>${markup}</main>${scripts}</body></html>`);
   }
   if(recipe&&environment==='react')files.set('page.jsx',`export { default } from './design/examples/main/${entryID}.jsx';\n`);
-  try{fs.mkdirSync(target);for(const [name,content]of files){const file=path.join(target,name);fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,content,{flag:'wx'});}}
-  catch(error){throw Error('Export interrupted; partial output remains at '+target+': '+error.message);}
+  writeExport(files,target);
   return {directory:target,files:files.size,dependencies,entry:recipe?(environment==='html'?'index.html':'page.jsx'):ids.map(id=>'design/examples/'+style+'/'+id+'.'+(environment==='html'?'html':'jsx')),integration:recipe&&['login-form','settings-form'].includes(chosen.items[0])?'Connect the async submit callback before use':undefined};
+}
+export function writeExport(files,out){
+  if(typeof out!=='string'||!out.trim())throw Error('Output directory is required');
+  const target=path.resolve(out);
+  if(fs.existsSync(target))throw Error('Output must be a new directory');
+  for(const [name,content]of files){
+    const resolved=path.resolve(target,name);
+    if(!resolved.startsWith(target+path.sep)||typeof content!=='string')throw Error('Unsafe output file: '+name);
+  }
+  // Claim a new directory atomically; never follow a pre-existing consumer directory.
+  fs.mkdirSync(target);
+  try{for(const [name,content]of files){const file=path.join(target,name);fs.mkdirSync(path.dirname(file),{recursive:true});fs.writeFileSync(file,content,{flag:'wx'});}}
+  catch(error){throw Error('Export interrupted; partial output remains at '+target+': '+error.message);}
+  return target;
 }
 export function compareInstallation(project) {
   const base=path.resolve(project),dir=path.join(base,'design/manifests');if(!fs.existsSync(dir))throw Error('No installation manifests');

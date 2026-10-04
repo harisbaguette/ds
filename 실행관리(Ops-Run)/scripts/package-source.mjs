@@ -15,7 +15,7 @@ function collect(relative){
 }
 try{
   for(const name of ['src','assets','scripts','tests','문서','영감보관함','index.html','package.json','package-lock.json','README.md','DESIGN.md'])collect(path.join(prefix,name));
-  for(const name of ['사용방법.md','패토브 실행.command','.github'])collect(name);
+  for(const name of ['사용방법.md','패토브 실행.command','.github','.gitattributes','.gitignore'])collect(name);
   if(fs.existsSync(path.join(packageRoot,'패토브 실행.exe')))collect('패토브 실행.exe');
   if(values.list){console.log(JSON.stringify({files:files.length,bytes:files.reduce((n,f)=>n+f.bytes,0),paths:files.map(f=>f.name)},null,2));}
   else{

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "intent": "판화 수업 일정과 준비물을 확인하고 신청한다",
+  "title": "토요일 판화 수업",
+  "sections": [
+    {"id":"details","component":"summary-list","props":{"title":"수업 안내","items":[{"label":"시간","value":"토요일 10:00–13:00"},{"label":"준비물","value":"앞치마와 편한 옷"},{"label":"참가비","value":"50,000원 · 재료 포함"}]}},
+    {"id":"application","component":"data-form","props":{"title":"신청자 정보","submitLabel":"신청","successMessage":"신청을 받았어요.","fields":[{"name":"name","label":"이름","type":"text","required":true,"autoComplete":"name"},{"name":"email","label":"이메일","type":"email","required":true,"autoComplete":"email"},{"name":"quantity","label":"참여 인원","type":"number","min":1,"max":4,"step":1,"value":1,"required":true},{"name":"memo","label":"요청 사항 (선택)","type":"textarea","maxLength":1000}]}},
+    {"id":"faq","component":"accordion","props":{"items":[{"title":"처음이어도 참여할 수 있나요?","body":"처음 사용하는 도구부터 함께 익힙니다."},{"title":"도구를 가져가야 하나요?","body":"수업에 필요한 도구는 작업실에서 제공합니다."}]}}
+  ]
+}

@@ -1,5 +1,7 @@
 name: Verify design system
 on:
+  push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 permissions:
@@ -28,3 +30,10 @@ jobs:
       - run: npm ci
       - run: npx playwright-core install --with-deps chromium firefox webkit
       - run: npm run test:all
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: verification-${{ matrix.os }}
+          path: 실행관리(Ops-Run)/test-results/verification.json
+          retention-days: 14
+          if-no-files-found: warn
